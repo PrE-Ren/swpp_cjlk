@@ -11,13 +11,13 @@ const Wrapper = styled.div`
   overflow-x: hidden;
   display: inline-block;
   border: 2px solid;
-  margin-top: 70px;
+  margin-top: 100px;
 `
 
 const Fonts = styled.div`
   font-size: 20px;
-  textDecoration: 'none';
 `
+
 const Left_sidebar = ({ children, ...props }) => {
   return (
     <Wrapper>
