@@ -6,14 +6,12 @@ import { SSL_OP_SINGLE_DH_USE } from 'constants';
 
 const Wrapper = styled.div`
   width: 150px;
-  z-index: 1;
-  top: 120px;
-  left: 0px;
+
   text-align: center;
-  overflow-x: hidden;
   display: inline-block;
   border: 2px solid;
   margin-top: 100px;
+  margin-left: 10px;
 `
 
 const Fonts = styled.div`
