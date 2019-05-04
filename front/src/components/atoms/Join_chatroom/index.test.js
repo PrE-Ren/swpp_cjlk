@@ -1,9 +1,8 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Make_new from '.'
+import Join_chatroom from '.'
 
-const wrap = (props = {}) => shallow(<Make_new {...props} />)
-
+const wrap = (props = {}) => shallow(<Join_chatroom {...props} />)
 
 it('renders children when passed in', () => {
   const wrapper = wrap({ children: 'test' })
