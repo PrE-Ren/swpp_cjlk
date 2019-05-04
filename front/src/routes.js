@@ -10,7 +10,6 @@ const routes = (
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Signup} />
   </div>
-
 )
 
 export default routes
