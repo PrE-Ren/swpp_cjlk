@@ -24,7 +24,7 @@ class Authenticate (APIView):
     def get(self, request, mySNU_verification_token, format = None):
         try:
             user = SnuUser.objects.get(mySNU_verification_token = mySNU_verification_token)
-        except SnuUser.DoesNotExst:
+        except SnuUser.DoesNotExist:
             return Response(status = status.HTTP_404_NOT_FOUND)
 
         if user.mySNU_verified:
@@ -57,7 +57,7 @@ class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPI
         if serializer.is_valid():
             token = get_random_string(length=32)
             link = "http://127.0.0.1:8000/auth/" + token + "/"
-            send_mail('SnuMoyeo Authenticate', link, 'toro.8906@gmail.com', ['sdrjseka96@snu.ac.kr'], fail_silently=False)
+            send_mail('SnuMoyeo Authenticate', link, 'toro.8906@gmail.com', [request.data['email']], fail_silently=False)
             serializer.save(mySNU_verification_token = token, mySNU_verified=False)
             id =  serializer.data['id']
             username = serializer.data['username']
