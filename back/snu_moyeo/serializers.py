@@ -5,8 +5,7 @@ class MeetingSerializer(serializers.ModelSerializer):
     # leader = serializers.ReadOnlyField (source = 'leader.name')
     class Meta:
         model = Meeting
-        fields = ('title','created','due','min_people','max_people','description','state','kind','leader')
-
+        fields = ('id', 'title','created','due','min_people','max_people','description','state','kind','leader')
 
 class SnuUserSerializer(serializers.ModelSerializer):
     # lead_meeting = serializers.PrimaryKeyRelatedField(many=True,queryset= Meeting.objects.all())
@@ -20,4 +19,3 @@ class SnuUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = SnuUser
         fields = ('id', 'username', 'password', 'name', 'email', 'point', 'mySNU_verified', 'mySNU_verification_token')
-
