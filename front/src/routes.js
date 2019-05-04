@@ -5,8 +5,7 @@ import App from 'components/App'
 import { Home } from 'components'
 
 const routes = (
-  <Route path="/" component={Home}>
-  </Route>
+  <Route path="/" component={Home}> </Route>
 )
 
 export default routes
