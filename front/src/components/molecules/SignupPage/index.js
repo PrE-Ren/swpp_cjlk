@@ -30,7 +30,7 @@ const SignupPage = ({ state, signupReq }) => {
           </div>
           <div>
             <h2>&ensp;&ensp;SNU email</h2>
-            &ensp;&ensp;<input ref={node=>{email=node;}}/>
+            &ensp;&ensp;<input ref={node=>{email=node;}}/>@snu.ac.kr
           </div>
           <div>
             <h4>&ensp;&ensp;메일 발송에 다소 시간이 걸릴 수 있으니 버튼을 누르고 기다려 주십시오.</h4>
