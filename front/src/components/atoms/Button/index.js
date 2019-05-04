@@ -1,8 +1,5 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-//import React from 'react'
-//import PropTypes from 'prop-types';
-
 import styled, { css } from 'styled-components'
 import { font, palette } from 'styled-theme'
 import { ifProp } from 'styled-tools'
@@ -19,30 +16,45 @@ const hoverBackgroundColor = ({ disabled, transparent }) => !disabled && !transp
 const hoverForegroundColor = ({ disabled, transparent }) => !disabled && transparent && palette(0)
 
 const styles = css`
-  background-color: #4CAF50; /* Green */
-  border: none;
-  width: 300px;
-  color: white;
-  border-radius: 12px;
-  padding: 10px 30px;
-  text-align: center;
-  display: inline-block;
-  font-size: 30px;
+  display: inline-flex;
+  font-family: ${font('primary')};
+  align-items: center;
+  white-space: nowrap;
+  font-size: ${fontSize};
+  border: 0.0625em solid ${ifProp('transparent', 'currentcolor', 'transparent')};
+  height: 2.5em;
+  justify-content: center;
+  text-decoration: none;
+  cursor: ${ifProp('disabled', 'default', 'pointer')};
+  appearance: none;
+  padding: 0 1em;
+  border-radius: 0.125em;
+  box-sizing: border-box;
+  pointer-events: ${ifProp('disabled', 'none', 'auto')};
+  transition: background-color 250ms ease-out, color 250ms ease-out, border-color 250ms ease-out;
+  background-color: ${backgroundColor};
+  color: ${foregroundColor};
+
   &:hover, &:focus, &:active {
     background-color: ${hoverBackgroundColor};
     color: ${hoverForegroundColor};
   }
 
+  &:focus {
+    outline: none
+  }
 `
 
+
+const Anchor = styled.a`${styles}`
 const StyledButton = styled.button`${styles}`
 
-const Make_new = ({ type, ...props }) => {
+export const Button = ({ type, ...props }) => {
 
   return <StyledButton {...props} type={type} />
 }
 
-Make_new.propTypes = {
+Button.propTypes = {
   disabled: PropTypes.bool,
   palette: PropTypes.string,
   transparent: PropTypes.bool,
@@ -53,9 +65,10 @@ Make_new.propTypes = {
   href: PropTypes.string,
 }
 
-Make_new.defaultProps = {
+Button.defaultProps = {
   palette: 'primary',
   type: 'button',
+  height: 40,
 }
 
-export default Make_new
+export default Button

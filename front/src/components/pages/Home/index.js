@@ -1,14 +1,13 @@
 import React from 'react'
 
 import { PageTemplate } from 'components'
-import Left_sidebar from '../../molecules/Left_sidebar'
-import Right_sidebar from '../../organisms/Right_sidebar'
+import HomePage from '../../../containers/HomePage'
+
 
 const Home = () => {
   return (
     <div>
-      <Left_sidebar />
-      <Right_sidebar />
+      <HomePage/>
     </div>
   )
 }

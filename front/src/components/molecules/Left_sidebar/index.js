@@ -1,6 +1,9 @@
-import React, { PropTypes } from 'react'
-import styled from 'styled-components'
+import React from 'react'
+import { PropTypes } from 'prop-types'
+import styled, {css} from 'styled-components'
 import { font, palette } from 'styled-theme'
+import { SSL_OP_SINGLE_DH_USE } from 'constants';
+
 
 const Wrapper = styled.div`
   width: 150px;
@@ -18,7 +21,9 @@ const Fonts = styled.div`
   font-size: 20px;
 `
 
-const Left_sidebar = ({ children, ...props }) => {
+
+export const Left_sidebar = () => {
+
   return (
     <Wrapper>
       <h3>분류</h3>
