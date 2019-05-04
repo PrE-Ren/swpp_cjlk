@@ -3,32 +3,40 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST'
 export const SIGNUP_REQUEST = 'SIGNUP_REQUEST'
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS'
+export const RELOAD_ACTION = 'RELOAD_ACTION'
 
-export const getLoginData = (userid,password) => {
+export const reload_action = (meeting_list) => {
+  return {
+    type : RELOAD_ACTION,
+    meeting_list : meeting_list
+  }
+};
+
+export const getLoginData = (username, password) => {
     return {
         type : LOGIN_REQUEST,
-        userid,
+        username,
         password
     }
 };
 
-export const postSignupData = (userid,password,name,email) => {
+export const postSignupData = (username, password, name, email) => {
     return {
         type : SIGNUP_REQUEST,
-        userid,
+        username,
         password,
         name,
         email
     }
 };
 
-export const loginSuccess = (username,password,content) => {
+export const loginSuccess = (username, password, data) => {
     return {
         type : LOGIN_SUCCESS,
-        data : { 
+        data : {
             username,
             password,
-            mySNU_verification_token : content.mySNU_verification_token
+            mySNU_verification_token : data.mySNU_verification_token
         }
     }
 };

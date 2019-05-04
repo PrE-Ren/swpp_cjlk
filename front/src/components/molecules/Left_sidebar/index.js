@@ -4,7 +4,6 @@ import styled, {css} from 'styled-components'
 import { font, palette } from 'styled-theme'
 import { SSL_OP_SINGLE_DH_USE } from 'constants';
 
-
 const Wrapper = styled.div`
   width: 150px;
   z-index: 1;
@@ -21,9 +20,7 @@ const Fonts = styled.div`
   font-size: 20px;
 `
 
-
 export const Left_sidebar = () => {
-
   return (
     <Wrapper>
       <h3>분류</h3>

@@ -4,12 +4,13 @@ import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 import Make_new from '../../atoms/Make_new'
 import Join_chatroom from '../../atoms/Join_chatroom'
+
 const Wrapper = styled.div`
   float:right;
   margin-top: 150px;
 `
 
-const Right_sidebar = (props) => {
+const Right_sidebar = () => {
   return (
     <Wrapper>
       <Make_new type="button" onClick={() => window.location.href='/new'}>새 모임 만들기</Make_new>
