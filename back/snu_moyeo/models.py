@@ -33,7 +33,6 @@ class SnuUser (AbstractUser):
     point = models.IntegerField(default = 0)
     mySNU_verified = models.BooleanField(default = False)
     mySNU_verification_token = models.CharField(max_length = 100, unique = True, blank = True)
-
     meetings = models.ManyToManyField('Meeting', through = 'Participate')
 
     # user_id = models.CharField(max_length= 100, primary_key=True) #changed variable name

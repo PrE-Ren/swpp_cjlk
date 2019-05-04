@@ -72,4 +72,3 @@ class ParticipateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participate
         fields = ('id', 'user_id', 'meeting_id')
-
