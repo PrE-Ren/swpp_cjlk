@@ -7,7 +7,7 @@ import Left_sidebar from '../../molecules/Left_sidebar'
 import MyInfo from '../../../containers/MyInfo'
 import Right_sidebar from '../../molecules/Right_sidebar'
 
-const HomePage = ({ state, logoutReq }) => {
+const MyPagePage = ({ state }) => {
   if(state.mySNU_verification_token == null) {
     window.location.href = "/login"
     return <div></div>
@@ -26,4 +26,4 @@ const HomePage = ({ state, logoutReq }) => {
   }
 }
 
-export default HomePage
+export default MyPagePage

@@ -1,32 +1,19 @@
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import SignupPage from '../components/molecules/SignupPage'
-import {postSignupData} from '../store/login/actions'
+import { postSignupData } from '../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
   return {
-    state: state.login
+    state: state.snu_moyeo
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signupReq: (userid,password,name,email) =>{
-      dispatch(postSignupData(userid,password,name,email))
+    signupReq: (username, password, name, email) =>{
+      dispatch(postSignupData(username, password, name, email))
     }
   }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)(SignupPage)
-
-/*
-const mapDispatchToProps = (dispatch) => {
-  return {
-    loginReq: (userid,password) =>{
-      dispatch(getLoginData(userid,password))
-    }
-    signupReq: (userid,password) =>{
-      dispatch(signupRequest(userid,password))
-    }
-  }
-}
-*/
+export default connect(mapStateToProps, mapDispatchToProps)(SignupPage)
