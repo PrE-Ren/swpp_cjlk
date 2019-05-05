@@ -1,0 +1,6 @@
+back/db.sqlite3
+back/snu_moyeo/__pycache__
+back/swpp_cjlk/__pycache__
+back/snu_moyeo/migrations
+back/env
+back/*~
