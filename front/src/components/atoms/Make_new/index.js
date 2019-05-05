@@ -23,7 +23,7 @@ const styles = css`
   border: none;
   position:absolute;
   right: 5px;
-  margin-top: -500px;
+  margin-top: -230px;
   width: 300px;
   color: white;
   border-radius: 12px;
