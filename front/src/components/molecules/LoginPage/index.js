@@ -26,6 +26,7 @@ export const LoginPage = ({ state, loginReq }) => {
         <div>
           <Fonts>
             <p></p>
+            &ensp;&ensp;로그인
             <p></p>
             &ensp;&ensp;ID &ensp;&ensp;
             <input ref={node=>{username=node;}}/>
