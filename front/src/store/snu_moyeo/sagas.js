@@ -49,6 +49,13 @@ export function* watchLogin(){
     }
 }
 
+export function* watchNew(){
+    while(true) {
+        const action = yield take(actions.LOGIN_REQUEST)
+        yield call(sendNewReq, action)
+    }
+}
+
 export function* watchSignup(){
     while(true) {
         const action = yield take(actions.SIGNUP_REQUEST)

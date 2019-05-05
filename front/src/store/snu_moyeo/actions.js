@@ -4,6 +4,20 @@ export const LOGOUT_REQUEST = 'LOGOUT_REQUEST'
 export const SIGNUP_REQUEST = 'SIGNUP_REQUEST'
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS'
 export const RELOAD_ACTION = 'RELOAD_ACTION'
+export const NEW_REQUEST = 'NEW_REQUEST'
+
+export const postNewData = (kind, leader, title, due, min_people, max_people, description) => {
+  return {
+    type: NEW_REQUEST,
+    kind,
+    leader,
+    title,
+    due,
+    min_people,
+    max_people,
+    description
+  }
+};
 
 export const reload_action = (meeting_list) => {
   return {

@@ -8,7 +8,7 @@ import styled from 'styled-components'
 const Wrapper = styled.div`
   position: relative;
   float:right;
-  top: -400px;
+  top: -150px;
   right: 0px;
 `
 const Right_sidebar = () => {
