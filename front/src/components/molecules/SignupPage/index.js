@@ -16,7 +16,7 @@ const SignupPage = ({ state, signupReq }) => {
     return (
         <div>
           <div>
-            <h1>&ensp;회원가입</h1>
+            <h2>&ensp;&ensp;회원가입</h2>
             <h2>&ensp;&ensp;ID</h2>
             &ensp;&ensp;<input ref={node=>{username=node;}}/>
           </div>
