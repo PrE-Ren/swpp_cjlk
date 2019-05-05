@@ -1,3 +1,7 @@
 language: python
 script:
         - python3 manage.py test
+
+branches:
+        only:
+                - backend
