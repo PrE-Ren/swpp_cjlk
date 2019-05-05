@@ -27,7 +27,7 @@ class MeetingModelsTests(TestCase):
         link = self.link + 'user/'
         #print(link)
         res = requests.get(link, auth = ('hi','hello'))
-        contents = res.content.json()
+        #contents = res.content.json()
         
         #print(contents[0]['id'])
         self.assertEqual(int(res.status_code/100),2)
