@@ -19,4 +19,3 @@ script:
         - coverage run --source='.' manage.py test snu_moyeo
         - coverage report
 
-
