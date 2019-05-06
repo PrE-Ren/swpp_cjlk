@@ -38,7 +38,10 @@ const MyInfoCss = styled.div`
 
 const HomePage = ({ state, logoutReq }) => {
   if(state.mySNU_verification_token == null) {
-    window.location.href = "/login"
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/login'
+    });
     return <div></div>
   }
   else {
@@ -55,7 +58,7 @@ const HomePage = ({ state, logoutReq }) => {
         </MyPageCss>
 
         <LogoutCss>
-          <Button type = "submit" onClick={()=> logoutReq()}> 로그아웃 </Button>
+          <Button type = "submit" onClick={()=> logoutReq()}>로그아웃</Button>
         </LogoutCss>
         <MyInfoCss>
           <MyInfo />

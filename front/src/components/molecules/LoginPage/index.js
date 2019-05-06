@@ -36,13 +36,16 @@ export const LoginPage = ({ state, loginReq }) => {
             <input ref={node=>{password=node;}}/>
           </Fonts>
           <br/>
-          &ensp;&ensp;<Button type = "submit" onClick={() => loginReq(username.value, password.value)}> 로그인 </Button>
-          &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/signup"}> 회원가입 </Button>
+          &ensp;&ensp;<Button type = "submit" onClick={() => loginReq(username.value, password.value)}>로그인</Button>
+          &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/signup"}>회원가입</Button>
         </div>
     )
   }
   else {
-    window.location.href = "/"
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/'
+    });
     return <div></div>
   }
 }

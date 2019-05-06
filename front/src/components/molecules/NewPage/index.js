@@ -14,7 +14,10 @@ const NewPage = ({ state, newReq }) => {
   let kind, title, due, min_people, max_people, description
 
   if(state.mySNU_verification_token == null){
-    window.location.href = "/"
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/'
+    });
     return (
       <div>
       </div>
