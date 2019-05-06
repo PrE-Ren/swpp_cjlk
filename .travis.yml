@@ -1,6 +1,4 @@
-sudo: required
-dist: trusty
-language: generic
+dist: xenial
 matrix:
   include:
     
@@ -18,17 +16,18 @@ matrix:
     -language: python
     before_script:
       - rm ./back/db.sqlite3
+      - rm ./back/snu_moyeo/migrations
       - python3 ./back/manage.py makemigrations snu_moyeo
       - python3 ./back/manage.py migrate
         
     install:
-      - pip3 install django
-      - pip3 install djangorestframework
-      - pip3 install coverage
-      - pip3 install requests
-      - pip3 install django-cors-headers
-      - pip3 install django-rest-auth
-      - pip3 install django-allauth
+      - pip install django
+      - pip install djangorestframework
+      - pip install coverage
+      - pip install requests
+      - pip install django-cors-headers
+      - pip install django-rest-auth
+      - pip install django-allauth
   
     script:
       - cd back/
