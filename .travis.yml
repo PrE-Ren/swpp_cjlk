@@ -21,13 +21,14 @@ matrix:
       - python3 ./back/manage.py migrate
         
     install:
-      - pip install django
-      - pip install djangorestframework
-      - pip install coverage
-      - pip install requests
-      - pip install django-cors-headers
-      - pip install django-rest-auth
-      - pip install django-allauth
+      - sudo apt-get install python3-pip
+      - sudo pip3 install django
+      - sudo pip3 install djangorestframework
+      - sudo pip3 install coverage
+      - sudo pip3 install requests
+      - sudo pip3 install django-cors-headers
+      - sudo pip3 install django-rest-auth
+      - sudo pip3 install django-allauth
   
     script:
       - cd back/
