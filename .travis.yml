@@ -2,10 +2,14 @@
 language: node_js
 node_js: 6.9.4
 install:
+        - sudo apt-get install curl
         - sudo apt-get install npm
         - sudo npm install
+        - curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
+        - sudo apt-get install -y nodejs
         - sudo npm install --save cross-env
         - sudo npm install jest 
+        - sudo npm install -g yo generator-arc
 script:
         - cd front/ 
         - sudo npm test -- --coverage
