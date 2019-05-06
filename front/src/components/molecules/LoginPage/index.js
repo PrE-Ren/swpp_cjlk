@@ -5,9 +5,9 @@ import { font, palette } from 'styled-theme'
 import Button from '../../atoms/Button'
 import { SSL_OP_SINGLE_DH_USE } from 'constants';
 
-const Wrapper = styled.div`
-  font-family: ${font('primary')};
-  color: ${palette('grayscale', 0)};
+const Fonts = styled.div`
+  font-size: 25px;
+  font-weight: bold;
 `
 let rgb = [255, 240, 240]
 
@@ -24,23 +24,28 @@ export const LoginPage = ({ state, loginReq }) => {
   if (state.mySNU_verification_token == null) {
     return (
         <div>
-          <div>
-            <h1>&ensp;로그인</h1>
-            <h2>&ensp;&ensp;ID</h2>
-            &ensp;&ensp;<input ref={node=>{username=node;}}/>
-          </div>
-          <div>
-            <h2>&ensp;&ensp;PW</h2>
-            &ensp;&ensp;<input ref={node=>{password=node;}}/>
-          </div>
+          <Fonts>
+            <p></p>
+            &ensp;&ensp;로그인
+            <p></p>
+            &ensp;&ensp;ID &ensp;&ensp;
+            <input ref={node=>{username=node;}}/>
+          </Fonts>
+          <Fonts>
+            &ensp;&ensp;PW &ensp;
+            <input ref={node=>{password=node;}}/>
+          </Fonts>
           <br/>
-          &ensp;&ensp;<Button type = "submit" onClick={() => loginReq(username.value, password.value)}> 로그인 </Button>
-          &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/signup"}> 회원가입 </Button>
+          &ensp;&ensp;<Button type = "submit" onClick={() => loginReq(username.value, password.value)}>로그인</Button>
+          &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/signup"}>회원가입</Button>
         </div>
     )
   }
   else {
-    window.location.href = "/"
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/'
+    });
     return <div></div>
   }
 }

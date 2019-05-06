@@ -21,6 +21,9 @@ const hoverForegroundColor = ({ disabled, transparent }) => !disabled && transpa
 const styles = css`
   background-color: #4CAF50; /* Green */
   border: none;
+  position:absolute;
+  right: 5px;
+  margin-top: -230px;
   width: 300px;
   color: white;
   border-radius: 12px;
@@ -32,7 +35,6 @@ const styles = css`
     background-color: ${hoverBackgroundColor};
     color: ${hoverForegroundColor};
   }
-
 `
 
 const StyledButton = styled.button`${styles}`

@@ -49,6 +49,13 @@ export function* watchLogin(){
     }
 }
 
+export function* watchNew(){
+    while(true) {
+        const action = yield take(actions.LOGIN_REQUEST)
+        yield call(sendNewReq, action)
+    }
+}
+
 export function* watchSignup(){
     while(true) {
         const action = yield take(actions.SIGNUP_REQUEST)
@@ -93,7 +100,7 @@ export function* sendSignupReq(data) {
     let uid = data.username
     let upw = data.password
     let name = data.name
-    let email = data.email
+    let email = data.email+"@snu.ac.kr"
     const url = 'http://127.0.0.1:8000/sign_up/'
     const info = JSON.stringify({ username: uid, password: upw, name: name, email: email });
     const response = yield call(fetch, url, {
