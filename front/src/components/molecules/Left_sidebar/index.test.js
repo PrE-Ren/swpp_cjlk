@@ -4,12 +4,26 @@ import Left_sidebar from '.'
 
 const wrap = (props = {}) => shallow(<Left_sidebar {...props} />)
 
-it('renders children when passed in', () => {
-  const wrapper = wrap({ children: 'test' })
-  expect(wrapper.contains('test')).toBe(true)
+it('renders same sidebar when different childern, props passed in', () => {
+  const wrapper = wrap({ children: 'test', id: 'foo' })
+  expect(wrapper.contains('음식배달')).toBe(true)
+  expect(wrapper.contains('택시합승')).toBe(true)
+  expect(wrapper.contains('공동구매')).toBe(true)
+  expect(wrapper.contains('스터디')).toBe(true)
+  expect(wrapper.contains('운동')).toBe(true)
+  expect(wrapper.contains('미팅')).toBe(true)
+  const wrapper2 = wrap({ children: 'foo', id: 'test' })
+  expect(wrapper2.contains('음식배달')).toBe(true)
+  expect(wrapper2.contains('택시합승')).toBe(true)
+  expect(wrapper2.contains('공동구매')).toBe(true)
+  expect(wrapper2.contains('스터디')).toBe(true)
+  expect(wrapper2.contains('운동')).toBe(true)
+  expect(wrapper2.contains('미팅')).toBe(true)
 })
 
+/*
 it('renders props when passed in', () => {
   const wrapper = wrap({ id: 'foo' })
   expect(wrapper.find({ id: 'foo' })).toHaveLength(1)
 })
+*/
