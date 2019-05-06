@@ -1,16 +1,14 @@
+dist: xenial
 
 matrix:
         include:
-
                 - language: python
-
-                  dist: xenial
                   before_script:
                           - rm ./back/db.sqlite3
-                          - rm -r ./back/snu_moyeo/migrations
+                          - rm -r ./back/snu_moyeo/migrations snu_moyeo
                           - python3 ./back/manage.py makemigrations snu_moyeo
                           - python3 ./back/manage.py migrate
-                  install:
+                  install: 
                           - pip install django
                           - pip install djangorestframework
                           - pip install coverage
@@ -27,17 +25,21 @@ matrix:
 
 
 
-                          - language: node_js
-                            node_js: 
-                          - "8"
-                            install:
-                                    - sudo apt-get install curl
-                                    - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - 
-                                    - sudo apt-get install -y nodejs
-                                    - sudo npm install --save cross-env
-                                    - sudo npm install -g yo generator-arc
-                                    - sudo npm install jest
+                - language: node_js
+                  node_js:
+                          - 8
 
-                            script:
-                                    - cd front/
-                                    - npm test -- --coverage
+                  install: 
+                          - sudo apt-get install curl
+                          - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+                          - sudo apt-get install -y nodejs
+                          - sudo npm install --save cross-env
+                          - sudo npm install -g yo generator-arc
+                          - sudo npm install jest
+                  script: 
+                          - cd front/
+                          - npm test -- --coverage
+
+        
+
+~                                                
