@@ -11,7 +11,9 @@ install:
         - pip install djangorestframework
         - pip install coverage
         - pip install requests
-
+        - pip install django-cors-headers
+        - pip install django-rest-auth
+        - pip install django-allauth
 script:
         - cd back/
         - python3 manage.py runserver&
