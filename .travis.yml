@@ -3,7 +3,6 @@ language: python
 
 before_script:
         - rm ./back/db.sqlite3
-        - rm -r ./back/snu_moyeo/migrations
         - python3 ./back/manage.py makemigrations snu_moyeo
         - python3 ./back/manage.py migrate
 install:
