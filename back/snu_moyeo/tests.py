@@ -58,10 +58,10 @@ class MeetingModelsTests(TestCase):
 
     def delete_userlist_test (self):
         link = self.link + 'user/'
-        #print('how about another user delete another?')
-        #res = requests.delete(link+'1/', auth = ('wrong','wrong'))  # wrong authentication
-        #self.assertEqual(res.status_code, 401)
-        #print('you cannot delete!')
+        print('how about another user delete another?')
+        res = requests.delete(link+'1/', auth = ('wrong','wrong'))  # wrong authentication
+        self.assertEqual(res.status_code, 401)
+        print('you cannot delete!')
 
         res = requests.delete(link+'2/', auth =('test2', 'hello'))        
         self.assertEqual(res.status_code, 204)
@@ -81,7 +81,6 @@ class MeetingModelsTests(TestCase):
         #print(res)
 
         link = self.link + 'meetinglist/'
-        print(link)
         data = {'title': 'postmeeting1', 'due': '2019-08-23T13:23:00+09:00' , 'min_people': 0, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
         
         res = requests.post(link, data = data, auth = ('test1', 'hello'))
@@ -95,10 +94,10 @@ class MeetingModelsTests(TestCase):
     def delete_meeting_test(self) :
         link = self.link + "meetinglist/"
         
-        #print('how about delete meeting that is not owned?')
-        #res = requests.delete( link+'2/',auth = ('test2','hello') )
-        #self.assertEqual(res.status_code, 401)
-        #print('you cannot delete it')
+        print('how about delete meeting that is not owned?')
+        res = requests.delete( link+'2/',auth = ('test2','hello') )
+        self.assertEqual(res.status_code, 401)
+        print('you cannot delete it')
         
         res = requests.delete( link + '2/', auth = ('test1','hello') )
         self.assertEqual(res.status_code, 204)
@@ -138,9 +137,11 @@ class MeetingModelsTests(TestCase):
         res = requests.put(link,data)
         self.assertEqual(res.status_code,200)
 
-        #data = {'snuuser' : 2, 'meeting' : 1}
-        #res = requests.put(link,data)
-        #self.assertEqual(res.status_code, 400)
+        print('how about put illegal data?')
+        data = {'snuuser' : 2, 'meeting' : 1}
+        res = requests.put(link,data)
+        self.assertEqual(res.status_code, 400)
+        print('answer: 400 error!')
 
     def test_all(self):
         self.sign_up_post()
