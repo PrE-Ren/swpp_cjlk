@@ -1,6 +1,11 @@
 dist: xenial
 language: python
 
+branches:
+        only:
+                - master
+                - backend
+
 before_script:
         - rm db.sqlite3
         - rm -r ./snu_moyeo/migrations
@@ -17,4 +22,5 @@ script:
         - sleep 3
         - coverage run --source='.' manage.py test snu_moyeo
         - coverage report
+
 
