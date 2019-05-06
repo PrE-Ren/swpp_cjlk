@@ -21,3 +21,17 @@ script:
         - coverage run --source='.' manage.py test snu_moyeo
         - coverage report
 
+
+
+language: node_js
+
+install:
+        - apt-get install curl
+        - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - 
+        - apt-get install -y nodejs
+        - npm install --save cross-env
+        - npm install -g yo generator-arc
+        - npm jest
+
+script:
+        - npm test -- --coverage
