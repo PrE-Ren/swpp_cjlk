@@ -63,6 +63,24 @@ export function* watchSignup(){
     }
 }
 
+export function* sendNewReq(action){
+  let uid = action.username
+  let upw = action.password
+  const url_token = 'http://127.0.0.1:8000/get_auth_token/'
+  const url_user = 'http://127.0.0.1:8000/meetinglist/'
+  const info = JSON.stringify({ username: uid, password: upw });
+  const response_token = yield call(fetch, url_token, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: info,
+  })
+  if (response_token.ok) {
+  }
+
+}
+
 export function* sendLoginReq(action) {
     let uid = action.username
     let upw = action.password

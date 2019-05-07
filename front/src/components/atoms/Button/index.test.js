@@ -2,7 +2,8 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import Button from '.'
 
-const wrap = (props = {}) => shallow(<Button {...props} />).dive()
+const onClick = jest.fn()
+const wrap = (props = {}) => shallow(<Button onClick = {onClick} {...props} />).dive()
 
 it('renders with different combination of props', () => {
   wrap({ disabled: true })
@@ -23,4 +24,12 @@ it('renders props when passed in', () => {
 it('renders button by default', () => {
   const wrapper = wrap()
   expect(wrapper.find('button')).toHaveLength(1)
+})
+
+it('calls onClick when Clicked', () => {
+  onClick.mockClear()
+  const wrapper = wrap()
+  expect(onClick).not.toBeCalled()
+  wrapper.simulate('click')
+  expect(onClick).toBeCalled()
 })

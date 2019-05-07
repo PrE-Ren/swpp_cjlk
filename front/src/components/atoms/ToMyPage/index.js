@@ -15,10 +15,14 @@ const ToMyPageWrapper = styled.div`
     color: white;
   }`;
 
-  const ToMyPage = ({ type, ...rest }) => {
+  const ToMyPage = ({ type, ...props }) => {
     return (
-      <ToMyPageWrapper fontSize="1.25rem" {...rest}></ToMyPageWrapper>
+      <ToMyPageWrapper fontSize="1.25rem" {...props}></ToMyPageWrapper>
     );
   };
 
+ToMyPage.defaultProps = {
+    palette: 'primary',
+    type: 'button',
+}
 export default ToMyPage

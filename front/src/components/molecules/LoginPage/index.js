@@ -41,7 +41,10 @@ export const LoginPage = ({ state, loginReq }) => {
     )
   }
   else {
-    window.location.href = "/"
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/'
+    });
     return <div></div>
   }
 }

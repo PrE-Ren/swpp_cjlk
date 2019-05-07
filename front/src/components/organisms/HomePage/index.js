@@ -38,7 +38,10 @@ const MyInfoCss = styled.div`
 
 const HomePage = ({ state, logoutReq }) => {
   if(state.mySNU_verification_token == null) {
-    window.location.href = "/login"
+    Object.defineProperty(window.location, 'href', {
+     writable: true,
+     value: '/login'
+   });
     return <div></div>
   }
   else {
@@ -60,7 +63,7 @@ const HomePage = ({ state, logoutReq }) => {
         <MyInfoCss>
           <MyInfo />
         </MyInfoCss>
-        
+
         <Right_sidebar />
 
       </div>

@@ -35,7 +35,7 @@ const NewPage = ({ state, newReq }) => {
         <br />
         내용: <textarea rows="30" cols="100" ref={node => {description=node;}} />
         <br />
-        <Button type = "submit" onClick={() => newReq(kind.value, state.username, title.value, due.value, min_people.value, max_people.value, description.value)}> 로그인 </Button>
+        <Button type = "submit" onClick={() => newReq(state.username,state.password,kind.value, state.username, title.value, due.value, min_people.value, max_people.value, description.value)}> 로그인 </Button>
       </div>
     )
   }

@@ -41,7 +41,10 @@ const SignupPage = ({ state, signupReq }) => {
     )
   }
   else {
-    window.location.href = "/"
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/'
+    });
     return <div></div>
   }
 }
