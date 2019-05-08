@@ -26,6 +26,7 @@ export const LoginPage = ({ state, loginReq }) => {
         <div>
           <Fonts>
             <p></p>
+            &ensp;&ensp;로그인
             <p></p>
             &ensp;&ensp;ID &ensp;&ensp;
             <input ref={node=>{username=node;}}/>
@@ -35,8 +36,8 @@ export const LoginPage = ({ state, loginReq }) => {
             <input ref={node=>{password=node;}}/>
           </Fonts>
           <br/>
-          &ensp;&ensp;<Button type = "submit" onClick={() => loginReq(username.value, password.value)}> 로그인 </Button>
-          &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/signup"}> 회원가입 </Button>
+          &ensp;&ensp;<Button type = "submit" onClick={() => loginReq(username.value, password.value)}>로그인</Button>
+          &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/signup"}>회원가입</Button>
         </div>
     )
   }

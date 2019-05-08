@@ -15,3 +15,4 @@ it('renders entry when passed in', () => {
   expect(wrapper.contains('미팅 구해요')).toBe(true)
   expect(wrapper.contains('2019-05-16T19:00:00+09:00')).toBe(true)
 })
+

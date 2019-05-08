@@ -18,7 +18,7 @@ const Fonts = styled.div`
   font-size: 20px;
 `
 
-export const Left_sidebar = () => {
+export const Left_sidebar = ({children, ...props}) => {
   return (
     <Wrapper>
       <h3>분류</h3>

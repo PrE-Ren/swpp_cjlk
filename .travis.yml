@@ -1,0 +1,39 @@
+sudo: required
+dist: trusty
+language: generic
+matrix:
+  include:
+    
+    -language: node_js
+    node_js: 6.9.4
+    install:
+      - sudo npm install
+      - sudo npm install --save cross-env
+      - sudo npm install jest 
+    script:
+      - cd front/ 
+      - sudo npm test -- --coverage
+
+    
+    -language: python
+    before_script:
+      - rm ./back/db.sqlite3
+      - python3 ./back/manage.py makemigrations snu_moyeo
+      - python3 ./back/manage.py migrate
+        
+    install:
+      - pip install django
+      - pip install djangorestframework
+      - pip install coverage
+      - pip install requests
+      - pip install django-cors-headers
+      - pip install django-rest-auth
+      - pip install django-allauth
+  
+    script:
+      - cd back/
+      - python3 manage.py runserver&
+      - sleep 3
+      - coverage run --source = '.' manage.py test snu_moyeo
+      - coverage report
+

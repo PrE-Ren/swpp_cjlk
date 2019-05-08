@@ -19,4 +19,6 @@ it('renders same sidebar when different childern, props passed in', () => {
   expect(wrapper2.contains('스터디')).toBe(true)
   expect(wrapper2.contains('운동')).toBe(true)
   expect(wrapper2.contains('미팅')).toBe(true)
+
 })
+

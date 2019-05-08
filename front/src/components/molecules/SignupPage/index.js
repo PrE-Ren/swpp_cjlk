@@ -16,7 +16,7 @@ const SignupPage = ({ state, signupReq }) => {
     return (
         <div>
           <div>
-            <h1>&ensp;회원가입</h1>
+            <h2>&ensp;&ensp;회원가입</h2>
             <h2>&ensp;&ensp;ID</h2>
             &ensp;&ensp;<input ref={node=>{username=node;}}/>
           </div>
@@ -35,8 +35,8 @@ const SignupPage = ({ state, signupReq }) => {
           <div>
             <h4>&ensp;&ensp;메일 발송에 다소 시간이 걸릴 수 있으니 버튼을 누르고 기다려 주십시오.</h4>
           </div>
-          &ensp;&ensp;<Button type = "submit" onClick={() => signupReq(username.value, password.value, name.value, email.value)}> 제출 </Button>
-          &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/login"}> 돌아가기 </Button>
+          &ensp;&ensp;<Button type = "submit" onClick={() => signupReq(username.value, password.value, name.value, email.value)}>제출</Button>
+          &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/login"}>돌아가기</Button>
         </div>
     )
   }

@@ -15,7 +15,10 @@ const NewPage = ({ state, NewReq }) => {
   console.log(state.username)
   console.log(state.password)
   if(state.mySNU_verification_token == null){
-    window.location.href = "/"
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/'
+    });
     return (
       <div>
       </div>

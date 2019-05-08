@@ -43,6 +43,7 @@ const HomePage = ({ state, logoutReq }) => {
      writable: true,
      value: '/login'
    });
+
     return <div></div>
   }
   else {
@@ -59,7 +60,7 @@ const HomePage = ({ state, logoutReq }) => {
         </MyPageCss>
 
         <LogoutCss>
-          <Button type = "submit" onClick={()=> logoutReq()}> 로그아웃 </Button>
+          <Button type = "submit" onClick={()=> logoutReq()}>로그아웃</Button>
         </LogoutCss>
 
         <MyInfoCss>
