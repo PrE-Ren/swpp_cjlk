@@ -63,6 +63,7 @@ export function* watchSignup(){
     }
 }
 
+/*
 export function* sendNewReq(action){
   let uid = action.username
   let upw = action.password
@@ -75,11 +76,8 @@ export function* sendNewReq(action){
   let des = action.description
 
   const url_user = 'http://127.0.0.1:8000/meetinglist/'
-  const hash = new Buffer(`${'abc'}:${'abc'}`).toString('base64')
-
+  const hash = new Buffer(`${uid}:${upw}`).toString('base64')
   const info = JSON.stringify({ title: tit, kind: kin, due: during, min_people: mip, max_people: map, description: des , state: 0 });
-
-  console.log(localStorage.getItem('token'))
 
   const response_token = yield call(fetch, url_user, {
       method: 'POST',
@@ -91,11 +89,70 @@ export function* sendNewReq(action){
   })
   if (response_token.ok) {
     console.log('good')
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/'
+    });
   }
   else {
     console.log('bad')
+    alert('올바르지 않은 형식입니다')
   }
+}
+*/
 
+export function* sendNewReq(action){
+  const url_meetinglist = 'http://127.0.0.1:8000/meetinglist/'
+  const url_participate = 'http://127.0.0.1:8000/participate/'
+  const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
+  const info_meeting = JSON.stringify(
+    {
+      title: action.title,
+      kind: action.kind,
+      due: action.due,
+      min_people: action.min_people,
+      max_people: action.max_people,
+      description: action.description,
+      state: 0
+    }
+  );
+
+  const response_meeting = yield call(fetch, url_meetinglist, {
+      method: 'POST',
+      headers: {
+          'Authorization': `Basic ${hash}`,
+          'Content-Type': 'application/json',
+      },
+      body: info_meeting,
+  })
+
+  if (response_meeting.ok) {
+    console.log('Meeting POST ok')
+    const meeting_id = (yield call([response_meeting, response_meeting.json])).id
+    const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: meeting_id });
+    const response_participate = yield call(fetch, url_participate, {
+        method: 'POST',
+        headers: {
+            'Authorization': `Basic ${hash}`,
+            'Content-Type': 'application/json',
+        },
+        body: info_participate,
+    })
+
+    if (response_participate.ok) {
+      console.log('Participate POST ok')
+      Object.defineProperty(window.location, 'href', {
+        writable: true,
+        value: '/'
+      });
+    }
+    else
+      console.log('Participate POST bad')
+  }
+  else {
+    console.log('Meeting POST bad')
+    console.log('올바르지 않은 형식입니다.')
+  }
 }
 
 export function* sendLoginReq(action) {
@@ -119,8 +176,8 @@ export function* sendLoginReq(action) {
         for (var i in response_user_data) {
             if (response_user_data[i].username == uid) {
                 const user_data = response_user_data[i]
-                if(user_data.mySNU_verified)
-                    yield put(actions.loginSuccess(uid, upw, user_data))
+                if (user_data.mySNU_verified)
+                    yield put(actions.loginSuccess(uid, upw, user_data.mySNU_verification_token, user_data.id))
                 else
                     alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
                 break
@@ -148,7 +205,10 @@ export function* sendSignupReq(data) {
     if (response.ok) {
         alert("인증 링크가 당신의 SNU 메일로 전송되었습니다.")
         yield put(actions.signupSuccess())
-        window.location.href = "/login"
+        Object.defineProperty(window.location, 'href', {
+          writable: true,
+          value: '/login'
+        });
     } else {
         alert("회원가입 실패 : 정보를 바르게 입력하세요.")
     }

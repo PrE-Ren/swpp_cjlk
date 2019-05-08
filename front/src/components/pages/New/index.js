@@ -1,5 +1,5 @@
 import React from 'react'
-import NewPage from '../../../containers/NewPage'
+import NewPage from '../../../containers/Page/NewPage'
 
 import { PageTemplate } from 'components'
 

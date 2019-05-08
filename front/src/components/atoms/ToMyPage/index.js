@@ -3,7 +3,14 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const ToMyPageWrapper = styled.div`
+const ToMyPagePos = styled.div`
+  position: relative;
+  float:right;
+  right:110px;
+  top:-43px;
+`
+
+const ToMyPageDesign = styled.div`
   border: 1.5px solid black;
   display: inline-block;
   padding: 0.5rem;
@@ -17,7 +24,9 @@ const ToMyPageWrapper = styled.div`
 
   const ToMyPage = ({ type, ...props }) => {
     return (
-      <ToMyPageWrapper fontSize="1.25rem" {...props}></ToMyPageWrapper>
+      <ToMyPagePos>
+        <ToMyPageDesign fontSize="1.25rem" {...props}></ToMyPageDesign>
+      </ToMyPagePos>
     );
   };
 

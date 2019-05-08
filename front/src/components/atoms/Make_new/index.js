@@ -2,7 +2,6 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 //import React from 'react'
 //import PropTypes from 'prop-types';
-
 import styled, { css } from 'styled-components'
 import { font, palette } from 'styled-theme'
 import { ifProp } from 'styled-tools'
@@ -37,11 +36,10 @@ const styles = css`
   }
 `
 
-const StyledButton = styled.button`${styles}`
+const Make_newDesign = styled.button`${styles}`
 
 const Make_new = ({ type, ...props }) => {
-
-  return <StyledButton {...props} type={type} />
+  return <Make_newDesign {...props} type={type} />
 }
 
 Make_new.propTypes = {

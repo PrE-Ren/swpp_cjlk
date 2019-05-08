@@ -1,5 +1,5 @@
 import React from 'react'
-import SignupPage from '../../../containers/SignupPage'
+import SignupPage from '../../../containers/Page/SignupPage'
 
 import { PageTemplate } from 'components'
 
