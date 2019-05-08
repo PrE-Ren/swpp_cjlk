@@ -4,15 +4,15 @@ import ToHome from '../../atoms/ToHome'
 import ToMyPage from '../../atoms/ToMyPage'
 import Logout from '../../atoms/Logout'
 import Left_sidebar from '../../molecules/Left_sidebar'
-import MyInfo from '../../../containers/MyInfo'
+import MeetingCreate from '../../molecules/MeetingCreate'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import styled from 'styled-components'
 
-const HomePage = ({ state, logoutReq }) => {
+const NewPage = ({ state, logoutReq, newReq }) => {
   if (state.mySNU_verification_token == null) {
     Object.defineProperty(window.location, 'href', {
       writable: true,
-      value: '/login'
+      value: '/'
     });
     return (<div></div>)
   }
@@ -23,11 +23,16 @@ const HomePage = ({ state, logoutReq }) => {
         <Left_sidebar />
         <ToMyPage type="submit" onClick={() => window.location.href = ('/user/' + state.user_id)}>My Page</ToMyPage>
         <Logout type = "submit" onClick={()=> logoutReq()}>로그아웃</Logout>
-        <MyInfo />
+        <MeetingCreate state={state} newReq={newReq} />
         <Right_sidebar />
       </div>
     )
   }
 }
 
-export default HomePage
+NewPage.propTypes = {
+  reverse: PropTypes.bool,
+  children: PropTypes.node,
+}
+
+export default NewPage
