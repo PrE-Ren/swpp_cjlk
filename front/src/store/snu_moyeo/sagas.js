@@ -63,44 +63,6 @@ export function* watchSignup(){
     }
 }
 
-/*
-export function* sendNewReq(action){
-  let uid = action.username
-  let upw = action.password
-
-  let tit = action.title
-  let kin = action.kind
-  let during = action.due
-  let mip = action.min_people
-  let map = action.max_people
-  let des = action.description
-
-  const url_user = 'http://127.0.0.1:8000/meetinglist/'
-  const hash = new Buffer(`${uid}:${upw}`).toString('base64')
-  const info = JSON.stringify({ title: tit, kind: kin, due: during, min_people: mip, max_people: map, description: des , state: 0 });
-
-  const response_token = yield call(fetch, url_user, {
-      method: 'POST',
-      headers: {
-          'Authorization': `Basic ${hash}`,
-          'Content-Type': 'application/json',
-      },
-      body: info,
-  })
-  if (response_token.ok) {
-    console.log('good')
-    Object.defineProperty(window.location, 'href', {
-      writable: true,
-      value: '/'
-    });
-  }
-  else {
-    console.log('bad')
-    alert('올바르지 않은 형식입니다')
-  }
-}
-*/
-
 export function* sendNewReq(action){
   const url_meetinglist = 'http://127.0.0.1:8000/meetinglist/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
