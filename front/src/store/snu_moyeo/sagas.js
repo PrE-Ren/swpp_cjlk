@@ -51,7 +51,7 @@ export function* watchLogin(){
 
 export function* watchNew(){
     while(true) {
-        const action = yield take(actions.LOGIN_REQUEST)
+        const action = yield take(actions.NEW_REQUEST)
         yield call(sendNewReq, action)
     }
 }
@@ -66,17 +66,34 @@ export function* watchSignup(){
 export function* sendNewReq(action){
   let uid = action.username
   let upw = action.password
-  const url_token = 'http://127.0.0.1:8000/get_auth_token/'
+
+  let tit = action.title
+  let kin = action.kind
+  let during = action.due
+  let mip = action.min_people
+  let map = action.max_people
+  let des = action.description
+
   const url_user = 'http://127.0.0.1:8000/meetinglist/'
-  const info = JSON.stringify({ username: uid, password: upw });
-  const response_token = yield call(fetch, url_token, {
+  const hash = new Buffer(`${'abc'}:${'abc'}`).toString('base64')
+
+  const info = JSON.stringify({ title: tit, kind: kin, due: during, min_people: mip, max_people: map, description: des , state: 0 });
+
+  console.log(localStorage.getItem('token'))
+
+  const response_token = yield call(fetch, url_user, {
       method: 'POST',
       headers: {
+          'Authorization': `Basic ${hash}`,
           'Content-Type': 'application/json',
       },
       body: info,
   })
   if (response_token.ok) {
+    console.log('good')
+  }
+  else {
+    console.log('bad')
   }
 
 }
@@ -142,4 +159,5 @@ export default function* () {
   yield fork(watchReload)
   yield fork(watchLogin)
   yield fork(watchSignup)
+  yield fork(watchNew)
 }

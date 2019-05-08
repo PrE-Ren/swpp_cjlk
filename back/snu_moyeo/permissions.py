@@ -18,4 +18,4 @@ class LeaderOnlyControl(permissions.BasePermission):
             return True
         if request.method in permissions.SAFE_METHODS:
             return True
-        return obj.leader == request.user.username
+        return obj.leader == request.user

@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
 const Styledli = styled.span`
-  display: inline-block;
+  display: block;
+  width: 700px;
   padding: 0.5rem 0.5rem;
   margin: 1rem 2rem;
   border: 2px solid cadetblue;

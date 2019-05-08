@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import NewPage from '../components/molecules/NewPage'
-
+import { postNewData } from '../store/snu_moyeo/actions'
 const mapStateToProps = (state) => {
   return {
     state: state.snu_moyeo

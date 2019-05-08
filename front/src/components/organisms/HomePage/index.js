@@ -29,6 +29,7 @@ const LogoutCss = styled.div`
 const Left_sidebarCss = styled.div`
   left: 5px;
 `
+
 const MyInfoCss = styled.div`
   position: relative;
   float: center;
@@ -60,6 +61,7 @@ const HomePage = ({ state, logoutReq }) => {
         <LogoutCss>
           <Button type = "submit" onClick={()=> logoutReq()}> 로그아웃 </Button>
         </LogoutCss>
+
         <MyInfoCss>
           <MyInfo />
         </MyInfoCss>
