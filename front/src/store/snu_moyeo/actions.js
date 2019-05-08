@@ -47,14 +47,16 @@ export const postSignupData = (username, password, name, email) => {
     }
 };
 
-export const loginSuccess = (username, password, token, user_id) => {
+export const loginSuccess = (username, password, token, user_id, email, name) => {
     return {
         type : LOGIN_SUCCESS,
         data : {
             username : username,
             password : password,
             mySNU_verification_token : token,
-            user_id : user_id
+            user_id : user_id,
+            email : email,
+            name : name
         }
     }
 };

@@ -35,4 +35,5 @@ Logout.defaultProps = {
     palette: 'primary',
     type: 'button',
 }
+
 export default Logout

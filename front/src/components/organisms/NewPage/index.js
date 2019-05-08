@@ -12,7 +12,7 @@ const NewPage = ({ state, logoutReq, newReq }) => {
   if (state.mySNU_verification_token == null) {
     Object.defineProperty(window.location, 'href', {
       writable: true,
-      value: '/'
+      value: '/login'
     });
     return (<div></div>)
   }
@@ -21,7 +21,7 @@ const NewPage = ({ state, logoutReq, newReq }) => {
       <div>
         <ToHome type="submit" onClick={() => window.location.href = '/'}>To Home</ToHome>
         <Left_sidebar />
-        <ToMyPage type="submit" onClick={() => window.location.href = ('/user/' + state.user_id)}>My Page</ToMyPage>
+        <ToMyPage type="submit" onClick={() => window.location.href = '/mypage'}>My Page</ToMyPage>
         <Logout type = "submit" onClick={()=> logoutReq()}>로그아웃</Logout>
         <MeetingCreate state={state} newReq={newReq} />
         <Right_sidebar />

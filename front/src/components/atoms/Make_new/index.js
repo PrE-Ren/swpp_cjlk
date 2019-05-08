@@ -1,7 +1,5 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-//import React from 'react'
-//import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components'
 import { font, palette } from 'styled-theme'
 import { ifProp } from 'styled-tools'
@@ -22,7 +20,7 @@ const styles = css`
   border: none;
   position:absolute;
   right: 5px;
-  margin-top: -230px;
+  margin-top: -100px;
   width: 300px;
   color: white;
   border-radius: 12px;

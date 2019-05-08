@@ -118,11 +118,11 @@ export function* sendNewReq(action){
 }
 
 export function* sendLoginReq(action) {
-    let uid = action.username
-    let upw = action.password
+    const username = action.username
+    const password = action.password
     const url_token = 'http://127.0.0.1:8000/get_auth_token/'
     const url_user = 'http://127.0.0.1:8000/sign_up/'
-    const info = JSON.stringify({ username: uid, password: upw });
+    const info = JSON.stringify({ username: username, password: password });
     const response_token = yield call(fetch, url_token, {
         method: 'POST',
         headers: {
@@ -136,10 +136,14 @@ export function* sendLoginReq(action) {
         })
         const response_user_data = yield call([response_user, response_user.json]);
         for (var i in response_user_data) {
-            if (response_user_data[i].username == uid) {
+            if (response_user_data[i].username == username) {
                 const user_data = response_user_data[i]
+                const token = user_data.mySNU_verification_token
+                const user_id = user_data.id
+                const email = user_data.email
+                const name = user_data.name
                 if (user_data.mySNU_verified)
-                    yield put(actions.loginSuccess(uid, upw, user_data.mySNU_verification_token, user_data.id))
+                    yield put(actions.loginSuccess(username, password, token, user_id, email, name))
                 else
                     alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
                 break
