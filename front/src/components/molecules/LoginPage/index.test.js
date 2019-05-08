@@ -35,3 +35,4 @@ it('renders page when passed in', () => {
   expect(wrapper2.contains('로그인')).toBe(false)
   expect(wrapper2.contains('회원가입')).toBe(false)
 })
+

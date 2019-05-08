@@ -6,9 +6,11 @@ export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS'
 export const RELOAD_ACTION = 'RELOAD_ACTION'
 export const NEW_REQUEST = 'NEW_REQUEST'
 
-export const postNewData = (kind, leader, title, due, min_people, max_people, description) => {
+export const postNewData = (username, password, kind, leader, title, due, min_people, max_people, description) => {
   return {
     type: NEW_REQUEST,
+    username,
+    password,
     kind,
     leader,
     title,

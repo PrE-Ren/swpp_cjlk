@@ -105,4 +105,3 @@ class ParticipateList(generics.ListCreateAPIView):
 class ParticipateDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Participate.objects.all()
     serializer_class = ParticipateSerializer
-

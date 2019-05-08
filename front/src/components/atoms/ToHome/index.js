@@ -15,10 +15,14 @@ const ToHomeWrapper = styled.div`
     color: white;
   }`;
 
-  const ToHome = ({ type, ...rest }) => {
+  const ToHome = ({ type, ...props }) => {
     return (
-      <ToHomeWrapper fontSize="1.25rem" {...rest}></ToHomeWrapper>
+      <ToHomeWrapper fontSize="1.25rem" {...props}></ToHomeWrapper>
     );
   };
 
+ToHome.defaultProps = {
+    palette: 'primary',
+    type: 'button',
+}
 export default ToHome

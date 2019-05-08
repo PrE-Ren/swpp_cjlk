@@ -1,14 +1,13 @@
 import React from 'react'
+import NewPage from '../../../containers/NewPage'
 
-import { PageTemplate, Header, Footer } from 'components'
-import { PostForm, PostList } from 'containers'
+import { PageTemplate } from 'components'
 
 const New = () => {
   return (
-    <PageTemplate header={<Header />} footer={<Footer />}>
-      <PostForm />
-      <PostList limit={15} />
-    </PageTemplate>
+    <div>
+      <NewPage/>
+    </div>
   )
 }
 

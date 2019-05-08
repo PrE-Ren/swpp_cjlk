@@ -16,17 +16,3 @@ it('renders entry when passed in', () => {
   expect(wrapper.contains('2019-05-16T19:00:00+09:00')).toBe(true)
 })
 
-/*
-configure({ adapter: new Adapter() });
-const mockStore = configureMockStore();
-
-describe('<MeetingEntry />', () => {
-  it('MeetingEntry의 렌더링', () => {
-    const initialState = {};
-    const store = mockStore(initialState);
-    const wrapper = mount(<MeetingEntry store={store} />);
-    expect(wrapper.length).toBe(1);
-    expect(wrapper.find('#MeetingEntry').length).toEqual(2);
-  });
-});
-*/

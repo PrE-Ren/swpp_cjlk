@@ -10,9 +10,10 @@ const Wrapper = styled.div`
   color: ${palette('grayscale', 0)};
 `
 
-const NewPage = ({ state, newReq }) => {
+const NewPage = ({ state, NewReq }) => {
   let kind, title, due, min_people, max_people, description
-
+  console.log(state.username)
+  console.log(state.password)
   if(state.mySNU_verification_token == null){
     Object.defineProperty(window.location, 'href', {
       writable: true,
@@ -38,7 +39,7 @@ const NewPage = ({ state, newReq }) => {
         <br />
         내용: <textarea rows="30" cols="100" ref={node => {description=node;}} />
         <br />
-        <Button type = "submit" onClick={() => newReq(kind.value, state.username, title.value, due.value, min_people.value, max_people.value, description.value)}> 로그인 </Button>
+        <Button type = "submit" onClick={() => NewReq(state.username,state.password,kind.value, state.username, title.value, due.value, min_people.value, max_people.value, description.value)}>제출</Button>
       </div>
     )
   }

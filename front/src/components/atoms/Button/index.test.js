@@ -33,3 +33,4 @@ it('calls onClick when Clicked', () => {
   wrapper.simulate('click')
   expect(onClick).toBeCalled()
 })
+
