@@ -7,7 +7,12 @@ export const initialState = {
   point : null,
   mySNU_verified : null,
   mySNU_verification_token: localStorage.getItem("token"),
-  meetings : null,
+
+  meetinglist_impending: localStorage.getItem("impending"),
+  meetinglist_recent: localStorage.getItem("recent"),
+  meetinglist_lead: null,
+  meetinglist_join: null,
+  meetinglist_history: null,
 
   meeting_list : localStorage.getItem("meeting_list")
 };
