@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const Wrapper = styled.div`
+const Join_chatroomPos = styled.div`
   text-align: center;
   display: inline-block;
   width: 300px;
@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 
 const Join_chatroom = ({ children, ...props }) => {
   return (
-    <Wrapper>채팅방 빠른입장</Wrapper>
+    <Join_chatroomPos>채팅방 빠른입장</Join_chatroomPos>
   )
 }
 

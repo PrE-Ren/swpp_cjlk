@@ -1,7 +1,6 @@
 export const initialState = {
-  user_id : null,
   username: localStorage.getItem("username"),
-  password: null,
+  password: localStorage.getItem("password"),
   name : null,
   email : null,
   point : null,
@@ -9,5 +8,6 @@ export const initialState = {
   mySNU_verification_token: localStorage.getItem("token"),
   meetings : null,
 
-  meeting_list : localStorage.getItem("meeting_list")
+  meeting_list : localStorage.getItem("meeting_list"),
+  user_id : localStorage.getItem("user_id")
 };

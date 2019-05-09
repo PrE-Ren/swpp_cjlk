@@ -34,12 +34,10 @@ const styles = css`
   transition: background-color 250ms ease-out, color 250ms ease-out, border-color 250ms ease-out;
   background-color: ${backgroundColor};
   color: ${foregroundColor};
-
   &:hover, &:focus, &:active {
     background-color: ${hoverBackgroundColor};
     color: ${hoverForegroundColor};
   }
-
   &:focus {
     outline: none
   }

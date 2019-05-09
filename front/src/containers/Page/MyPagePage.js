@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import MyPagePage from '../components/organisms/MyPagePage'
+import MyPagePage from '../../components/organisms/MyPagePage'
 //import { 액션생성함수1, 액션생성함수2 } from '../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {

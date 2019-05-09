@@ -39,8 +39,8 @@ class SnuUser (AbstractUser):
     meetings = models.ManyToManyField('Meeting', through = 'Participate')
 
     # user_id = models.CharField(max_length= 100, primary_key=True) #changed variable name
-    # snu_mail = models.EmailField(default = '') 
-    # has inner validator(checker) whether it is valid email address 
+    # snu_mail = models.EmailField(default = '')
+    # has inner validator(checker) whether it is valid email address
     # -> EmailValidator with error: ValidationError, "ENter a valid email address" message will be out
 
 @receiver(post_save, sender = settings.AUTH_USER_MODEL)

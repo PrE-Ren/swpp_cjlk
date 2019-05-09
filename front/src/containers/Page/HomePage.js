@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import HomePage from '../components/organisms/HomePage'
-import { logoutRequest } from '../store/snu_moyeo/actions'
+import HomePage from '../../components/organisms/HomePage'
+import { logoutRequest } from '../../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
   return {
