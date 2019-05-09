@@ -7,13 +7,14 @@ const Join_chatroomPos = styled.div`
   text-align: center;
   display: inline-block;
   width: 300px;
+  top: -1000px;
   border: 2px solid;
   font-size: 30px;
 `
 
 const Join_chatroom = ({ children, ...props }) => {
   return (
-    <Join_chatroomPos>채팅방 빠른입장</Join_chatroomPos>
+    <Join_chatroomPos>채팅방 빠른 입장</Join_chatroomPos>
   )
 }
 

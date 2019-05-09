@@ -14,12 +14,16 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         localStorage.setItem("password", action.data.password);
         localStorage.setItem("token", action.data.mySNU_verification_token);
         localStorage.setItem("user_id", action.data.user_id);
+        localStorage.setItem("email", action.data.email);
+        localStorage.setItem("name", action.data.name);
         return {
             ...state,
             username: action.data.username,
             paswword: action.data.password,
             mySNU_verification_token: action.data.mySNU_verification_token,
-            user_id: action.data.user_id
+            user_id: action.data.user_id,
+            email: action.data.email,
+            name: action.data.name
         }
       }
       case 'SIGNUP_SUCCESS': {
@@ -30,12 +34,16 @@ const snu_moyeo_reducer = (state = initialState, action) => {
        localStorage.removeItem("password");
        localStorage.removeItem("token");
        localStorage.removeItem("user_id");
+       localStorage.removeItem("email");
+       localStorage.removeItem("name");
        return {
            ...state,
            username: null,
            paswword: null,
            mySNU_verification_token: null,
-           user_id: null
+           user_id: null,
+           email: null,
+           name: null
        }
       }
       default:

@@ -113,5 +113,3 @@ class RecentList(generics.ListAPIView):
 class ImpendingList(generics.ListAPIView):
     queryset = Meeting.objects.order_by('-due')[:5]
     serializer_class = MeetingSerializer
-
-#class

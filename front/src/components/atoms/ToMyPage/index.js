@@ -34,4 +34,5 @@ ToMyPage.defaultProps = {
     palette: 'primary',
     type: 'button',
 }
+
 export default ToMyPage

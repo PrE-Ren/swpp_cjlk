@@ -21,7 +21,7 @@ const HomePage = ({ state, logoutReq }) => {
       <div>
         <ToHome type="submit" onClick={() => window.location.href = '/'}>To Home</ToHome>
         <Left_sidebar />
-        <ToMyPage type="submit" onClick={() => window.location.href = ('/user/' + state.user_id)}>My Page</ToMyPage>
+        <ToMyPage type="submit" onClick={() => window.location.href = '/mypage'}>My Page</ToMyPage>
         <Logout type = "submit" onClick={()=> logoutReq()}>로그아웃</Logout>
         <MyInfo />
         <Right_sidebar />

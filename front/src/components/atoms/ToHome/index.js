@@ -33,4 +33,5 @@ ToHome.defaultProps = {
     palette: 'primary',
     type: 'button',
 }
+
 export default ToHome
