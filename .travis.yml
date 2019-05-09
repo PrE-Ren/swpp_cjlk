@@ -4,7 +4,7 @@ node_js: 6.9.4
 
 before_install:
         - cd front/
-install:
+install :
         - sudo apt-get install curl
         - sudo apt-get install npm
         - sudo npm install
