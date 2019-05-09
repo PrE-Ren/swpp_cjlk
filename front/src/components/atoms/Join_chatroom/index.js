@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const Join_chatroomPos = styled.div`
+const Join_chatroomCss = styled.div`
   text-align: center;
   display: inline-block;
   width: 300px;
@@ -14,7 +14,7 @@ const Join_chatroomPos = styled.div`
 
 const Join_chatroom = ({ children, ...props }) => {
   return (
-    <Join_chatroomPos>채팅방 빠른 입장</Join_chatroomPos>
+    <Join_chatroomCss>채팅방 빠른 입장</Join_chatroomCss>
   )
 }
 

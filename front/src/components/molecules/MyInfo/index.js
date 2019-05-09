@@ -5,10 +5,10 @@ import { font, palette } from 'styled-theme'
 import MeetingEntry from '../../atoms/MeetingEntry'
 
 const MyInfoCss = styled.div`
-  position: relative;
+  position: absolute;
   float: center;
-  right: -200px;
-  top: 0px;
+  right: 600px;
+  top: 150px;
   border: 2px solid black;
   display: inline-block;
 `

@@ -3,14 +3,14 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const LogoutPos = styled.div`
+const LogoutCss1 = styled.div`
   position: absolute;
   float: right;
   right: 0px;
   top: 2px;
 `
 
-const LogoutDesign = styled.div`
+const LogoutCss2 = styled.div`
   border: 1.5px solid black;
   display: inline-block;
   padding: 0.5rem;
@@ -23,13 +23,13 @@ const LogoutDesign = styled.div`
   }
 `
 
-  const Logout = ({ type, ...props }) => {
-    return (
-      <LogoutPos>
-        <LogoutDesign fontSize="1.25rem" {...props}></LogoutDesign>
-      </LogoutPos>
-    );
-  };
+const Logout = ({ type, ...props }) => {
+  return (
+    <LogoutCss1>
+      <LogoutCss2 fontSize="1.25rem" {...props}></LogoutCss2>
+    </LogoutCss1>
+  );
+};
 
 Logout.defaultProps = {
     palette: 'primary',

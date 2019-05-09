@@ -8,7 +8,7 @@ import styled from 'styled-components'
 const Right_sidebarCss = styled.div`
   position: fixed;
   float:right;
-  top: 350px;
+  top: 250px;
   right: 3px;
 `
 

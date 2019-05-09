@@ -16,10 +16,6 @@ const MeetingEntryCss = styled.span`
   }
 `
 
-const delete_style = {
-  float : 'right'
-}
-
 const MeetingEntry = ({ id, title, created, due, min_people, max_people, state, description, kind, leader }) => {
   return(
     <MeetingEntryCss>
