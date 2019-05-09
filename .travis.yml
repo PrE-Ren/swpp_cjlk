@@ -6,10 +6,10 @@ before_install:
         - cd front/
 install :
         - sudo apt-get install curl
+        - sudo apt-get install -y nodejs
+        - curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
         - sudo apt-get install npm
         - sudo npm install
-        - curl -sL https://deb.nodesource.com/setup_11.x | sudo -E bash -
-        - sudo apt-get install -y nodejs
         - sudo npm install --save cross-env
         - sudo npm install jest 
         - sudo npm install -g yo generator-arc
