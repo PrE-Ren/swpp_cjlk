@@ -43,12 +43,10 @@ const styles = css`
   }
 `
 
-
 const Anchor = styled.a`${styles}`
 const StyledButton = styled.button`${styles}`
 
 export const Button = ({ type, ...props }) => {
-
   return <StyledButton {...props} type={type} />
 }
 

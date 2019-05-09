@@ -1,17 +1,18 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
+import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const Wrapper = styled.div`
+const MeetingInfoCss = styled.div`
   font-family: ${font('primary')};
   color: ${palette('grayscale', 0)};
 `
 
 const MeetingInfo = ({ children, ...props }) => {
   return (
-    <Wrapper {...props}>
+    <MeetingInfoCss {...props}>
       {children}
-    </Wrapper>
+    </MeetingInfoCss>
   )
 }
 

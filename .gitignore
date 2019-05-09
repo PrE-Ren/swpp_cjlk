@@ -2,3 +2,5 @@ back/snu_moyeo/__pycache__
 back/swpp_cjlk/__pycache__
 back/env
 back/*~
+back/snu_moyeo/migrations
+back/db.sqlite3
