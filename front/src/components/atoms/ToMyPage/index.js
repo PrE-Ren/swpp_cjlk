@@ -3,7 +3,14 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const ToMyPageWrapper = styled.div`
+const ToMyPageCss1 = styled.div`
+  position: relative;
+  float:right;
+  right:110px;
+  top:-43px;
+`
+
+const ToMyPageCss2 = styled.div`
   border: 1.5px solid black;
   display: inline-block;
   padding: 0.5rem;
@@ -13,12 +20,20 @@ const ToMyPageWrapper = styled.div`
   &:hover {
     background: black;
     color: white;
-  }`;
+  }
+`
 
-  const ToMyPage = ({ type, ...rest }) => {
-    return (
-      <ToMyPageWrapper fontSize="1.25rem" {...rest}></ToMyPageWrapper>
-    );
-  };
+const ToMyPage = ({ type, ...props }) => {
+  return (
+    <ToMyPageCss1>
+      <ToMyPageCss2 fontSize="1.25rem" {...props}></ToMyPageCss2>
+    </ToMyPageCss1>
+  );
+};
+
+ToMyPage.defaultProps = {
+    palette: 'primary',
+    type: 'button',
+}
 
 export default ToMyPage

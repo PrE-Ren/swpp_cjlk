@@ -9,4 +9,6 @@ it('renders same sidebar when different childern, props passed in', () => {
   expect(wrapper.contains('새 모임 만들기')).toBe(true)
   const wrapper2 = wrap({ children: 'foo', id: 'test' })
   expect(wrapper.contains('새 모임 만들기')).toBe(true)
+
 })
+

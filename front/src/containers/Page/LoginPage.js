@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import LoginPage from '../components/molecules/LoginPage'
-import { getLoginData } from '../store/snu_moyeo/actions'
+import LoginPage from '../../components/organisms/LoginPage'
+import { getLoginData } from '../../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
   return {

@@ -3,19 +3,22 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const Wrapper = styled.div`
+const MeetingInfoCss = styled.div`
   font-family: ${font('primary')};
   color: ${palette('grayscale', 0)};
 `
 
-const MeetingCreate = (props) => {
+const MeetingInfo = ({ children, ...props }) => {
   return (
-    <Wrapper {...props}>content</Wrapper>
+    <MeetingInfoCss {...props}>
+      {children}
+    </MeetingInfoCss>
   )
 }
 
-MeetingCreate.propTypes = {
+MeetingInfo.propTypes = {
   reverse: PropTypes.bool,
+  children: PropTypes.node,
 }
 
-export default MeetingCreate
+export default MeetingInfo

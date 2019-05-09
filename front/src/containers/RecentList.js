@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { MyInfo } from '../components/molecules/MyInfo'
+import { RecentList } from '../components/molecules/RecentList'
 //import { 액션생성함수1, 액션생성함수2 } from '../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
@@ -15,4 +15,4 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MyInfo)
+export default connect(mapStateToProps, mapDispatchToProps)(RecentList)

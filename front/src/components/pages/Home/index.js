@@ -1,6 +1,6 @@
 import React from 'react'
 import { PageTemplate } from 'components'
-import HomePage from '../../../containers/HomePage'
+import HomePage from '../../../containers/Page/HomePage'
 
 const Home = () => {
   return (

@@ -1,13 +1,18 @@
 export const initialState = {
-  user_id : null,
+  user_id : localStorage.getItem("user_id"),
   username: localStorage.getItem("username"),
-  password: null,
-  name : null,
-  email : null,
+  password: localStorage.getItem("password"),
+  name : localStorage.getItem("name"),
+  email : localStorage.getItem("email"),
   point : null,
   mySNU_verified : null,
   mySNU_verification_token: localStorage.getItem("token"),
-  meetings : null,
+
+  meetinglist_impending: localStorage.getItem("impending"),
+  meetinglist_recent: localStorage.getItem("recent"),
+  meetinglist_lead: null,
+  meetinglist_join: null,
+  meetinglist_history: null,
 
   meeting_list : localStorage.getItem("meeting_list")
 };

@@ -19,11 +19,6 @@ it('renders same sidebar when different childern, props passed in', () => {
   expect(wrapper2.contains('스터디')).toBe(true)
   expect(wrapper2.contains('운동')).toBe(true)
   expect(wrapper2.contains('미팅')).toBe(true)
+
 })
 
-/*
-it('renders props when passed in', () => {
-  const wrapper = wrap({ id: 'foo' })
-  expect(wrapper.find({ id: 'foo' })).toHaveLength(1)
-})
-*/

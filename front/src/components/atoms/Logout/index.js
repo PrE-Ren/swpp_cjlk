@@ -3,13 +3,14 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const ToHomeCss1 = styled.div`
-  position: relative;
-  top: 5px;
-  left: 20px;
+const LogoutCss1 = styled.div`
+  position: absolute;
+  float: right;
+  right: 0px;
+  top: 2px;
 `
 
-const ToHomeCss2 = styled.div`
+const LogoutCss2 = styled.div`
   border: 1.5px solid black;
   display: inline-block;
   padding: 0.5rem;
@@ -22,17 +23,17 @@ const ToHomeCss2 = styled.div`
   }
 `
 
-const ToHome = ({ type, ...props }) => {
+const Logout = ({ type, ...props }) => {
   return (
-    <ToHomeCss1>
-      <ToHomeCss2 fontSize="1.25rem" {...props}></ToHomeCss2>
-    </ToHomeCss1>
+    <LogoutCss1>
+      <LogoutCss2 fontSize="1.25rem" {...props}></LogoutCss2>
+    </LogoutCss1>
   );
 };
 
-ToHome.defaultProps = {
+Logout.defaultProps = {
     palette: 'primary',
     type: 'button',
 }
 
-export default ToHome
+export default Logout

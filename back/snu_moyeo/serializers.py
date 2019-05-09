@@ -26,7 +26,7 @@ class MeetingSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'created', 'due', 'min_people', 'max_people', 'description', 'state', 'kind', 'leader', 'picture', 'members')
 
 class SnuUserSerializer(serializers.ModelSerializer):
-    # lead_meeting = serializers.PrimaryKeyRelatedField(many = True, queryset= Meeting.objects.all())i
+    # lead_meeting = serializers.PrimaryKeyRelatedField(many = True, queryset= Meeting.objects.all())
 
     def validate(self, data):
         if (data['email'] == ''):
@@ -63,7 +63,7 @@ class ParticipateSerializer(serializers.ModelSerializer):
             for meeting_data in Meeting.objects.all():
                 if (meeting_data.state == 0 and participate_data.snuuser == new_snuuser):
                     cnt_participate = cnt_participate + 1
-                    print(cnt_participate) 
+                    print(cnt_participate)
             '''
             if (cnt_participate >= 5):
                 raise serializers.ValidationError('you can participate up to 5 meetings')

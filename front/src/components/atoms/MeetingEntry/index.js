@@ -3,8 +3,9 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const Styledli = styled.span`
-  display: inline-block;
+const MeetingEntryCss = styled.span`
+  display: block;
+  width: 700px;
   padding: 0.5rem 0.5rem;
   margin: 1rem 2rem;
   border: 2px solid cadetblue;
@@ -15,13 +16,9 @@ const Styledli = styled.span`
   }
 `
 
-const delete_style = {
-  float : 'right'
-}
-
 const MeetingEntry = ({ id, title, created, due, min_people, max_people, state, description, kind, leader }) => {
   return(
-    <Styledli>
+    <MeetingEntryCss>
       <br/>
       &ensp;1. 제목 : {title}<br/>
       &ensp;2. 주최자 : {leader}<br/>
@@ -30,7 +27,7 @@ const MeetingEntry = ({ id, title, created, due, min_people, max_people, state, 
       &ensp;5. 모임 내용 : {description}<br/>
       &ensp;6. 마감 기한 : {due}<br/>
       <br/>
-    </Styledli>
+    </MeetingEntryCss>
   )
 }
 

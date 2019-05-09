@@ -8,27 +8,25 @@ from rest_framework.authtoken.models import Token
 class Meeting (models.Model):
     id = models.AutoField(primary_key = True)
     title = models.CharField(max_length = 100, blank = True, default = '')
-    created = models.DateTimeField(auto_now_add = True) # added variable
+    created = models.DateTimeField(auto_now_add = True)
     due = models.DateTimeField()
-    min_people = models.IntegerField(default = 1) # modified name
-    max_people = models.IntegerField(default = 999) # modified name
-
+    min_people = models.IntegerField(default = 1)
+    max_people = models.IntegerField(default = 999)
     state = models.IntegerField(default = 0)
     description = models.TextField()
-    kind = models.IntegerField(); # need to specify
-    leader = models.ForeignKey('SnuUser', related_name = 'lead_meeting', on_delete=models.CASCADE)
-    
-    picture = models.ImageField(blank=True)
-
+    kind = models.IntegerField();
+    leader = models.ForeignKey('SnuUser', related_name = 'lead_meeting', on_delete = models.CASCADE)
+    picture = models.ImageField(blank = True)
     members = models.ManyToManyField('SnuUser', through = 'Participate')
 
     class Meta:
-        ordering = ['-created']  #order by descending time created
+        ordering = ['-created']  # order by descending time created
 
     def save(self, *args, **kwargs) :
         super(Meeting, self).save(*args, **kwargs)
 
 class SnuUser (AbstractUser):
+    # id
     # username(unique=True) : ID
     # password
     name = models.CharField(max_length = 100)
@@ -39,8 +37,8 @@ class SnuUser (AbstractUser):
     meetings = models.ManyToManyField('Meeting', through = 'Participate')
 
     # user_id = models.CharField(max_length= 100, primary_key=True) #changed variable name
-    # snu_mail = models.EmailField(default = '') 
-    # has inner validator(checker) whether it is valid email address 
+    # snu_mail = models.EmailField(default = '')
+    # has inner validator(checker) whether it is valid email address
     # -> EmailValidator with error: ValidationError, "ENter a valid email address" message will be out
 
 @receiver(post_save, sender = settings.AUTH_USER_MODEL)

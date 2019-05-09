@@ -1,9 +1,14 @@
 language: node_js
 node_js:
-  - v6
+  - '8'
+install:
+  - sudo apt-get install curl
+  - curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+  - sudo apt-get install -y nodejs
+  - sudo npm install
+  - sudo npm install --save cross-env
+  - sudo npm install -g yo generator-arc
+  - sudo npm install jest
 script:
-  - npm run lint && npm test -- --coverage
-cache:
-  - yarn
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - cd front/
+  - npm test -- --coverage

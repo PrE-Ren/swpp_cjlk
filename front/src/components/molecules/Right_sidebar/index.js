@@ -5,20 +5,19 @@ import Make_new from '../../atoms/Make_new'
 import Join_chatroom from '../../atoms/Join_chatroom'
 import styled from 'styled-components'
 
-const Wrapper = styled.div`
-  position: relative;
+const Right_sidebarCss = styled.div`
+  position: fixed;
   float:right;
-  top: -150px;
-  right: 0px;
+  top: 250px;
+  right: 3px;
 `
+
 const Right_sidebar = () => {
   return (
-    <div>
-      <Make_new type="submit" onClick={() => window.location.href = '/new'}>새 모임 만들기</Make_new>
-      <Wrapper>
-        <Join_chatroom />
-      </Wrapper>
-    </div>
+    <Right_sidebarCss>
+      <Make_new type="submit" onClick={() => window.location.href = '/new'}>새 모임 만들기 +</Make_new>
+      <Join_chatroom />
+    </Right_sidebarCss>
   )
 }
 

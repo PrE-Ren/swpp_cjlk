@@ -110,17 +110,9 @@ class ParticipateDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ParticipateSerializer
 
 class RecentList(generics.ListAPIView):
-    queryset = Meeting.objects.all()[:5]
+    queryset = Meeting.objects.all()[:2]
     serializer_class = MeetingSerializer
 
 class ImpendingList(generics.ListAPIView):
-    queryset = Meeting.objects.order_by('-due')[:5]
+    queryset = Meeting.objects.order_by('due')[:2]
     serializer_class = MeetingSerializer
-
-class LeadingList(generics.ListAPIView):
-    serializer_class = MeetingSerializer
-    
-    def get_queryset(self):
-        user = self.request.user
-        return Meeting.objects.filter( leader = user and Meeting.state != 3 )
-

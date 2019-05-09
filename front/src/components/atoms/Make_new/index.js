@@ -1,8 +1,5 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-//import React from 'react'
-//import PropTypes from 'prop-types';
-
 import styled, { css } from 'styled-components'
 import { font, palette } from 'styled-theme'
 import { ifProp } from 'styled-tools'
@@ -23,7 +20,7 @@ const styles = css`
   border: none;
   position:absolute;
   right: 5px;
-  margin-top: -230px;
+  margin-top: -100px;
   width: 300px;
   color: white;
   border-radius: 12px;
@@ -37,11 +34,10 @@ const styles = css`
   }
 `
 
-const StyledButton = styled.button`${styles}`
+const Make_newDesign = styled.button`${styles}`
 
 const Make_new = ({ type, ...props }) => {
-
-  return <StyledButton {...props} type={type} />
+  return <Make_newDesign {...props} type={type} />
 }
 
 Make_new.propTypes = {
