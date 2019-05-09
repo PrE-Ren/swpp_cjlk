@@ -26,7 +26,7 @@ class MeetingSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'created', 'due', 'min_people', 'max_people', 'description', 'state', 'kind', 'leader', 'picture', 'members')
 
 class SnuUserSerializer(serializers.ModelSerializer):
-    # lead_meeting = serializers.PrimaryKeyRelatedField(many = True, queryset= Meeting.objects.all())i
+    # lead_meeting = serializers.PrimaryKeyRelatedField(many = True, queryset= Meeting.objects.all())
 
     def validate(self, data):
         if (data['email'] == ''):
