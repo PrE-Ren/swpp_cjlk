@@ -20,6 +20,7 @@ urlpatterns = [
 
     path('recent/',views.RecentList.as_view()),
     path('impending/',views.ImpendingList.as_view()),
+    path('lead_meeting/',views.LeadingList.as_view()),
     url(r'^get_auth_token/', obtain_auth_token),
 ]
 

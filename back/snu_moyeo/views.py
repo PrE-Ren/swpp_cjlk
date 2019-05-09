@@ -13,6 +13,9 @@ from django.utils.crypto import get_random_string
 from rest_framework import permissions
 from django.http import HttpResponse
 from snu_moyeo.permissions import UserOnlyAccess, LeaderOnlyControl
+from django.db.models import Q
+
+
 
 class Authenticate (APIView):
     queryset = SnuUser.objects.all()
@@ -114,4 +117,10 @@ class ImpendingList(generics.ListAPIView):
     queryset = Meeting.objects.order_by('-due')[:5]
     serializer_class = MeetingSerializer
 
-#class
+class LeadingList(generics.ListAPIView):
+    serializer_class = MeetingSerializer
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Meeting.objects.filter( leader = user and Meeting.state != 3 )
+

@@ -1,6 +1,9 @@
-
+dist: trusty
 language: node_js
 node_js: 6.9.4
+
+before_install:
+        - cd front/
 install:
         - sudo apt-get install curl
         - sudo apt-get install npm
@@ -11,5 +14,4 @@ install:
         - sudo npm install jest 
         - sudo npm install -g yo generator-arc
 script:
-        - cd front/ 
         - sudo npm test -- --coverage

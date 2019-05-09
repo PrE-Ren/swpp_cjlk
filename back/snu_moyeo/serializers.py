@@ -57,7 +57,7 @@ class ParticipateSerializer(serializers.ModelSerializer):
             if (participate_data.user_id == new_snuuser and participate_data.meeting_id == new_meeting):
                 raise serializers.ValidationError('already on meeting')
             if (participate_data.user_id == new_snuuser):
-                if (participate_data.meeting_id.state == 0):
+                if (participate_data.meeting_id.state != 3):
                     cnt_participate = cnt_participate + 1
             '''
             for meeting_data in Meeting.objects.all():
