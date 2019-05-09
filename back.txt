@@ -15,7 +15,8 @@ install:
         - pip install django-rest-auth
         - pip install django-allauth
 script:
-        - cd back/
+        
+	- cd back//f
         - python3 manage.py runserver&
         - sleep 3
         - coverage run --source='.' manage.py test snu_moyeo
