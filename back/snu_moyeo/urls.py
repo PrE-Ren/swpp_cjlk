@@ -4,6 +4,8 @@ from snu_moyeo import views
 from django.conf.urls import url
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework.authtoken.views import obtain_auth_token
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('sign_up/', views.SignUp.as_view()),
@@ -16,9 +18,14 @@ urlpatterns = [
     path('participate/', views.ParticipateList.as_view()),
     path('participate/<int:pk>/', views.ParticipateDetail.as_view()),
 
+    path('recent/',views.RecentList.as_view()),
+    path('impending/',views.ImpendingList.as_view()),
     url(r'^get_auth_token/', obtain_auth_token),
 ]
 
 urlpatterns += [
     path(r'^api-auth/', include('rest_framework.urls')),
 ]
+
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
