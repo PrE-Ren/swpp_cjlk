@@ -3,10 +3,12 @@ import { initialState } from "./selectors";
 const snu_moyeo_reducer = (state = initialState, action) => {
     switch(action.type){
       case 'RELOAD_ACTION' : {
-        localStorage.setItem("meeting_list", JSON.stringify(action.meeting_list))
+        localStorage.setItem("impending", JSON.stringify(action.meetinglist_impending))
+        localStorage.setItem("recent", JSON.stringify(action.meetinglist_recent))
         return {
           ...state,
-          meeting_list : JSON.stringify(action.meeting_list)
+          meetinglist_impending : JSON.stringify(action.meetinglist_impending),
+          meetinglist_recent : JSON.stringify(action.meetinglist_recent)
         }
       }
       case 'LOGIN_SUCCESS': {

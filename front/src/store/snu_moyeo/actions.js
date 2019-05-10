@@ -23,10 +23,11 @@ export const postNewData = (username, password, kind, leader, title, due, min_pe
   }
 };
 
-export const reload_action = (meeting_list) => {
+export const reload_action = (meetinglist_impending, meetinglist_recent) => {
   return {
     type : RELOAD_ACTION,
-    meeting_list : meeting_list
+    meetinglist_impending : meetinglist_impending,
+    meetinglist_recent : meetinglist_recent
   }
 };
 
