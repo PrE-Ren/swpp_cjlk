@@ -23,8 +23,9 @@ const ButtonCss = styled.div`
   margin-right: 5px;
 `
 
+
 const MeetingCreate = ({ state, newReq }) => {
-  let kind, title, due, min_people, max_people, description
+  let kind, title, due, min_people, max_people, description, picture
   return (
     <MeetingCreateCss>
       &ensp;유형 :&ensp;
@@ -46,11 +47,13 @@ const MeetingCreate = ({ state, newReq }) => {
       &ensp;&ensp;최대 인원 :&ensp;
       <input type="number" ref={node => {max_people =node;}} style={{width: '45px'}} />
       <br />
+      <input type="file" ref={node => {picture = node;}} accept="image/*" />
       <div>&ensp;내용 :</div>
       &ensp;
       <textarea placeholder = "내용을 입력하세요" rows="20" cols="80" ref={node => {description=node;}} />
       <ButtonCss>
-        <Button type = "submit" onClick={() => newReq(state.username, state.password, kind.value, state.username, title.value, due.value, min_people.value, max_people.value, description.value, state.user_id)}>제출</Button>
+        <Button type = "submit" onClick={() => newReq(state.username, state.password, kind.value, state.username, title.value, due.value, min_people.value,
+           max_people.value, description.value, state.user_id, picture.value)}>제출</Button>
       </ButtonCss>
     </MeetingCreateCss>
   )

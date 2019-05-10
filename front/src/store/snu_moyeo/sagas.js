@@ -67,6 +67,18 @@ export function* sendNewReq(action){
   const url_meetinglist = 'http://127.0.0.1:8000/meetinglist/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
+  const formData = new FormData();
+  formData.append('title',action.title);
+  formData.append('kind',action.kind);
+  formData.append('due',action.due);
+  formData.append('min_people',action.min_people);
+  formData.append('max_people',action.max_people);
+  formData.append('description',action.description);
+  formData.append('state',0);
+  if(action.picture !== undefined){
+    formData.append('picture',action.picture);
+  }
+
   const info_meeting = JSON.stringify(
     {
       title: action.title,
@@ -75,7 +87,8 @@ export function* sendNewReq(action){
       min_people: action.min_people,
       max_people: action.max_people,
       description: action.description,
-      state: 0
+      state: 0,
+      picture: action.picture,
     }
   );
 
@@ -83,9 +96,8 @@ export function* sendNewReq(action){
       method: 'POST',
       headers: {
           'Authorization': `Basic ${hash}`,
-          'Content-Type': 'application/json',
       },
-      body: info_meeting,
+      body: formData,
   })
 
   if (response_meeting.ok) {
