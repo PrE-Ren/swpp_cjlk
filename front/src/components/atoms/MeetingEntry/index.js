@@ -72,16 +72,22 @@ const dateParse = (data) => {
     return day.split('+')[0]
 }
 
+/* id, title, created, due, min_people, max_people, state, description, kind, leader, memebers */
+
 class MeetingEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       flag: 0,
       title: this.props.title,
-      description: this.props.description,
+      created: this.props.created,
       due: this.props.due,
       min_people: this.props.min_people,
       max_people: this.props.max_people,
+      state: this.props.state,
+      description: this.props.description,
+      kind: this.props.kind,
+      leader: this.props.leader,
       members: this.props.members
     };
   }
@@ -113,13 +119,6 @@ class MeetingEntry extends React.Component {
     }
   }
 }
-
-
-/* id, title, created, due, min_people, max_people, state, description, kind, leader
-const MeetingEntry = ({ id, title, due, min_people, max_people, members }) => {
-  let flag = 0
-
-} */
 
 MeetingEntry.propTypes = {
   id: PropTypes.number.isRequired,
