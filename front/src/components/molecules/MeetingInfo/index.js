@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const MeetingInfo = ({ description }) => {
+const MeetingInfo = ({ title, created, due, min_people, max_people, state, description, kind, leader, members }) => {
   return (
     <div> {description} </div>
   )

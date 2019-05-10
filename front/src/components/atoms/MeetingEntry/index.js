@@ -72,7 +72,7 @@ const dateParse = (data) => {
     return day.split('+')[0]
 }
 
-/* id, title, created, due, min_people, max_people, state, description, kind, leader, memebers */
+/* id, title, created, due, min_people, max_people, state, description, kind, leader, members */
 
 class MeetingEntry extends React.Component {
   constructor(props) {
