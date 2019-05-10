@@ -12,7 +12,7 @@ import styled from 'styled-components'
 const ListCss = styled.div`
   position: absolute;
   float: center;
-  right: 600px;
+  right: 500px;
   top: 150px;
   border: 2px solid black;
   display: inline-block;

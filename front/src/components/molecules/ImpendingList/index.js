@@ -16,7 +16,7 @@ export const ImpendingList = ({ state }) => {
       <FontCss> 마감 임박 모임 </FontCss>
       {meetings.map(meeting_entry =>
         <div key = {meeting_entry.id} >
-          <MeetingEntry {...meeting_entry} />
+          <MeetingEntry {...meeting_entry}/>
         </div>
       )}
     </div>
