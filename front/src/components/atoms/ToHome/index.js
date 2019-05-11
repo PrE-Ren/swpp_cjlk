@@ -23,10 +23,10 @@ const ToHomeCss2 = styled.div`
   }
 `
 
-const ToHome = ({ type, ...props }) => {
+const ToHome = () => {
   return (
     <ToHomeCss1>
-      <ToHomeCss2 fontSize="1.25rem" {...props}></ToHomeCss2>
+      <ToHomeCss2 fontSize="1.25rem" type="submit" onClick={() => window.location.href = '/'}>To Home</ToHomeCss2>
     </ToHomeCss1>
   );
 };

@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
-import LoginPage from '../../components/organisms/LoginPage'
+import { LoginPage } from '../../components/organisms/LoginPage'
 import { getLoginData } from '../../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
   return {
-    state: state.snu_moyeo
+    token: state.snu_moyeo.mySNU_verification_token
   }
 }
 

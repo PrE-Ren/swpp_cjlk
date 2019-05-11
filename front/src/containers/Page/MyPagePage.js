@@ -1,19 +1,10 @@
 import { connect } from 'react-redux'
-import MyPagePage from '../../components/organisms/MyPagePage'
-import { logoutRequest } from '../../store/snu_moyeo/actions'
+import { MyPagePage } from '../../components/organisms/MyPagePage'
 
 const mapStateToProps = (state) => {
   return {
-    state : state.snu_moyeo
+    token: state.snu_moyeo.mySNU_verification_token
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    logoutReq: () => {
-      dispatch(logoutRequest())
-    }
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyPagePage)
+export default connect(mapStateToProps, null)(MyPagePage)

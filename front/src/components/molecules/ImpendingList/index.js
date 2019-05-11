@@ -29,5 +29,3 @@ ImpendingList.propTypes = {
   reverse: PropTypes.bool,
   children: PropTypes.node,
 }
-
-export default ImpendingList

@@ -39,5 +39,3 @@ export const MyInfo = ({ state }) => {
 MyInfo.propTypes = {
   reverse: PropTypes.bool,
 }
-
-export default MyInfo

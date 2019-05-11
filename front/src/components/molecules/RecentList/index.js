@@ -29,5 +29,3 @@ RecentList.propTypes = {
   reverse: PropTypes.bool,
   children: PropTypes.node,
 }
-
-export default RecentList
