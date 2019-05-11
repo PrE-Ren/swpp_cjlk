@@ -24,7 +24,7 @@ const LogoutCss2 = styled.div`
   }
 `
 
-const Logout = ({ type, ...props }) => {
+const Logout = (props) => {
   return (
     <LogoutCss1>
       <LogoutCss2 fontSize="1.25rem" {...props}></LogoutCss2>

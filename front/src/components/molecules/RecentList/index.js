@@ -8,6 +8,8 @@ const FontCss = styled.div`
   font-size: 20px;
 `
 
+/* meeting_entry 필드 : id, title, created, due, min_people, max_people, description, state, kind, leader, picture, members */
+
 export const RecentList = ({ state, stateReq }) => {
   let meetings = JSON.parse(state.meetinglist_recent)
   console.log('<RecentList Rendering>')

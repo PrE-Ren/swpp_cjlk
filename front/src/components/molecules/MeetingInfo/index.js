@@ -4,20 +4,23 @@ import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 import Button from '../../atoms/Button'
 
-const MeetingInfo = ({ meeting_id, title, due, min_people, max_people, kind, description, leader, state, members, user_state, stateReq, participateReq}) => {
-  let joinflag = 0; //0이면 미팅에 참여하지 않은 상태, 1이면 이미 참여하고 있는 상태
-  if(leader == user_state.username){
-    if(state == 0){ //모집 중
+const MeetingInfo = ({ id, title, due, min_people, max_people, description, state, kind, leader, picture, members,
+                       user_state, stateReq }) => {
+  /* 내가 만든 모임일 때 */
+  if (leader == user_state.username) {
+    /* 모집 중 */
+    if (state == 0) {
       return (
         <div>
           {description}<br />
-          <Button type="submit" onClick={() => stateReq(user_state.username, user_state.password, meeting_id, 1, title, due, min_people, max_people, description, kind)}>마감</Button>
+          <Button type="submit" onClick={() => stateReq(user_state.username, user_state.password, id, title, due, min_people, max_people, description, 1, kind)}>마감</Button>
           &nbsp;
-          <Button type="submit" onClick={() => stateReq(user_state.username, user_state.password, meeting_id, 3, title, due, min_people, max_people, description, kind)}>해산</Button>
+          <Button type="submit" onClick={() => stateReq(user_state.username, user_state.password, id, title, due, min_people, max_people, description, 3, kind)}>해산</Button>
         </div>
       )
     }
-    else{
+    /* 그 외 */
+    else {
       return (
         <div>
           {description}
@@ -25,13 +28,10 @@ const MeetingInfo = ({ meeting_id, title, due, min_people, max_people, kind, des
       )
     }
   }
-  else{
-    for(var i in members){
-      if(members[i] == user_state.user_id){
-          joinflag = 1;
-      }
-    }
-    if(joinflag == 1){
+
+  /* 내가 만든 모임이 아닐 때 */
+  else {
+    if (members.includes(user_state.user_id)) {
       return (
         <div>
           {description}<br />
@@ -39,11 +39,11 @@ const MeetingInfo = ({ meeting_id, title, due, min_people, max_people, kind, des
         </div>
       )
     }
-    else{
+    else {
       return (
         <div>
           {description}<br />
-          <Button type="submit" onClick={() => participateReq(user_state.username,user_state.password, user_state.user_id, meeting_id)}>참가</Button>
+          <Button type="submit">참가</Button>
         </div>
       )
     }
