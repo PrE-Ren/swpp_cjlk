@@ -10,8 +10,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    stateReq: (username, password, meeting_id, state, title, due, min_people, max_people, description, kind) => {
-      dispatch(putChangeState(username, password, meeting_id, state, title, due, min_people, max_people, description, kind))
+    stateReq: (username, password, id,
+               title, due, min_people, max_people, description, state, kind) => {
+      dispatch(putChangeState(username, password, id, title, due, min_people, max_people, description, state, kind))
     },
     participateReq: (username, password, user_id, meeting_id) => {
       dispatch(postParticipate(username, password, user_id, meeting_id))

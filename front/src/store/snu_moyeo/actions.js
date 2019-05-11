@@ -8,45 +8,6 @@ export const NEW_REQUEST = 'NEW_REQUEST'
 export const CHANGE_STATE = 'CHANGE_STATE'
 export const PARTICIPATE_REQUEST = 'PARTICIPATE_REQUEST'
 
-export const postNewData = (username, password, kind, leader, title, due, min_people, max_people, description, user_id) => {
-  return {
-    type: NEW_REQUEST,
-    username,
-    password,
-    kind,
-    leader,
-    title,
-    due,
-    min_people,
-    max_people,
-    description,
-    user_id
-  }
-};
-export const postParticipate = (username, password, user_id, meeting_id) => {
-  return {
-    type: PARTICIPATE_REQUEST,
-    username,
-    password,
-    user_id,
-    meeting_id
-  }
-}
-export const putChangeState = (username, password, meeting_id, state, title, due, min_people, max_people, description, kind ) => {
-  return {
-    type: CHANGE_STATE,
-    username,
-    password,
-    meeting_id,
-    state,
-    title,
-    due,
-    min_people,
-    max_people,
-    description,
-    kind
-  }
-};
 export const reload_action = (meetinglist_impending, meetinglist_recent) => {
   return {
     type : RELOAD_ACTION,
@@ -60,16 +21,6 @@ export const getLoginData = (username, password) => {
         type : LOGIN_REQUEST,
         username,
         password
-    }
-};
-
-export const postSignupData = (username, password, name, email) => {
-    return {
-        type : SIGNUP_REQUEST,
-        username,
-        password,
-        name,
-        email
     }
 };
 
@@ -93,8 +44,60 @@ export const logoutRequest = () => {
     }
 };
 
+export const postSignupData = (username, password, name, email) => {
+    return {
+        type : SIGNUP_REQUEST,
+        username,
+        password,
+        name,
+        email
+    }
+};
+
 export const signupSuccess = () => {
     return {
         type : SIGNUP_SUCCESS
     }
+};
+
+export const postNewData = (username, password, kind, leader, title, due, min_people, max_people, description, user_id) => {
+  return {
+    type: NEW_REQUEST,
+    username,
+    password,
+    kind,
+    leader,
+    title,
+    due,
+    min_people,
+    max_people,
+    description,
+    user_id
+  }
+};
+
+export const putChangeState = (username, password, id, title, due, min_people, max_people, description, state, kind) => {
+  return {
+    type: CHANGE_STATE,
+    username,
+    password,
+    id,
+    title,
+    due,
+    min_people,
+    max_people,
+    description,
+    state,
+    kind
+  }
+};
+
+export const postParticipate = (username, password, user_id, meeting_id) => {
+  return {
+    type: PARTICIPATE_REQUEST,
+    username,
+    password,
+    user_id,
+    meeting_id
+  }
 };

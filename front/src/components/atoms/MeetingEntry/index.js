@@ -72,26 +72,10 @@ const dateParse = (data) => {
     return day.split('+')[0]
 }
 
-/* id, title, created, due, min_people, max_people, state, description, kind, leader, memebers */
-
 class MeetingEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      flag: 0,
-      meeting_id: this.props.id,
-      title: this.props.title,
-      created: this.props.created,
-      due: this.props.due,
-      min_people: this.props.min_people,
-      max_people: this.props.max_people,
-      state: this.props.state,
-      description: this.props.description,
-      kind: this.props.kind,
-      leader: this.props.leader,
-      members: this.props.members,
-      user_state: this.props.user_state
-    };
+    this.state = { flag: 0 };
   }
   render() {
     let meeting_entry = (
@@ -100,11 +84,11 @@ class MeetingEntry extends React.Component {
             this.setState({ flag: 0 })
           else
             this.setState({ flag: 1 })}}>
-        <TitleCss>{this.state.title}</TitleCss><BorderCss>|</BorderCss>
-        <DueCss>{dateParse(this.state.due)}</DueCss><BorderCss>|</BorderCss>
-        <MinCss>{this.state.min_people}명</MinCss><BorderCss>|</BorderCss>
-        <MaxCss>{this.state.max_people}명</MaxCss><BorderCss>|</BorderCss>
-        <FractionCss>{this.state.members.length}/{this.state.max_people}</FractionCss>
+        <TitleCss>{this.props.title}</TitleCss><BorderCss>|</BorderCss>
+        <DueCss>{dateParse(this.props.due)}</DueCss><BorderCss>|</BorderCss>
+        <MinCss>{this.props.min_people}명</MinCss><BorderCss>|</BorderCss>
+        <MaxCss>{this.props.max_people}명</MaxCss><BorderCss>|</BorderCss>
+        <FractionCss>{this.props.members.length}/{this.props.max_people}</FractionCss>
       </div>
     )
 
@@ -119,10 +103,7 @@ class MeetingEntry extends React.Component {
       return (
         <MeetingEntryCss >
           {meeting_entry}
-          <MeetingInfo meeting_id={this.state.meeting_id} title={this.state.title} due={this.props.due}
-            min_people={this.props.min_people} max_people={this.props.max_people} kind={this.props.kind}
-            description={this.state.description} leader={this.state.leader} state={this.state.state}
-            members={this.state.members} user_state={this.state.user_state} stateReq={this.props.stateReq}/>
+          <MeetingInfo {...this.props} />
         </MeetingEntryCss>
       )
     }
