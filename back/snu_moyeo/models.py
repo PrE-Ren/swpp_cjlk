@@ -16,7 +16,7 @@ class Meeting (models.Model):
     description = models.TextField()
     kind = models.IntegerField();
     leader = models.ForeignKey('SnuUser', related_name = 'lead_meeting', on_delete = models.CASCADE)
-    picture = models.ImageField(blank = True)
+    picture = models.ImageField(blank = True, null = True)
     members = models.ManyToManyField('SnuUser', through = 'Participate')
 
     class Meta:

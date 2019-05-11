@@ -5,6 +5,8 @@ export const SIGNUP_REQUEST = 'SIGNUP_REQUEST'
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS'
 export const RELOAD_ACTION = 'RELOAD_ACTION'
 export const NEW_REQUEST = 'NEW_REQUEST'
+export const CHANGE_STATE = 'CHANGE_STATE'
+export const PARTICIPATE_REQUEST = 'PARTICIPATE_REQUEST'
 
 export const postNewData = (username, password, kind, leader, title, due, min_people, max_people, description, user_id) => {
   return {
@@ -21,7 +23,30 @@ export const postNewData = (username, password, kind, leader, title, due, min_pe
     user_id
   }
 };
-
+export const postParticipate = (username, password, user_id, meeting_id) => {
+  return {
+    type: PARTICIPATE_REQUEST,
+    username,
+    password,
+    user_id,
+    meeting_id
+  }
+}
+export const putChangeState = (username, password, meeting_id, state, title, due, min_people, max_people, description, kind ) => {
+  return {
+    type: CHANGE_STATE,
+    username,
+    password,
+    meeting_id,
+    state,
+    title,
+    due,
+    min_people,
+    max_people,
+    description,
+    kind
+  }
+};
 export const reload_action = (meetinglist_impending, meetinglist_recent) => {
   return {
     type : RELOAD_ACTION,

@@ -32,7 +32,12 @@ export function* watchNew(){
     yield call(sendNewReq, action)
   }
 }
-
+export function* watchChangeState(){
+  while(true){
+    const action = yield take(actions.CHANGE_STATE)
+    yield call(sendStateReq, action)
+  }
+}
 /* It will be unnecessary later */
 export function* initialize() {
   console.log("<Initialize : state will be initialized by back-end data>")
@@ -145,11 +150,53 @@ export function* sendSignupReq(data) {
   else
     alert("회원가입 실패 : 정보를 바르게 입력하세요.")
 }
+export function* sendStateReq(action) {
+  let meet_id = action.meeting_id
+  const url_meetinglist = `http://127.0.0.1:8000/meetinglist/${meet_id}/`
+  const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
+  const info_meeting = JSON.stringify(
+    {
+      title: action.title,
+      kind: action.kind,
+      due: action.due,
+      min_people: action.min_people,
+      max_people: action.max_people,
+      description: action.description,
+      state: action.state
+    }
+  );
+  const response_meeting = yield call(fetch, url_meetinglist, {
+      method: 'PUT',
+      headers: {
+          'Authorization': `Basic ${hash}`,
+          'Content-Type': 'application/json',
+      },
+      body: info_meeting,
+  })
+  if(response_meeting.ok)
+  {
 
+  }
+  else {
+    console.log('put fail')
+  }
+}
 export function* sendNewReq(action){
   const url_meetinglist = 'http://127.0.0.1:8000/meetinglist/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
+  const formData = new FormData();
+  formData.append('title',action.title);
+  formData.append('kind',action.kind);
+  formData.append('due',action.due);
+  formData.append('min_people',action.min_people);
+  formData.append('max_people',action.max_people);
+  formData.append('description',action.description);
+  formData.append('state',0);
+  if(action.picture !== undefined){
+    formData.append('picture',action.picture);
+  }
+
   const info_meeting = JSON.stringify(
     {
       title: action.title,
@@ -165,9 +212,8 @@ export function* sendNewReq(action){
       method: 'POST',
       headers: {
           'Authorization': `Basic ${hash}`,
-          'Content-Type': 'application/json',
       },
-      body: info_meeting,
+      body: formData,
   })
 
   if (response_meeting.ok) {
@@ -204,4 +250,5 @@ export default function* () {
   yield fork(watchLogin)
   yield fork(watchSignup)
   yield fork(watchNew)
+  yield fork(watchChangeState)
 }
