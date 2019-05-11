@@ -16,6 +16,7 @@ const ToHomeCss2 = styled.div`
   border-radius: 5px;
   background: white;
   font-size: ${(props)=>props.fontSize};
+  cursor: pointer;
   &:hover {
     background: black;
     color: white;

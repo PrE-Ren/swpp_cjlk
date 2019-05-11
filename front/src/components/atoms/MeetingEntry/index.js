@@ -79,6 +79,7 @@ class MeetingEntry extends React.Component {
     super(props);
     this.state = {
       flag: 0,
+      meeting_id: this.props.id,
       title: this.props.title,
       created: this.props.created,
       due: this.props.due,
@@ -88,12 +89,17 @@ class MeetingEntry extends React.Component {
       description: this.props.description,
       kind: this.props.kind,
       leader: this.props.leader,
-      members: this.props.members
+      members: this.props.members,
+      user_state: this.props.user_state
     };
   }
   render() {
     let meeting_entry = (
-      <div style={{ cursor: 'pointer' }}>
+      <div style={{ cursor: 'pointer' }} onClick={() => {
+          if(this.state.flag == 1)
+            this.setState({ flag: 0 })
+          else
+            this.setState({ flag: 1 })}}>
         <TitleCss>{this.state.title}</TitleCss><BorderCss>|</BorderCss>
         <DueCss>{dateParse(this.state.due)}</DueCss><BorderCss>|</BorderCss>
         <MinCss>{this.state.min_people}명</MinCss><BorderCss>|</BorderCss>
@@ -104,16 +110,19 @@ class MeetingEntry extends React.Component {
 
     if (this.state.flag == 0) {
       return (
-        <MeetingEntryCss onClick={() => { this.setState({ flag: 1 }) }}>
+        <MeetingEntryCss >
           {meeting_entry}
         </MeetingEntryCss>
       )
     }
     else {
       return (
-        <MeetingEntryCss onClick={() => { this.setState({ flag: 0 }) }}>
+        <MeetingEntryCss >
           {meeting_entry}
-          <MeetingInfo description={this.state.description} />
+          <MeetingInfo meeting_id={this.state.meeting_id} title={this.state.title} due={this.props.due}
+            min_people={this.props.min_people} max_people={this.props.max_people} kind={this.props.kind}
+            description={this.state.description} leader={this.state.leader} state={this.state.state}
+            members={this.state.members} user_state={this.state.user_state} stateReq={this.props.stateReq}/>
         </MeetingEntryCss>
       )
     }

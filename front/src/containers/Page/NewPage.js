@@ -13,8 +13,8 @@ const mapDispatchToProps = (dispatch) => {
     logoutReq: () => {
       dispatch(logoutRequest())
     },
-    newReq: (username, password, kind, leader, title, due, min_people, max_people, description, user_id) => {
-      dispatch(postNewData(username, password, kind, leader, title, due, min_people, max_people, description, user_id))
+    newReq: (username, password, kind, leader, title, due, min_people, max_people, description, user_id, picture) => {
+      dispatch(postNewData(username, password, kind, leader, title, due, min_people, max_people, description, user_id, picture))
     }
   }
 }
