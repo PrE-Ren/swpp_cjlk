@@ -28,6 +28,7 @@ const styles = css`
   text-align: center;
   display: inline-block;
   font-size: 30px;
+  cursor: pointer;
   &:hover, &:focus, &:active {
     background-color: ${hoverBackgroundColor};
     color: ${hoverForegroundColor};

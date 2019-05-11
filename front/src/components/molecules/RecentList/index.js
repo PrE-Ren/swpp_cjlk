@@ -8,7 +8,7 @@ const FontCss = styled.div`
   font-size: 20px;
 `
 
-export const RecentList = ({ state }) => {
+export const RecentList = ({ state, stateReq }) => {
   let meetings = JSON.parse(state.meetinglist_recent)
   console.log('<RecentList Rendering>')
   return (
@@ -16,7 +16,7 @@ export const RecentList = ({ state }) => {
       <FontCss> 따끈따끈 방금 올라온 모임 </FontCss>
       {meetings.map(meeting_entry =>
         <div key = {meeting_entry.id} >
-          <MeetingEntry {...meeting_entry} />
+          <MeetingEntry {...meeting_entry} user_state={state} stateReq = {stateReq}/>
         </div>
       )}
     </div>
