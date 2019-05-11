@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { SignupPage } from '../../components/organisms/SignupPage'
-import { postSignupData } from '../../store/snu_moyeo/actions'
+import { signup_action } from '../../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
   return {
@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     signupReq: (username, password, name, email) =>{
-      dispatch(postSignupData(username, password, name, email))
+      dispatch(signup_action(username, password, name, email))
     }
   }
 }

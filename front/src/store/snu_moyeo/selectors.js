@@ -13,6 +13,4 @@ export const initialState = {
   meetinglist_lead: null,
   meetinglist_join: null,
   meetinglist_history: null,
-
-  meeting_list : localStorage.getItem("meeting_list")
 };

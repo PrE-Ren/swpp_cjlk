@@ -11,7 +11,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
           meetinglist_recent : JSON.stringify(action.meetinglist_recent)
         }
       }
-      case 'LOGIN_SUCCESS': {
+      case 'LOGIN_SUCCESS_ACTION': {
         localStorage.setItem("username", action.data.username);
         localStorage.setItem("password", action.data.password);
         localStorage.setItem("token", action.data.mySNU_verification_token);
@@ -28,10 +28,10 @@ const snu_moyeo_reducer = (state = initialState, action) => {
             name: action.data.name
         }
       }
-      case 'SIGNUP_SUCCESS': {
+      case 'SIGNUP_SUCCESS_ACTION': {
         return state
       }
-      case 'LOGOUT_REQUEST': {
+      case 'LOGOUT_ACTION': {
        localStorage.removeItem("username");
        localStorage.removeItem("password");
        localStorage.removeItem("token");

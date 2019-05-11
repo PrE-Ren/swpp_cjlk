@@ -2,7 +2,7 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
-import MeetingInfo from '../../molecules/MeetingInfo'
+import MeetingInfo from '../../../containers/MeetingInfo'
 
 const MeetingEntryCss = styled.span`
   display: block;
@@ -75,24 +75,20 @@ const dateParse = (data) => {
 class MeetingEntry extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { flag: 0 };
+    this.state = { is_folded: true };
   }
   render() {
     let meeting_entry = (
-      <div style={{ cursor: 'pointer' }} onClick={() => {
-          if(this.state.flag == 1)
-            this.setState({ flag: 0 })
-          else
-            this.setState({ flag: 1 })}}>
-        <TitleCss>{this.props.title}</TitleCss><BorderCss>|</BorderCss>
-        <DueCss>{dateParse(this.props.due)}</DueCss><BorderCss>|</BorderCss>
-        <MinCss>{this.props.min_people}명</MinCss><BorderCss>|</BorderCss>
-        <MaxCss>{this.props.max_people}명</MaxCss><BorderCss>|</BorderCss>
-        <FractionCss>{this.props.members.length}/{this.props.max_people}</FractionCss>
+      <div style={{ cursor: 'pointer' }} onClick={() => { this.setState({ is_folded: !this.state.is_folded }) }}>
+        <TitleCss>{this.props.meeting_info.title}</TitleCss><BorderCss>|</BorderCss>
+        <DueCss>{dateParse(this.props.meeting_info.due)}</DueCss><BorderCss>|</BorderCss>
+        <MinCss>{this.props.meeting_info.min_people}명</MinCss><BorderCss>|</BorderCss>
+        <MaxCss>{this.props.meeting_info.max_people}명</MaxCss><BorderCss>|</BorderCss>
+        <FractionCss>{this.props.meeting_info.members.length}/{this.props.meeting_info.max_people}</FractionCss>
       </div>
     )
 
-    if (this.state.flag == 0) {
+    if (this.state.is_folded == true) {
       return (
         <MeetingEntryCss >
           {meeting_entry}
@@ -103,24 +99,11 @@ class MeetingEntry extends React.Component {
       return (
         <MeetingEntryCss >
           {meeting_entry}
-          <MeetingInfo {...this.props} />
+          <MeetingInfo meeting_info = {this.props.meeting_info}/>
         </MeetingEntryCss>
       )
     }
   }
-}
-
-MeetingEntry.propTypes = {
-  id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  created: PropTypes.string.isRequired,
-  due: PropTypes.string.isRequired,
-  min_people: PropTypes.number.isRequired,
-  max_people: PropTypes.number.isRequired,
-  state: PropTypes.number.isRequired,
-  kind: PropTypes.number.isRequired,
-  leader: PropTypes.string.isRequired,
-  reverse: PropTypes.bool,
 }
 
 export default MeetingEntry

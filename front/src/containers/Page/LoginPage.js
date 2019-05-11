@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { LoginPage } from '../../components/organisms/LoginPage'
-import { getLoginData } from '../../store/snu_moyeo/actions'
+import { login_action } from '../../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
   return {
@@ -11,7 +11,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     loginReq: (username, password) => {
-      dispatch(getLoginData(username, password))
+      dispatch(login_action(username, password))
     }
   }
 }

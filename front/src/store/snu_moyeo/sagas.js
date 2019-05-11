@@ -8,35 +8,35 @@ import * as actions from './actions'
 export function* watchReload() {
   if (window.performance && performance.navigation.type == 1) {
     console.log("<Detect page reload : state will be updated by back-end data>")
-    yield call(reload_function)
+    yield call(reload_func)
   }
 }
 
 export function* watchLogin(){
   while(true) {
-    const action = yield take(actions.LOGIN_REQUEST)
-    yield call(sendLoginReq, action)
+    const action = yield take(actions.LOGIN_ACTION)
+    yield call(login_func, action)
   }
 }
 
 export function* watchSignup(){
   while(true) {
-    const action = yield take(actions.SIGNUP_REQUEST)
-    yield call(sendSignupReq, action)
+    const action = yield take(actions.SIGNUP_ACTION)
+    yield call(signup_func, action)
   }
 }
 
 export function* watchNew(){
   while(true) {
-    const action = yield take(actions.NEW_REQUEST)
-    yield call(sendNewReq, action)
+    const action = yield take(actions.NEW_ACTION)
+    yield call(new_func, action)
   }
 }
 
-export function* watchChangeState(){
+export function* watchChangeMeetingState(){
   while(true) {
-    const action = yield take(actions.CHANGE_STATE)
-    yield call(sendStateReq, action)
+    const action = yield take(actions.CHANGE_MEETING_STATE_ACTION)
+    yield call(change_meeting_state_func, action)
   }
 }
 
@@ -68,7 +68,7 @@ export function* initialize() {
   yield put(actions.reload_action(meetinglist_impending, meetinglist_recent))
 }
 
-export function* reload_function() {
+export function* reload_func() {
   let meetinglist_impending
   let meetinglist_recent
 
@@ -94,7 +94,7 @@ export function* reload_function() {
   yield put(actions.reload_action(meetinglist_impending, meetinglist_recent))
 }
 
-export function* sendLoginReq(action) {
+export function* login_func(action) {
   const username = action.username
   const password = action.password
   const url_token = 'http://127.0.0.1:8000/get_auth_token/'
@@ -118,7 +118,7 @@ export function* sendLoginReq(action) {
         const email = user_data.email
         const name = user_data.name
         if (user_data.mySNU_verified)
-          yield put(actions.loginSuccess(username, password, token, user_id, email, name))
+          yield put(actions.login_success_action(username, password, token, user_id, email, name))
         else
           alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
         break
@@ -129,7 +129,7 @@ export function* sendLoginReq(action) {
     alert("존재하지 않는 ID나 비밀번호입니다.")
 }
 
-export function* sendSignupReq(data) {
+export function* signup_func(data) {
   let uid = data.username
   let upw = data.password
   let name = data.name
@@ -143,7 +143,7 @@ export function* sendSignupReq(data) {
   })
   if (response.ok) {
     alert("인증 링크가 당신의 SNU 메일로 전송되었습니다.")
-    yield put(actions.signupSuccess())
+    yield put(actions.signup_success_action())
     Object.defineProperty(window.location, 'href', {
       writable: true,
       value: '/login'
@@ -153,7 +153,7 @@ export function* sendSignupReq(data) {
     alert("회원가입 실패 : 정보를 바르게 입력하세요.")
 }
 
-export function* sendNewReq(action){
+export function* new_func(action){
   const url_meetinglist = 'http://127.0.0.1:8000/meetinglist/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
@@ -216,19 +216,19 @@ export function* sendNewReq(action){
   }
 }
 
-export function* sendStateReq(action) {
-  let meeting_id = action.id
+export function* change_meeting_state_func(action) {
+  let meeting_id = action.meeting_info.id
   const url_meeting = `http://127.0.0.1:8000/meetinglist/${meeting_id}/`
   const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
   const info_meeting = JSON.stringify(
     {
-      title: action.title,
-      due: action.due,
-      min_people: action.min_people,
-      max_people: action.max_people,
-      description: action.description,
-      state: action.state,
-      kind: action.kind
+      title: action.meeting_info.title,
+      due: action.meeting_info.due,
+      min_people: action.meeting_info.min_people,
+      max_people: action.meeting_info.max_people,
+      description: action.meeting_info.description,
+      state: action.new_state,
+      kind: action.meeting_info.kind
     }
   );
   const response_meeting = yield call(fetch, url_meeting, {
@@ -240,11 +240,11 @@ export function* sendStateReq(action) {
       body: info_meeting,
   })
   if (response_meeting.ok) {
-    console.log('put success')
+    console.log('PUT ok')
     window.location.reload()
   }
   else {
-    console.log('put fail')
+    console.log('PUT bad')
   }
 }
 
@@ -254,5 +254,5 @@ export default function* () {
   yield fork(watchLogin)
   yield fork(watchSignup)
   yield fork(watchNew)
-  yield fork(watchChangeState)
+  yield fork(watchChangeMeetingState)
 }
