@@ -8,6 +8,7 @@ export const initialState = {
   mySNU_verified : null,
   mySNU_verification_token: localStorage.getItem("token"),
 
+  // participatelist: localStorage.getItem("participatelist"),
   meetinglist_impending: localStorage.getItem("impending"),
   meetinglist_recent: localStorage.getItem("recent"),
   meetinglist_lead: null,

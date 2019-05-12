@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { MeetingInfo } from '../components/molecules/MeetingInfo'
-import { change_meeting_state_action, join_meeting_action } from '../store/snu_moyeo/actions'
+import { change_meeting_state_action, join_meeting_action, withdraw_meeting_action } from '../store/snu_moyeo/actions'
 
 const mapStateToProps = (state, own_props) => {
   return {
@@ -10,11 +10,14 @@ const mapStateToProps = (state, own_props) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    stateReq: (username, password, meeting_info, new_state) => {
-      dispatch(change_meeting_state_action(username, password, meeting_info, new_state))
+    change_meeting_state_click: (hash, meeting_info, new_state) => {
+      dispatch(change_meeting_state_action(hash, meeting_info, new_state))
     },
-    participateReq: (username, password, user_id, meeting_id) => {
-      dispatch(join_meeting_action(username, password, user_id, meeting_id))
+    join_meeting_click: (hash, user_id, meeting_id) => {
+      dispatch(join_meeting_action(hash, user_id, meeting_id))
+    },
+    withdraw_meeting_click: (hash, user_id, meeting_id) => {
+      dispatch(withdraw_meeting_action(hash, user_id, meeting_id))
     }
   }
 }

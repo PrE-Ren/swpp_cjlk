@@ -24,10 +24,10 @@ const LogoutCss2 = styled.div`
   }
 `
 
-export const Logout = ({ logoutReq }) => {
+export const Logout = ({ logout_click }) => {
   return (
     <LogoutCss1>
-      <LogoutCss2 fontSize="1.25rem" type = "submit" onClick={logoutReq}>로그아웃</LogoutCss2>
+      <LogoutCss2 fontSize="1.25rem" type = "submit" onClick={logout_click}>로그아웃</LogoutCss2>
     </LogoutCss1>
   );
 };

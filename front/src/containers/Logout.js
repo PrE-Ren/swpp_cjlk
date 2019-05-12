@@ -4,7 +4,7 @@ import { logout_action } from '../store/snu_moyeo/actions'
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logoutReq: () => {
+    logout_click: () => {
       dispatch(logout_action())
     }
   }

@@ -24,7 +24,7 @@ const ButtonCss = styled.div`
   margin-bottom: 5px;
 `
 
-export const MeetingCreate = ({ username, password, user_id, newReq }) => {
+export const MeetingCreate = ({ username, password, user_id, new_click }) => {
   let kind, title, due, min_people, max_people, description, picture
   return (
     <MeetingCreateCss>
@@ -52,7 +52,7 @@ export const MeetingCreate = ({ username, password, user_id, newReq }) => {
       &ensp;
       <textarea placeholder = "내용을 입력하세요." rows="20" cols="80" ref={node => {description=node;}} />
       <ButtonCss>
-        <Button type = "submit" onClick={() => newReq(username, password, user_id, title.value, due.value, min_people.value, max_people.value, description.value, kind.value, username, picture)}>제출</Button>
+        <Button type = "submit" onClick={() => new_click(username, password, user_id, title.value, due.value, min_people.value, max_people.value, description.value, kind.value, username, picture)}>제출</Button>
       </ButtonCss>
     </MeetingCreateCss>
   )

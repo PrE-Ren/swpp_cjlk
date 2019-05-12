@@ -40,6 +40,20 @@ export function* watchChangeMeetingState(){
   }
 }
 
+export function* watchJoinMeeting(){
+  while(true) {
+    const action = yield take(actions.JOIN_MEETING_ACTION)
+    yield call(join_meeting_func, action)
+  }
+}
+
+export function* watchWithdrawMeeting(){
+  while(true) {
+    const action = yield take(actions.WITHDRAW_MEETING_ACTION)
+    yield call(withdraw_meeting_func, action)
+  }
+}
+
 /* It will be unnecessary later */
 export function* initialize() {
   console.log("<Initialize : state will be initialized by back-end data>")
@@ -219,7 +233,6 @@ export function* new_func(action){
 export function* change_meeting_state_func(action) {
   let meeting_id = action.meeting_info.id
   const url_meeting = `http://127.0.0.1:8000/meetinglist/${meeting_id}/`
-  const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
   const info_meeting = JSON.stringify(
     {
       title: action.meeting_info.title,
@@ -234,7 +247,7 @@ export function* change_meeting_state_func(action) {
   const response_meeting = yield call(fetch, url_meeting, {
       method: 'PUT',
       headers: {
-          'Authorization': `Basic ${hash}`,
+          'Authorization': `Basic ${action.hash}`,
           'Content-Type': 'application/json',
       },
       body: info_meeting,
@@ -248,6 +261,42 @@ export function* change_meeting_state_func(action) {
   }
 }
 
+export function* join_meeting_func(action) {
+  const url_participate = 'http://127.0.0.1:8000/participate/'
+  const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: action.meeting_id });
+  const response_participate = yield call(fetch, url_participate, {
+      method: 'POST',
+      headers: {
+          'Authorization': `Basic ${action.hash}`,
+          'Content-Type': 'application/json',
+      },
+      body: info_participate,
+  })
+  if (response_participate.ok) {
+    console.log('Participate POST ok')
+    // const participate_info = yield call([response_participate, response_participate.json])
+    window.location.reload()
+  }
+  else
+    console.log('Participate POST bad')
+}
+
+export function* withdraw_meeting_func(action) {
+  const participate_id = 1 // 어떻게 가져올지 back-end와 논의
+  const url_participate = `http://127.0.0.1:8000/participate/${10}/`
+  const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: action.meeting_id });
+  const response_participate = yield call(fetch, url_participate, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Basic ${action.hash}` }
+  })
+  if (response_participate.ok) {
+    console.log('Participate DELETE ok')
+    window.location.reload()
+  }
+  else
+    console.log('Participate DELETE bad')
+}
+
 export default function* () {
   yield fork(initialize)
   yield fork(watchReload)
@@ -255,4 +304,6 @@ export default function* () {
   yield fork(watchSignup)
   yield fork(watchNew)
   yield fork(watchChangeMeetingState)
+  yield fork(watchJoinMeeting)
+  yield fork(watchWithdrawMeeting)
 }
