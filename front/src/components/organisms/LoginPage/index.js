@@ -19,9 +19,9 @@ let styles = {
   backgroundColor: 'lavenderblush'
 }
 
-export const LoginPage = ({ state, loginReq }) => {
+export const LoginPage = ({ token, loginReq }) => {
   let username, password
-  if (state.mySNU_verification_token == null) {
+  if (token == null) {
     return (
         <div>
           <Fonts>
@@ -46,7 +46,7 @@ export const LoginPage = ({ state, loginReq }) => {
       writable: true,
       value: '/'
     });
-    return <div></div>
+    return (<div></div>)
   }
 }
 
@@ -54,5 +54,3 @@ LoginPage.propTypes = {
   reverse: PropTypes.bool,
   children: PropTypes.node,
 }
-
-export default LoginPage

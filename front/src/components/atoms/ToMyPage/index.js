@@ -24,10 +24,10 @@ const ToMyPageCss2 = styled.div`
   }
 `
 
-const ToMyPage = ({ type, ...props }) => {
+const ToMyPage = () => {
   return (
     <ToMyPageCss1>
-      <ToMyPageCss2 fontSize="1.25rem" {...props}></ToMyPageCss2>
+      <ToMyPageCss2 fontSize="1.25rem" type="submit" onClick={() => window.location.href = '/mypage'}>My Page</ToMyPageCss2>
     </ToMyPageCss1>
   );
 };

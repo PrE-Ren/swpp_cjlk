@@ -7,7 +7,7 @@ import MeetingEntry from '../../atoms/MeetingEntry'
 const MyInfoCss = styled.div`
   position: absolute;
   float: center;
-  right: 600px;
+  right: 500px;
   top: 150px;
   border: 2px solid black;
   display: inline-block;
@@ -18,9 +18,8 @@ const FontCss = styled.div`
 `
 
 export const MyInfo = ({ state }) => {
-  let meetings = JSON.parse(state.meeting_list)
+  let meetings = JSON.parse(state.meetinglist_recent)
   console.log('<MyInfo Rendering>')
-  console.log(state)
   return (
     <MyInfoCss>
       <FontCss>
@@ -29,7 +28,7 @@ export const MyInfo = ({ state }) => {
       </FontCss>
       {meetings.map(meeting_entry =>
         <div key = {meeting_entry.id} >
-          <MeetingEntry {...meeting_entry} />
+          <MeetingEntry meeting_info = {meeting_entry}/>
         </div>
       )}
     </MyInfoCss>
@@ -39,5 +38,3 @@ export const MyInfo = ({ state }) => {
 MyInfo.propTypes = {
   reverse: PropTypes.bool,
 }
-
-export default MyInfo

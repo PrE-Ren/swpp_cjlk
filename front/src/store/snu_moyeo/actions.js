@@ -1,12 +1,12 @@
-export const LOGIN_REQUEST = 'LOGIN_REQUEST'
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
-export const LOGOUT_REQUEST = 'LOGOUT_REQUEST'
-export const SIGNUP_REQUEST = 'SIGNUP_REQUEST'
-export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS'
 export const RELOAD_ACTION = 'RELOAD_ACTION'
-export const NEW_REQUEST = 'NEW_REQUEST'
-export const CHANGE_STATE = 'CHANGE_STATE'
-export const PARTICIPATE_REQUEST = 'PARTICIPATE_REQUEST'
+export const LOGIN_ACTION = 'LOGIN_ACTION'
+export const LOGIN_SUCCESS_ACTION = 'LOGIN_SUCCESS_ACTION'
+export const LOGOUT_ACTION = 'LOGOUT_ACTION'
+export const SIGNUP_ACTION = 'SIGNUP_ACTION'
+export const SIGNUP_SUCCESS_ACTION = 'SIGNUP_SUCCESS_ACTION'
+export const NEW_ACTION = 'NEW_ACTION'
+export const CHANGE_MEETING_STATE_ACTION = 'CHANGE_MEETING_STATE_ACTION'
+export const JOIN_MEETING_ACTION = 'JOIN_MEETING_ACTION'
 
 export const reload_action = (meetinglist_impending, meetinglist_recent) => {
   return {
@@ -16,17 +16,17 @@ export const reload_action = (meetinglist_impending, meetinglist_recent) => {
   }
 };
 
-export const getLoginData = (username, password) => {
+export const login_action = (username, password) => {
     return {
-        type : LOGIN_REQUEST,
+        type : LOGIN_ACTION,
         username,
         password
     }
 };
 
-export const loginSuccess = (username, password, token, user_id, email, name) => {
+export const login_success_action = (username, password, token, user_id, email, name) => {
     return {
-        type : LOGIN_SUCCESS,
+        type : LOGIN_SUCCESS_ACTION,
         data : {
             username : username,
             password : password,
@@ -38,15 +38,15 @@ export const loginSuccess = (username, password, token, user_id, email, name) =>
     }
 };
 
-export const logoutRequest = () => {
+export const logout_action = () => {
     return {
-        type : LOGOUT_REQUEST
+        type : LOGOUT_ACTION
     }
 };
 
-export const postSignupData = (username, password, name, email) => {
+export const signup_action = (username, password, name, email) => {
     return {
-        type : SIGNUP_REQUEST,
+        type : SIGNUP_ACTION,
         username,
         password,
         name,
@@ -54,15 +54,15 @@ export const postSignupData = (username, password, name, email) => {
     }
 };
 
-export const signupSuccess = () => {
+export const signup_success_action = () => {
     return {
-        type : SIGNUP_SUCCESS
+        type : SIGNUP_SUCCESS_ACTION
     }
 };
 
-export const postNewData = (username, password, kind, leader, title, due, min_people, max_people, description, user_id) => {
+export const new_action = (username, password, kind, leader, title, due, min_people, max_people, description, user_id) => {
   return {
-    type: NEW_REQUEST,
+    type: NEW_ACTION,
     username,
     password,
     kind,
@@ -76,25 +76,19 @@ export const postNewData = (username, password, kind, leader, title, due, min_pe
   }
 };
 
-export const putChangeState = (username, password, id, title, due, min_people, max_people, description, state, kind) => {
+export const change_meeting_state_action = (username, password, meeting_info, new_state) => {
   return {
-    type: CHANGE_STATE,
+    type: CHANGE_MEETING_STATE_ACTION,
     username,
     password,
-    id,
-    title,
-    due,
-    min_people,
-    max_people,
-    description,
-    state,
-    kind
+    meeting_info,
+    new_state
   }
 };
 
-export const postParticipate = (username, password, user_id, meeting_id) => {
+export const join_meeting_action = (username, password, user_id, meeting_id) => {
   return {
-    type: PARTICIPATE_REQUEST,
+    type: JOIN_MEETING_ACTION,
     username,
     password,
     user_id,

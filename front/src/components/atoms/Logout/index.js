@@ -24,10 +24,10 @@ const LogoutCss2 = styled.div`
   }
 `
 
-const Logout = (props) => {
+export const Logout = ({ logoutReq }) => {
   return (
     <LogoutCss1>
-      <LogoutCss2 fontSize="1.25rem" {...props}></LogoutCss2>
+      <LogoutCss2 fontSize="1.25rem" type = "submit" onClick={logoutReq}>로그아웃</LogoutCss2>
     </LogoutCss1>
   );
 };
@@ -36,5 +36,3 @@ Logout.defaultProps = {
     palette: 'primary',
     type: 'button',
 }
-
-export default Logout
