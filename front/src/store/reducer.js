@@ -13,7 +13,6 @@ req.keys().forEach((key) => {
   const storeName = key.replace(/\.\/(.+)\/.+$/, '$1')
   reducers[storeName] = req(key).default
   console.log(storeName)
-
 })
 
 export default combineReducers(reducers)

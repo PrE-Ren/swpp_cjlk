@@ -121,22 +121,23 @@ export function* login_func(action) {
     },
     body: info,
   })
+  // 회원가입된 계정 O
   if (response_token.ok) {
     const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
-    const response_login = yield call(fetch, url_user, { 
+    const response_user = yield call(fetch, url_user, {
       method: 'GET',
-      headers: {
-          'Authorization' : `Basic ${hash}`
-      },
+      headers: { 'Authorization' : `Basic ${hash}` }
     })
-    if(response_login.ok)
-    {
-      const response_login_data = yield call([response_login, response_login.json]);
-      yield put(actions.login_success_action(username, password, response_login_data.mySNU_verification_token, response_login_data.user_id, response_login_data.email, response_login_data.name))
+    // 로그인 성공 (인증 완료)
+    if (response_user.ok) {
+      const response_user_data = yield call([response_user, response_user.json]);
+      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.name))
     }
+    // 로그인 실패 (인증 미완료)
     else
       alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
   }
+  // 회원가입된 계정 X
   else
     alert("존재하지 않는 ID나 비밀번호입니다.")
 }
