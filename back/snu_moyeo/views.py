@@ -45,8 +45,10 @@ class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPI
     serializer_class = SnuUserSerializer
 
     # It will have to be deleted later
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    
+    #def get(self, request, *args, **kwargs):
+    #    return self.list(request, *args, **kwargs)
+    
 
     def post(self, request, format=None):
         email = request.data['email']
@@ -73,7 +75,7 @@ class LogIn(APIView):
                 print('log in..')
                 user = request.user
                 if user.mySNU_verified == True:
-                    return Response(data = {'user_id':user.id}, status = status.HTTP_202_ACCEPTED)
+                    return Response(data = {'user_id':user.id, 'email':user.email, 'mySNU_verification_token':user.mySNU_verification_token, 'name':user.name}, status = status.HTTP_202_ACCEPTED)
                 else :
                     return Response(data = {'details':'Not SNU verified.'}, status = status.HTTP_403_FORBIDDEN)
 
@@ -93,10 +95,10 @@ class SnuUserList(generics.ListAPIView):
     queryset = SnuUser.objects.all()
     serializer_class = SnuUserSerializer
 
-class SnuUserDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = SnuUser.objects.all()
-    serializer_class = SnuUserSerializer
-    permission_classes = (UserOnlyAccess,)
+#class SnuUserDetail(generics.RetrieveUpdateDestroyAPIView):
+#    queryset = SnuUser.objects.all()
+#   serializer_class = SnuUserSerializer
+#    permission_classes = (UserOnlyAccess,)
 
 class ParticipateList(generics.ListCreateAPIView):
     queryset = Participate.objects.all()
