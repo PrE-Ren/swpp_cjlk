@@ -112,7 +112,7 @@ export function* login_func(action) {
   const username = action.username
   const password = action.password
   const url_token = 'http://127.0.0.1:8000/get_auth_token/'
-  const url_user = 'http://127.0.0.1:8000/sign_up/'
+  const url_user = 'http://127.0.0.1:8000/log_in/'
   const info = JSON.stringify({ username: username, password: password });
   const response_token = yield call(fetch, url_token, {
     method: 'POST',
@@ -122,22 +122,30 @@ export function* login_func(action) {
     body: info,
   })
   if (response_token.ok) {
-    const response_user = yield call(fetch, url_user, { method: 'GET' })
-    const response_user_data = yield call([response_user, response_user.json]);
-    for (var i in response_user_data) {
-      if (response_user_data[i].username == username) {
-        const user_data = response_user_data[i]
-        const token = user_data.mySNU_verification_token
-        const user_id = user_data.id
-        const email = user_data.email
-        const name = user_data.name
-        if (user_data.mySNU_verified)
-          yield put(actions.login_success_action(username, password, token, user_id, email, name))
-        else
-          alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
-        break
-      }
+    const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
+    const response_login = yield call(fetch, url_user, { 
+      method: 'GET',
+      headers: {
+          'Authorization' : `Basic ${hash}`
+      },
+    })
+    if(response_login.ok)
+    {
+      const response_login_data = yield call([response_login, response_login.json]);
+      const id = response_login_data.user_id;
+      const url_the_user = 'http://127.0.0.1:8000/user/'+id+'/'
+      const response_user = yield call(fetch, url_the_user, { 
+        method: 'GET',
+        headers: {
+            'Authorization' : `Basic ${hash}`
+        },
+      })
+
+      const response_user_data = yield call([response_user, response_user.json]);
+      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, id, response_user_data.email, response_user_data.name))
     }
+    else
+      alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
   }
   else
     alert("존재하지 않는 ID나 비밀번호입니다.")
