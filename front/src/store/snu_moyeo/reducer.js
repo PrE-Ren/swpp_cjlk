@@ -48,6 +48,15 @@ const snu_moyeo_reducer = (state = initialState, action) => {
            name: null
        }
       }
+      /* case 'PARTICIPATE_ADD_ACTION': {
+        let participates = JSON.parse(state.participatelist)
+        let new_participates = participates.concat(action.participate_info)
+        localStorage.setItem("participatelist", JSON.stringify(new_participates));
+        return {
+            ...state,
+            participatelist : JSON.stringify(new_participates)
+        }
+      } */
       default:
         return state
     }

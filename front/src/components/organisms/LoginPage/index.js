@@ -19,7 +19,7 @@ let styles = {
   backgroundColor: 'lavenderblush'
 }
 
-export const LoginPage = ({ token, loginReq }) => {
+export const LoginPage = ({ token, login_click }) => {
   let username, password
   if (token == null) {
     return (
@@ -36,7 +36,7 @@ export const LoginPage = ({ token, loginReq }) => {
             <input ref={node=>{password=node;}}/>
           </Fonts>
           <br/>
-          &ensp;&ensp;<Button type = "submit" onClick={() => loginReq(username.value, password.value)}>로그인</Button>
+          &ensp;&ensp;<Button type = "submit" onClick={() => login_click(username.value, password.value)}>로그인</Button>
           &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/signup"}>회원가입</Button>
         </div>
     )

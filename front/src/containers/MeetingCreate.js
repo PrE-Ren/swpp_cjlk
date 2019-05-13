@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    newReq: (username, password, user_id, title, due, min_people, max_people, description, kind, leader, picture) => {
+    new_click: (username, password, user_id, title, due, min_people, max_people, description, kind, leader, picture) => {
       dispatch(new_action(username, password, kind, leader, title, due, min_people, max_people, description, user_id, picture))
     }
   }

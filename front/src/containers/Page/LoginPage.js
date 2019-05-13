@@ -10,7 +10,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loginReq: (username, password) => {
+    login_click: (username, password) => {
       dispatch(login_action(username, password))
     }
   }
