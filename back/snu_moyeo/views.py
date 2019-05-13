@@ -73,7 +73,7 @@ class LogIn(APIView):
                 print('log in..')
                 user = request.user
                 if user.mySNU_verified == True:
-                    return Response(data = {'userid':user.id}, status = status.HTTP_202_ACCEPTED)
+                    return Response(data = {'user_id':user.id}, status = status.HTTP_202_ACCEPTED)
                 else :
                     return Response(data = {'details':'Not SNU verified.'}, status = status.HTTP_403_FORBIDDEN)
 

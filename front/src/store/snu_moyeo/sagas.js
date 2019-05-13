@@ -118,7 +118,7 @@ export function* login_func(action) {
     if(response_login.ok)
     {
       const response_login_data = yield call([response_login, response_login.json]);
-      const id = response_login_data.userid;
+      const id = response_login_data.user_id;
       const url_the_user = 'http://127.0.0.1:8000/user/'+id+'/'
       const response_user = yield call(fetch, url_the_user, { 
         method: 'GET',
@@ -128,26 +128,10 @@ export function* login_func(action) {
       })
 
       const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.id, response_user_data.email, response_user_data.name))
+      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, id, response_user_data.email, response_user_data.name))
     }
     else
       alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
-    /*
-    for (var i in response_user_data) {
-      if (response_user_data[i].username == username) {
-        const user_data = response_user_data[i]
-        const token = user_data.mySNU_verification_token
-        const user_id = user_data.id
-        const email = user_data.email
-        const name = user_data.name
-        if (user_data.mySNU_verified)
-          yield put(actions.login_success_action(username, password, token, user_id, email, name))
-        else
-          alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
-        break
-      }
-    }
-    */
   }
   else
     alert("존재하지 않는 ID나 비밀번호입니다.")
