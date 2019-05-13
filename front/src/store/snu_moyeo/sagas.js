@@ -118,17 +118,7 @@ export function* login_func(action) {
     if(response_login.ok)
     {
       const response_login_data = yield call([response_login, response_login.json]);
-      const id = response_login_data.user_id;
-      const url_the_user = 'http://127.0.0.1:8000/user/'+id+'/'
-      const response_user = yield call(fetch, url_the_user, { 
-        method: 'GET',
-        headers: {
-            'Authorization' : `Basic ${hash}`
-        },
-      })
-
-      const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, id, response_user_data.email, response_user_data.name))
+      yield put(actions.login_success_action(username, password, response_login_data.mySNU_verification_token, response_login_data.user_id, response_login_data.email, response_login_data.name))
     }
     else
       alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
