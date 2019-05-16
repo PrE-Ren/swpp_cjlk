@@ -8,16 +8,16 @@ matrix:
         - python3 manage.py makemigrations snu_moyeo
         - python3 manage.py migrate
     install:
-        - sudo pip install --upgrade pip
-        - sudo pip install django
-        - sudo pip install djangorestframework
-        - sudo pip install coverage
-        - sudo pip install requests
-        - sudo pip install django-cors-headers
-        - sudo pip install django-rest-auth
-        - sudo pip install django-allauth
+        - sudo apt-get update
+        - sudo apt-get -y install python3-pip
+        - sudo pip3 install --upgrade pip
+        - sudo pip3 install django
+        - sudo pip3 install djangorestframework
+        - sudo pip3 install coverage
+        - sudo pip3 install requests
+        - sudo pip3 install django-cors-headers
+        - sudo pip3 install Pillow
     script:
-        - cd back
         - python3 manage.py runserver&
         - sleep 3
         - coverage run --source='.' manage.py test snu_moyeo
