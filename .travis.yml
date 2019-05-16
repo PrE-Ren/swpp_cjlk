@@ -3,12 +3,12 @@ language: generic
 matrix:
   include:
     -language: node_js
-    node_js: 6.9.4
+    node_js: "8"
     before_install:
       - cd ./front/
     install:
-      - sudo npm install
-      - sudo npm install --save cross-env
-      - sudo npm install jest
+      - npm install
+      - npm install --save cross-env
+      - npm install jest
     script:
-      - sudo npm test -- --coverage
+      - npm test -- --coverage
