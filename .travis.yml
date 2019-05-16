@@ -3,9 +3,9 @@ dist: xenial
 matrix:
   include:
     -language: python
-    install:
+    before_install:
         - cd ../back
-        - ls
+    install:
         - sudo apt-get update
         - sudo apt-get -y install python3-pip
         - sudo pip3 install --upgrade pip
@@ -15,9 +15,9 @@ matrix:
         - sudo pip3 install requests
         - sudo pip3 install django-cors-headers
         - sudo pip3 install Pillow
+    script:
         - python3 manage.py makemigrations snu_moyeo
         - python3 manage.py migrate
-    script:
         - python3 manage.py runserver&
         - sleep 3
         - coverage run --source='.' manage.py test snu_moyeo
