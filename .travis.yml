@@ -18,7 +18,6 @@ matrix:
         - sudo pip3 install django-cors-headers
         - sudo pip3 install Pillow
     script:
-        - cd back
         - python3 manage.py runserver&
         - sleep 3
         - coverage run --source='.' manage.py test snu_moyeo

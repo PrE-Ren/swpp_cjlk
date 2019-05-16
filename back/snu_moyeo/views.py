@@ -96,10 +96,10 @@ class SnuUserList(generics.ListAPIView):
     queryset = SnuUser.objects.all()
     serializer_class = SnuUserSerializer
 
-# class SnuUserDetail(generics.RetrieveUpdateDestroyAPIView):
-#    queryset = SnuUser.objects.all()
-#   serializer_class = SnuUserSerializer
-#    permission_classes = (UserOnlyAccess,)
+class SnuUserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SnuUser.objects.all()
+    serializer_class = SnuUserSerializer
+    permission_classes = (UserOnlyAccess,)
 
 class ParticipateList(generics.ListCreateAPIView):
     queryset = Participate.objects.all()
