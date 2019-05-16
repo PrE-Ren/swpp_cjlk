@@ -110,11 +110,11 @@ class ParticipateDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ParticipateSerializer
 
 class RecentList(generics.ListAPIView):
-    queryset = Meeting.objects.all().filter(Q(state=0) or Q(state=2))[:2]
+    queryset = Meeting.objects.all().filter(Q(state=0) | Q(state=2))[:2]
     serializer_class = MeetingSerializer
 
 class ImpendingList(generics.ListAPIView):
-    queryset = Meeting.objects.all().filter(Q(state=0) or Q(state=2)).order_by('-due')[:2]
+    queryset = Meeting.objects.all().filter(Q(state=0) | Q(state=2)).order_by('-due')[:2]
     serializer_class = MeetingSerializer
 
 
@@ -122,14 +122,18 @@ class LeadList(generics.ListAPIView):
     serializer_class = MeetingSerializer
     def get_queryset(self):
         user = self.request.user
-        return Meeting.objects.filter(Q(leader = user) and ~Q(state = 4))
+        if (not user.is_anonymous):
+            lead_user = SnuUser.objects.get(id = user.id)
+            return lead_user.lead_meeting.all().filter(~Q(state=4))
+        return Meeting.objects.none()
+    #Meeting.objects.filter(Q(leader = user) and ~Q(state = 4))
 
 class JoinList (generics.ListAPIView):
     serializer_class = MeetingSerializer
     def get_queryset(self):
         user = self.request.user
         user_id = user.id
-        return Meeting.objects.filter(Q(leader=user_id) and ~Q(state =4))
+        return Meeting.objects.filter(Q(leader=user_id) & ~Q(state =4))
 
 class HistoryList (generics.ListAPIView):
     serializer_class = MeetingSerializer
@@ -137,18 +141,24 @@ class HistoryList (generics.ListAPIView):
     #queryset = SnuUser.objects.filter(Q(id = request.user.id))
     def get_queryset(self):
         user = self.request.user
-        user_id = user.id
-        temp = SnuUser.objects.get(id = user_id)
-        return temp.meetings.all().filter(Q(state=4))
+        
+        if (not user.is_anonymous):
+            user_id = user.id
+            history_user = SnuUser.objects.get(id = user_id)
+            return history_user.meetings.all().filter(Q(state=4))
+        return Meeting.objects.none()
 
-def get_participate(request, userid, meetingid):
-    participate_obj = Participate.objects.all().filter(Q(user_id = userid) and Q(meeting_id = meetingid))
-    participateList = participate_obj.values()
+def get_participate(request, in_userid, in_meetingid):
+    participate_obj1 = Participate.objects.filter(Q(user_id_id = in_userid)) #here
+    participateList1 = participate_obj1.values()
+    participate_obj2 = participate_obj1.filter(Q(meeting_id_id = in_meetingid))
+    participateList2 = participate_obj2.values()
+    #print(participate_obj2.values())
 
-    if len(participateList)==0 :
+    if len(participateList2)==0 :
         content = {}
         return HttpResponse(content,status = status.HTTP_404_NOT_FOUND)
-    participate_id = participateList[0]['id']
+    participate_id = participateList2[0]['id']
 
 
     return HttpResponse(participate_id, status = status.HTTP_200_OK)

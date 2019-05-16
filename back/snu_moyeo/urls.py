@@ -22,7 +22,7 @@ urlpatterns = [
     path('meetinglist/lead/',views.LeadList.as_view()),
     path('meetinglist/join/',views.JoinList.as_view()),
     path('meetinglist/history/',views.HistoryList.as_view()),
-    path('participate/<int:userid>/<int:meetingid>/',views.get_participate),
+    path('participate/<int:in_userid>/<int:in_meetingid>/',views.get_participate),
     
     url(r'^get_auth_token/', obtain_auth_token),
 ]
