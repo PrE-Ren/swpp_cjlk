@@ -11,12 +11,12 @@ matrix:
     install:
         - sudo pip install --upgrade pip
         - sudo pip install django
-        - pip install djangorestframework
-        - pip install coverage
-        - pip install requests
-        - pip install django-cors-headers
-        - pip install django-rest-auth
-        - pip install django-allauth
+        - sudo pip install djangorestframework
+        - sudo pip install coverage
+        - sudo pip install requests
+        - sudo pip install django-cors-headers
+        - sudo pip install django-rest-auth
+        - sudo pip install django-allauth
     script:
         - python3 manage.py runserver&
         - sleep 3
