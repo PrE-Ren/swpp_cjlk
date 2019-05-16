@@ -4,6 +4,7 @@ matrix:
   include:
     -language: python
     before_script:
+        - cd back
         - python3 manage.py makemigrations snu_moyeo
         - python3 manage.py migrate
     install:
