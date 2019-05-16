@@ -35,7 +35,6 @@ class MeetingModelsTests(TestCase):
 
 
     def get_userlist_Test(self):
-        
         link = self.link + 'user/'
         res = requests.get(link)
         contents = res.json()
@@ -54,8 +53,9 @@ class MeetingModelsTests(TestCase):
         data = {'username':'test3put', 'password':'hello', 'name':'nametest3put', 'email':'sdrjseka96@snu.ac.kr', 'mySNU_verified': True }
         res = requests.put(link,data,auth=('test3', 'hello'))
         self.assertEqual(res.status_code,200)
-        
-'''
+       
+
+    '''
     def delete_userlist_test (self):
         link = self.link + 'user/'
         print('how about another user delete another?')
@@ -66,7 +66,7 @@ class MeetingModelsTests(TestCase):
         res = requests.delete(link+'2/', auth =('test2', 'hello'))        
         self.assertEqual(res.status_code, 204)
         print('correct auth delete test done')
-'''
+    '''
 
     def get_meeting_test(self):
         link = self.link + 'meetinglist/'
