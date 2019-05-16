@@ -8,15 +8,15 @@ const FontCss = styled.div`
   font-size: 20px;
 `
 
-export const ImpendingList = ({ state }) => {
-  let meetings = JSON.parse(state.meetinglist_impending)
+export const ImpendingList = ({ meetinglist_impending }) => {
+  let meetings = JSON.parse(meetinglist_impending)
   console.log('<ImpendingList Rendering>')
   return (
     <div>
       <FontCss> 마감 임박 모임 </FontCss>
       {meetings.map(meeting_entry =>
         <div key = {meeting_entry.id} >
-          <MeetingEntry {...meeting_entry} />
+          <MeetingEntry meeting_info = {meeting_entry}/>
         </div>
       )}
     </div>
@@ -27,5 +27,3 @@ ImpendingList.propTypes = {
   reverse: PropTypes.bool,
   children: PropTypes.node,
 }
-
-export default ImpendingList

@@ -12,7 +12,7 @@ const Join_chatroomCss = styled.div`
   font-size: 30px;
 `
 
-const Join_chatroom = ({ children, ...props }) => {
+const Join_chatroom = () => {
   return (
     <Join_chatroomCss>채팅방 빠른 입장</Join_chatroomCss>
   )

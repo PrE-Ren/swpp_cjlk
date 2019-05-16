@@ -16,16 +16,17 @@ const ToHomeCss2 = styled.div`
   border-radius: 5px;
   background: white;
   font-size: ${(props)=>props.fontSize};
+  cursor: pointer;
   &:hover {
     background: black;
     color: white;
   }
 `
 
-const ToHome = ({ type, ...props }) => {
+const ToHome = () => {
   return (
     <ToHomeCss1>
-      <ToHomeCss2 fontSize="1.25rem" {...props}></ToHomeCss2>
+      <ToHomeCss2 fontSize="1.25rem" type="submit" onClick={() => window.location.href = '/'}>To Home</ToHomeCss2>
     </ToHomeCss1>
   );
 };

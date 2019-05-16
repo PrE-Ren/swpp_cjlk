@@ -29,31 +29,31 @@ class Authenticate (APIView):
             return Response(status = status.HTTP_404_NOT_FOUND)
 
         if user.mySNU_verified:
-            return Response({'details': 'Already verified'}, status = status.HTTP_400_BAD_REQUEST)
+            return Response({'details':'Already verified'}, status = status.HTTP_400_BAD_REQUEST)
 
-        print ('authenticating...')
-        serializer = SnuUserSerializer(user, data={'email':user.email, 'mySNU_verified':True}, partial=True)
+        print ('Authenticating...')
+        serializer = SnuUserSerializer(user, data = {'email':user.email, 'mySNU_verified':True}, partial = True)
 
         if serializer.is_valid():
             serializer.save()
             id = serializer.data['id']
             username = serializer.data['username']
             verified = serializer.data['mySNU_verified']
-            return HttpResponse("welcome! "+username+"'s mail is verified!", status=202)
+            return HttpResponse("welcome! "+username+"'s mail is verified!", status = 202)
         else :
-            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-    queryset =  SnuUser.objects.all()
+    queryset = SnuUser.objects.all()
     serializer_class = SnuUserSerializer
 
     # It will have to be deleted later
-    def get(self, request, *args, **kwargs):
-        return self.list(request, *args, **kwargs)
+    # def get(self, request, *args, **kwargs):
+    #    return self.list(request, *args, **kwargs)
 
-    def post(self, request, format=None):
+    def post(self, request, format = None):
         email = request.data['email']
-        serializer = SnuUserSerializer(data=request.data)
+        serializer = SnuUserSerializer(data = request.data)
 
         if serializer.is_valid():
             token = get_random_string(length = 32)
@@ -63,7 +63,7 @@ class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPI
             id =  serializer.data['id']
             username = serializer.data['username']
             verified = serializer.data['mySNU_verified']
-            return Response(data={'id':id, 'username':username, 'mySNU_verified':verified}, status=status.HTTP_201_CREATED)
+            return Response(data = {'id':id, 'username':username, 'mySNU_verified':verified}, status = status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
@@ -73,10 +73,10 @@ class LogIn(APIView):
         permission_classes = ()
 
         def get(self, request, format = None):
-                print('log in..')
+                print('Log in..')
                 user = request.user
                 if user.mySNU_verified == True:
-                    return Response(data = {'username':user.username}, status = status.HTTP_202_ACCEPTED)
+                    return Response(data = {'user_id':user.id, 'email':user.email, 'mySNU_verification_token':user.mySNU_verification_token, 'name':user.name}, status = status.HTTP_202_ACCEPTED)
                 else :
                     return Response(data = {'details':'Not SNU verified.'}, status = status.HTTP_403_FORBIDDEN)
 
@@ -96,10 +96,10 @@ class SnuUserList(generics.ListAPIView):
     queryset = SnuUser.objects.all()
     serializer_class = SnuUserSerializer
 
-class SnuUserDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = SnuUser.objects.all()
-    serializer_class = SnuUserSerializer
-    permission_classes = (UserOnlyAccess,)
+# class SnuUserDetail(generics.RetrieveUpdateDestroyAPIView):
+#    queryset = SnuUser.objects.all()
+#   serializer_class = SnuUserSerializer
+#    permission_classes = (UserOnlyAccess,)
 
 class ParticipateList(generics.ListCreateAPIView):
     queryset = Participate.objects.all()

@@ -5,6 +5,7 @@ import django
 class MeetingSerializer(serializers.ModelSerializer):
     leader = serializers.ReadOnlyField(source = 'SnuUser.username')
     leader = serializers.CharField(read_only = True)
+    picture = serializers.ImageField(use_url=True, allow_empty_file=True, required=False)
 
     def validate(self, data):
         due = data['due']

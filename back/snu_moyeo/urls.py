@@ -12,7 +12,7 @@ urlpatterns = [
     path('log_in/', views.LogIn.as_view()),
     url(r'^auth/(?P<mySNU_verification_token>[a-zA-Z0-9]+)/$', views.Authenticate.as_view()),
     path('user/', views.SnuUserList.as_view()),
-    path('user/<int:pk>/', views.SnuUserDetail.as_view()),
+    # path('user/<int:pk>/', views.SnuUserDetail.as_view()),
     path('meetinglist/', views.MeetingList.as_view()),
     path('meetinglist/<int:pk>/', views.MeetingDetail.as_view()),
     path('participate/', views.ParticipateList.as_view()),
@@ -25,6 +25,5 @@ urlpatterns = [
 urlpatterns += [
     path(r'^api-auth/', include('rest_framework.urls')),
 ]
-
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

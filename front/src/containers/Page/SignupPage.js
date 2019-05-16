@@ -1,17 +1,17 @@
 import { connect } from 'react-redux'
-import SignupPage from '../../components/organisms/SignupPage'
-import { postSignupData } from '../../store/snu_moyeo/actions'
+import { SignupPage } from '../../components/organisms/SignupPage'
+import { signup_action } from '../../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
   return {
-    state: state.snu_moyeo
+    token: state.snu_moyeo.mySNU_verification_token
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signupReq: (username, password, name, email) =>{
-      dispatch(postSignupData(username, password, name, email))
+    signup_click: (username, password, name, email) =>{
+      dispatch(signup_action(username, password, name, email))
     }
   }
 }

@@ -1,17 +1,17 @@
 import { connect } from 'react-redux'
-import LoginPage from '../../components/organisms/LoginPage'
-import { getLoginData } from '../../store/snu_moyeo/actions'
+import { LoginPage } from '../../components/organisms/LoginPage'
+import { login_action } from '../../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
   return {
-    state: state.snu_moyeo
+    token: state.snu_moyeo.mySNU_verification_token
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    loginReq: (username, password) => {
-      dispatch(getLoginData(username, password))
+    login_click: (username, password) => {
+      dispatch(login_action(username, password))
     }
   }
 }

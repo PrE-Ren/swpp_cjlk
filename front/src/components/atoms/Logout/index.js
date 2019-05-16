@@ -17,16 +17,17 @@ const LogoutCss2 = styled.div`
   border-radius: 5px;
   background: white;
   font-size: ${(props)=>props.fontSize};
+  cursor: pointer;
   &:hover {
     background: black;
     color: white;
   }
 `
 
-const Logout = ({ type, ...props }) => {
+export const Logout = ({ logout_click }) => {
   return (
     <LogoutCss1>
-      <LogoutCss2 fontSize="1.25rem" {...props}></LogoutCss2>
+      <LogoutCss2 fontSize="1.25rem" type = "submit" onClick={logout_click}>로그아웃</LogoutCss2>
     </LogoutCss1>
   );
 };
@@ -35,5 +36,3 @@ Logout.defaultProps = {
     palette: 'primary',
     type: 'button',
 }
-
-export default Logout

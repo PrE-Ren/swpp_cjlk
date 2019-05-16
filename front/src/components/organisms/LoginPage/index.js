@@ -19,9 +19,9 @@ let styles = {
   backgroundColor: 'lavenderblush'
 }
 
-export const LoginPage = ({ state, loginReq }) => {
+export const LoginPage = ({ token, login_click }) => {
   let username, password
-  if (state.mySNU_verification_token == null) {
+  if (token == null) {
     return (
         <div>
           <Fonts>
@@ -36,7 +36,7 @@ export const LoginPage = ({ state, loginReq }) => {
             <input ref={node=>{password=node;}}/>
           </Fonts>
           <br/>
-          &ensp;&ensp;<Button type = "submit" onClick={() => loginReq(username.value, password.value)}>로그인</Button>
+          &ensp;&ensp;<Button type = "submit" onClick={() => login_click(username.value, password.value)}>로그인</Button>
           &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/signup"}>회원가입</Button>
         </div>
     )
@@ -46,7 +46,7 @@ export const LoginPage = ({ state, loginReq }) => {
       writable: true,
       value: '/'
     });
-    return <div></div>
+    return (<div></div>)
   }
 }
 
@@ -54,5 +54,3 @@ LoginPage.propTypes = {
   reverse: PropTypes.bool,
   children: PropTypes.node,
 }
-
-export default LoginPage
