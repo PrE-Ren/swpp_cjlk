@@ -67,6 +67,7 @@ class MeetingModelsTests(TestCase):
         self.assertEqual(res.status_code, 204)
         print('correct auth delete test done')
 '''
+
     def get_meeting_test(self):
         link = self.link + 'meetinglist/'
         res = requests.get(link)
