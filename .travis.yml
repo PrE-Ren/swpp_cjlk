@@ -16,6 +16,7 @@ matrix:
         - sudo pip3 install coverage
         - sudo pip3 install requests
         - sudo pip3 install django-cors-headers
+        - sudo pip3 install Pillow
     script:
         - cd back
         - python3 manage.py runserver&
