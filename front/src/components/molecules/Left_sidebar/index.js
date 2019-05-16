@@ -6,6 +6,7 @@ import { SSL_OP_SINGLE_DH_USE } from 'constants';
 
 const Left_sidebarCss = styled.div`
   position: relative;
+  float:left;
   width: 150px;
   text-align: center;
   display: inline-block;

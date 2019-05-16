@@ -3,42 +3,45 @@ import { PropTypes } from 'prop-types'
 import styled, {css} from 'styled-components'
 import { font, palette } from 'styled-theme'
 import Button from '../../atoms/Button'
-import { SSL_OP_SINGLE_DH_USE } from 'constants';
 
 const Fonts = styled.div`
   font-size: 25px;
   font-weight: bold;
 `
-let rgb = [255, 240, 240]
-
-let styles = {
-  border: '3px solid darkslategray',
-  margin: '10px',
-  padding: '20px 20px 0px 10px',
-  display: 'inline-block',
-  backgroundColor: 'lavenderblush'
-}
+const H1 = styled.div`
+  font-size: 32px;
+  font-weight: bold;
+`
+const LoginBox = styled.div`
+  width: 300px;
+  padding: 40px;
+  position: absolute;
+  top: 47%;
+  left: 47%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+`
 
 export const LoginPage = ({ token, login_click }) => {
   let username, password
   if (token == null) {
     return (
-        <div>
+        <LoginBox>
+
+          <H1><h1>로그인</h1></H1>
           <Fonts>
             <p></p>
-            &ensp;&ensp;로그인
-            <p></p>
-            &ensp;&ensp;ID &ensp;&ensp;
+            ID &ensp;&ensp;
             <input ref={node=>{username=node;}}/>
           </Fonts>
           <Fonts>
-            &ensp;&ensp;PW &ensp;
-            <input type ="password" ref={node=>{password=node;}}/>
+            PW &ensp;
+            <input type="password" ref={node=>{password=node;}}/>
           </Fonts>
           <br/>
-          &ensp;&ensp;<Button type = "submit" onClick={() => login_click(username.value, password.value)}>로그인</Button>
-          &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/signup"}>회원가입</Button>
-        </div>
+          <Button type = "submit" onClick={() => login_click(username.value, password.value)}>로그인</Button>
+          &ensp;&ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/signup"}>회원가입</Button>
+        </LoginBox>
     )
   }
   else {

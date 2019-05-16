@@ -62,7 +62,7 @@ export const signup_success_action = () => {
     }
 };
 
-export const new_action = (username, password, kind, leader, title, due, min_people, max_people, description, user_id) => {
+export const new_action = (username, password, kind, leader, title, due, min_people, max_people, description, user_id, picture) => {
   return {
     type: NEW_ACTION,
     username,
@@ -74,7 +74,8 @@ export const new_action = (username, password, kind, leader, title, due, min_peo
     min_people,
     max_people,
     description,
-    user_id
+    user_id,
+    picture
   }
 };
 

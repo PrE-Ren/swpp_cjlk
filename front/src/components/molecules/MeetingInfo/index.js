@@ -10,59 +10,132 @@ import * as meeting_state from '../../../literal'
 export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click }) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')
   // 내가 만든 모임
+  console.log(meeting_info)
   if (meeting_info.leader == state.username) {
     switch (meeting_info.state) {
       case meeting_state.OPEN : {
-        return (
-          <div>
-            주최자 : {meeting_info.leader}<br />
-            본문 : {meeting_info.description}<br />
-            상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
-            <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button>&nbsp;
-            <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-          </div>
-        )
+        if (meeting_info.picture == null) {
+          return (
+            <div>
+              주최자 : {meeting_info.leader}<br />
+              본문 : {meeting_info.description}<br />
+              상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button>&nbsp;
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>
+          )
+        }
+        else {
+          return (
+            <div>
+              주최자 : {meeting_info.leader}<br />
+              본문 : {meeting_info.description}<br />
+              상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
+              사진 : <br />
+              <img src={meeting_info.picture} width="600" /><br />
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button>&nbsp;
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+              </div>
+            )
+        }
       }
       case meeting_state.CLOSED : {
-        return (
-          <div>
-            주최자 : {meeting_info.leader}<br />
-            본문 : {meeting_info.description}<br />
-            상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
-            <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_OPEN)}>추가 모집 시작</Button>&nbsp;
-            <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-          </div>
-        )
+        if (meeting_info.picture == null) {
+          return (
+            <div>
+              주최자 : {meeting_info.leader}<br />
+              본문 : {meeting_info.description}<br />
+              상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_OPEN)}>추가 모집 시작</Button>&nbsp;
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>
+          )
+        }
+        else {
+          return (
+            <div>
+              주최자 : {meeting_info.leader}<br />
+              본문 : {meeting_info.description}<br />
+              상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
+              사진 : <br />
+              <img src={meeting_info.picture} width="600" /><br />
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_OPEN)}>추가 모집 시작</Button>&nbsp;
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>
+          )
+        }
       }
       case meeting_state.RE_OPEN : {
-        return (
-          <div>
-            주최자 : {meeting_info.leader}<br />
-            본문 : {meeting_info.description}<br />
-            상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
-            <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_CLOSED)}>추가 모집 중단</Button>&nbsp;
-            <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-          </div>
-        )
+        if (meeting_info.picture == null) {
+          return (
+            <div>
+              주최자 : {meeting_info.leader}<br />
+              본문 : {meeting_info.description}<br />
+              상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_CLOSED)}>추가 모집 중단</Button>&nbsp;
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>
+          )
+        }
+        else {
+          return (
+            <div>
+              주최자 : {meeting_info.leader}<br />
+              본문 : {meeting_info.description}<br />
+              상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
+              사진 : <br />
+              <img src={meeting_info.picture} width="600" /><br />
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_CLOSED)}>추가 모집 중단</Button>&nbsp;
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>
+          )
+        }
       }
       case meeting_state.RE_CLOSED : {
-        return (
-          <div>
-            주최자 : {meeting_info.leader}<br />
-            본문 : {meeting_info.description}<br />
-            상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
-            <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-          </div>
-        )
+        if (meeting_info.picture == null) {
+          return (
+            <div>
+              주최자 : {meeting_info.leader}<br />
+              본문 : {meeting_info.description}<br />
+              상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>
+          )
+        }
+        else {
+          return (
+            <div>
+              주최자 : {meeting_info.leader}<br />
+              본문 : {meeting_info.description}<br />
+              상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
+              사진 : <br />
+              <img src={meeting_info.picture} width="600" /><br />
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>
+          )
+        }
       }
       case meeting_state.BREAK_UP : {
-        return (
-          <div>
-            주최자 : {meeting_info.leader}<br />
-            본문 : {meeting_info.description}<br />
-            상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
-          </div>
-        )
+        if (meeting_info.picture == null) {
+          return (
+            <div>
+              주최자 : {meeting_info.leader}<br />
+              본문 : {meeting_info.description}<br />
+              상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
+            </div>
+          )
+        }
+        else {
+          return (
+            <div>
+              주최자 : {meeting_info.leader}<br />
+              본문 : {meeting_info.description}<br />
+              상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
+              사진 : <br />
+              <img src={meeting_info.picture} width="600" /><br />
+            </div>
+          )
+        }
       }
     }
   }
