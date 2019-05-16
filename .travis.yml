@@ -4,7 +4,7 @@ matrix:
   include:
     -language: python
     before_install:
-        - cd ../back
+        - cd back
     install:
         - sudo apt-get update
         - sudo apt-get -y install python3-pip
