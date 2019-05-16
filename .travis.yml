@@ -1,3 +1,5 @@
+dist: xenial
+
 matrix:
   include:
     -language: python
@@ -19,3 +21,14 @@ matrix:
         - sleep 3
         - coverage run --source='.' manage.py test snu_moyeo
         - coverage report
+
+    -language: node_js
+    node_js: "8"
+    before_install:
+      - cd ../front/
+    install:
+      - npm install
+      - npm install --save cross-env
+      - npm install jest
+    script:
+      - npm test -- --coverage
