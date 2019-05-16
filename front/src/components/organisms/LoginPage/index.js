@@ -33,7 +33,7 @@ export const LoginPage = ({ token, login_click }) => {
           </Fonts>
           <Fonts>
             &ensp;&ensp;PW &ensp;
-            <input ref={node=>{password=node;}}/>
+            <input type ="password" ref={node=>{password=node;}}/>
           </Fonts>
           <br/>
           &ensp;&ensp;<Button type = "submit" onClick={() => login_click(username.value, password.value)}>로그인</Button>

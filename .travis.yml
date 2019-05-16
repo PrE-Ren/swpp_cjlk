@@ -2,21 +2,21 @@ dist: xenial
 
 matrix:
   include:
-     -language: node_js
-    node_js: "8"
-    before_install:
-      - cd front
-    install:
-      - npm install
-      - npm install --save cross-env
-      - npm install jest
-    script:
-      - npm test -- --coverage
+    - language: node_js
+      node_js: "8"
+      before_install:
+        - cd front
+      install:
+        - npm install
+        - npm install --save cross-env
+        - npm install jest
+      script:
+        - npm test -- --coverage
 
-    -language: python
-    before_install:
+    - language: python
+      before_install:
         - cd back
-    install:
+      install:
         - sudo apt-get update
         - sudo apt-get -y install python3-pip
         - sudo pip3 install --upgrade pip
@@ -26,7 +26,7 @@ matrix:
         - sudo pip3 install requests
         - sudo pip3 install django-cors-headers
         - sudo pip3 install Pillow
-    script:
+      script:
         - python3 manage.py makemigrations snu_moyeo
         - python3 manage.py migrate
         - python3 manage.py runserver&
