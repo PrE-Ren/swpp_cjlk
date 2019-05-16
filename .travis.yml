@@ -5,7 +5,7 @@ matrix:
     -language: node_js
     node_js: 6.9.4
     before_install:
-      - cd ./frontend/
+      - cd ./front/
     install:
       - sudo npm install
       - sudo npm install --save cross-env
