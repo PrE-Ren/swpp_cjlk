@@ -97,7 +97,7 @@ class MeetingModelsTests(TestCase):
         
         print('how about delete meeting that is not owned?')
         res = requests.delete( link+'2/',auth = ('test2','hello') )
-        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.status_code, 403)
         print('you cannot delete it')
         
         res = requests.delete( link + '2/', auth = ('test1','hello') )
