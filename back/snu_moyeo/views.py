@@ -47,9 +47,9 @@ class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPI
     queryset = SnuUser.objects.all()
     serializer_class = SnuUserSerializer
 
-    # It will have to be deleted later
-    # def get(self, request, *args, **kwargs):
-    #    return self.list(request, *args, **kwargs)
+    #It will have to be deleted later
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
     def post(self, request, format = None):
         email = request.data['email']
@@ -110,9 +110,44 @@ class ParticipateDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ParticipateSerializer
 
 class RecentList(generics.ListAPIView):
-    queryset = Meeting.objects.all()[:2]
+    queryset = Meeting.objects.all().filter(Q(state=0) or Q(state=2))[:2]
     serializer_class = MeetingSerializer
 
 class ImpendingList(generics.ListAPIView):
-    queryset = Meeting.objects.order_by('due')[:2]
+    queryset = Meeting.objects.all().filter(Q(state=0) or Q(state=2)).order_by('due')[:2]
     serializer_class = MeetingSerializer
+
+
+class LeadList(generics.ListAPIView):
+    serializer_class = MeetingSerializer
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Meeting.objects.filter (leader = user and Meeting.state != 4)
+
+class JoinList (generics.ListAPIView):
+    serializer_class = MeetingSerializer
+    
+    def get_queryset(self):
+        user = self.request.user
+        user_id = user.id
+        return Meeting.objects.filter ((user_id in members) and (Meeting.state !=4))
+
+class HistoryList (generics.ListAPIView):
+    serializer_class = MeetingSerializer
+    
+    def get_queryset(self):
+        user = self.request.user
+        user_id = user.id
+        return Meeting.objects.filter ((user_id in members) and (Meeting.state!=4))
+
+#class ParticipateDetail (APIView):
+#    queryset = Participate.objects.all()
+#    serializer_class = ParticipateSerializer
+#    
+#    def get (self, request, meet_id, user_id, format = None):
+#        try:
+            
+
+
+

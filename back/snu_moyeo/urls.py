@@ -19,6 +19,7 @@ urlpatterns = [
     path('participate/<int:pk>/', views.ParticipateDetail.as_view()),
     path('meetinglist/recent/', views.RecentList.as_view()),
     path('meetinglist/impending/', views.ImpendingList.as_view()),
+    path('meetinglist/lead/',views.LeadList.as_view()),
     url(r'^get_auth_token/', obtain_auth_token),
 ]
 

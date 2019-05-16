@@ -2,8 +2,6 @@ dist: xenial
 language: python
 
 before_script:
-        - rm ./back/db.sqlite3
-        - rm -r ./back/snu_moyeo/migrations
         - python3 ./back/manage.py makemigrations snu_moyeo
         - python3 ./back/manage.py migrate
 install:
@@ -15,8 +13,7 @@ install:
         - pip install django-rest-auth
         - pip install django-allauth
 script:
-        
-	- cd back//f
+	- cd back/
         - python3 manage.py runserver&
         - sleep 3
         - coverage run --source='.' manage.py test snu_moyeo
