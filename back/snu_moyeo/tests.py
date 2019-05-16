@@ -47,13 +47,13 @@ class MeetingModelsTests(TestCase):
             if '@snu.ac.kr' not in content_item['email'] : 
                 print('email format is wrong')
                 self.assertEqual(True,False)
-    
+    ''' 
     def put_user_test(self): 
         link = self.link + 'user/3/'
         data = {'username':'test3put', 'password':'hello', 'name':'nametest3put', 'email':'sdrjseka96@snu.ac.kr', 'mySNU_verified': True }
         res = requests.put(link,data,auth=('test3', 'hello'))
         self.assertEqual(res.status_code,200)
-       
+    '''   
 
     '''
     def delete_userlist_test (self):
@@ -149,7 +149,7 @@ class MeetingModelsTests(TestCase):
 
         self.get_userlist_Test()
         #self.delete_userlist_test()
-        self.put_user_test()
+        #self.put_user_test()
 
         self.post_meeting_test()        
         self.get_meeting_test()
