@@ -12,7 +12,7 @@ urlpatterns = [
     path('log_in/', views.LogIn.as_view()),
     url(r'^auth/(?P<mySNU_verification_token>[a-zA-Z0-9]+)/$', views.Authenticate.as_view()),
     path('user/', views.SnuUserList.as_view()),
-    path('user/<int:pk>/', views.SnuUserDetail.as_view()),
+    #path('user/<int:pk>/', views.SnuUserDetail.as_view()),
     path('meetinglist/', views.MeetingList.as_view()),
     path('meetinglist/<int:pk>/', views.MeetingDetail.as_view()),
     path('participate/', views.ParticipateList.as_view()),
@@ -20,6 +20,10 @@ urlpatterns = [
     path('meetinglist/recent/', views.RecentList.as_view()),
     path('meetinglist/impending/', views.ImpendingList.as_view()),
     path('meetinglist/lead/',views.LeadList.as_view()),
+    path('meetinglist/join/',views.JoinList.as_view()),
+    path('meetinglist/history/',views.HistoryList.as_view()),
+    path('participate/<int:userid>/<int:meetingid>/',views.get_participate),
+    
     url(r'^get_auth_token/', obtain_auth_token),
 ]
 
