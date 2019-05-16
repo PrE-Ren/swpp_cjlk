@@ -4,10 +4,10 @@ import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
 const LogoutCss1 = styled.div`
-  position: absolute;
+  position: relative;
   float: right;
-  right: 0px;
-  top: 2px;
+  right: -95px;
+  top: -43px;
 `
 
 const LogoutCss2 = styled.div`
