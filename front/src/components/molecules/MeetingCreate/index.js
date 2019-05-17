@@ -24,11 +24,11 @@ const ButtonCss = styled.div`
 `
 
 export const MeetingCreate = ({ username, password, user_id, new_click }) => {
-  let kind, title, due, min_people, max_people, description,picture
+  let kind, title, due, min_people, max_people, description, picture
   return (
     <MeetingCreateCss>
       유형 :&ensp;
-      <select ref={node => {kind=node;}} style={{width: '85px'},{height:'30px'}}>
+      <select ref={node => {kind=node;}} style={{width:'85px'},{height:'30px'}}>
         <option value="0">음식배달</option>
         <option value="1">택시합승</option>
         <option value="2">공동구매</option>
@@ -40,14 +40,14 @@ export const MeetingCreate = ({ username, password, user_id, new_click }) => {
       <br />
       모집 마감 기한 : <input type="datetime-local" ref={node => {due=node;}} />
       <br />
-      제목 : <input placeholder = "제목을 입력하세요" style={{width: '350px', height:'20px'}} ref={node => {title=node;}} />
+      제목 : <input placeholder = "제목을 입력하세요" style={{width:'350px', height:'20px'}} ref={node => {title=node;}} />
       <br />
       최소 인원 :&ensp;
-      <input type="number" ref={node => {min_people = node;}} style={{width: '45px'}}/>
+      <input type="number" ref={node => {min_people = node;}} style={{width:'45px'}}/>
       &ensp;&ensp;최대 인원 :&ensp;
-      <input type="number" ref={node => {max_people = node;}} style={{width: '45px'}} />
+      <input type="number" ref={node => {max_people = node;}} style={{width:'45px'}} />
       <br />
-      사진(선택사항) :&ensp;
+      사진(선택) :&ensp;
       <input type="file" onChange={(e)=> picture = e.target.files[0]} accept="image/*" />
       <div>내용 :</div>
       <textarea placeholder = "내용을 입력하세요." rows="20" cols="80" ref={node => {description=node;}} />
