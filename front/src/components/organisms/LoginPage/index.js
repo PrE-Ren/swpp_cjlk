@@ -8,8 +8,8 @@ const Fonts = styled.div`
   font-size: 25px;
   font-weight: bold;
 `
-const H1 = styled.div`
-  font-size: 32px;
+const H1 = styled.h1`
+  font-size: 38px;
   font-weight: bold;
 `
 const LoginBox = styled.div`
@@ -27,8 +27,7 @@ export const LoginPage = ({ token, login_click }) => {
   if (token == null) {
     return (
         <LoginBox>
-
-          <H1><h1>로그인</h1></H1>
+          <H1>로그인</H1>
           <Fonts>
             <p></p>
             ID &ensp;&ensp;
