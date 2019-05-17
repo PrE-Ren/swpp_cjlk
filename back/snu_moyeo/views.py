@@ -15,7 +15,7 @@ from django.http import HttpResponse
 from snu_moyeo.permissions import UserOnlyAccess, LeaderOnlyControl
 from django.db.models import Q
 
-
+from rest_framework.pagination import PageNumberPagination
 
 class Authenticate (APIView):
     queryset = SnuUser.objects.all()
@@ -132,8 +132,13 @@ class JoinList (generics.ListAPIView):
     serializer_class = MeetingSerializer
     def get_queryset(self):
         user = self.request.user
-        user_id = user.id
-        return Meeting.objects.filter(Q(leader=user_id) & ~Q(state =4))
+
+        if (not user.is_anonymous):
+            user_id = user.id
+            join_user = SnuUser.objects.get(id = user_id)
+            return join_user.meetings.all().filter(~Q(state=4))
+
+        return Meeting.objects.none()
 
 class HistoryList (generics.ListAPIView):
     serializer_class = MeetingSerializer
@@ -162,3 +167,6 @@ def get_participate(request, in_userid, in_meetingid):
 
 
     return HttpResponse(participate_id, status = status.HTTP_200_OK)
+
+
+        
