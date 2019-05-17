@@ -62,7 +62,7 @@ Button.propTypes = {
 }
 
 Button.defaultProps = {
-  palette: 'primary',
+  palette: 'success',
   type: 'button',
   height: 40,
 }

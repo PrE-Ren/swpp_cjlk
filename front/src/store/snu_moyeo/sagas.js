@@ -171,52 +171,56 @@ export function* new_func(action){
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
   const formData = new FormData();
-  formData.append('title',action.title);
-  formData.append('kind',action.kind);
-  formData.append('due',action.due);
-  formData.append('min_people',action.min_people);
-  formData.append('max_people',action.max_people);
-  formData.append('description',action.description);
-  formData.append('state',0);
-  if(action.picture !== undefined){
-    formData.append('picture',action.picture,action.picture.name);
-  }
+  if(action.min_people > 1 && action.max_people > 1){
+    formData.append('title',action.title);
+    formData.append('kind',action.kind);
+    formData.append('due',action.due);
+    formData.append('min_people',action.min_people);
+    formData.append('max_people',action.max_people);
+    formData.append('description',action.description);
+    formData.append('state',0);
+    if(action.picture !== undefined){
+      formData.append('picture',action.picture,action.picture.name);
+    }
 
-  const response_meeting = yield call(fetch, url_meetinglist, {
-      method: 'POST',
-      headers: {
-          'Authorization': `Basic ${hash}`,
-      },
-      body: formData,
-  })
-
-  if (response_meeting.ok) {
-    console.log('Meeting POST ok')
-    const meeting_id = (yield call([response_meeting, response_meeting.json])).id
-    const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: meeting_id });
-    const response_participate = yield call(fetch, url_participate, {
+    const response_meeting = yield call(fetch, url_meetinglist, {
         method: 'POST',
         headers: {
             'Authorization': `Basic ${hash}`,
-            'Content-Type': 'application/json',
         },
-        body: info_participate,
+        body: formData,
     })
-    if (response_participate.ok) {
-      console.log('Participate POST ok')
-      Object.defineProperty(window.location, 'href', {
-        writable: true,
-        value: '/'
-      });
-    }
-    else
-      console.log('Participate POST bad')
-  }
-  else {
-    console.log('Meeting POST bad')
-    console.log('올바르지 않은 형식입니다.')
-  }
 
+    if (response_meeting.ok) {
+      console.log('Meeting POST ok')
+      const meeting_id = (yield call([response_meeting, response_meeting.json])).id
+      const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: meeting_id });
+      const response_participate = yield call(fetch, url_participate, {
+          method: 'POST',
+          headers: {
+              'Authorization': `Basic ${hash}`,
+              'Content-Type': 'application/json',
+          },
+          body: info_participate,
+      })
+      if (response_participate.ok) {
+        console.log('Participate POST ok')
+        Object.defineProperty(window.location, 'href', {
+          writable: true,
+          value: '/'
+        });
+      }
+      else
+        console.log('Participate POST bad')
+    }
+    else {
+      console.log('Meeting POST bad')
+      console.log('올바르지 않은 형식입니다.')
+    }
+  }
+  else{
+    alert('올바르지 않은 인원 형식')
+  }
 }
 
 export function* change_meeting_state_func(action) {
@@ -246,6 +250,8 @@ export function* change_meeting_state_func(action) {
     window.location.reload()
   }
   else {
+    if(action.new_state == 1)
+      alert("모임 인원이 최소 인원을 충족하지 못했습니다")
     console.log('PUT bad')
   }
 }
@@ -267,7 +273,10 @@ export function* join_meeting_func(action) {
     window.location.reload()
   }
   else
+  {
+    alert("참여하고자 하는 모임의 인원이 가득 찼습니다")
     console.log('Participate POST bad')
+  }
 }
 
 export function* withdraw_meeting_func(action) {

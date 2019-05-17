@@ -29,7 +29,8 @@ export const Left_sidebar = ({children, ...props}) => {
         <a href="/2" style={{textDecoration: 'none'}}>공동구매</a><br />
         <a href="/3" style={{textDecoration: 'none'}}>스터디</a><br />
         <a href="/4" style={{textDecoration: 'none'}}>운동</a><br />
-        <a href="/5" style={{textDecoration: 'none'}}>미팅</a>
+        <a href="/5" style={{textDecoration: 'none'}}>미팅</a><br />
+        <a href="/6" style={{textDecoration: 'none'}}>기타</a>
       </FontCss>
     </Left_sidebarCss>
   )

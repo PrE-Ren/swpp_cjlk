@@ -35,6 +35,7 @@ export const MeetingCreate = ({ username, password, user_id, new_click }) => {
         <option value="3">스터디</option>
         <option value="4">운동</option>
         <option value="5">미팅</option>
+        <option value="6">기타</option>
       </select>
       <br />
       모집 마감 기한 : <input type="datetime-local" ref={node => {due=node;}} />
@@ -46,6 +47,7 @@ export const MeetingCreate = ({ username, password, user_id, new_click }) => {
       &ensp;&ensp;최대 인원 :&ensp;
       <input type="number" ref={node => {max_people = node;}} style={{width: '45px'}} />
       <br />
+      사진(선택사항) :&ensp;
       <input type="file" onChange={(e)=> picture = e.target.files[0]} accept="image/*" />
       <div>내용 :</div>
       <textarea placeholder = "내용을 입력하세요." rows="20" cols="80" ref={node => {description=node;}} />
