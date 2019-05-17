@@ -6,10 +6,11 @@ import { font, palette } from 'styled-theme'
 const Join_chatroomCss = styled.div`
   text-align: center;
   display: inline-block;
-  width: 300px;
-  top: -1000px;
+  width: 250px;
+  margin-right: 3px;
+  margin-top: -25px;
   border: 2px solid;
-  font-size: 30px;
+  font-size: 25px;
 `
 
 const Join_chatroom = () => {

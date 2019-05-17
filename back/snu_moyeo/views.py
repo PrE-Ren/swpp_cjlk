@@ -110,11 +110,11 @@ class ParticipateDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ParticipateSerializer
 
 class RecentList(generics.ListAPIView):
-    queryset = Meeting.objects.all().filter(Q(state=0) | Q(state=2))[:2]
+    queryset = Meeting.objects.all().filter(Q(state=0) | Q(state=2))[:5]
     serializer_class = MeetingSerializer
 
 class ImpendingList(generics.ListAPIView):
-    queryset = Meeting.objects.all().filter(Q(state=0) | Q(state=2)).order_by('-due')[:2]
+    queryset = Meeting.objects.all().filter(Q(state=0) | Q(state=2)).order_by('-due')[:5]
     serializer_class = MeetingSerializer
 
 
@@ -137,11 +137,11 @@ class JoinList (generics.ListAPIView):
 
 class HistoryList (generics.ListAPIView):
     serializer_class = MeetingSerializer
-    
+
     #queryset = SnuUser.objects.filter(Q(id = request.user.id))
     def get_queryset(self):
         user = self.request.user
-        
+
         if (not user.is_anonymous):
             user_id = user.id
             history_user = SnuUser.objects.get(id = user_id)
@@ -162,8 +162,3 @@ def get_participate(request, in_userid, in_meetingid):
 
 
     return HttpResponse(participate_id, status = status.HTTP_200_OK)
-    
-            
-
-
-
