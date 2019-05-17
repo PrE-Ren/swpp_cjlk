@@ -33,7 +33,7 @@ class MeetingSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'created', 'due', 'min_people', 'max_people', 'description', 'state', 'kind', 'leader', 'picture', 'members')
 
 class SnuUserSerializer(serializers.ModelSerializer):
-    # lead_meeting = serializers.PrimaryKeyRelatedField(many = True, queryset = Meeting.objects.all())
+    lead_meeting = serializers.PrimaryKeyRelatedField(many = True, queryset = Meeting.objects.all())
 
     def validate(self, data):
         if (data['email'] == ''):
@@ -50,7 +50,7 @@ class SnuUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SnuUser
-        fields = ('id', 'username', 'password', 'name', 'email', 'point', 'mySNU_verified', 'mySNU_verification_token', 'meetings')
+        fields = ('id', 'username', 'password', 'name', 'email', 'point', 'mySNU_verified', 'mySNU_verification_token', 'meetings', 'lead_meeting')
 
 class ParticipateSerializer(serializers.ModelSerializer):
     # snuuser = serializers.ReadOnlyField(source = 'SnuUser.id')
