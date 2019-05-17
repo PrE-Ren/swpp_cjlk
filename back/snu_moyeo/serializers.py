@@ -7,6 +7,7 @@ class MeetingSerializer(serializers.ModelSerializer):
     leader = serializers.CharField(read_only = True)
     picture = serializers.ImageField(use_url=True, allow_empty_file=True, required=False)
 
+    
     def validate(self, data):
         due = data['due']
         created_when = django.utils.timezone.now()
@@ -54,12 +55,28 @@ class ParticipateSerializer(serializers.ModelSerializer):
         new_meeting = data['meeting_id'] 
         print(new_meeting)
         cnt_participate = 0
+        cnt_max = 0
+    
+        try:
+            target_meeting = Meeting.objects.get(id = new_meeting.id)
+        except Meeting.DoesNotExist:
+            raise serializers.ValidationError('it is non existing meeting to participate on')
+        
+        if target_meeting.max_people == len(target_meeting.members.all()):
+            raise serializers.ValidationError('already meeting people is full')
+
         for participate_data in Participate.objects.all():
             if (participate_data.user_id == new_snuuser and participate_data.meeting_id == new_meeting): 
                 raise serializers.ValidationError('already on meeting')
             if (participate_data.user_id == new_snuuser): 
-                if (participate_data.meeting_id.state != 3): 
+                if (not participate_data.meeting_id.state == 4): 
                     cnt_participate = cnt_participate + 1
+            '''
+            if (participate_data.meeting_id == new_meeting):
+                target_meeting = Meeting.objects.get(id = new_meeting)
+                if target_meeting.max_people == len(target_meeting.members.all()):
+            '''
+
             '''
             for meeting_data in Meeting.objects.all():
                 if (meeting_data.state == 0 and participate_data.snuuser == new_snuuser):
