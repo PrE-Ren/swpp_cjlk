@@ -136,7 +136,6 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
           {meeting_info.members.length >= meeting_info.min_people ?
                <div>FULL</div>
                :<Button type="submit" onClick={() => join_meeting_click(hash, state.user_id, meeting_info.id)}>참가</Button> }
-
         </div>
       )
     }

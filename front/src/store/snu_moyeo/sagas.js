@@ -169,9 +169,13 @@ export function* signup_func(data) {
 export function* new_func(action){
   const url_meetinglist = 'http://127.0.0.1:8000/meetinglist/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
+  const url_userdetail = `http://127.0.0.1:8000/user/${action.user_id}/`
   const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
   const formData = new FormData();
-  if(action.min_people > 1 && action.max_people > 1){
+  let response_meeting;
+
+  if(action.min_people > 1 && action.max_people > 1)
+  {
     formData.append('title',action.title);
     formData.append('kind',action.kind);
     formData.append('due',action.due);
@@ -183,39 +187,57 @@ export function* new_func(action){
       formData.append('picture',action.picture,action.picture.name);
     }
 
-    const response_meeting = yield call(fetch, url_meetinglist, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Basic ${hash}`,
-        },
-        body: formData,
+    const response_userdetail = yield call(fetch, url_userdetail, {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+      }
     })
 
-    if (response_meeting.ok) {
-      console.log('Meeting POST ok')
-      const meeting_id = (yield call([response_meeting, response_meeting.json])).id
-      const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: meeting_id });
-      const response_participate = yield call(fetch, url_participate, {
+    const list = (yield call([response_userdetail, response_userdetail.json])).meetings
+    console.log(list)
+    if(list.length < 5)
+    {
+      response_meeting = yield call(fetch, url_meetinglist,
+        {
           method: 'POST',
           headers: {
-              'Authorization': `Basic ${hash}`,
-              'Content-Type': 'application/json',
-          },
-          body: info_participate,
-      })
-      if (response_participate.ok) {
-        console.log('Participate POST ok')
-        Object.defineProperty(window.location, 'href', {
-          writable: true,
-          value: '/'
-        });
+            'Authorization': `Basic ${hash}`,
+        },
+        body: formData,})
+
+      if (response_meeting.ok)
+      {
+        console.log('Meeting POST ok')
+        const meeting_id = (yield call([response_meeting, response_meeting.json])).id
+        const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: meeting_id });
+        const response_participate = yield call(fetch, url_participate, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Basic ${hash}`,
+                'Content-Type': 'application/json',
+            },
+            body: info_participate,
+        })
+        if (response_participate.ok) {
+          console.log('Participate POST ok')
+          Object.defineProperty(window.location, 'href', {
+            writable: true,
+            value: '/'
+          });
+        }
+        else
+          console.log('Participate POST bad')
       }
       else
-        console.log('Participate POST bad')
+      {
+        console.log('Meeting POST bad')
+        console.log('올바르지 않은 형식입니다.')
+      }
     }
-    else {
-      console.log('Meeting POST bad')
-      console.log('올바르지 않은 형식입니다.')
+    else
+    {
+      alert('모임 개수 제한')
     }
   }
   else{
