@@ -21,13 +21,13 @@ const styles = css`
   position:absolute;
   right: 5px;
   margin-top: -100px;
-  width: 300px;
+  width: 250px;
   color: white;
   border-radius: 12px;
   padding: 10px 30px;
   text-align: center;
   display: inline-block;
-  font-size: 30px;
+  font-size: 25px;
   cursor: pointer;
   &:hover, &:focus, &:active {
     background-color: ${hoverBackgroundColor};

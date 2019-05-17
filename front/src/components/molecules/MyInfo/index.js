@@ -5,12 +5,12 @@ import { font, palette } from 'styled-theme'
 import MeetingEntry from '../../atoms/MeetingEntry'
 
 const MyInfoCss = styled.div`
-  position: absolute;
-  float: center;
-  right: 500px;
-  top: 150px;
   border: 2px solid black;
   display: inline-block;
+  position: relative;
+  top: 100px;
+  left: 3%;
+  margin-left: 120px;
 `
 
 const FontCss = styled.div`
