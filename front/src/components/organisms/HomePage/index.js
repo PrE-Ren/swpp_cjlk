@@ -10,10 +10,9 @@ import Right_sidebar from '../../molecules/Right_sidebar'
 import styled from 'styled-components'
 
 const ListCss = styled.div`
-  position: absolute;
-  float: center;
-  right: 500px;
-  top: 150px;
+  position: relative;
+  left: 10%
+  top: 120px;
   border: 2px solid black;
   display: inline-block;
 `

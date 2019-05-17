@@ -179,20 +179,9 @@ export function* new_func(action){
   formData.append('description',action.description);
   formData.append('state',0);
   if(action.picture !== undefined){
-    formData.append('picture',action.picture);
+    formData.append('picture',action.picture,action.picture.name);
   }
 
-  const info_meeting = JSON.stringify(
-    {
-      title: action.title,
-      kind: action.kind,
-      due: action.due,
-      min_people: action.min_people,
-      max_people: action.max_people,
-      description: action.description,
-      state: 0
-    }
-  );
   const response_meeting = yield call(fetch, url_meetinglist, {
       method: 'POST',
       headers: {
@@ -227,6 +216,7 @@ export function* new_func(action){
     console.log('Meeting POST bad')
     console.log('올바르지 않은 형식입니다.')
   }
+
 }
 
 export function* change_meeting_state_func(action) {

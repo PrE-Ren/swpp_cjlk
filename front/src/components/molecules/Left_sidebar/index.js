@@ -5,7 +5,8 @@ import { font, palette } from 'styled-theme'
 import { SSL_OP_SINGLE_DH_USE } from 'constants';
 
 const Left_sidebarCss = styled.div`
-  position: absolute;
+  position: relative;
+  float:left;
   width: 150px;
   text-align: center;
   display: inline-block;

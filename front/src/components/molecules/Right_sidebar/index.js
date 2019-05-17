@@ -6,10 +6,10 @@ import Join_chatroom from '../../atoms/Join_chatroom'
 import styled from 'styled-components'
 
 const Right_sidebarCss = styled.div`
-  position: fixed;
+  position: relative;
   float:right;
   top: 250px;
-  right: 3px;
+  right: -200px;
 `
 
 const Right_sidebar = () => {

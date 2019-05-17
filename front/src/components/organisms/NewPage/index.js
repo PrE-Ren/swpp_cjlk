@@ -8,6 +8,7 @@ import MeetingCreate from '../../../containers/MeetingCreate'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import styled from 'styled-components'
 
+
 export const NewPage = ({ token }) => {
   if (token == null) {
     Object.defineProperty(window.location, 'href', {
@@ -23,8 +24,8 @@ export const NewPage = ({ token }) => {
         <Left_sidebar />
         <ToMyPage />
         <Logout />
-        <MeetingCreate />
         <Right_sidebar />
+        <MeetingCreate />
       </div>
     )
   }
