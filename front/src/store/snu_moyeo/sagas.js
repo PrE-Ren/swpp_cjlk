@@ -166,21 +166,21 @@ export function* signup_func(data) {
     alert("회원가입 실패 : 정보를 바르게 입력하세요.")
 }
 
-export function* new_func(action){
+export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
   const formData = new FormData();
-  if(action.min_people > 1 && action.max_people > 1){
-    formData.append('title',action.title);
-    formData.append('kind',action.kind);
-    formData.append('due',action.due);
-    formData.append('min_people',action.min_people);
-    formData.append('max_people',action.max_people);
-    formData.append('description',action.description);
-    formData.append('state',0);
-    if(action.picture !== undefined){
-      formData.append('picture',action.picture,action.picture.name);
+  if (action.min_people > 1 && action.max_people > 1) {
+    formData.append('title', action.title);
+    formData.append('kind', action.kind);
+    formData.append('due', action.due);
+    formData.append('min_people', action.min_people);
+    formData.append('max_people', action.max_people);
+    formData.append('description', action.description);
+    formData.append('state', 0);
+    if (action.picture !== undefined) {
+      formData.append('picture', action.picture, action.picture.name);
     }
 
     const response_meeting = yield call(fetch, url_meeting, {
@@ -218,7 +218,7 @@ export function* new_func(action){
       console.log('올바르지 않은 형식입니다.')
     }
   }
-  else{
+  else {
     alert('올바르지 않은 인원 형식')
   }
 }

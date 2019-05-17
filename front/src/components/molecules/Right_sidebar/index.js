@@ -15,7 +15,7 @@ const Right_sidebarCss = styled.div`
 const Right_sidebar = () => {
   return (
     <Right_sidebarCss>
-      <Make_new />
+      <Make_new type="submit" onClick={() => window.location.href = '/new'}>새 모임 만들기 +</Make_new>
       <Join_chatroom />
     </Right_sidebarCss>
   )

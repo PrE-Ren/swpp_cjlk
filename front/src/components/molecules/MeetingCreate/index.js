@@ -17,7 +17,7 @@ const MeetingCreateCss = styled.div`
 `
 
 const ButtonCss = styled.div`
-  float:right;
+  float: right;
   margin-top: 280px;
   margin-right: 5px;
   margin-bottom: 5px;

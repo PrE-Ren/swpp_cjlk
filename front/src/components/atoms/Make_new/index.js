@@ -37,8 +37,8 @@ const styles = css`
 
 const Make_newCss = styled.button`${styles}`
 
-const Make_new = () => {
-  return <Make_newCss type="submit" onClick={() => window.location.href = '/new'}>새 모임 만들기 +</Make_newCss>
+const Make_new = (props) => {
+  return <Make_newCss {...props} />
 }
 
 Make_new.propTypes = {
