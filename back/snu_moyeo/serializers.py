@@ -50,15 +50,15 @@ class ParticipateSerializer(serializers.ModelSerializer):
     # snuuser = serializers.IntegerField(read_only = True)
 
     def validate(self,data):
-        new_snuuser = data['user_id']
-        new_meeting = data['meeting_id']
+        new_snuuser = data['user_id'] 
+        new_meeting = data['meeting_id'] 
         print(new_meeting)
         cnt_participate = 0
         for participate_data in Participate.objects.all():
-            if (participate_data.user_id == new_snuuser and participate_data.meeting_id == new_meeting):
+            if (participate_data.user_id == new_snuuser and participate_data.meeting_id == new_meeting): 
                 raise serializers.ValidationError('already on meeting')
-            if (participate_data.user_id == new_snuuser):
-                if (participate_data.meeting_id.state == 0):
+            if (participate_data.user_id == new_snuuser): 
+                if (participate_data.meeting_id.state != 3): 
                     cnt_participate = cnt_participate + 1
             '''
             for meeting_data in Meeting.objects.all():
@@ -72,4 +72,4 @@ class ParticipateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Participate
-        fields = ('id', 'user_id', 'meeting_id')
+        fields = ('id', 'user_id', 'meeting_id') 

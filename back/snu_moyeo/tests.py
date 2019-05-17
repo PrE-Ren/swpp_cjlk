@@ -35,7 +35,6 @@ class MeetingModelsTests(TestCase):
 
 
     def get_userlist_Test(self):
-        
         link = self.link + 'user/'
         res = requests.get(link)
         contents = res.json()
@@ -48,14 +47,15 @@ class MeetingModelsTests(TestCase):
             if '@snu.ac.kr' not in content_item['email'] : 
                 print('email format is wrong')
                 self.assertEqual(True,False)
-    
+    ''' 
     def put_user_test(self): 
         link = self.link + 'user/3/'
         data = {'username':'test3put', 'password':'hello', 'name':'nametest3put', 'email':'sdrjseka96@snu.ac.kr', 'mySNU_verified': True }
         res = requests.put(link,data,auth=('test3', 'hello'))
         self.assertEqual(res.status_code,200)
-        
+    '''   
 
+    '''
     def delete_userlist_test (self):
         link = self.link + 'user/'
         print('how about another user delete another?')
@@ -66,6 +66,7 @@ class MeetingModelsTests(TestCase):
         res = requests.delete(link+'2/', auth =('test2', 'hello'))        
         self.assertEqual(res.status_code, 204)
         print('correct auth delete test done')
+    '''
 
     def get_meeting_test(self):
         link = self.link + 'meetinglist/'
@@ -96,7 +97,7 @@ class MeetingModelsTests(TestCase):
         
         print('how about delete meeting that is not owned?')
         res = requests.delete( link+'2/',auth = ('test2','hello') )
-        self.assertEqual(res.status_code, 401)
+        self.assertEqual(res.status_code, 403)
         print('you cannot delete it')
         
         res = requests.delete( link + '2/', auth = ('test1','hello') )
@@ -147,8 +148,8 @@ class MeetingModelsTests(TestCase):
         self.sign_up_post()
 
         self.get_userlist_Test()
-        self.delete_userlist_test()
-        self.put_user_test()
+        #self.delete_userlist_test()
+        #self.put_user_test()
 
         self.post_meeting_test()        
         self.get_meeting_test()

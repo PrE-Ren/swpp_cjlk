@@ -50,3 +50,6 @@ class Participate (models.Model):
     id = models.AutoField(primary_key = True)
     user_id = models.ForeignKey('SnuUser', on_delete = models.CASCADE)
     meeting_id = models.ForeignKey('Meeting', on_delete = models.CASCADE)
+
+    class Meta:
+        unique_together = ['user_id', 'meeting_id']

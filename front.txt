@@ -1,0 +1,17 @@
+dist: trusty
+language: node_js
+node_js: 11
+
+before_install:
+        - cd front/
+        - npm config set strict-ssl false
+install :
+        - sudo apt-get install curl
+        - sudo apt-get install -y nodejs
+        - sudo apt-get install npm
+        - sudo npm install
+	- sudo npm install --save cross-env
+        - sudo npm install jest 
+        - sudo npm install -g yo generator-arc
+script:
+        - sudo npm test -- --coverage
