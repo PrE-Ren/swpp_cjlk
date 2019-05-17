@@ -162,8 +162,7 @@ def get_participate(request, in_userid, in_meetingid):
 
 
     return HttpResponse(participate_id, status = status.HTTP_200_OK)
-    
-            
+                
 
 
 
