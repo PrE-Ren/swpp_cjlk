@@ -167,7 +167,7 @@ export function* signup_func(data) {
 }
 
 export function* new_func(action){
-  const url_meetinglist = 'http://127.0.0.1:8000/meetinglist/'
+  const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
   const formData = new FormData();
@@ -183,7 +183,7 @@ export function* new_func(action){
       formData.append('picture',action.picture,action.picture.name);
     }
 
-    const response_meeting = yield call(fetch, url_meetinglist, {
+    const response_meeting = yield call(fetch, url_meeting, {
         method: 'POST',
         headers: {
             'Authorization': `Basic ${hash}`,
@@ -225,7 +225,7 @@ export function* new_func(action){
 
 export function* change_meeting_state_func(action) {
   let meeting_id = action.meeting_info.id
-  const url_meeting = `http://127.0.0.1:8000/meetinglist/${meeting_id}/`
+  const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`
   const info_meeting = JSON.stringify(
     {
       title: action.meeting_info.title,
