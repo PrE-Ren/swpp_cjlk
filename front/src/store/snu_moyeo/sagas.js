@@ -4,6 +4,9 @@ import * as actions from './actions'
 
 /* Fetch data from back-end when detecting page reload */
 /* 각 페이지 별로 필요한 미팅 목록이 다르기 때문에, 사실 따로따로 구현해야 함. */
+/* <Home> 페이지 : Impending List, Recent List
+/* <List> 페이지 : Kind List (가명)
+/* <MyPage> 페이지 : Lead List, Join List, History List
 /* 그런데 일단 여기서 다 가져오는 걸로 구현하겠음. 나중에 수정 요망. */
 export function* watchReload() {
   if (window.performance && performance.navigation.type == 1) {
@@ -59,6 +62,10 @@ export function* initialize() {
   console.log("<Initialize : state will be initialized by back-end data>")
   let meetinglist_impending
   let meetinglist_recent
+  let meetinglist_lead
+  let meetinglist_join
+  let meetinglist_history
+  /* hash */
 
   const response_impending = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/impending', { method : 'GET' })
   if (response_impending.ok) {
@@ -78,13 +85,56 @@ export function* initialize() {
   else
     alert('Fail to fetch recent list from back-end')
 
+  /*const response_lead = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/lead', {
+    method : 'GET',
+    headers: { 'Authorization' : `Basic ${hash}` }
+  })*/
+  const response_lead = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/lead', { method : 'GET' })
+  if (response_lead.ok) {
+    meetinglist_lead = yield call([response_lead, response_lead.json])
+    console.log('<Fetch lead list from back-end (Reload)>')
+    console.log(meetinglist_lead)
+  }
+  else
+    alert('Fail to fetch lead list from back-end')
+
+  /*const response_join = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/join', {
+    method : 'GET',
+    headers: { 'Authorization' : `Basic ${hash}` }
+  })*/
+  const response_join = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/join', { method : 'GET' })
+  if (response_join.ok) {
+    meetinglist_join = yield call([response_join, response_join.json])
+    console.log('<Fetch join list from back-end (Reload)>')
+    console.log(meetinglist_join)
+  }
+  else
+    alert('Fail to fetch join list from back-end')
+
+  /*const response_history = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/history', {
+    method : 'GET',
+    headers: { 'Authorization' : `Basic ${hash}` }
+  })*/
+  const response_history = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/history', { method : 'GET' })
+  if (response_history.ok) {
+    meetinglist_history = yield call([response_history, response_history.json])
+    console.log('<Fetch history list from back-end (Reload)>')
+    console.log(meetinglist_history)
+  }
+  else
+    alert('Fail to fetch history list from back-end')
+
   console.log('<Dispatch reload_action>')
-  yield put(actions.reload_action(meetinglist_impending, meetinglist_recent))
+  yield put(actions.reload_action(meetinglist_impending, meetinglist_recent, meetinglist_lead, meetinglist_join, meetinglist_history))
 }
 
 export function* reload_func() {
   let meetinglist_impending
   let meetinglist_recent
+  let meetinglist_lead
+  let meetinglist_join
+  let meetinglist_history
+  /* hash */
 
   const response_impending = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/impending', { method : 'GET' })
   if (response_impending.ok) {
@@ -103,6 +153,45 @@ export function* reload_func() {
   }
   else
     alert('Fail to fetch recent list from back-end')
+
+  /*const response_lead = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/lead', {
+    method : 'GET',
+    headers: { 'Authorization' : `Basic ${hash}` }
+  })*/
+  const response_lead = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/lead', { method : 'GET' })
+  if (response_lead.ok) {
+    meetinglist_lead = yield call([response_lead, response_lead.json])
+    console.log('<Fetch lead list from back-end (Reload)>')
+    console.log(meetinglist_lead)
+  }
+  else
+    alert('Fail to fetch lead list from back-end')
+
+  /*const response_join = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/join', {
+    method : 'GET',
+    headers: { 'Authorization' : `Basic ${hash}` }
+  })*/
+  const response_join = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/join', { method : 'GET' })
+  if (response_join.ok) {
+    meetinglist_join = yield call([response_join, response_join.json])
+    console.log('<Fetch join list from back-end (Reload)>')
+    console.log(meetinglist_join)
+  }
+  else
+    alert('Fail to fetch join list from back-end')
+
+  /*const response_history = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/history', {
+    method : 'GET',
+    headers: { 'Authorization' : `Basic ${hash}` }
+  })*/
+  const response_history = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/history', { method : 'GET' })
+  if (response_history.ok) {
+    meetinglist_history = yield call([response_history, response_history.json])
+    console.log('<Fetch history list from back-end (Reload)>')
+    console.log(meetinglist_history)
+  }
+  else
+    alert('Fail to fetch history list from back-end')
 
   console.log('<Dispatch reload_action>')
   yield put(actions.reload_action(meetinglist_impending, meetinglist_recent))
@@ -166,24 +255,24 @@ export function* signup_func(data) {
     alert("회원가입 실패 : 정보를 바르게 입력하세요.")
 }
 
-export function* new_func(action){
-  const url_meetinglist = 'http://127.0.0.1:8000/meetinglist/'
+export function* new_func(action) {
+  const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
   const formData = new FormData();
-  if(action.min_people > 1 && action.max_people > 1){
-    formData.append('title',action.title);
-    formData.append('kind',action.kind);
-    formData.append('due',action.due);
-    formData.append('min_people',action.min_people);
-    formData.append('max_people',action.max_people);
-    formData.append('description',action.description);
-    formData.append('state',0);
-    if(action.picture !== undefined){
-      formData.append('picture',action.picture,action.picture.name);
+  if (action.min_people > 1 && action.max_people > 1) {
+    formData.append('title', action.title);
+    formData.append('kind', action.kind);
+    formData.append('due', action.due);
+    formData.append('min_people', action.min_people);
+    formData.append('max_people', action.max_people);
+    formData.append('description', action.description);
+    formData.append('state', 0);
+    if (action.picture !== undefined) {
+      formData.append('picture', action.picture, action.picture.name);
     }
 
-    const response_meeting = yield call(fetch, url_meetinglist, {
+    const response_meeting = yield call(fetch, url_meeting, {
         method: 'POST',
         headers: {
             'Authorization': `Basic ${hash}`,
@@ -218,14 +307,14 @@ export function* new_func(action){
       console.log('올바르지 않은 형식입니다.')
     }
   }
-  else{
+  else {
     alert('올바르지 않은 인원 형식')
   }
 }
 
 export function* change_meeting_state_func(action) {
   let meeting_id = action.meeting_info.id
-  const url_meeting = `http://127.0.0.1:8000/meetinglist/${meeting_id}/`
+  const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`
   const info_meeting = JSON.stringify(
     {
       title: action.meeting_info.title,
@@ -280,8 +369,10 @@ export function* join_meeting_func(action) {
 }
 
 export function* withdraw_meeting_func(action) {
-  const participate_id = 1 // 어떻게 가져올지 back-end와 논의
-  const url_participate = `http://127.0.0.1:8000/participate/${10}/`
+  const url = `http://127.0.0.1:8000/participate/${action.user_id}/${action.meeting_id}/`
+  const response = yield call(fetch, url, { method: 'GET' })
+  const participate_id = yield call([response, response.json])
+  const url_participate = `http://127.0.0.1:8000/participate/${participate_id}/`
   const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: action.meeting_id });
   const response_participate = yield call(fetch, url_participate, {
       method: 'DELETE',

@@ -14,8 +14,13 @@ from rest_framework import permissions
 from django.http import HttpResponse
 from snu_moyeo.permissions import UserOnlyAccess, LeaderOnlyControl
 from django.db.models import Q
-
 from rest_framework.pagination import PageNumberPagination
+
+OPEN = 0
+CLOSED = 1
+RE_OPEN = 2
+RE_CLOSED = 3
+BREAK_UP = 4
 
 class Authenticate (APIView):
     queryset = SnuUser.objects.all()
@@ -47,7 +52,7 @@ class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPI
     queryset = SnuUser.objects.all()
     serializer_class = SnuUserSerializer
 
-    #It will have to be deleted later
+    # It will have to be deleted later
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
@@ -80,6 +85,15 @@ class LogIn(APIView):
                 else :
                     return Response(data = {'details':'Not SNU verified.'}, status = status.HTTP_403_FORBIDDEN)
 
+class SnuUserList(generics.ListAPIView):
+    queryset = SnuUser.objects.all()
+    serializer_class = SnuUserSerializer
+
+class SnuUserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SnuUser.objects.all()
+    serializer_class = SnuUserSerializer
+    permission_classes = (UserOnlyAccess,)
+
 class MeetingList(generics.ListCreateAPIView):
     queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer
@@ -92,15 +106,6 @@ class MeetingDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = MeetingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, LeaderOnlyControl,)
 
-class SnuUserList(generics.ListAPIView):
-    queryset = SnuUser.objects.all()
-    serializer_class = SnuUserSerializer
-
-#class SnuUserDetail(generics.RetrieveUpdateDestroyAPIView):
-#    queryset = SnuUser.objects.all()
-#    serializer_class = SnuUserSerializer
-#    permission_classes = (UserOnlyAccess,)
-
 class ParticipateList(generics.ListCreateAPIView):
     queryset = Participate.objects.all()
     serializer_class = ParticipateSerializer
@@ -109,14 +114,25 @@ class ParticipateDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Participate.objects.all()
     serializer_class = ParticipateSerializer
 
+def get_participate(request, in_userid, in_meetingid):
+    participate_obj1 = Participate.objects.filter(Q(user_id_id = in_userid))
+    participate_list1 = participate_obj1.values()
+    participate_obj2 = participate_obj1.filter(Q(meeting_id_id = in_meetingid))
+    participate_list2 = participate_obj2.values()
+    # print(participate_obj2.values())
+
+    if len(participate_list2) == 0 :
+        return HttpResponse({}, status = status.HTTP_404_NOT_FOUND)
+    participate_id = participate_list2[0]['id']
+    return HttpResponse(participate_id, status = status.HTTP_200_OK)
+
 class RecentList(generics.ListAPIView):
-    queryset = Meeting.objects.all().filter(Q(state=0) | Q(state=2))[:5]
+    queryset = Meeting.objects.all().filter(Q(state = OPEN) | Q(state = RE_OPEN))[:5]
     serializer_class = MeetingSerializer
 
 class ImpendingList(generics.ListAPIView):
-    queryset = Meeting.objects.all().filter(Q(state=0) | Q(state=2)).order_by('-due')[:5]
+    queryset = Meeting.objects.all().filter(Q(state = OPEN) | Q(state = RE_OPEN)).order_by('due')[:5]
     serializer_class = MeetingSerializer
-
 
 class LeadList(generics.ListAPIView):
     serializer_class = MeetingSerializer
@@ -124,33 +140,29 @@ class LeadList(generics.ListAPIView):
         user = self.request.user
         if (not user.is_anonymous):
             lead_user = SnuUser.objects.get(id = user.id)
-            return lead_user.lead_meeting.all().filter(~Q(state=4))
+            return lead_user.lead_meeting.all()
         return Meeting.objects.none()
-    #Meeting.objects.filter(Q(leader = user) and ~Q(state = 4))
+    # Meeting.objects.filter(Q(leader = user) and ~Q(state = BREAK_UP))
 
 class JoinList (generics.ListAPIView):
     serializer_class = MeetingSerializer
     def get_queryset(self):
         user = self.request.user
-
         if (not user.is_anonymous):
             user_id = user.id
             join_user = SnuUser.objects.get(id = user_id)
-            return join_user.meetings.all().filter(~Q(state=4))
-
+            return join_user.meetings.all().filter(~Q(state = BREAK_UP))
         return Meeting.objects.none()
 
 class HistoryList (generics.ListAPIView):
     serializer_class = MeetingSerializer
-
-    #queryset = SnuUser.objects.filter(Q(id = request.user.id))
+    # queryset = SnuUser.objects.filter(Q(id = request.user.id))
     def get_queryset(self):
         user = self.request.user
-
         if (not user.is_anonymous):
             user_id = user.id
             history_user = SnuUser.objects.get(id = user_id)
-            return history_user.meetings.all().filter(Q(state=4))
+            return history_user.meetings.all().filter(Q(state = BREAK_UP))
         return Meeting.objects.none()
 
 def get_participate(request, in_userid, in_meetingid):
@@ -169,30 +181,13 @@ def get_participate(request, in_userid, in_meetingid):
     return HttpResponse(participate_id, status = status.HTTP_200_OK)
 
 
+
 class CustomPagination(PageNumberPagination):
-    page_size = 2
-    page_size_query_param = 'page_size'
-    max_page_size = 4
-
-    def get_paginated_response(self, data):
-        return Response({
-            'links': {
-                'next': self.get_next_link(),
-                'previous': self.get_previous_link()
-            },
-            'count': self.page.paginator.count,
-            'page_size': self.page_size,
-            'results': data
-        })
-
-
-class CustomtempPagination(PageNumberPagination):
     page_size = 3
     page_size_query_param = 'page_size'
     max_page_size = 3
 
     def get_paginated_response(self, data):
-        print(data)
         return Response({
             'links': {
                 'next': self.get_next_link(),
@@ -203,7 +198,8 @@ class CustomtempPagination(PageNumberPagination):
             'results': data
         })
 
-
+'''
+simple version pagination (not used now)
 class TempList(generics.ListAPIView):
     serializer_class = MeetingSerializer
     pagination_class = CustomPagination
@@ -213,30 +209,14 @@ class TempList(generics.ListAPIView):
         return temp_meeting
 
 '''
-def tempview(request,in_kind):
-    paginator = CustomtempPagination()
-    paginator.page_size = 2
-    meeting_objects = Meeting.objects.filter(~Q(state=4) and Q(kind=in_kind))
-    print("hi1")
-    print(type(meeting_objects))
-    result_page = paginator.paginate_queryset(queryset = meeting_objects,request= request)
-    print("hi2")
-    serializer = MeetingSerializer(result_page, many= True)
-    return paginator.get_paginated_response(serializer.data)
-'''
-class Temp2View(APIView):
+
+
+
+class ListMeetingView(APIView):
 
     def get(self,request,in_kind,format=None):
         temp = Meeting.objects.filter(Q(kind = in_kind) & ~Q(state=4))
-        paginator = CustomtempPagination()
+        paginator = CustomPagination()
         result_page = paginator.paginate_queryset(temp,request)
         serializer = MeetingSerializer(result_page,many=True)
-        print(serializer.data)
         return paginator.get_paginated_response(serializer.data)
-'''
-class Temp3View(ListCreateAPIView):
-        def list (self,request,in_kind):
-            queryset = self.get_queryset()
-            paged_queryset = self.paginate_queryset(queryset)
-
-            '''

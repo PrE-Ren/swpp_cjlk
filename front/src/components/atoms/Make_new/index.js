@@ -35,10 +35,10 @@ const styles = css`
   }
 `
 
-const Make_newDesign = styled.button`${styles}`
+const Make_newCss = styled.button`${styles}`
 
 const Make_new = (props) => {
-  return <Make_newDesign {...props} />
+  return <Make_newCss {...props} />
 }
 
 Make_new.propTypes = {
