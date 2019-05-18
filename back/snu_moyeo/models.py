@@ -20,7 +20,7 @@ class Meeting (models.Model):
     members = models.ManyToManyField('SnuUser', through = 'Participate')
 
     class Meta:
-        ordering = ['-created']  # order by descending time created
+        ordering = ['-created']  # sorted in decreasing order of created time
 
     def save(self, *args, **kwargs) :
         super(Meeting, self).save(*args, **kwargs)

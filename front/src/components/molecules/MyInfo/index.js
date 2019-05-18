@@ -3,18 +3,30 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 import MeetingEntry from '../../atoms/MeetingEntry'
+import LeadList from '../../../containers/LeadList'
+import JoinList from '../../../containers/JoinList'
+import HistoryList from '../../../containers/HistoryList'
 
 const MyInfoCss = styled.div`
   border: 2px solid black;
-  display: inline-block;
+  display: block;
+  margin-left: 200px;
+  margin-right: 100px;
   position: relative;
   top: 100px;
   left: 3%;
-  margin-left: 120px;
 `
 
 const FontCss = styled.div`
   font-size: 20px;
+`
+
+const ListCss = styled.div`
+  position: relative;
+  left: 10%
+  top: 120px;
+  border: 2px solid black;
+  display: inline-block;
 `
 
 export const MyInfo = ({ state }) => {
@@ -26,15 +38,21 @@ export const MyInfo = ({ state }) => {
         &emsp; 1. 이름 : {state.name} <br />
         &emsp; 2. SNU 메일 : {state.email} <br />
       </FontCss>
-      {meetings.map(meeting_entry =>
-        <div key = {meeting_entry.id} >
-          <MeetingEntry meeting_info = {meeting_entry}/>
-        </div>
-      )}
+      <ListCss>
+        <LeadList />
+        <JoinList />
+        <HistoryList />
+      </ListCss>
     </MyInfoCss>
   )
 }
-
+/*
+{meetings.map(meeting_entry =>
+  <div key = {meeting_entry.id} >
+    <MeetingEntry meeting_info = {meeting_entry}/>
+  </div>
+)}
+*/
 MyInfo.propTypes = {
   reverse: PropTypes.bool,
 }
