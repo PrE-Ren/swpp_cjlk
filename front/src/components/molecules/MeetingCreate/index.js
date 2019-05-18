@@ -39,7 +39,6 @@ export const MeetingCreate = ({ username, password, user_id, new_click }) => {
           <option value="3">스터디</option>
           <option value="4">운동</option>
           <option value="5">미팅</option>
-          <option value="6">기타</option>
         </select><br />
         모집 마감 기한 : <input type="datetime-local" ref={node => {due=node;}} /><br />
         제목 : <input placeholder = "제목을 입력하세요." style={{width:'350px', height:'20px'}} ref={node => {title=node;}} /><br />

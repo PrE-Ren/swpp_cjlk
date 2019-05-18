@@ -5,16 +5,31 @@ import { font, palette } from 'styled-theme'
 import Button from '../../atoms/Button'
 import * as meeting_state from '../../../literal'
 
+const Info_Box = styled.div`
+  font-size: 20px;
+  font-weight: 400;
+  padding-top: 20px;
+  padding-left: 10px;
+  padding-bottom: 20px;
+`
+
 /* meeting_entry 필드 : id, title, created, due, min_people, max_people, description, state, kind, leader, picture, members */
 
 export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click }) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')
   const content =
-    <div>
-      주최자 : {meeting_info.leader}<br />
-      본문 : {meeting_info.description}<br />
-      상태 : {meeting_state.NUM_TO_STRING(meeting_info.state)}<br />
-    </div>
+    <Info_Box>
+      ① 제목 : {meeting_info.title}<br />
+      ② 주최자 : {meeting_info.leader}<br />
+      ③ 게시 날짜 : {meeting_info.created}<br />
+      ④ 종류 : {meeting_state.KIND_NUM_TO_STRING(meeting_info.kind)}<br />
+      ⑤ 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)}<br />
+      ⑥ 모집 마감 : {meeting_info.due}<br />
+      ⑦ 최소 인원 : {meeting_info.min_people}<br />
+      ⑧ 최대 인원 : {meeting_info.max_people}<br />
+      ⑨ 현재 참여 인원 : {meeting_info.members.length}<br /><br />
+      {meeting_info.description}<br />
+    </Info_Box>
 
   // 내가 만든 모임
   if (meeting_info.leader == state.username) {
