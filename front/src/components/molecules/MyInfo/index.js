@@ -7,54 +7,51 @@ import LeadList from '../../../containers/LeadList'
 import JoinList from '../../../containers/JoinList'
 import HistoryList from '../../../containers/HistoryList'
 
-const MyInfoCss = styled.div`
+const MyInfo_Box = styled.div`
   border: 2px solid black;
-  display: block;
-  margin-left: 200px;
-  margin-right: 100px;
-  position: relative;
-  top: 100px;
-  left: 3%;
-`
-
-const FontCss = styled.div`
-  font-size: 20px;
-`
-
-const ListCss = styled.div`
-  left: 10%
-  top: 120px;
-  border: 2px solid black;
+  border-radius: 5px;
+  float: left;
+  margin-left: 50px;
   display: inline-block;
-  margin-left: 30px;
-  margin-top: 30px;
-  margin-bottom: 30px;
+`
+
+const Info_Box = styled.div`
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+`
+
+const Font_Info = styled.div`
+  font-size: 20px;
+  display: inline-block;
+`
+
+const List_Box = styled.div`
+  float: left;
+  display: inline-block;
+  margin-left: 20px;
+  margin-right: 20px;
 `
 
 export const MyInfo = ({ state }) => {
   let meetings = JSON.parse(state.meetinglist_recent)
   console.log('<MyInfo Rendering>')
   return (
-    <MyInfoCss>
-      <FontCss>
-        &emsp; 1. 이름 : {state.name} <br />
-        &emsp; 2. SNU 메일 : {state.email} <br />
-      </FontCss>
-      <ListCss>
+    <MyInfo_Box>
+      <Info_Box>
+        <Font_Info>1. 이름 : {state.name}</Font_Info><br />
+        <Font_Info>2. SNU 메일 : {state.email}</Font_Info><br />
+      </Info_Box>
+      <List_Box>
         <LeadList />
         <JoinList />
         <HistoryList />
-      </ListCss>
-    </MyInfoCss>
+      </List_Box>
+    </MyInfo_Box>
   )
 }
-/*
-{meetings.map(meeting_entry =>
-  <div key = {meeting_entry.id} >
-    <MeetingEntry meeting_info = {meeting_entry}/>
-  </div>
-)}
-*/
+
 MyInfo.propTypes = {
   reverse: PropTypes.bool,
 }

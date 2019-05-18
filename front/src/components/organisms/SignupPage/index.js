@@ -35,16 +35,16 @@ export const SignupPage = ({ token, signup_click }) => {
           <Font_Info>
             <p></p>
             ID &nbsp;&nbsp;&nbsp;&nbsp;
-            <input style={{borderStyle: "solid"}} size="23" ref={node => {username=node;}}/>
+            <input style={{border: "1px solid"}} size="23" ref={node => {username=node;}}/>
             <p></p>
             PW &nbsp;&nbsp;&nbsp;
-            <input style={{borderStyle: "solid"}} size="23" ref={node => {password=node;}}/>
+            <input style={{border: "1px solid"}} size="23" ref={node => {password=node;}}/>
             <p></p>
             이름 &nbsp;&nbsp;
-            <input style={{borderStyle: "solid"}} size="23" ref={node => {name=node;}}/>
+            <input style={{border: "1px solid"}} size="23" ref={node => {name=node;}}/>
             <p></p>
             SNU email &nbsp;&nbsp;
-            <input style={{borderStyle: "solid"}} size="14" ref={node => {email=node;}}/>&nbsp;
+            <input style={{border: "1px solid"}} size="14" ref={node => {email=node;}}/>&nbsp;
             @ snu.ac.kr
           </Font_Info>
           <h4>&ensp;&ensp;메일 발송에 다소 시간이 걸릴 수 있으니 버튼을 누르고 기다려 주십시오.</h4>

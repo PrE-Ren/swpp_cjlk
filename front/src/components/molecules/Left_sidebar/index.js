@@ -4,35 +4,45 @@ import styled, {css} from 'styled-components'
 import { font, palette } from 'styled-theme'
 import { SSL_OP_SINGLE_DH_USE } from 'constants';
 
-const Left_sidebarCss = styled.div`
-  position: relative;
-  float:left;
-  width: 150px;
-  text-align: center;
+const Left_sidebar_Box = styled.div`
   display: inline-block;
+  float: left;
   border: 2px solid;
-  margin-top: 100px;
-  margin-left: 10px;
+  border-radius: 5px;
+  margin-left: 5px;
 `
 
-const FontCss = styled.div`
+const Font_Classify = styled.div`
+  font-size: 25px;
+  font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 20px;
+  text-align: center;
+`
+
+const Font_Kind = styled.div`
   font-size: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 30px;
+  padding-right: 30px;
+  text-align: center;
+  &:visited {
+    color: black;
+  }
 `
 
-export const Left_sidebar = ({children, ...props}) => {
+export const Left_sidebar = () => {
   return (
-    <Left_sidebarCss>
-      <h3>분류</h3>
-      <FontCss>
-        <a href="/0" style={{textDecoration: 'none'}}>음식배달</a><br />
-        <a href="/1" style={{textDecoration: 'none'}}>택시합승</a><br />
-        <a href="/2" style={{textDecoration: 'none'}}>공동구매</a><br />
-        <a href="/3" style={{textDecoration: 'none'}}>스터디</a><br />
-        <a href="/4" style={{textDecoration: 'none'}}>운동</a><br />
-        <a href="/5" style={{textDecoration: 'none'}}>미팅</a><br />
-        <a href="/6" style={{textDecoration: 'none'}}>기타</a>
-      </FontCss>
-    </Left_sidebarCss>
+    <Left_sidebar_Box>
+      <Font_Classify>분류</Font_Classify>
+      <Font_Kind><a href="/0" style={{textDecoration: 'none'}}>음식배달</a><br /></Font_Kind>
+      <Font_Kind><a href="/1" style={{textDecoration: 'none'}}>택시합승</a><br /></Font_Kind>
+      <Font_Kind><a href="/2" style={{textDecoration: 'none'}}>공동구매</a><br /></Font_Kind>
+      <Font_Kind><a href="/3" style={{textDecoration: 'none'}}>스터디</a><br /></Font_Kind>
+      <Font_Kind><a href="/4" style={{textDecoration: 'none'}}>운동</a><br /></Font_Kind>
+      <Font_Kind><a href="/5" style={{textDecoration: 'none'}}>미팅</a><br /></Font_Kind>
+    </Left_sidebar_Box>
   )
 }
 

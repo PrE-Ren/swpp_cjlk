@@ -6,6 +6,7 @@ import Button from '../../atoms/Button'
 
 const Login_Box = styled.div`
   border: 2px solid black;
+  border-radius: 5px;
   width: 300px;
   padding: 40px;
   position: absolute;
@@ -34,11 +35,11 @@ export const LoginPage = ({ token, login_click }) => {
           <Font_IDPW>
             <p></p>
             ID &ensp;&ensp;
-            <input style={{borderStyle: "solid"}} ref={node => {username=node;}}/>
+            <input style={{border: "1px solid"}} ref={node => {username=node;}}/>
           </Font_IDPW>
           <Font_IDPW>
             PW &ensp;
-            <input style={{borderStyle: "solid"}} type="password" ref={node => {password=node;}}/>
+            <input style={{border: "1px solid"}} type="password" ref={node => {password=node;}}/>
           </Font_IDPW>
           <br/>
           <Button type = "submit" onClick={() => login_click(username.value, password.value)}>로그인</Button>

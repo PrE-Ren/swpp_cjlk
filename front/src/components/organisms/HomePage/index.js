@@ -9,11 +9,31 @@ import RecentList from '../../../containers/RecentList'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import styled from 'styled-components'
 
+const Title_Font = styled.div`
+  display: inline-block;
+  float: right;
+  font-size: 50px;
+  font-weight: bold;
+  margin-right: 600px;
+`
+
+const Upper_Box = styled.div`
+  display: block;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-bottom: 100px;
+  margin-right: 5px;
+`
+
+const Lower_Box = styled.div`
+  display: block;
+  margin-left: 5px;
+  margin-right: 5px;
+`
+
 const List_Box = styled.div`
-  position: relative;
-  left: 10%
-  top: 120px;
-  border: 2px solid black;
+  float: left;
+  margin-left: 50px;
   display: inline-block;
 `
 
@@ -28,15 +48,20 @@ export const HomePage = ({ token }) => {
   else {
     return (
       <div>
-        <ToHome />
-        <Left_sidebar />
-        <ToMyPage />
-        <Logout />
-        <List_Box>
-          <ImpendingList />
-          <RecentList />
-        </List_Box>
-        <Right_sidebar />
+        <Upper_Box>
+          <ToHome />
+          <Logout />
+          <ToMyPage />
+          <Title_Font>SNU Moyeo</Title_Font>
+        </Upper_Box>
+        <Lower_Box>
+          <Left_sidebar />
+          <List_Box>
+            <ImpendingList />
+            <RecentList />
+          </List_Box>
+          <Right_sidebar />
+        </Lower_Box>
       </div>
     )
   }

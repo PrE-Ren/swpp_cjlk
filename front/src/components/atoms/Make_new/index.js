@@ -16,18 +16,16 @@ const hoverBackgroundColor = ({ disabled, transparent }) => !disabled && !transp
 const hoverForegroundColor = ({ disabled, transparent }) => !disabled && transparent && palette(0)
 
 const styles = css`
+  width: 250px;
+  display: block;
   background-color: #4CAF50; /* Green */
   border: none;
-  position:absolute;
-  right: 5px;
-  margin-top: -100px;
-  width: 250px;
   color: white;
   border-radius: 12px;
-  padding: 10px 30px;
-  text-align: center;
-  display: inline-block;
+  padding-top: 10px;
+  padding-bottom: 10px;
   font-size: 25px;
+  text-align: center;
   cursor: pointer;
   &:hover, &:focus, &:active {
     background-color: ${hoverBackgroundColor};

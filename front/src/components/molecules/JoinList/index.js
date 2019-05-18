@@ -4,8 +4,23 @@ import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 import MeetingEntry from '../../atoms/MeetingEntry'
 
-const FontCss = styled.div`
-  font-size: 20px;
+const JoinList_Box = styled.div`
+  display: block;
+  width: 900px;
+  margin-top: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 50px;
+  border: 2px solid black;
+  border-radius: 5px;
+`
+
+const JoinMeeting_Font = styled.div`
+  margin-top: 5px;
+  margin-left: 5px;
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
 `
 
 export const JoinList = ({ meetinglist_join }) => {
@@ -13,14 +28,14 @@ export const JoinList = ({ meetinglist_join }) => {
   if (meetinglist_join != null) {
     let meetings = JSON.parse(meetinglist_join)
     return (
-      <div>
-        <FontCss> 내가 참여중인 모임 </FontCss>
+      <JoinList_Box>
+        <JoinMeeting_Font>내가 참여중인 모임</JoinMeeting_Font>
         {meetings.map(meeting_entry =>
           <div key = {meeting_entry.id} >
             <MeetingEntry meeting_info = {meeting_entry}/>
           </div>
         )}
-      </div>
+      </JoinList_Box>
     )
   }
   else
