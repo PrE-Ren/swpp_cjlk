@@ -5,10 +5,16 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       case 'RELOAD_ACTION' : {
         localStorage.setItem("impending", JSON.stringify(action.meetinglist_impending))
         localStorage.setItem("recent", JSON.stringify(action.meetinglist_recent))
+        localStorage.setItem("lead", JSON.stringify(action.meetinglist_lead))
+        localStorage.setItem("join", JSON.stringify(action.meetinglist_join))
+        localStorage.setItem("history", JSON.stringify(action.meetinglist_history))
         return {
           ...state,
           meetinglist_impending : JSON.stringify(action.meetinglist_impending),
-          meetinglist_recent : JSON.stringify(action.meetinglist_recent)
+          meetinglist_recent : JSON.stringify(action.meetinglist_recent),
+          meetinglist_lead : JSON.stringify(action.meetinglist_lead),
+          meetinglist_join : JSON.stringify(action.meetinglist_join),
+          meetinglist_history : JSON.stringify(action.meetinglist_history)
         }
       }
       case 'LOGIN_SUCCESS_ACTION': {
@@ -38,6 +44,11 @@ const snu_moyeo_reducer = (state = initialState, action) => {
        localStorage.removeItem("user_id");
        localStorage.removeItem("email");
        localStorage.removeItem("name");
+       localStorage.removeItem("impending");
+       localStorage.removeItem("recent");
+       localStorage.removeItem("lead");
+       localStorage.removeItem("join");
+       localStorage.removeItem("history");
        return {
            ...state,
            username: null,
@@ -45,7 +56,12 @@ const snu_moyeo_reducer = (state = initialState, action) => {
            mySNU_verification_token: null,
            user_id: null,
            email: null,
-           name: null
+           name: null,
+           meetinglist_impending : null,
+           meetinglist_recent : null,
+           meetinglist_lead : null,
+           meetinglist_join : null,
+           meetinglist_history : null
        }
       }
       /* case 'PARTICIPATE_ADD_ACTION': {

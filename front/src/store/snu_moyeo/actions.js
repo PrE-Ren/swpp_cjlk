@@ -10,11 +10,14 @@ export const JOIN_MEETING_ACTION = 'JOIN_MEETING_ACTION'
 export const WITHDRAW_MEETING_ACTION = 'WITHDRAW_MEETING_ACTION'
 export const PARTICIPATE_ADD_ACTION = 'PARTICIPATE_ADD_ACTION'
 
-export const reload_action = (meetinglist_impending, meetinglist_recent) => {
+export const reload_action = (meetinglist_impending, meetinglist_recent, meetinglist_lead, meetinglist_join, meetinglist_history) => {
   return {
     type : RELOAD_ACTION,
     meetinglist_impending : meetinglist_impending,
-    meetinglist_recent : meetinglist_recent
+    meetinglist_recent : meetinglist_recent,
+    meetinglist_lead : meetinglist_lead,
+    meetinglist_join : meetinglist_join,
+    meetinglist_history : meetinglist_history
   }
 };
 
@@ -97,7 +100,7 @@ export const join_meeting_action = (hash, user_id, meeting_id) => {
   }
 };
 
-export const withdraw_meeting_action = (username, password, user_id, meeting_id) => {
+export const withdraw_meeting_action = (hash, user_id, meeting_id) => {
   return {
     type: WITHDRAW_MEETING_ACTION,
     hash,
