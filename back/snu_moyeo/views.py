@@ -165,22 +165,6 @@ class HistoryList (generics.ListAPIView):
             return history_user.meetings.all().filter(Q(state = BREAK_UP))
         return Meeting.objects.none()
 
-def get_participate(request, in_userid, in_meetingid):
-    participate_obj1 = Participate.objects.filter(Q(user_id_id = in_userid)) #here
-    participateList1 = participate_obj1.values()
-    participate_obj2 = participate_obj1.filter(Q(meeting_id_id = in_meetingid))
-    participateList2 = participate_obj2.values()
-    #print(participate_obj2.values())
-
-    if len(participateList2)==0 :
-        content = {}
-        return HttpResponse(content,status = status.HTTP_404_NOT_FOUND)
-    participate_id = participateList2[0]['id']
-
-
-    return HttpResponse(participate_id, status = status.HTTP_200_OK)
-
-
 
 class CustomPagination(PageNumberPagination):
     page_size = 3
@@ -211,7 +195,7 @@ class TempList(generics.ListAPIView):
 '''
 
 
-class ListMeetingView(APIView):
+class ListView(APIView):
 
     def get(self,request,in_kind,format=None):
         kind_meeting = Meeting.objects.filter(Q(kind = in_kind) & ~Q(state=4))
