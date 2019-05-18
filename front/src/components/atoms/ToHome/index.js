@@ -6,7 +6,7 @@ import { font, palette } from 'styled-theme'
 const ToHomeCss1 = styled.div`
   position: relative;
   top: 5px;
-  left: 20px;
+  left: 5px;
 `
 
 const ToHomeCss2 = styled.div`

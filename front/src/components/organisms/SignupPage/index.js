@@ -4,9 +4,25 @@ import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 import Button from '../../atoms/Button'
 
-const Wrapper = styled.div`
-  font-family: ${font('primary')};
-  color: ${palette('grayscale', 0)};
+const Signup_Box = styled.div`
+  border: 2px solid black;
+  width: 600px;
+  padding: 40px;
+  position: absolute;
+  top: 47%;
+  left: 47%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+`
+
+const Font_Signup = styled.h1`
+  font-size: 38px;
+  font-weight: bold;
+`
+
+const Font_Info = styled.div`
+  font-size: 20px;
+  font-weight: bold;
 `
 
 export const SignupPage = ({ token, signup_click }) => {
@@ -14,30 +30,28 @@ export const SignupPage = ({ token, signup_click }) => {
 
   if (token == null) {
     return (
-        <div>
-          <div>
-            <h2>&ensp;&ensp;회원가입</h2>
-            <h2>&ensp;&ensp;ID</h2>
-            &ensp;&ensp;<input ref={node => {username=node;}}/>
-          </div>
-          <div>
-            <h2>&ensp;&ensp;PW</h2>
-            &ensp;&ensp;<input ref={node => {password=node;}}/>
-          </div>
-          <div>
-            <h2>&ensp;&ensp;이름</h2>
-            &ensp;&ensp;<input ref={node => {name=node;}}/>
-          </div>
-          <div>
-            <h2>&ensp;&ensp;SNU email</h2>
-            &ensp;&ensp;<input ref={node => {email=node;}}/>@snu.ac.kr
-          </div>
-          <div>
-            <h4>&ensp;&ensp;메일 발송에 다소 시간이 걸릴 수 있으니 버튼을 누르고 기다려 주십시오.</h4>
-          </div>
-          &ensp;&ensp;<Button type = "submit" onClick={() => signup_click(username.value, password.value, name.value, email.value)}>제출</Button>
-          &ensp;&ensp;<Button type = "submit" onClick={() => window.location.href = "/login"}>돌아가기</Button>
-        </div>
+        <Signup_Box>
+          <Font_Signup>회원가입</Font_Signup>
+          <Font_Info>
+            <p></p>
+            ID &nbsp;&nbsp;&nbsp;&nbsp;
+            <input style={{borderStyle: "solid"}} size="23" ref={node => {username=node;}}/>
+            <p></p>
+            PW &nbsp;&nbsp;&nbsp;
+            <input style={{borderStyle: "solid"}} size="23" ref={node => {password=node;}}/>
+            <p></p>
+            이름 &nbsp;&nbsp;
+            <input style={{borderStyle: "solid"}} size="23" ref={node => {name=node;}}/>
+            <p></p>
+            SNU email &nbsp;&nbsp;
+            <input style={{borderStyle: "solid"}} size="14" ref={node => {email=node;}}/>&nbsp;
+            @ snu.ac.kr
+          </Font_Info>
+          <h4>&ensp;&ensp;메일 발송에 다소 시간이 걸릴 수 있으니 버튼을 누르고 기다려 주십시오.</h4>
+          <Button type = "submit" onClick={() => signup_click(username.value, password.value, name.value, email.value)}>제출</Button>
+          &ensp;&ensp;
+          <Button type = "submit" onClick={() => window.location.href = "/login"}>돌아가기</Button>
+        </Signup_Box>
     )
   }
   else {

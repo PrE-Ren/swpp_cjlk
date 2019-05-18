@@ -9,7 +9,7 @@ import RecentList from '../../../containers/RecentList'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import styled from 'styled-components'
 
-const ListCss = styled.div`
+const List_Box = styled.div`
   position: relative;
   left: 10%
   top: 120px;
@@ -32,10 +32,10 @@ export const HomePage = ({ token }) => {
         <Left_sidebar />
         <ToMyPage />
         <Logout />
-        <ListCss>
+        <List_Box>
           <ImpendingList />
           <RecentList />
-        </ListCss>
+        </List_Box>
         <Right_sidebar />
       </div>
     )

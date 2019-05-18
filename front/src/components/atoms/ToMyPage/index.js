@@ -5,9 +5,9 @@ import { font, palette } from 'styled-theme'
 
 const ToMyPageCss1 = styled.div`
   position: relative;
-  float:right;
-  right:110px;
-  top:-43px;
+  float: right;
+  right: 110px;
+  top: -43px;
 `
 
 const ToMyPageCss2 = styled.div`
