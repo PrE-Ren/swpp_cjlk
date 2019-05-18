@@ -169,4 +169,74 @@ def get_participate(request, in_userid, in_meetingid):
     return HttpResponse(participate_id, status = status.HTTP_200_OK)
 
 
-        
+class CustomPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = 'page_size'
+    max_page_size = 4
+
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'count': self.page.paginator.count,
+            'page_size': self.page_size,
+            'results': data
+        })
+
+
+class CustomtempPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = 'page_size'
+    max_page_size = 3
+
+    def get_paginated_response(self, data):
+        print(data)
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'count': self.page.paginator.count,
+            'page_size': self.page_size,
+            'results': data
+        })
+
+
+class TempList(generics.ListAPIView):
+    serializer_class = MeetingSerializer
+    pagination_class = CustomPagination
+    
+    def get_queryset(self):
+        temp_meeting = Meeting.objects.filter(~Q(state=4))
+        return temp_meeting
+
+'''
+def tempview(request,in_kind):
+    paginator = CustomtempPagination()
+    paginator.page_size = 2
+    meeting_objects = Meeting.objects.filter(~Q(state=4) and Q(kind=in_kind))
+    print("hi1")
+    print(type(meeting_objects))
+    result_page = paginator.paginate_queryset(queryset = meeting_objects,request= request)
+    print("hi2")
+    serializer = MeetingSerializer(result_page, many= True)
+    return paginator.get_paginated_response(serializer.data)
+'''
+class Temp2View(APIView):
+
+    def get(self,request,in_kind,format=None):
+        temp = Meeting.objects.filter(Q(kind = in_kind) & ~Q(state=4))
+        paginator = CustomtempPagination()
+        result_page = paginator.paginate_queryset(temp,request)
+        serializer = MeetingSerializer(result_page,many=True)
+        print(serializer.data)
+        return paginator.get_paginated_response(serializer.data)
+'''
+class Temp3View(ListCreateAPIView):
+        def list (self,request,in_kind):
+            queryset = self.get_queryset()
+            paged_queryset = self.paginate_queryset(queryset)
+
+            '''

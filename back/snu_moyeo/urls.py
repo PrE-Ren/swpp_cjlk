@@ -23,7 +23,10 @@ urlpatterns = [
     path('meetinglist/join/',views.JoinList.as_view()),
     path('meetinglist/history/',views.HistoryList.as_view()),
     path('participate/<int:in_userid>/<int:in_meetingid>/',views.get_participate),
-    
+   
+    #path('pagetemp/',views.TempList.as_view()),
+    path('temp/<int:in_kind>/',views.Temp2View.as_view()),
+    #path('temp2/<int:in_kind>/',views.tempview),
     url(r'^get_auth_token/', obtain_auth_token),
 ]
 
