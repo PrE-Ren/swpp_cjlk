@@ -10,8 +10,8 @@ const FontCss = styled.div`
 
 export const ImpendingList = ({ meetinglist_impending }) => {
   console.log('<ImpendingList Rendering>')
-  let meetings = JSON.parse(meetinglist_impending)
-  if (meetings !== null) {
+  if (meetinglist_impending != null) {
+    let meetings = JSON.parse(meetinglist_impending)
     return (
       <div>
         <FontCss> 마감 임박 모임 </FontCss>

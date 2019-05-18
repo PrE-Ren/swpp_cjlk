@@ -10,8 +10,8 @@ const FontCss = styled.div`
 
 export const LeadList = ({ meetinglist_lead }) => {
   console.log('<Lead Rendering>')
-  let meetings = JSON.parse(meetinglist_lead)
-  if (meetings !== null) {
+  if (meetinglist_lead != null) {
+    let meetings = JSON.parse(meetinglist_lead)
     return (
       <div>
         <FontCss> 내가 만든 모임 </FontCss>

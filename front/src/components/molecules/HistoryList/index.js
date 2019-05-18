@@ -10,8 +10,8 @@ const FontCss = styled.div`
 
 export const HistoryList = ({ meetinglist_history }) => {
   console.log('<History Rendering>')
-  let meetings = JSON.parse(meetinglist_history)
-  if (meetings !== null) {
+  if (meetinglist_history != null) {
+    let meetings = JSON.parse(meetinglist_history)
     return (
       <div>
         <FontCss> 내가 참여했던 모임 </FontCss>

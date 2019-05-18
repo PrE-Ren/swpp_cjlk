@@ -10,14 +10,11 @@ export const JOIN_MEETING_ACTION = 'JOIN_MEETING_ACTION'
 export const WITHDRAW_MEETING_ACTION = 'WITHDRAW_MEETING_ACTION'
 export const PARTICIPATE_ADD_ACTION = 'PARTICIPATE_ADD_ACTION'
 
-export const reload_action = (meetinglist_impending, meetinglist_recent, meetinglist_lead, meetinglist_join, meetinglist_history) => {
+export const reload_action = (option, meetinglist) => {
   return {
     type : RELOAD_ACTION,
-    meetinglist_impending : meetinglist_impending,
-    meetinglist_recent : meetinglist_recent,
-    meetinglist_lead : meetinglist_lead,
-    meetinglist_join : meetinglist_join,
-    meetinglist_history : meetinglist_history
+    option,
+    meetinglist
   }
 };
 

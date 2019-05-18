@@ -1,43 +1,43 @@
-import {take, put, call, fork} from 'redux-saga/effects'
+import {take, put, call, fork, select} from 'redux-saga/effects'
 import api from 'services/api'
 import * as actions from './actions'
 
-export function* watchLogin(){
+export function* watchLogin() {
   while(true) {
     const action = yield take(actions.LOGIN_ACTION)
     yield call(login_func, action)
   }
 }
 
-export function* watchSignup(){
+export function* watchSignup() {
   while(true) {
     const action = yield take(actions.SIGNUP_ACTION)
     yield call(signup_func, action)
   }
 }
 
-export function* watchNew(){
+export function* watchNew() {
   while(true) {
     const action = yield take(actions.NEW_ACTION)
     yield call(new_func, action)
   }
 }
 
-export function* watchChangeMeetingState(){
+export function* watchChangeMeetingState() {
   while(true) {
     const action = yield take(actions.CHANGE_MEETING_STATE_ACTION)
     yield call(change_meeting_state_func, action)
   }
 }
 
-export function* watchJoinMeeting(){
+export function* watchJoinMeeting() {
   while(true) {
     const action = yield take(actions.JOIN_MEETING_ACTION)
     yield call(join_meeting_func, action)
   }
 }
 
-export function* watchWithdrawMeeting(){
+export function* watchWithdrawMeeting() {
   while(true) {
     const action = yield take(actions.WITHDRAW_MEETING_ACTION)
     yield call(withdraw_meeting_func, action)
@@ -45,45 +45,62 @@ export function* watchWithdrawMeeting(){
 }
 
 function* get_meetinglist(type) {
-  const response = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/' + type, { method : 'GET' })
-  if (response.ok) {
-    const meetinglist = yield call([response, response.json])
-    console.log('<Fetch ' + type + ' list from back-end (by reload)>')
-    console.log(meetinglist)
-    return meetinglist
+  const get_token = (state) => state.snu_moyeo.mySNU_verification_token
+  const token = yield select(get_token)
+
+  if (token !== null) {
+    const get_username = (state) => state.snu_moyeo.username
+    const get_password = (state) => state.snu_moyeo.password
+    const username = yield select(get_username)
+    const password = yield select(get_password)
+    const hash = new Buffer(`${username}:${password}`).toString('base64')
+
+    const response = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/' + type, {
+      method : 'GET',
+      headers: { 'Authorization' : `Basic ${hash}` }
+    })
+    if (response.ok) {
+      const meetinglist = yield call([response, response.json])
+      console.log('<Fetch ' + type + ' list from back-end (by reload)>')
+      console.log(meetinglist)
+      return meetinglist
+    }
+    else {
+      alert('Fail to fetch ' + type + ' list from back-end')
+      return null
+    }
   }
   else
-    alert('Fail to fetch ' + type + ' list from back-end')
     return null
 }
 
 export function* reload() {
   const pathname = window.location.pathname
-  alert("Page Reload : " + pathname)
 
   if (pathname == '/') {
-    console.log("<Set state by data from back-end in " + pathname + " page>")
+    alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist_impending = yield call(get_meetinglist, 'impending')
     const meetinglist_recent = yield call(get_meetinglist, 'recent')
     if (meetinglist_impending !== null && meetinglist_recent !== null) {
       console.log('<Dispatch reload_action>')
-      yield put(actions.reload_action(meetinglist_impending, meetinglist_recent))
+      yield put(actions.reload_action('impending', meetinglist_impending))
+      yield put(actions.reload_action('recent', meetinglist_recent))
     }
   }
   else if (pathname == '/mypage') {
-    // 문제 발생 !
-    // const response_history = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/history', {
-    //  method : 'GET',
-    //  headers: { 'Authorization' : `Basic ${hash}` }
-    // })
-    // 이렇게 유저 정보를 넘겨줘야 함. 따라서 hash 변수도 필요해 보임.
-    console.log("<Set state by data from back-end in " + pathname + " page>")
+    alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist_lead = yield call(get_meetinglist, 'lead')
     const meetinglist_join = yield call(get_meetinglist, 'join')
     const meetinglist_history = yield call(get_meetinglist, 'history')
+    if (meetinglist_lead !== null && meetinglist_join !== null && meetinglist_history !== null) {
+      console.log('<Dispatch reload_action>')
+      yield put(actions.reload_action('lead', meetinglist_lead))
+      yield put(actions.reload_action('join', meetinglist_join))
+      yield put(actions.reload_action('history', meetinglist_history))
+    }
   }
   else {
-    console.log(pathname + " page doesn't have to fetch data from back-end")
+    alert("Reload " + pathname + " : Do nothing")
   }
 }
 

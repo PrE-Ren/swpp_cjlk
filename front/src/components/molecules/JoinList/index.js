@@ -10,8 +10,8 @@ const FontCss = styled.div`
 
 export const JoinList = ({ meetinglist_join }) => {
   console.log('<Join Rendering>')
-  let meetings = JSON.parse(meetinglist_join)
-  if (meetings !== null) {
+  if (meetinglist_join != null) {
+    let meetings = JSON.parse(meetinglist_join)
     return (
       <div>
         <FontCss> 내가 참여중인 모임 </FontCss>

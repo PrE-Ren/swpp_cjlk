@@ -10,8 +10,8 @@ const FontCss = styled.div`
 
 export const RecentList = ({ meetinglist_recent }) => {
   console.log('<RecentList Rendering>')
-  let meetings = JSON.parse(meetinglist_recent)
-  if (meetings !== null) {
+  if (meetinglist_recent != null) {
+    let meetings = JSON.parse(meetinglist_recent)
     return (
       <div>
         <FontCss> 따끈따끈 방금 올라온 모임 </FontCss>

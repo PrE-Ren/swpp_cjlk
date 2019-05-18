@@ -22,11 +22,13 @@ const FontCss = styled.div`
 `
 
 const ListCss = styled.div`
-  position: relative;
   left: 10%
   top: 120px;
   border: 2px solid black;
   display: inline-block;
+  margin-left: 30px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 `
 
 export const MyInfo = ({ state }) => {
