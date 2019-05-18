@@ -131,7 +131,7 @@ class RecentList(generics.ListAPIView):
     serializer_class = MeetingSerializer
 
 class ImpendingList(generics.ListAPIView):
-    queryset = Meeting.objects.all().filter(Q(state = OPEN) | Q(state = RE_OPEN)).order_by('-due')[:5]
+    queryset = Meeting.objects.all().filter(Q(state = OPEN) | Q(state = RE_OPEN)).order_by('due')[:5]
     serializer_class = MeetingSerializer
 
 class LeadList(generics.ListAPIView):
@@ -164,3 +164,42 @@ class HistoryList (generics.ListAPIView):
             history_user = SnuUser.objects.get(id = user_id)
             return history_user.meetings.all().filter(Q(state = BREAK_UP))
         return Meeting.objects.none()
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 3
+    page_size_query_param = 'page_size'
+    max_page_size = 3
+
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'count': self.page.paginator.count,
+            'page_size': self.page_size,
+            'results': data
+        })
+
+'''
+simple version pagination (not used now)
+class TempList(generics.ListAPIView):
+    serializer_class = MeetingSerializer
+    pagination_class = CustomPagination
+    
+    def get_queryset(self):
+        temp_meeting = Meeting.objects.filter(~Q(state=4))
+        return temp_meeting
+
+'''
+
+
+class ListView(APIView):
+
+    def get(self,request,in_kind,format=None):
+        kind_meeting = Meeting.objects.filter(Q(kind = in_kind) & ~Q(state=4))
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(kind_meeting,request)
+        serializer = MeetingSerializer(result_page,many=True)
+        return paginator.get_paginated_response(serializer.data)

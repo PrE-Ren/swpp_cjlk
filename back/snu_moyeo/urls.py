@@ -9,8 +9,6 @@ from django.conf import settings
 
 urlpatterns = [
     url(r'^auth/(?P<mySNU_verification_token>[a-zA-Z0-9]+)/$', views.Authenticate.as_view()),
-    url(r'^get_auth_token/', obtain_auth_token),
-    
     path('sign_up/', views.SignUp.as_view()),
     path('log_in/', views.LogIn.as_view()),
     path('user/', views.SnuUserList.as_view()),
@@ -22,6 +20,8 @@ urlpatterns = [
     path('participate/<int:in_userid>/<int:in_meetingid>/', views.get_participate),
     path('meetinglist/recent/', views.RecentList.as_view()),
     path('meetinglist/impending/', views.ImpendingList.as_view()),
+    path('list/<int:in_kind>/', views.ListView.as_view()),
+    url(r'^get_auth_token/', obtain_auth_token),
     path('meetinglist/lead/', views.LeadList.as_view()),
     path('meetinglist/join/', views.JoinList.as_view()),
     path('meetinglist/history/', views.HistoryList.as_view()),
