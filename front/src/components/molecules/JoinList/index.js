@@ -9,18 +9,22 @@ const FontCss = styled.div`
 `
 
 export const JoinList = ({ meetinglist_join }) => {
-  let meetings = JSON.parse(meetinglist_join)
   console.log('<Join Rendering>')
-  return (
-    <div>
-      <FontCss> 내가 참여중인 모임 </FontCss>
-      {meetings.map(meeting_entry =>
-        <div key = {meeting_entry.id} >
-          <MeetingEntry meeting_info = {meeting_entry}/>
-        </div>
-      )}
-    </div>
-  )
+  let meetings = JSON.parse(meetinglist_join)
+  if (meetings !== null) {
+    return (
+      <div>
+        <FontCss> 내가 참여중인 모임 </FontCss>
+        {meetings.map(meeting_entry =>
+          <div key = {meeting_entry.id} >
+            <MeetingEntry meeting_info = {meeting_entry}/>
+          </div>
+        )}
+      </div>
+    )
+  }
+  else
+    return <div></div>
 }
 
 JoinList.propTypes = {

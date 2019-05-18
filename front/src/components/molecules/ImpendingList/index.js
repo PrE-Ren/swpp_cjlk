@@ -9,18 +9,22 @@ const FontCss = styled.div`
 `
 
 export const ImpendingList = ({ meetinglist_impending }) => {
-  let meetings = JSON.parse(meetinglist_impending)
   console.log('<ImpendingList Rendering>')
-  return (
-    <div>
-      <FontCss> 마감 임박 모임 </FontCss>
-      {meetings.map(meeting_entry =>
-        <div key = {meeting_entry.id} >
-          <MeetingEntry meeting_info = {meeting_entry}/>
-        </div>
-      )}
-    </div>
-  )
+  let meetings = JSON.parse(meetinglist_impending)
+  if (meetings !== null) {
+    return (
+      <div>
+        <FontCss> 마감 임박 모임 </FontCss>
+        {meetings.map(meeting_entry =>
+          <div key = {meeting_entry.id} >
+            <MeetingEntry meeting_info = {meeting_entry}/>
+          </div>
+        )}
+      </div>
+    )
+  }
+  else
+    return <div></div>
 }
 
 ImpendingList.propTypes = {
