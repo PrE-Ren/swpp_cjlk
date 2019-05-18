@@ -211,12 +211,11 @@ class TempList(generics.ListAPIView):
 '''
 
 
-
 class ListMeetingView(APIView):
 
     def get(self,request,in_kind,format=None):
-        temp = Meeting.objects.filter(Q(kind = in_kind) & ~Q(state=4))
+        kind_meeting = Meeting.objects.filter(Q(kind = in_kind) & ~Q(state=4))
         paginator = CustomPagination()
-        result_page = paginator.paginate_queryset(temp,request)
+        result_page = paginator.paginate_queryset(kind_meeting,request)
         serializer = MeetingSerializer(result_page,many=True)
         return paginator.get_paginated_response(serializer.data)
