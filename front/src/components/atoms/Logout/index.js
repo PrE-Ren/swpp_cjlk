@@ -19,26 +19,6 @@ const Logout_Css = styled.div`
   }
 `
 
-const LogoutCss1 = styled.div`
-  float: right;
-  right: -95px;
-  top: -43px;
-`
-
-const LogoutCss2 = styled.div`
-  border: 1.5px solid black;
-  display: inline-block;
-  padding: 0.5rem;
-  border-radius: 5px;
-  background: white;
-  font-size: ${(props)=>props.fontSize};
-  cursor: pointer;
-  &:hover {
-    background: black;
-    color: white;
-  }
-`
-
 export const Logout = ({ logout_click }) => {
   return (
     <Logout_Css fontSize="1.25rem" type = "submit" onClick={logout_click}>로그아웃</Logout_Css>
