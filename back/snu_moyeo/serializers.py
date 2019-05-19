@@ -16,16 +16,22 @@ class MeetingSerializer(serializers.ModelSerializer):
     def validate(self, data):
         due = data['due']
         created_when = django.utils.timezone.now()
-        # print("due: ")
-        # print(due)
-        # print("created when: ")
-        # print(created_when)
+        
         if (created_when >= due):
             raise serializers.ValidationError("Meeting's Due should be future")
         min_people = data['min_people']
         max_people = data['max_people']
         if (min_people > max_people):
             raise serializers.ValidationError("Max should be larger than Min")
+        
+        making_user = SnuUser.objects.get(id = self.context['request'].user.id)
+        cnt_participate = 0
+        for participating in making_user.meetings.all() :
+            print(participating)
+            if participating.state != BREAK_UP :
+                cnt_participate = cnt_participate + 1
+        if cnt_participate>=5 :
+            raise serializers.ValidationError("You can not participate more than 5")
         return data
 
     class Meta:
@@ -33,8 +39,10 @@ class MeetingSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'created', 'due', 'min_people', 'max_people', 'description', 'state', 'kind', 'leader', 'picture', 'members')
 
 class SnuUserSerializer(serializers.ModelSerializer):
-    lead_meeting = serializers.PrimaryKeyRelatedField(many = True, queryset = Meeting.objects.all())
-
+    lead_meeting = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
+    #queryset = Meeting.objects.all())
+    
+    
     def validate(self, data):
         if (data['email'] == ''):
             raise serializers.ValidationError("Put the email")
