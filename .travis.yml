@@ -16,6 +16,7 @@ matrix:
     - language: python
       before_install:
         - cd back
+        - export PYTHONPATH=$PYTHONPATH:$(pwd)
       install:
         - sudo apt-get update
         - sudo apt-get install python3
