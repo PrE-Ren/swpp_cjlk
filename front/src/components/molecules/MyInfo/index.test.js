@@ -1,7 +1,9 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import MyInfo from '.'
-import MeetingEntry from '../../atoms/MeetingEntry'
+import { MyInfo } from '.'
+import LeadList from '../../../containers/LeadList'
+import JoinList from '../../../containers/JoinList'
+import HistoryList from '../../../containers/HistoryList'
 
 
 const entry1 = {
@@ -31,18 +33,21 @@ const initialState = {
   meeting_list : JSON.stringify([entry1])
 };
 
-//const state1 = {...initialState, mySNU_verification_token : "abc"}
+const state1 = {...initialState, name : 'hello', email : 'hello@snu.ac.kr'}
 
 const wrap = (props = {}) => shallow(<MyInfo {...props} />)
 
 it('renders page when passed in', () => {
   const wrapper = wrap({ state: initialState})
-  expect(wrapper.contains(<MeetingEntry {...entry1} />)).toBe(true)
-  /*
-  const wrapper2 = wrap({ state: state1, signupReq: postSignupData})
-  expect(wrapper2.contains(<input ref={node=>{username=node;}}/>)).toBe(false)
-  expect(wrapper2.contains(<input ref={node=>{password=node;}}/>)).toBe(false)
-  expect(wrapper2.contains(<input ref={node=>{name=node;}}/>)).toBe(false)
-  expect(wrapper2.contains(<input ref={node=>{email=node;}}/>)).toBe(false)
-  */
+  expect(wrapper.contains(<LeadList/>)).toBe(true)
+  expect(wrapper.contains(<JoinList/>)).toBe(true)
+  expect(wrapper.contains(<HistoryList/>)).toBe(true)
+  expect(wrapper.contains('1. 이름 : ')).toBe(true)
+  expect(wrapper.contains('2. SNU 메일 : ')).toBe(true)  
+  const wrapper2 = wrap({ state: state1})
+  expect(wrapper2.contains(<LeadList/>)).toBe(true)
+  expect(wrapper2.contains(<JoinList/>)).toBe(true)
+  expect(wrapper2.contains(<HistoryList/>)).toBe(true);
+  expect(wrapper2.contains('1. 이름 : ')).toBe(true)
+  expect(wrapper2.contains('2. SNU 메일 : ')).toBe(true)
 })
