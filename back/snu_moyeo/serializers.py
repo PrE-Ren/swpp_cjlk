@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from snu_moyeo.models import Meeting, SnuUser, Participate
 import django
+from django.db.models import Q
 
 OPEN = 0
 CLOSED = 1
@@ -26,12 +27,14 @@ class MeetingSerializer(serializers.ModelSerializer):
         
         making_user = SnuUser.objects.get(id = self.context['request'].user.id)
         cnt_participate = 0
-        for participating in making_user.meetings.all() :
-            print(participating)
-            if participating.state != BREAK_UP :
-                cnt_participate = cnt_participate + 1
-        if cnt_participate>=5 :
-            raise serializers.ValidationError("You can not participate more than 5")
+
+        if self.context['request'].method == 'POST':
+            open_meetings = making_user.meetings.all().filter(~Q(state = BREAK_UP))
+            cnt_participate = len(open_meetings)
+            print(cnt_participate)
+            if cnt_participate >= 5 :
+                raise serializers.ValidationError("You can not participate more than 5")
+
         return data
 
     class Meta:
@@ -40,8 +43,7 @@ class MeetingSerializer(serializers.ModelSerializer):
 
 class SnuUserSerializer(serializers.ModelSerializer):
     lead_meeting = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
-    #queryset = Meeting.objects.all())
-    
+    # queryset = Meeting.objects.all())
     
     def validate(self, data):
         if (data['email'] == ''):
@@ -78,28 +80,28 @@ class ParticipateSerializer(serializers.ModelSerializer):
 
         if target_meeting.max_people == len(target_meeting.members.all()):
             raise serializers.ValidationError('Already meeting is full')
-
-        for participate_data in Participate.objects.all():
-            if (participate_data.user_id == new_snuuser and participate_data.meeting_id == new_meeting):
-                raise serializers.ValidationError('Already belonged to this meeting')
-            # 79, 80, 81 라인은 "cnt_participate = len(SnuUser.objects.get(id = new_snuuser.id).meetings.all())"로 대체 가능
-            # 그리고 93 라인은 for문 앞으로 빼면 될 듯
+ 
+        if self.context['request'].method == 'POST':
+            open_meetings = SnuUser.objects.get(id = new_snuuser.id).meetings.all().filter(~Q(state = BREAK_UP))
+            cnt_participate = len(open_meetings)
+            
+            '''
             if (participate_data.user_id == new_snuuser):
                 if (not participate_data.meeting_id.state == BREAK_UP):
                     cnt_participate = cnt_participate + 1
-            '''
+            
             if (participate_data.meeting_id == new_meeting):
                 target_meeting = Meeting.objects.get(id = new_meeting)
                 if target_meeting.max_people == len(target_meeting.members.all()):
-            '''
-            '''
+            
             for meeting_data in Meeting.objects.all():
                 if (meeting_data.state == 0 and participate_data.snuuser == new_snuuser):
                     cnt_participate = cnt_participate + 1
                     print(cnt_participate)
             '''
-            if (cnt_participate >= 5):
-                raise serializers.ValidationError('You can participate up to 5 meetings')
+
+        if (cnt_participate >= 5):
+            raise serializers.ValidationError('You can participate up to 5 meetings')
         return data
 
     class Meta:
