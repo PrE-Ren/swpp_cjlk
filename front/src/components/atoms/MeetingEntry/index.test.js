@@ -21,5 +21,3 @@ it('unfolded when Clicked', () => {
   wrapper.find('div').first().simulate('click')
   expect(wrapper.state('is_folded')).toBe(false)
 })
-
-
