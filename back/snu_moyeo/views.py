@@ -63,7 +63,7 @@ class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPI
         if serializer.is_valid():
             token = get_random_string(length = 32)
             link = "http://127.0.0.1:8000/auth/" + token + "/"
-            send_mail('SnuMoyeo Authenticate', link, 'toro.8906@gmail.com', [request.data['email']], fail_silently = False)
+            send_mail('SnuMoyeo Authenticate', 'please click this to authenticate\n' + link, 'toro.8906@gmail.com', [request.data['email']], fail_silently = False)
             serializer.save(mySNU_verification_token = token, mySNU_verified = False)
             id =  serializer.data['id']
             username = serializer.data['username']
