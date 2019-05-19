@@ -27,21 +27,23 @@ const Font_Kind = styled.div`
   padding-left: 30px;
   padding-right: 30px;
   text-align: center;
-  &:visited {
-    color: black;
+`
+const A = styled.a`
+  color: blue;
+  &:hover {
+    color : red;
   }
 `
-
 export const Left_sidebar = () => {
   return (
     <Left_sidebar_Box>
       <Font_Classify>분류</Font_Classify>
-      <Font_Kind><a href="/list/0/?page=1" style={{textDecoration: 'none'}}>음식배달</a><br /></Font_Kind>
-      <Font_Kind><a href="/list/1/?page=1" style={{textDecoration: 'none'}}>택시합승</a><br /></Font_Kind>
-      <Font_Kind><a href="/list/2/?page=1" style={{textDecoration: 'none'}}>공동구매</a><br /></Font_Kind>
-      <Font_Kind><a href="/list/3/?page=1" style={{textDecoration: 'none'}}>스터디</a><br /></Font_Kind>
-      <Font_Kind><a href="/list/4/?page=1" style={{textDecoration: 'none'}}>운동</a><br /></Font_Kind>
-      <Font_Kind><a href="/list/5/?page=1" style={{textDecoration: 'none'}}>미팅</a><br /></Font_Kind>
+      <Font_Kind><A href="/list/0/?page=1" style={{textDecoration: 'none'}}>음식배달</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/1/?page=1" style={{textDecoration: 'none'}}>택시합승</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/2/?page=1" style={{textDecoration: 'none'}}>공동구매</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/3/?page=1" style={{textDecoration: 'none'}}>스터디</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/4/?page=1" style={{textDecoration: 'none'}}>운동</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/5/?page=1" style={{textDecoration: 'none'}}>미팅</A><br /></Font_Kind>
     </Left_sidebar_Box>
   )
 }
