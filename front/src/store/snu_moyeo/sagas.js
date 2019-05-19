@@ -1,200 +1,107 @@
-import {take, put, call, fork} from 'redux-saga/effects'
+import {take, put, call, fork, select} from 'redux-saga/effects'
 import api from 'services/api'
 import * as actions from './actions'
 
-/* Fetch data from back-end when detecting page reload */
-/* 각 페이지 별로 필요한 미팅 목록이 다르기 때문에, 사실 따로따로 구현해야 함. */
-/* <Home> 페이지 : Impending List, Recent List
-/* <List> 페이지 : Kind List (가명)
-/* <MyPage> 페이지 : Lead List, Join List, History List
-/* 그런데 일단 여기서 다 가져오는 걸로 구현하겠음. 나중에 수정 요망. */
-export function* watchReload() {
-  if (window.performance && performance.navigation.type == 1) {
-    console.log("<Detect page reload : state will be updated by back-end data>")
-    yield call(reload_func)
-  }
-}
-
-export function* watchLogin(){
+export function* watchLogin() {
   while(true) {
     const action = yield take(actions.LOGIN_ACTION)
     yield call(login_func, action)
   }
 }
 
-export function* watchSignup(){
+export function* watchSignup() {
   while(true) {
     const action = yield take(actions.SIGNUP_ACTION)
     yield call(signup_func, action)
   }
 }
 
-export function* watchNew(){
+export function* watchNew() {
   while(true) {
     const action = yield take(actions.NEW_ACTION)
     yield call(new_func, action)
   }
 }
 
-export function* watchChangeMeetingState(){
+export function* watchChangeMeetingState() {
   while(true) {
     const action = yield take(actions.CHANGE_MEETING_STATE_ACTION)
     yield call(change_meeting_state_func, action)
   }
 }
 
-export function* watchJoinMeeting(){
+export function* watchJoinMeeting() {
   while(true) {
     const action = yield take(actions.JOIN_MEETING_ACTION)
     yield call(join_meeting_func, action)
   }
 }
 
-export function* watchWithdrawMeeting(){
+export function* watchWithdrawMeeting() {
   while(true) {
     const action = yield take(actions.WITHDRAW_MEETING_ACTION)
     yield call(withdraw_meeting_func, action)
   }
 }
 
-/* It will be unnecessary later */
-export function* initialize() {
-  console.log("<Initialize : state will be initialized by back-end data>")
-  let meetinglist_impending
-  let meetinglist_recent
-  let meetinglist_lead
-  let meetinglist_join
-  let meetinglist_history
-  /* hash */
+function* get_meetinglist(type) {
+  const get_token = (state) => state.snu_moyeo.mySNU_verification_token
+  const token = yield select(get_token)
 
-  const response_impending = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/impending', { method : 'GET' })
-  if (response_impending.ok) {
-    meetinglist_impending = yield call([response_impending, response_impending.json])
-    console.log('<Fetch impending list from back-end (Reload)>')
-    console.log(meetinglist_impending)
+  if (token !== null) {
+    const get_username = (state) => state.snu_moyeo.username
+    const get_password = (state) => state.snu_moyeo.password
+    const username = yield select(get_username)
+    const password = yield select(get_password)
+    const hash = new Buffer(`${username}:${password}`).toString('base64')
+
+    const response = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/' + type, {
+      method : 'GET',
+      headers: { 'Authorization' : `Basic ${hash}` }
+    })
+    if (response.ok) {
+      const meetinglist = yield call([response, response.json])
+      console.log('<Fetch ' + type + ' list from back-end (by reload)>')
+      console.log(meetinglist)
+      return meetinglist
+    }
+    else {
+      alert('Fail to fetch ' + type + ' list from back-end')
+      return null
+    }
   }
   else
-    alert('Fail to fetch impending list from back-end')
-
-  const response_recent = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/recent', { method : 'GET' })
-  if (response_recent.ok) {
-    meetinglist_recent = yield call([response_recent, response_recent.json])
-    console.log('<Fetch recent list from back-end (Reload)>')
-    console.log(meetinglist_recent)
-  }
-  else
-    alert('Fail to fetch recent list from back-end')
-
-  /*const response_lead = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/lead', {
-    method : 'GET',
-    headers: { 'Authorization' : `Basic ${hash}` }
-  })*/
-  const response_lead = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/lead', { method : 'GET' })
-  if (response_lead.ok) {
-    meetinglist_lead = yield call([response_lead, response_lead.json])
-    console.log('<Fetch lead list from back-end (Reload)>')
-    console.log(meetinglist_lead)
-  }
-  else
-    alert('Fail to fetch lead list from back-end')
-
-  /*const response_join = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/join', {
-    method : 'GET',
-    headers: { 'Authorization' : `Basic ${hash}` }
-  })*/
-  const response_join = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/join', { method : 'GET' })
-  if (response_join.ok) {
-    meetinglist_join = yield call([response_join, response_join.json])
-    console.log('<Fetch join list from back-end (Reload)>')
-    console.log(meetinglist_join)
-  }
-  else
-    alert('Fail to fetch join list from back-end')
-
-  /*const response_history = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/history', {
-    method : 'GET',
-    headers: { 'Authorization' : `Basic ${hash}` }
-  })*/
-  const response_history = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/history', { method : 'GET' })
-  if (response_history.ok) {
-    meetinglist_history = yield call([response_history, response_history.json])
-    console.log('<Fetch history list from back-end (Reload)>')
-    console.log(meetinglist_history)
-  }
-  else
-    alert('Fail to fetch history list from back-end')
-
-  console.log('<Dispatch reload_action>')
-  yield put(actions.reload_action(meetinglist_impending, meetinglist_recent, meetinglist_lead, meetinglist_join, meetinglist_history))
+    return null
 }
 
-export function* reload_func() {
-  let meetinglist_impending
-  let meetinglist_recent
-  let meetinglist_lead
-  let meetinglist_join
-  let meetinglist_history
-  /* hash */
+export function* reload() {
+  const pathname = window.location.pathname
 
-  const response_impending = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/impending', { method : 'GET' })
-  if (response_impending.ok) {
-    meetinglist_impending = yield call([response_impending, response_impending.json])
-    console.log('<Fetch impending list from back-end (Reload)>')
-    console.log(meetinglist_impending)
+  if (pathname == '/') {
+    alert("Reload " + pathname + " : Set state by data from back-end")
+    const meetinglist_impending = yield call(get_meetinglist, 'impending')
+    const meetinglist_recent = yield call(get_meetinglist, 'recent')
+    if (meetinglist_impending !== null && meetinglist_recent !== null) {
+      console.log('<Dispatch reload_action>')
+      yield put(actions.reload_action('impending', meetinglist_impending))
+      yield put(actions.reload_action('recent', meetinglist_recent))
+    }
   }
-  else
-    alert('Fail to fetch impending list from back-end')
-
-  const response_recent = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/recent', { method : 'GET' })
-  if (response_recent.ok) {
-    meetinglist_recent = yield call([response_recent, response_recent.json])
-    console.log('<Fetch recent list from back-end (Reload)>')
-    console.log(meetinglist_recent)
+  else if (pathname == '/mypage') {
+    alert("Reload " + pathname + " : Set state by data from back-end")
+    const meetinglist_lead = yield call(get_meetinglist, 'lead')
+    const meetinglist_join = yield call(get_meetinglist, 'join')
+    const meetinglist_history = yield call(get_meetinglist, 'history')
+    if (meetinglist_lead !== null && meetinglist_join !== null && meetinglist_history !== null) {
+      console.log('<Dispatch reload_action>')
+      yield put(actions.reload_action('lead', meetinglist_lead))
+      yield put(actions.reload_action('join', meetinglist_join))
+      yield put(actions.reload_action('history', meetinglist_history))
+    }
   }
-  else
-    alert('Fail to fetch recent list from back-end')
-
-  /*const response_lead = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/lead', {
-    method : 'GET',
-    headers: { 'Authorization' : `Basic ${hash}` }
-  })*/
-  const response_lead = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/lead', { method : 'GET' })
-  if (response_lead.ok) {
-    meetinglist_lead = yield call([response_lead, response_lead.json])
-    console.log('<Fetch lead list from back-end (Reload)>')
-    console.log(meetinglist_lead)
+  else {
+    alert("Reload " + pathname + " : Do nothing")
   }
-  else
-    alert('Fail to fetch lead list from back-end')
-
-  /*const response_join = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/join', {
-    method : 'GET',
-    headers: { 'Authorization' : `Basic ${hash}` }
-  })*/
-  const response_join = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/join', { method : 'GET' })
-  if (response_join.ok) {
-    meetinglist_join = yield call([response_join, response_join.json])
-    console.log('<Fetch join list from back-end (Reload)>')
-    console.log(meetinglist_join)
-  }
-  else
-    alert('Fail to fetch join list from back-end')
-
-  /*const response_history = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/history', {
-    method : 'GET',
-    headers: { 'Authorization' : `Basic ${hash}` }
-  })*/
-  const response_history = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/history', { method : 'GET' })
-  if (response_history.ok) {
-    meetinglist_history = yield call([response_history, response_history.json])
-    console.log('<Fetch history list from back-end (Reload)>')
-    console.log(meetinglist_history)
-  }
-  else
-    alert('Fail to fetch history list from back-end')
-
-  console.log('<Dispatch reload_action>')
-  yield put(actions.reload_action(meetinglist_impending, meetinglist_recent))
 }
 
 export function* login_func(action) {
@@ -387,8 +294,7 @@ export function* withdraw_meeting_func(action) {
 }
 
 export default function* () {
-  yield fork(initialize)
-  yield fork(watchReload)
+  yield fork(reload)
   yield fork(watchLogin)
   yield fork(watchSignup)
   yield fork(watchNew)

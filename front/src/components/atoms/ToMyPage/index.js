@@ -3,16 +3,12 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const ToMyPageCss1 = styled.div`
-  position: relative;
-  float:right;
-  right:110px;
-  top:-43px;
-`
-
-const ToMyPageCss2 = styled.div`
-  border: 1.5px solid black;
+const ToMyPage_Css = styled.div`
+  float: right;
+  margin-right: 5px;
   display: inline-block;
+  text-align: center;
+  border: 1.5px solid black;
   padding: 0.5rem;
   border-radius: 5px;
   background: white;
@@ -26,9 +22,7 @@ const ToMyPageCss2 = styled.div`
 
 const ToMyPage = () => {
   return (
-    <ToMyPageCss1>
-      <ToMyPageCss2 fontSize="1.25rem" type="submit" onClick={() => window.location.href = '/mypage'}>My Page</ToMyPageCss2>
-    </ToMyPageCss1>
+      <ToMyPage_Css fontSize="1.25rem" type="submit" onClick={() => window.location.href = '/mypage'}>My Page</ToMyPage_Css>
   );
 };
 

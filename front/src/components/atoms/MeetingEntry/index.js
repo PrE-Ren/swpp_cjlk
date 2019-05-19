@@ -5,7 +5,7 @@ import { font, palette } from 'styled-theme'
 import MeetingInfo from '../../../containers/MeetingInfo'
 
 const MeetingEntryCss = styled.span`
-  display: block;
+  display: inline-block;
   width: 800px;
   padding: 0.5rem 0.5rem;
   margin: 1rem 2rem;

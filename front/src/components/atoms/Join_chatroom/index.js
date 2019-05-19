@@ -3,19 +3,19 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 
-const Join_chatroomCss = styled.div`
-  text-align: center;
-  display: inline-block;
-  width: 250px;
-  margin-right: 3px;
-  margin-top: -25px;
+const Join_chatroom_Css = styled.div`
+  display: block;
   border: 2px solid;
+  border-radius: 5px;
+  text-align: center;
+  width: 250px;
+  margin-top: 10px;
   font-size: 25px;
 `
 
 const Join_chatroom = () => {
   return (
-    <Join_chatroomCss>채팅방 빠른 입장</Join_chatroomCss>
+    <Join_chatroom_Css>채팅방 빠른 입장</Join_chatroom_Css>
   )
 }
 
