@@ -22,7 +22,7 @@ matrix:
         - sudo apt-get install python3
         - sudo apt-get -y install python3-pip
         - sudo pip3 install --upgrade pip
-        - sudo pip3 install -U pip3
+        - sudo pip3 install -U pip
         - export PYTHONPATH=$PYTHONPATH:$(pwd)
         - sudo pip3 install django==2.2.1
         - sudo pip3 install djangorestframework==3.9.3
