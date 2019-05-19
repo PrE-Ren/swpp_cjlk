@@ -21,6 +21,7 @@ matrix:
         - sudo apt-get -y install python3-pip
         - sudo pip3 install --upgrade pip
         - sudo pip3 install django
+        - sudo pip install django
         - sudo pip3 install djangorestframework
         - sudo pip3 install coverage
         - sudo pip3 install requests
