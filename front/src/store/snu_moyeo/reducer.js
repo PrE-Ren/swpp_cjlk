@@ -1,20 +1,37 @@
 import { initialState } from "./selectors";
 
 const snu_moyeo_reducer = (state = initialState, action) => {
-    switch(action.type){
+    switch(action.type) {
       case 'RELOAD_ACTION' : {
-        localStorage.setItem("impending", JSON.stringify(action.meetinglist_impending))
-        localStorage.setItem("recent", JSON.stringify(action.meetinglist_recent))
-        localStorage.setItem("lead", JSON.stringify(action.meetinglist_lead))
-        localStorage.setItem("join", JSON.stringify(action.meetinglist_join))
-        localStorage.setItem("history", JSON.stringify(action.meetinglist_history))
-        return {
-          ...state,
-          meetinglist_impending : JSON.stringify(action.meetinglist_impending),
-          meetinglist_recent : JSON.stringify(action.meetinglist_recent),
-          meetinglist_lead : JSON.stringify(action.meetinglist_lead),
-          meetinglist_join : JSON.stringify(action.meetinglist_join),
-          meetinglist_history : JSON.stringify(action.meetinglist_history)
+        localStorage.setItem(action.option, JSON.stringify(action.meetinglist))
+        switch(action.option) {
+          case 'impending' :
+            return {
+              ...state,
+              meetinglist_impending : JSON.stringify(action.meetinglist)
+            }
+          case 'recent' :
+            return {
+              ...state,
+              meetinglist_recent : JSON.stringify(action.meetinglist)
+            }
+          case 'lead' :
+            return {
+              ...state,
+              meetinglist_lead : JSON.stringify(action.meetinglist)
+            }
+          case 'join' :
+            return {
+              ...state,
+              meetinglist_join : JSON.stringify(action.meetinglist)
+            }
+          case 'history' :
+            return {
+              ...state,
+              meetinglist_history : JSON.stringify(action.meetinglist)
+            }
+          default :
+            return state
         }
       }
       case 'LOGIN_SUCCESS_ACTION': {
