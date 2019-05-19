@@ -89,7 +89,6 @@ function* get_meetinglist(type) {
 
 export function* reload() {
   const pathname = window.location.pathname
-
   if (pathname == '/') {
     //alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist_impending = yield call(get_meetinglist, 'impending')

@@ -9,11 +9,10 @@ import Right_sidebar from '../../molecules/Right_sidebar'
 import styled from 'styled-components'
 
 const Title_Font = styled.div`
-  display: inline-block;
-  float: right;
-  font-size: 50px;
+  display: flex;
+  font-size: 55px;
   font-weight: bold;
-  margin-right: 600px;
+  justify-content: center;
 `
 
 const Upper_Box = styled.div`
