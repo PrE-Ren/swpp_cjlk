@@ -16,20 +16,19 @@ matrix:
     - language: python
       before_install:
         - cd back
-
       install:
         - sudo apt-get update
         - sudo apt-get install python3
         - sudo apt-get -y install python3-pip
         - sudo pip3 install --upgrade pip
         - sudo pip3 install -U pip
-        - export PYTHONPATH=$PYTHONPATH:$(pwd)
         - sudo pip3 install django==2.2.1
         - sudo pip3 install djangorestframework==3.9.3
         - sudo pip3 install coverage==4.5.3
         - sudo pip3 install requests==2.21.0
         - sudo pip3 install django-cors-headers==2.5.3
         - sudo pip3 install Pillow
+        - export PYTHONPATH=$PYTHONPATH:$(pwd)
       script:
         - python3 manage.py makemigrations snu_moyeo
         - python3 manage.py migrate
