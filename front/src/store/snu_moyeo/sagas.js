@@ -78,7 +78,7 @@ export function* reload() {
   const pathname = window.location.pathname
 
   if (pathname == '/') {
-    alert("Reload " + pathname + " : Set state by data from back-end")
+    //alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist_impending = yield call(get_meetinglist, 'impending')
     const meetinglist_recent = yield call(get_meetinglist, 'recent')
     if (meetinglist_impending !== null && meetinglist_recent !== null) {
@@ -88,7 +88,7 @@ export function* reload() {
     }
   }
   else if (pathname == '/mypage') {
-    alert("Reload " + pathname + " : Set state by data from back-end")
+    //alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist_lead = yield call(get_meetinglist, 'lead')
     const meetinglist_join = yield call(get_meetinglist, 'join')
     const meetinglist_history = yield call(get_meetinglist, 'history')
@@ -100,7 +100,7 @@ export function* reload() {
     }
   }
   else {
-    alert("Reload " + pathname + " : Do nothing")
+    //alert("Reload " + pathname + " : Do nothing")
   }
 }
 

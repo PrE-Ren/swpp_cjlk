@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import Button from '.'
 
 const onClick = jest.fn()
-const wrap = (props = {}) => shallow(<Button onClick = {onClick} {...props} />).dive()
+const wrap = (props = {}) => shallow(<Button onClick = {onClick} {...props} />)
 
 it('renders with different combination of props', () => {
   wrap({ disabled: true })
@@ -23,7 +23,7 @@ it('renders props when passed in', () => {
 
 it('renders button by default', () => {
   const wrapper = wrap()
-  expect(wrapper.find('button')).toHaveLength(1)
+  expect(wrapper.dive().find('button')).toHaveLength(1)
 })
 
 it('calls onClick when Clicked', () => {

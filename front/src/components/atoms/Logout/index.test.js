@@ -1,15 +1,19 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Logout from '.'
+import { Logout } from '.'
 
+const onClick = jest.fn()
 const wrap = (props = {}) => shallow(<Logout {...props} />)
 
-it('renders children when passed in', () => {
-  const wrapper = wrap({ children: 'test' })
-  expect(wrapper.contains('test')).toBe(true)
+it('renders same text when different childern, props passed in', () => {
+  const wrapper = wrap({logout_click : onClick})
+  expect(wrapper.contains('로그아웃')).toBe(true)
 })
 
-it('renders props when passed in', () => {
-  const wrapper = wrap({ id: 'foo' })
-  expect(wrapper.find({ id: 'foo' })).toHaveLength(1)
+it('calls onClick when Clicked', () => {
+  onClick.mockClear()
+  const wrapper = wrap({logout_click : onClick})
+  expect(onClick).not.toBeCalled()
+  wrapper.simulate('click')
+  expect(onClick).toBeCalled()
 })

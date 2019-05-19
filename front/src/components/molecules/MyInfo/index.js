@@ -35,7 +35,6 @@ const List_Box = styled.div`
 `
 
 export const MyInfo = ({ state }) => {
-  let meetings = JSON.parse(state.meetinglist_recent)
   console.log('<MyInfo Rendering>')
   return (
     <MyInfo_Box>
