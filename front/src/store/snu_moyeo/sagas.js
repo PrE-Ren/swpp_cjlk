@@ -58,7 +58,7 @@ function* get_meetinglist(type) {
   if (token !== null) {
     let url
     if (type.includes('/list'))
-      url = 'http://127.0.0.1:8000' + type + '?page=1'
+      url = 'http://127.0.0.1:8000' + type + '/?page=1'
     else
       url = 'http://127.0.0.1:8000/meetinglist/' + type
 
@@ -89,7 +89,6 @@ function* get_meetinglist(type) {
 
 export function* reload() {
   const pathname = window.location.pathname
-  alert(pathname)
   if (pathname == '/') {
     //alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist_impending = yield call(get_meetinglist, 'impending')
@@ -321,7 +320,7 @@ export function* change_page_num_func(action) {
     const token = yield select(get_token)
 
     if (token !== null) {
-      const url = 'http://127.0.0.1:8000' + pathname + '?page=' + action.page_num
+      const url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
 
       const get_username = (state) => state.snu_moyeo.username
       const get_password = (state) => state.snu_moyeo.password

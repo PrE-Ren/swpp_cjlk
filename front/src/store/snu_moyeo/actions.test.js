@@ -2,7 +2,7 @@ import * as actions from './actions'
 
 it('test reload_action', () => {
   const option = 'meeting'
-  const meetinglist = '[{id: 3, title: 미팅, created: 2019-05-10T19:00:00+09:00, leader: 김동욱, min_people: 8, max_people: 10, state: 0, description: 미팅 구해요, kind: 5, due: 2019-05-16T19:00:00+09:00}, members: [1]]'
+  const meetinglist = '[{id: 3, title: 미팅, created: 2019-05-10T19:00:00+09:00, leader: test, min_people: 8, max_people: 10, state: 0, description: 미팅 구해요, kind: 5, due: 2019-05-16T19:00:00+09:00}, members: [1]]'
 
   const expectedAction = {
     type : actions.RELOAD_ACTION,
@@ -107,7 +107,7 @@ it('test new_action',()=> {
 
 it('test change_meeting_state_action', () => {
     const hash = 'asdqe12'
-    const meeting_info = '{id: 3, title: 미팅, created: 2019-05-10T19:00:00+09:00, leader: 김동욱, min_people: 8, max_people: 10, state: 0, description: 미팅 구해요, kind: 5, due: 2019-05-16T19:00:00+09:00, members: [1]}'
+    const meeting_info = '{id: 3, title: 미팅, created: 2019-05-10T19:00:00+09:00, leader: test, min_people: 8, max_people: 10, state: 0, description: 미팅 구해요, kind: 5, due: 2019-05-16T19:00:00+09:00, members: [1]}'
     const new_state = '2'
 
     const expectedAction = {

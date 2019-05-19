@@ -38,12 +38,12 @@ export const Left_sidebar = () => {
   return (
     <Left_sidebar_Box>
       <Font_Classify>분류</Font_Classify>
-      <Font_Kind><A href="/list/0/?page=1" style={{textDecoration: 'none'}}>음식배달</A><br /></Font_Kind>
-      <Font_Kind><A href="/list/1/?page=1" style={{textDecoration: 'none'}}>택시합승</A><br /></Font_Kind>
-      <Font_Kind><A href="/list/2/?page=1" style={{textDecoration: 'none'}}>공동구매</A><br /></Font_Kind>
-      <Font_Kind><A href="/list/3/?page=1" style={{textDecoration: 'none'}}>스터디</A><br /></Font_Kind>
-      <Font_Kind><A href="/list/4/?page=1" style={{textDecoration: 'none'}}>운동</A><br /></Font_Kind>
-      <Font_Kind><A href="/list/5/?page=1" style={{textDecoration: 'none'}}>미팅</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/0" style={{textDecoration: 'none'}}>음식배달</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/1" style={{textDecoration: 'none'}}>택시합승</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/2" style={{textDecoration: 'none'}}>공동구매</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/3" style={{textDecoration: 'none'}}>스터디</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/4" style={{textDecoration: 'none'}}>운동</A><br /></Font_Kind>
+      <Font_Kind><A href="/list/5" style={{textDecoration: 'none'}}>미팅</A><br /></Font_Kind>
     </Left_sidebar_Box>
   )
 }
