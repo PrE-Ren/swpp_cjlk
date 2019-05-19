@@ -44,18 +44,31 @@ export function* watchWithdrawMeeting() {
   }
 }
 
+export function* watchChangePageNum() {
+  while(true) {
+    const action = yield take(actions.CHANGE_PAGE_NUM_ACTION)
+    yield call(change_page_num_func, action)
+  }
+}
+
 function* get_meetinglist(type) {
   const get_token = (state) => state.snu_moyeo.mySNU_verification_token
   const token = yield select(get_token)
 
   if (token !== null) {
+    let url
+    if (type.includes('/list'))
+      url = 'http://127.0.0.1:8000' + type + '/?page=1'
+    else
+      url = 'http://127.0.0.1:8000/meetinglist/' + type
+
     const get_username = (state) => state.snu_moyeo.username
     const get_password = (state) => state.snu_moyeo.password
     const username = yield select(get_username)
     const password = yield select(get_password)
     const hash = new Buffer(`${username}:${password}`).toString('base64')
 
-    const response = yield call(fetch, 'http://127.0.0.1:8000/meetinglist/' + type, {
+    const response = yield call(fetch, url, {
       method : 'GET',
       headers: { 'Authorization' : `Basic ${hash}` }
     })
@@ -78,7 +91,7 @@ export function* reload() {
   const pathname = window.location.pathname
 
   if (pathname == '/') {
-    alert("Reload " + pathname + " : Set state by data from back-end")
+    //alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist_impending = yield call(get_meetinglist, 'impending')
     const meetinglist_recent = yield call(get_meetinglist, 'recent')
     if (meetinglist_impending !== null && meetinglist_recent !== null) {
@@ -88,7 +101,7 @@ export function* reload() {
     }
   }
   else if (pathname == '/mypage') {
-    alert("Reload " + pathname + " : Set state by data from back-end")
+    //alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist_lead = yield call(get_meetinglist, 'lead')
     const meetinglist_join = yield call(get_meetinglist, 'join')
     const meetinglist_history = yield call(get_meetinglist, 'history')
@@ -99,8 +112,16 @@ export function* reload() {
       yield put(actions.reload_action('history', meetinglist_history))
     }
   }
+  else if (pathname.includes('/list')) {
+    //alert("Reload " + pathname + " : Set state by data from back-end")
+    const meetinglist = yield call(get_meetinglist, pathname)
+    if (meetinglist !== null) {
+      console.log('<Dispatch reload_action>')
+      yield put(actions.reload_action(pathname, meetinglist))
+    }
+  }
   else {
-    alert("Reload " + pathname + " : Do nothing")
+    //alert("Reload " + pathname + " : Do nothing")
   }
 }
 
@@ -293,6 +314,41 @@ export function* withdraw_meeting_func(action) {
     console.log('Participate DELETE bad')
 }
 
+export function* change_page_num_func(action) {
+  if (action.page_num != 0) {
+    const pathname = window.location.pathname
+    const get_token = (state) => state.snu_moyeo.mySNU_verification_token
+    const token = yield select(get_token)
+
+    if (token !== null) {
+      const url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
+
+      const get_username = (state) => state.snu_moyeo.username
+      const get_password = (state) => state.snu_moyeo.password
+      const username = yield select(get_username)
+      const password = yield select(get_password)
+      const hash = new Buffer(`${username}:${password}`).toString('base64')
+
+      const response = yield call(fetch, url, {
+        method : 'GET',
+        headers: { 'Authorization' : `Basic ${hash}` }
+      })
+      if (response.ok) {
+        const meetinglist = yield call([response, response.json])
+        console.log('<Fetch ' + action.page_num + 'th meeting list from back-end (by reload)>')
+        console.log(meetinglist)
+        yield put(actions.change_page_num_success_action(action.page_num, meetinglist))
+      }
+      else {
+        alert('Fail to fetch ' + action.page_num + 'th meeting list from back-end')
+      }
+    }
+  }
+  else {
+    alert('No page')
+  }
+}
+
 export default function* () {
   yield fork(reload)
   yield fork(watchLogin)
@@ -301,4 +357,5 @@ export default function* () {
   yield fork(watchChangeMeetingState)
   yield fork(watchJoinMeeting)
   yield fork(watchWithdrawMeeting)
+  yield fork(watchChangePageNum)
 }
