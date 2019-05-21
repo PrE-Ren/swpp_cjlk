@@ -101,7 +101,8 @@ class ParticipateSerializer(serializers.ModelSerializer):
             '''
 
         if (cnt_participate >= 5):
-            raise serializers.ValidationError('You can participate up to 5 meetings')
+            response = { 'detail': 'you can only 5'}
+            raise serializers.ValidationError(response['detail'])
         return data
 
     class Meta:
