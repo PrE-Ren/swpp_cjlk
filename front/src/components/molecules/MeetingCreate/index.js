@@ -6,8 +6,8 @@ import Button from '../../atoms/Button'
 
 const MeetingCreate_Box = styled.div`
   float: left;
-  width: 900px;
-  margin-left: 50px;
+  width: 700px;
+  margin-left: 10%;
   padding-left: 20px;
   padding-top: 10px;
   display: inline-block;
@@ -40,10 +40,10 @@ export const MeetingCreate = ({ username, password, user_id, new_click }) => {
           <option value="4">운동</option>
           <option value="5">미팅</option>
         </select><br />
-        모집 마감 기한 : <input type="datetime-local" ref={node => {due=node;}} /><br />
+        모집 마감 기한 : <input type="datetime-local" defaultValue="2019-05-01T13:00" ref={node => {due=node;}} /><br />
         제목 : <input placeholder = "제목을 입력하세요." style={{width:'350px', height:'20px'}} ref={node => {title=node;}} /><br />
-        최소 인원 : <input type="number" ref={node => {min_people = node;}} style={{width:'45px'}} />&ensp;&ensp;
-        최대 인원 : <input type="number" ref={node => {max_people = node;}} style={{width:'45px'}} /><br />
+        최소 인원 : <input type="number" defaultValue="2" ref={node => {min_people = node;}} style={{width:'45px'}} />&ensp;&ensp;
+        최대 인원 : <input type="number" defaultValue="2" ref={node => {max_people = node;}} style={{width:'45px'}} /><br />
         사진(선택) : <input type="file" onChange={(e)=> picture = e.target.files[0]} accept="image/*" /><br />
         내용<br /><textarea placeholder = "내용을 입력하세요." rows="20" cols="80" ref={node => {description=node;}} />
       </Info_Box>
