@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from snu_moyeo.serializers import MeetingSerializer, SnuUserSerializer, ParticipateSerializer
+from snu_moyeo.serializers import MeetingSerializer, SnuUserSerializer, ParticipateSerializer, CommentSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
-from snu_moyeo.models import SnuUser, Meeting, Participate
+from snu_moyeo.models import SnuUser, Meeting, Participate, Comment
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -200,3 +200,16 @@ class ListView(APIView):
         result_page = paginator.paginate_queryset(kind_meeting, request)
         serializer = MeetingSerializer(result_page, many = True)
         return paginator.get_paginated_response(serializer.data)
+
+class CommentList(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(writer = self.request.user)
+
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    #permission_classes = (UserOnlyAccess,)
+

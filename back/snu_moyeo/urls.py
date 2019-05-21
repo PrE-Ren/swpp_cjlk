@@ -25,6 +25,9 @@ urlpatterns = [
     path('meetinglist/lead/', views.LeadList.as_view()),
     path('meetinglist/join/', views.JoinList.as_view()),
     path('meetinglist/history/', views.HistoryList.as_view()),
+
+    path('meeting/comment/',views.CommentList.as_view()),
+    path('meeting/comment/<int:pk>/',views.CommentDetail.as_view()),
 ]
 
 urlpatterns += [

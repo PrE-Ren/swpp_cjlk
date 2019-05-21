@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from snu_moyeo.models import Meeting, SnuUser, Participate
+from snu_moyeo.models import Meeting, SnuUser, Participate, Comment
 import django
 from django.db.models import Q
 
@@ -108,3 +108,12 @@ class ParticipateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participate
         fields = ('id', 'user_id', 'meeting_id')
+
+class CommentSerializer(serializers.ModelSerializer) :
+    writer = serializers.ReadOnlyField(source = 'SnuUser.username')
+    writer = serializers.CharField(read_only = True)
+    
+    class Meta:
+        model = Comment
+        fields = ('id','created','writer','on_meeting','content')
+        

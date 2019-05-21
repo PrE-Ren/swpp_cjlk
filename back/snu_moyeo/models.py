@@ -53,3 +53,11 @@ class Participate (models.Model):
 
     class Meta:
         unique_together = ['user_id', 'meeting_id']
+
+class Comment (models.Model):
+    id = models.AutoField(primary_key = True)
+    created = models.DateTimeField(auto_now_add = True)
+    writer = models.ForeignKey('SnuUser', on_delete = models.CASCADE)
+    on_meeting = models.ForeignKey('Meeting', on_delete = models.CASCADE)   
+    content = models.CharField(max_length = 100)
+ 
