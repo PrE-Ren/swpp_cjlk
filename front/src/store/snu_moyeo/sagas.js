@@ -207,9 +207,10 @@ export function* new_func(action) {
         body: formData,
     })
 
+    const response_meeting_data = yield call([response_meeting, response_meeting.json]);
     if (response_meeting.ok) {
       console.log('Meeting POST ok')
-      const meeting_id = (yield call([response_meeting, response_meeting.json])).id
+      const meeting_id = response_meeting_data.id
       const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: meeting_id });
       const response_participate = yield call(fetch, url_participate, {
           method: 'POST',
@@ -231,7 +232,10 @@ export function* new_func(action) {
     }
     else {
       console.log('Meeting POST bad')
-      console.log('올바르지 않은 형식입니다.')
+      if(response_meeting_data.non_field_errors == "You can not participate more than 5")
+        alert('1인당 5개 이상의 열린 모임을 가질 수 없습니다')
+      else
+        alert('올바르지 않은 모임 형식입니다')
     }
   }
   else {
