@@ -318,7 +318,7 @@ export function* withdraw_meeting_func(action) {
 }
 
 export function* change_page_num_func(action) {
-  if (action.page_num != 0) {
+  if (action.page_num > 0) {
     const pathname = window.location.pathname
     const get_token = (state) => state.snu_moyeo.mySNU_verification_token
     const token = yield select(get_token)

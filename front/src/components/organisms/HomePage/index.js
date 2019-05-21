@@ -32,7 +32,7 @@ const Lower_Box = styled.div`
 
 const List_Box = styled.div`
   float: left;
-  margin-left: 50px;
+  margin-left: 10%;
   display: inline-block;
 `
 

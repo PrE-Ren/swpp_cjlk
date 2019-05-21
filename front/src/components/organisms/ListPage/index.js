@@ -36,7 +36,51 @@ const List_Box = styled.div`
   margin-left: 50px;
   display: inline-block;
 `
-
+const Left_Arrow = styled.div`
+  display: inline-block;
+  text-align: center;
+  border: 1.5px solid black;
+  padding: 8px 8px 10px 8px;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+  &:hover {
+    background: black;
+    color: white;
+  }
+  &::before {
+    content: '◀';
+  }
+`
+const MovePage = styled.div`
+  display: inline-block;
+  text-align: center;
+  border: 1.5px solid black;
+  padding: 8px 8px 8px 8px;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+  &:hover {
+    background: black;
+    color: white;
+  }
+`
+const Right_Arrow = styled.div`
+  display: inline-block;
+  text-align: center;
+  border: 1.5px solid black;
+  padding: 8px 8px 10px 10px;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+  &:hover {
+    background: black;
+    color: white;
+  }
+  &::after {
+    content: '▶';
+  }
+`
 export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => {
   if (token == null) {
     Object.defineProperty(window.location, 'href', {
@@ -49,10 +93,12 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
     const page_state = JSON.parse(meetinglist_list).links
     console.log("확인")
     console.log(page_state)
-      console.log(meetinglist_list)
+    console.log(meetinglist_list)
     const prev_url = page_state.previous
     const next_url = page_state.next
-    let prev_page_num, next_page_num, current_page_num
+    let prev_page_num, next_page_num, current_page_num, last_page_num
+    let page_num
+
     if (prev_url != null && next_url != null) {
       prev_page_num = Number(prev_url.split('?page=')[1])
       current_page_num = prev_page_num + 1
@@ -76,10 +122,20 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
       current_page_num = 1
     }
 
+    if(JSON.parse(meetinglist_list).count % JSON.parse(meetinglist_list).page_size == 0){
+      last_page_num = JSON.parse(meetinglist_list).count / JSON.parse(meetinglist_list).page_size
+    }
+    else {
+      last_page_num = parseInt(JSON.parse(meetinglist_list).count / JSON.parse(meetinglist_list).page_size) + 1
+    }
+    if(last_page_num == 0)
+      last_page_num = 1;
     const prev_text = (prev_page_num != 0) ? "["+String(prev_page_num)+"]" : ""
     const current_text = "["+String(current_page_num)+"]"
     const next_text = (next_page_num != 0) ? "["+String(next_page_num)+"]" : ""
+    const last_text = "["+String(last_page_num)+"]"
 
+    console.log(page_num)
     return (
       <div>
         <Upper_Box>
@@ -92,9 +148,12 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
           <Left_sidebar />
           <List_Box>
             <KindList /><br />
-            <Button type = "submit" onClick={() => change_page_num_click(prev_page_num)}>Prev {prev_text}</Button>&ensp;
-            <Button type = "submit" onClick={() => change_page_num_click(current_page_num)}>Current {current_text}</Button>&ensp;
-            <Button type = "submit" onClick={() => change_page_num_click(next_page_num)}>Next {next_text}</Button>&ensp;&ensp;
+            <Left_Arrow type = "submit" onClick={() => change_page_num_click(prev_page_num)}>Prev</Left_Arrow>&ensp;
+            <span key={current_page_num}>
+              <input type="number" style={{width:'35px'}} defaultValue={current_page_num} ref={node => {page_num = node;}}/>/{last_text}&ensp;
+            </span>
+            <MovePage type = "submit" onClick={() => change_page_num_click(page_num.value)}>페이지 이동</MovePage>&ensp;
+            <Right_Arrow type = "submit" onClick={() => change_page_num_click(next_page_num)}>Next</Right_Arrow>&ensp;&ensp;
             {/* number_of_pages = Math.ceil(JSON.parse(meetinglist_list).count / JSON.parse(meetinglist_list).page_size) */}
             {/* Can go to the page I want by typing the page number into <input> tag and pass the value to change_page_num_click function */}
             {/* But it is necessary to check whether it is in the range of [1, number_of_pages] */}
