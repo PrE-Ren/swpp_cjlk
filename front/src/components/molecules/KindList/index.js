@@ -22,6 +22,10 @@ const KindMeeting_Font = styled.div`
   font-weight: bold;
   text-align: center;
 `
+const Font = styled.div`
+  font-size: 17px;
+  font-weight: bold;
+`
 
 export const KindList = ({ meetinglist_list }) => {
   console.log('<KindList Rendering>')
@@ -30,6 +34,9 @@ export const KindList = ({ meetinglist_list }) => {
     return (
       <KindList_Box>
         <KindMeeting_Font>모임 목록</KindMeeting_Font>
+        <br />
+        <Font>&emsp;&emsp;제목&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        마감기한&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;최소인원 최대인원 모집현황</Font>
         {meetings.map(meeting_entry =>
           <div key = {meeting_entry.id} >
             <MeetingEntry meeting_info = {meeting_entry}/>

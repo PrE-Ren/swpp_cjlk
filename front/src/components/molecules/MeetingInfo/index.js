@@ -15,9 +15,12 @@ const Info_Box = styled.div`
 
 const dateParse = (data) => {
     const year = data.substring(0, 19).replace("-", "년 ")
-    const month = year.replace("-", "월 ")
-    const day = month.replace("T", "일 ")
-    return day.split('+')[0]
+    const month = year.replace("-", "월")
+    let day = month.replace("T", "일 ")
+    day = day.split('+')[0]
+    day = day.replace(":", "시")
+    day = day.replace(":", "분&")
+    return day.split("&")[0]
 }
 
 /* meeting_entry 필드 : id, title, created, due, min_people, max_people, description, state, kind, leader, picture, members */

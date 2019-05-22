@@ -35,7 +35,7 @@ const DueCss = styled.span`
 
 const MinCss = styled.span`
   display: inline-block;
-  width: 60px;
+  width: 65px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -43,7 +43,7 @@ const MinCss = styled.span`
 
 const MaxCss = styled.span`
   display: inline-block;
-  width: 60px;
+  width: 65px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -51,7 +51,7 @@ const MaxCss = styled.span`
 
 const FractionCss = styled.span`
   display: inline-block;
-  width: 50px;
+  width: 55x;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -66,11 +66,15 @@ const BorderCss = styled.span`
 `
 
 const dateParse = (data) => {
-    const year = data.replace("-", "년 ")
-    const month = year.replace("-", "월 ")
-    const day = month.replace("T", "일 ")
-    return day.split('+')[0]
+    const year = data.substring(0, 19).replace("-", "년 ")
+    const month = year.replace("-", "월")
+    let day = month.replace("T", "일 ")
+    day = day.split('+')[0]
+    day = day.replace(":", "시")
+    day = day.replace(":", "분&")
+    return day.split("&")[0]
 }
+
 
 class MeetingEntry extends React.Component {
   constructor(props) {

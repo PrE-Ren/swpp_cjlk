@@ -133,7 +133,7 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
     const prev_text = (prev_page_num != 0) ? "["+String(prev_page_num)+"]" : ""
     const current_text = "["+String(current_page_num)+"]"
     const next_text = (next_page_num != 0) ? "["+String(next_page_num)+"]" : ""
-    const last_text = "["+String(last_page_num)+"]"
+    const last_text = "["+String(last_page_num)+" page]"
 
     console.log(page_num)
     return (
@@ -148,15 +148,12 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
           <Left_sidebar />
           <List_Box>
             <KindList /><br />
-            <Left_Arrow type = "submit" onClick={() => change_page_num_click(prev_page_num)}>Prev</Left_Arrow>&ensp;
+            <Left_Arrow type = "submit" onClick={() => change_page_num_click(prev_page_num)}>Prev</Left_Arrow>&ensp;[
             <span key={current_page_num}>
               <input type="number" style={{width:'35px'}} defaultValue={current_page_num} ref={node => {page_num = node;}}/>/{last_text}&ensp;
             </span>
             <MovePage type = "submit" onClick={() => change_page_num_click(page_num.value)}>페이지 이동</MovePage>&ensp;
             <Right_Arrow type = "submit" onClick={() => change_page_num_click(next_page_num)}>Next</Right_Arrow>&ensp;&ensp;
-            {/* number_of_pages = Math.ceil(JSON.parse(meetinglist_list).count / JSON.parse(meetinglist_list).page_size) */}
-            {/* Can go to the page I want by typing the page number into <input> tag and pass the value to change_page_num_click function */}
-            {/* But it is necessary to check whether it is in the range of [1, number_of_pages] */}
           </List_Box>
           <Right_sidebar />
         </Lower_Box>
