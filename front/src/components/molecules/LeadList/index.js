@@ -22,6 +22,10 @@ const LeadMeeting_Font = styled.div`
   font-weight: bold;
   text-align: center;
 `
+const Font = styled.div`
+  font-size: 17px;
+  font-weight: bold;
+`
 
 export const LeadList = ({ meetinglist_lead }) => {
   console.log('<Lead Rendering>')
@@ -30,6 +34,9 @@ export const LeadList = ({ meetinglist_lead }) => {
     return (
       <LeadList_Box>
         <LeadMeeting_Font>내가 만든 모임</LeadMeeting_Font>
+        <br />
+        <Font>&emsp;&emsp;제목&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        마감기한&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;최소인원 최대인원 모집현황</Font>
         {meetings.map(meeting_entry =>
           <div key = {meeting_entry.id} >
             <MeetingEntry meeting_info = {meeting_entry}/>

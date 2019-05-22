@@ -17,14 +17,14 @@ class MeetingSerializer(serializers.ModelSerializer):
     def validate(self, data):
         due = data['due']
         created_when = django.utils.timezone.now()
-        
+
         if (created_when >= due):
             raise serializers.ValidationError("Meeting's Due should be future")
         min_people = data['min_people']
         max_people = data['max_people']
         if (min_people > max_people):
             raise serializers.ValidationError("Max should be larger than Min")
-        
+
         making_user = SnuUser.objects.get(id = self.context['request'].user.id)
         cnt_participate = 0
 
@@ -44,7 +44,7 @@ class MeetingSerializer(serializers.ModelSerializer):
 class SnuUserSerializer(serializers.ModelSerializer):
     lead_meeting = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
     # queryset = Meeting.objects.all())
-    
+
     def validate(self, data):
         if (data['email'] == ''):
             raise serializers.ValidationError("Put the email")
@@ -80,20 +80,20 @@ class ParticipateSerializer(serializers.ModelSerializer):
 
         if target_meeting.max_people == len(target_meeting.members.all()):
             raise serializers.ValidationError('Already meeting is full')
- 
+
         if self.context['request'].method == 'POST':
             open_meetings = SnuUser.objects.get(id = new_snuuser.id).meetings.all().filter(~Q(state = BREAK_UP))
             cnt_participate = len(open_meetings)
-            
+
             '''
             if (participate_data.user_id == new_snuuser):
                 if (not participate_data.meeting_id.state == BREAK_UP):
                     cnt_participate = cnt_participate + 1
-            
+
             if (participate_data.meeting_id == new_meeting):
                 target_meeting = Meeting.objects.get(id = new_meeting)
                 if target_meeting.max_people == len(target_meeting.members.all()):
-            
+
             for meeting_data in Meeting.objects.all():
                 if (meeting_data.state == 0 and participate_data.snuuser == new_snuuser):
                     cnt_participate = cnt_participate + 1

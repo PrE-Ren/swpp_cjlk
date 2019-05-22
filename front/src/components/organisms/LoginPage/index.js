@@ -46,7 +46,7 @@ export const LoginPage = ({ token, login_click }) => {
             PW &ensp;
             <input style={{border: "1px solid"}} type="password" onKeyPress = {auto_login} ref={node => {password=node;}} />
           </Font_IDPW>
-          <br/>        
+          <br/>
           <Button type = "submit" onClick={() => login_click(username.value, password.value)}>로그인</Button>
           &ensp;&ensp;&ensp;
           <Button type = "submit" onClick={() => window.location.href = "/signup"}>회원가입</Button>
