@@ -31,6 +31,7 @@ export const KindList = ({ meetinglist_list }) => {
   console.log('<KindList Rendering>')
   if (meetinglist_list != null) {
     let meetings = JSON.parse(meetinglist_list).results
+    console.log(meetings)
     return (
       <KindList_Box>
         <KindMeeting_Font>모임 목록</KindMeeting_Font>

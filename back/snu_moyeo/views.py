@@ -194,7 +194,7 @@ class TempList(generics.ListAPIView):
 
 class ListView(APIView):
     def get(self, request, in_kind, format = None):
-        kind_meeting = Meeting.objects.filter(Q(kind = in_kind) & ~Q(state = BREAK_UP))
+        kind_meeting = Meeting.objects.filter(Q(kind = in_kind) & (Q(state = OPEN) | Q(state = RE_OPEN)))
         paginator = CustomPagination()
         result_page = paginator.paginate_queryset(kind_meeting, request)
         serializer = MeetingSerializer(result_page, many = True)

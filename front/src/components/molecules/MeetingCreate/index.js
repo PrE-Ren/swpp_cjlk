@@ -34,7 +34,7 @@ export const MeetingCreate = ({ username, password, user_id, new_click }) => {
   const day = date.getDate() >= 10 ? date.getDate() : "0" + date.getDate()
   const hour = date.getHours() >= 10 ? date.getHours() : "0" + date.getHours()
   const min = date.getMinutes() >= 10 ? date.getMinutes() : "0" + date.getMinutes()
-  const datetime = year + "-" + month + "-" + day + "T" + hour + ":" + min 
+  const datetime = year + "-" + month + "-" + day + "T" + hour + ":" + min
   return (
     <MeetingCreate_Box>
       <Info_Box>
