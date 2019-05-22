@@ -239,7 +239,7 @@ export function* new_func(action) {
     }
   }
   else {
-    alert('올바르지 않은 인원 형식')
+    alert('최소 인원과 최대 인원은 2명 이상이어야 합니다')
   }
 }
 
