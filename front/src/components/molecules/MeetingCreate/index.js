@@ -28,6 +28,13 @@ const Complete_Css = styled.div`
 
 export const MeetingCreate = ({ username, password, user_id, new_click }) => {
   let kind, title, due, min_people, max_people, description, picture
+  const date = new Date()
+  const year = date.getFullYear()
+  const month = date.getMonth() + 1 >= 10 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)
+  const day = date.getDate() >= 10 ? date.getDate() : "0" + date.getDate()
+  const hour = date.getHours() >= 10 ? date.getHours() : "0" + date.getHours()
+  const min = date.getMinutes() >= 10 ? date.getMinutes() : "0" + date.getMinutes()
+  const datetime = year + "-" + month + "-" + day + "T" + hour + ":" + min 
   return (
     <MeetingCreate_Box>
       <Info_Box>
@@ -40,7 +47,7 @@ export const MeetingCreate = ({ username, password, user_id, new_click }) => {
           <option value="4">운동</option>
           <option value="5">미팅</option>
         </select><br />
-        모집 마감 기한 : <input type="datetime-local" defaultValue="2019-05-01T13:00" ref={node => {due=node;}} /><br />
+        모집 마감 기한 : <input type="datetime-local" defaultValue={datetime} ref={node => {due=node;}} /><br />
         제목 : <input placeholder = "제목을 입력하세요." style={{width:'350px', height:'20px'}} ref={node => {title=node;}} /><br />
         최소 인원 : <input type="number" placeholder="2" ref={node => {min_people = node;}} style={{width:'45px'}} />&ensp;&ensp;
         최대 인원 : <input type="number" ref={node => {max_people = node;}} style={{width:'45px'}} /><br />
