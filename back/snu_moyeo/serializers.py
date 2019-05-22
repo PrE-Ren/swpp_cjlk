@@ -18,8 +18,9 @@ class MeetingSerializer(serializers.ModelSerializer):
         due = data['due']
         created_when = django.utils.timezone.now()
         
-        if (created_when >= due):
-            raise serializers.ValidationError("Meeting's Due should be future")
+        if self.context['request'].method == 'POST':
+            if (created_when >= due):
+                raise serializers.ValidationError("Meeting's Due should be future")
         min_people = data['min_people']
         max_people = data['max_people']
         if (min_people > max_people):
@@ -39,7 +40,7 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ('id', 'title', 'created', 'due', 'min_people', 'max_people', 'description', 'state', 'kind', 'leader', 'picture', 'members')
+        fields = ('id', 'title', 'created', 'due', 'min_people', 'max_people', 'description', 'state', 'kind', 'leader', 'picture', 'members', 'comments')
 
 class SnuUserSerializer(serializers.ModelSerializer):
     lead_meeting = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
@@ -77,6 +78,10 @@ class ParticipateSerializer(serializers.ModelSerializer):
             target_meeting = Meeting.objects.get(id = new_meeting.id)
         except Meeting.DoesNotExist:
             raise serializers.ValidationError('It is non-existing meeting')
+
+
+        if target_meeting.state = 4:
+            raise serializers.ValidationError('Meeting is broken up')
 
         if target_meeting.max_people == len(target_meeting.members.all()):
             raise serializers.ValidationError('Already meeting is full')
