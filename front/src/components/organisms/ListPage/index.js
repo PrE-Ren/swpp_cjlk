@@ -35,6 +35,7 @@ const List_Box = styled.div`
   margin-left: 50px;
   display: inline-block;
 `
+
 const Left_Arrow = styled.div`
   display: inline-block;
   text-align: center;
@@ -51,6 +52,7 @@ const Left_Arrow = styled.div`
     content: '◀';
   }
 `
+
 const MovePage = styled.div`
   display: inline-block;
   text-align: center;
@@ -64,6 +66,7 @@ const MovePage = styled.div`
     color: white;
   }
 `
+
 const Right_Arrow = styled.div`
   display: inline-block;
   text-align: center;
@@ -80,6 +83,7 @@ const Right_Arrow = styled.div`
     content: '▶';
   }
 `
+
 export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => {
   if (token == null) {
     Object.defineProperty(window.location, 'href', {
@@ -90,9 +94,6 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
   }
   else if (meetinglist_list != null) {
     const page_state = JSON.parse(meetinglist_list).links
-    console.log("확인")
-    console.log(page_state)
-    console.log(meetinglist_list)
     const prev_url = page_state.previous
     const next_url = page_state.next
     let prev_page_num, next_page_num, current_page_num, last_page_num
@@ -121,18 +122,14 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
       current_page_num = 1
     }
 
-    if(JSON.parse(meetinglist_list).count % JSON.parse(meetinglist_list).page_size == 0){
-      last_page_num = JSON.parse(meetinglist_list).count / JSON.parse(meetinglist_list).page_size
-    }
-    else {
-      last_page_num = parseInt(JSON.parse(meetinglist_list).count / JSON.parse(meetinglist_list).page_size) + 1
-    }
-    if(last_page_num == 0)
+    last_page_num = Math.ceil(JSON.parse(meetinglist_list).count / JSON.parse(meetinglist_list).page_size)
+    if (last_page_num == 0)
       last_page_num = 1;
-    const prev_text = (prev_page_num != 0) ? "["+String(prev_page_num)+"]" : ""
-    const current_text = "["+String(current_page_num)+"]"
-    const next_text = (next_page_num != 0) ? "["+String(next_page_num)+"]" : ""
-    const last_text = "["+String(last_page_num)+" page]"
+
+    const prev_text = (prev_page_num != 0) ? String(prev_page_num) : ""
+    const current_text = String(current_page_num)
+    const next_text = (next_page_num != 0) ? String(next_page_num) : ""
+    const last_text = String(last_page_num)
 
     console.log(page_num)
     return (
@@ -149,9 +146,21 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
             <KindList /><br />
             <Left_Arrow type = "submit" onClick={() => change_page_num_click(prev_page_num)}>Prev</Left_Arrow>&ensp;[
             <span key={current_page_num}>
-              <input type="number" style={{width:'35px'}} defaultValue={current_page_num} ref={node => {page_num = node;}}/>/{last_text}&ensp;
+              <input
+                type="number"
+                style={{width:'35px'}}
+                defaultValue={current_page_num}
+                ref={node => {page_num = node;}}/>
+              /{last_text} page]&ensp;
             </span>
-            <MovePage type = "submit" onClick={() => change_page_num_click(page_num.value)}>페이지 이동</MovePage>&ensp;
+            <MovePage type = "submit" onClick={() => {
+              if (page_num.value >= 1 && page_num.value <= last_page_num)
+                change_page_num_click(page_num.value)
+              else
+                change_page_num_click(0)
+              }}>
+              페이지 이동
+            </MovePage>&ensp;
             <Right_Arrow type = "submit" onClick={() => change_page_num_click(next_page_num)}>Next</Right_Arrow>&ensp;&ensp;
           </List_Box>
           <Right_sidebar />
