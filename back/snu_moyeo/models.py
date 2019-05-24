@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
+import django
 
 class Meeting (models.Model):
     id = models.AutoField(primary_key = True)
@@ -19,8 +20,17 @@ class Meeting (models.Model):
     picture = models.ImageField(blank = True, null = True)
     members = models.ManyToManyField('SnuUser', through = 'Participate')
 
+
     class Meta:
         ordering = ['-created']  # sorted in decreasing order of created time
+
+    '''
+    def active(self) :
+        self.state = 4
+        if django.utils.timezone.now() > self.due :
+            return True
+        return False
+    '''
 
     def save(self, *args, **kwargs) :
         super(Meeting, self).save(*args, **kwargs)
@@ -35,6 +45,12 @@ class SnuUser (AbstractUser):
     mySNU_verified = models.BooleanField(default = False)
     mySNU_verification_token = models.CharField(max_length = 100, unique = True, blank = True)
     meetings = models.ManyToManyField('Meeting', through = 'Participate')
+
+
+    email = models.EmailField(max_length = 254, unique = True, blank = True)
+    phone_number = models.CharField( max_length = 11,  unique = True)
+    phone_verification_token = models.CharField(max_length = 6, blank = True)
+    phone_verified = models.BooleanField(default = False)
 
     # user_id = models.CharField(max_length= 100, primary_key=True) #changed variable name
     # snu_mail = models.EmailField(default = '')
@@ -53,3 +69,11 @@ class Participate (models.Model):
 
     class Meta:
         unique_together = ['user_id', 'meeting_id']
+
+class Comment (models.Model):
+    id = models.AutoField(primary_key = True)
+    created = models.DateTimeField(auto_now_add = True)
+    writer = models.ForeignKey('SnuUser', on_delete = models.CASCADE)
+    on_meeting = models.ForeignKey('Meeting', related_name = 'comments', on_delete = models.CASCADE)   
+    content = models.CharField(max_length = 100)
+ 
