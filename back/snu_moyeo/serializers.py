@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from snu_moyeo.models import Meeting, SnuUser, Participate
+from snu_moyeo.models import Meeting, SnuUser, Participate, Comment
 import django
 from django.db.models import Q
 
@@ -17,9 +17,11 @@ class MeetingSerializer(serializers.ModelSerializer):
     def validate(self, data):
         due = data['due']
         created_when = django.utils.timezone.now()
-
-        if (created_when >= due):
-            raise serializers.ValidationError("Meeting's Due should be future")
+        
+        if self.context['request'].method == 'POST' or self.context['request'].method == 'PUT' :
+            if (created_when >= due):
+                raise serializers.ValidationError("Meeting's Due should be future")
+        
         min_people = data['min_people']
         max_people = data['max_people']
         if (min_people > max_people):
@@ -39,17 +41,13 @@ class MeetingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Meeting
-        fields = ('id', 'title', 'created', 'due', 'min_people', 'max_people', 'description', 'state', 'kind', 'leader', 'picture', 'members')
+        fields = ('id', 'title', 'created', 'due', 'min_people', 'max_people', 'description', 'state', 'kind', 'leader', 'picture', 'members', 'comments')
 
 class SnuUserSerializer(serializers.ModelSerializer):
-    lead_meeting = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
+    # lead_meeting = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
     # queryset = Meeting.objects.all())
 
-    def validate(self, data):
-        if (data['email'] == ''):
-            raise serializers.ValidationError("Put the email")
-        return data
-
+        
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         instance = self.Meta.model(**validated_data)
@@ -60,7 +58,7 @@ class SnuUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SnuUser
-        fields = ('id', 'username', 'password', 'name', 'email', 'point', 'mySNU_verified', 'mySNU_verification_token', 'meetings', 'lead_meeting')
+        fields = ('id', 'username', 'password', 'name', 'email', 'point', 'mySNU_verified', 'mySNU_verification_token', 'meetings', 'lead_meeting', 'phone_number', 'phone_verification_token', 'phone_verified')
 
 class ParticipateSerializer(serializers.ModelSerializer):
     # snuuser = serializers.ReadOnlyField(source = 'SnuUser.id')
@@ -77,6 +75,10 @@ class ParticipateSerializer(serializers.ModelSerializer):
             target_meeting = Meeting.objects.get(id = new_meeting.id)
         except Meeting.DoesNotExist:
             raise serializers.ValidationError('It is non-existing meeting')
+
+
+        if target_meeting.state == 4:
+            raise serializers.ValidationError('Meeting is broken up')
 
         if target_meeting.max_people == len(target_meeting.members.all()):
             raise serializers.ValidationError('Already meeting is full')
@@ -101,9 +103,19 @@ class ParticipateSerializer(serializers.ModelSerializer):
             '''
 
         if (cnt_participate >= 5):
-            raise serializers.ValidationError('You can participate up to 5 meetings')
+            response = { 'detail': 'you can only 5'}
+            raise serializers.ValidationError(response['detail'])
         return data
 
     class Meta:
         model = Participate
         fields = ('id', 'user_id', 'meeting_id')
+
+class CommentSerializer(serializers.ModelSerializer) :
+    writer = serializers.ReadOnlyField(source = 'SnuUser.username')
+    writer = serializers.CharField(read_only = True)
+    
+    class Meta:
+        model = Comment
+        fields = ('id','created','writer','on_meeting','content')
+        

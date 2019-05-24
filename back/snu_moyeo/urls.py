@@ -9,6 +9,7 @@ from django.conf import settings
 
 urlpatterns = [
     url(r'^auth/(?P<mySNU_verification_token>[a-zA-Z0-9]+)/$', views.Authenticate.as_view()),
+    url(r'^phone_auth/(?P<phone_token>[0-9]+)/$',views.SMSVerificate.as_view()),
     path('sign_up/', views.SignUp.as_view()),
     path('log_in/', views.LogIn.as_view()),
     path('user/', views.SnuUserList.as_view()),
@@ -25,6 +26,9 @@ urlpatterns = [
     path('meetinglist/lead/', views.LeadList.as_view()),
     path('meetinglist/join/', views.JoinList.as_view()),
     path('meetinglist/history/', views.HistoryList.as_view()),
+
+    path('meeting/comment/',views.CommentList.as_view()),
+    path('meeting/comment/<int:pk>/',views.CommentDetail.as_view()),
 ]
 
 urlpatterns += [

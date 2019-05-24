@@ -15,7 +15,7 @@ install:
 script:
 	- cd back/
         - python3 manage.py runserver&
-        - sleep 3
+        - sleep 4
         - coverage run --source='.' manage.py test snu_moyeo
         - coverage report
 
