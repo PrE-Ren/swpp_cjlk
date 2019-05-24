@@ -47,8 +47,8 @@ class SnuUser (AbstractUser):
     meetings = models.ManyToManyField('Meeting', through = 'Participate')
 
 
-    email = models.EmailField(max_length = 254, unique = True, blank = True)
-    phone_number = models.CharField( max_length = 11,  unique = True)
+    email = models.EmailField(max_length = 254,  blank = True)
+    phone_number = models.CharField( max_length = 11)
     phone_verification_token = models.CharField(max_length = 6, blank = True)
     phone_verified = models.BooleanField(default = False)
 
