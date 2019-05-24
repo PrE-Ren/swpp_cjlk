@@ -22,6 +22,10 @@ const RecentMeeting_Font = styled.div`
   font-weight: bold;
   text-align: center;
 `
+const Font = styled.div`
+  font-size: 17px;
+  font-weight: bold;
+`
 
 export const RecentList = ({ meetinglist_recent }) => {
   console.log('<RecentList Rendering>')
@@ -30,6 +34,9 @@ export const RecentList = ({ meetinglist_recent }) => {
     return (
       <RecentList_Box>
         <RecentMeeting_Font>따끈따끈 방금 올라온 모임</RecentMeeting_Font>
+        <br />
+        <Font>&emsp;&emsp;제목&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        마감기한&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;최소인원 최대인원 모집현황</Font>
         {meetings.map(meeting_entry =>
           <div key = {meeting_entry.id} >
             <MeetingEntry meeting_info = {meeting_entry}/>

@@ -28,6 +28,11 @@ const Font_IDPW = styled.div`
 
 export const LoginPage = ({ token, login_click }) => {
   let username, password
+  function auto_login(event){
+    if(event.key == 'Enter'){
+      login_click(username.value, password.value)
+    }
+  }
   if (token == null) {
     return (
         <Login_Box>
@@ -39,7 +44,7 @@ export const LoginPage = ({ token, login_click }) => {
           </Font_IDPW>
           <Font_IDPW>
             PW &ensp;
-            <input style={{border: "1px solid"}} type="password" ref={node => {password=node;}}/>
+            <input style={{border: "1px solid"}} type="password" onKeyPress = {auto_login} ref={node => {password=node;}} />
           </Font_IDPW>
           <br/>
           <Button type = "submit" onClick={() => login_click(username.value, password.value)}>로그인</Button>

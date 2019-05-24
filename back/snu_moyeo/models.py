@@ -20,6 +20,7 @@ class Meeting (models.Model):
     picture = models.ImageField(blank = True, null = True)
     members = models.ManyToManyField('SnuUser', through = 'Participate')
 
+
     class Meta:
         ordering = ['-created']  # sorted in decreasing order of created time
 
@@ -44,6 +45,12 @@ class SnuUser (AbstractUser):
     mySNU_verified = models.BooleanField(default = False)
     mySNU_verification_token = models.CharField(max_length = 100, unique = True, blank = True)
     meetings = models.ManyToManyField('Meeting', through = 'Participate')
+
+
+    email = models.EmailField(max_length = 254, unique = True, blank = True)
+    phone_number = models.CharField( max_length = 11,  unique = True)
+    phone_verification_token = models.CharField(max_length = 6, blank = True)
+    phone_verified = models.BooleanField(default = False)
 
     # user_id = models.CharField(max_length= 100, primary_key=True) #changed variable name
     # snu_mail = models.EmailField(default = '')

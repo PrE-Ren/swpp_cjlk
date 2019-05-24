@@ -16,11 +16,75 @@ from snu_moyeo.permissions import UserOnlyAccess, LeaderOnlyControl
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 
+import random
+
+import sys
+from sdk.api.message import Message
+from sdk.exceptions import CoolsmsException
+
+
+
+
 OPEN = 0
 CLOSED = 1
 RE_OPEN = 2
 RE_CLOSED = 3
 BREAK_UP = 4
+
+def send_message(to_number, message):
+    # set api key, api secret
+    api_key = "NCSTXGIWAWFV3UHU"
+    api_secret = "4DO7XGNVKEOGGDDDDXWESGCVNW9MFBGP"
+
+    ## 4 params(to, from, type, text) are mandatory. must be filled
+    params = dict()
+    params['type'] = 'sms' # Message type ( sms, lms, mms, ata )
+    params['to'] =  str(to_number)  # Recipients Number '01000000000,01000000001'
+    params['from'] = '01040079493' # Sender number
+    params['text'] = str(message)  # Message
+
+    cool = Message(api_key, api_secret)
+    try:
+        response = cool.send(params)
+        print("Success Count : %s" % response['success_count'])
+        print("Error Count : %s" % response['error_count'])
+        print("Group ID : %s" % response['group_id'])
+
+        if "error_list" in response:
+            print("Error List : %s" % response['error_list'])
+
+    except CoolsmsException as e:
+        print("Error Code : %s" % e.code)
+        print("Error Message : %s" % e.msg)
+
+    # sys.exit()
+
+
+
+
+class SMSVerificate (APIView):
+    queryset = SnuUser.objects.all()
+    serializer_class = SnuUserSerializer
+    permission_class = ()
+
+    def get(self, request, phone_token) :
+        try:
+            user = SnuUser.objects.get(phone_verification_token = phone_token)
+        except SnuUser.DoesNotExist:
+            return Response(status = status.HTTP_404_NOT_FOUND)
+        
+        if user.phone_verified:
+            return Response( {'details': 'Already verified'}, status = status.HTTP_400_BAD_REQUEST)
+        print('phone authenticationg...')
+
+        serializer = SnuUserSerializer(user, data = {'phone_number' : user.phone_number, 'phone_verified' : True}, partial = True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return HttpResponse("phone verification done!", status = 202)
+        else :
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
 
 class Authenticate (APIView):
     queryset = SnuUser.objects.all()
@@ -58,17 +122,25 @@ class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPI
 
     def post(self, request, format = None):
         email = request.data['email']
+        phone = request.data['phone_number']
+
         serializer = SnuUserSerializer(data = request.data)
 
         if serializer.is_valid():
-            token = get_random_string(length = 32)
-            link = "http://127.0.0.1:8000/auth/" + token + "/"
+            email_token = get_random_string(length = 32)
+            link = "http://127.0.0.1:8000/auth/" + email_token + "/"
             send_mail('SnuMoyeo Authenticate', 'please click this to authenticate\n' + link, 'toro.8906@gmail.com', [request.data['email']], fail_silently = False)
-            serializer.save(mySNU_verification_token = token, mySNU_verified = False)
+            
+            phone_token = random.randint(100000,999999)
+            send_message(phone, phone_token) 
+            
+            serializer.save(mySNU_verification_token = email_token, mySNU_verified = False, phone_verification_token = phone_token, phone_verified = False)
+
             id =  serializer.data['id']
             username = serializer.data['username']
-            verified = serializer.data['mySNU_verified']
-            return Response(data = {'id':id, 'username':username, 'mySNU_verified':verified}, status = status.HTTP_201_CREATED)
+            email_verified = serializer.data['mySNU_verified']
+            phone_verify = serializer.data['phone_verified']
+            return Response(data = {'id':id, 'username':username, 'mySNU_verified':email_verified , 'phone_verified' : phone_verify }, status = status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
@@ -195,7 +267,7 @@ class TempList(generics.ListAPIView):
 
 class ListView(APIView):
     def get(self, request, in_kind, format = None):
-        kind_meeting = Meeting.objects.filter(Q(kind = in_kind) & ~Q(state = BREAK_UP))
+        kind_meeting = Meeting.objects.filter(Q(kind = in_kind) & (Q(state = OPEN) | Q(state = RE_OPEN)))
         paginator = CustomPagination()
         result_page = paginator.paginate_queryset(kind_meeting, request)
         serializer = MeetingSerializer(result_page, many = True)

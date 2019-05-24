@@ -11,7 +11,7 @@ const MyInfo_Box = styled.div`
   border: 2px solid black;
   border-radius: 5px;
   float: left;
-  margin-left: 50px;
+  margin-left: 10%;
   display: inline-block;
 `
 
