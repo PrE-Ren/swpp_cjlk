@@ -80,7 +80,7 @@ class ParticipateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('It is non-existing meeting')
 
 
-        if target_meeting.state = 4:
+        if target_meeting.state == 4:
             raise serializers.ValidationError('Meeting is broken up')
 
         if target_meeting.max_people == len(target_meeting.members.all()):
