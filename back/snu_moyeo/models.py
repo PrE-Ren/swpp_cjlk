@@ -24,15 +24,15 @@ class Meeting (models.Model):
     class Meta:
         ordering = ['-created']  # sorted in decreasing order of created time
 
+    '''
     def active(self) :
         self.state = 4
         if django.utils.timezone.now() > self.due :
             return True
         return False
+    '''
 
     def save(self, *args, **kwargs) :
-        if django.utils.timezone.now() > self.due :
-            self.state= 4
         super(Meeting, self).save(*args, **kwargs)
 
 class SnuUser (AbstractUser):

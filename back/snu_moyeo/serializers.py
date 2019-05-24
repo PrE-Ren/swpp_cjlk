@@ -18,7 +18,7 @@ class MeetingSerializer(serializers.ModelSerializer):
         due = data['due']
         created_when = django.utils.timezone.now()
         
-        if self.context['request'].method == 'POST':
+        if self.context['request'].method == 'POST' or self.context['request'].method == 'PUT' :
             if (created_when >= due):
                 raise serializers.ValidationError("Meeting's Due should be future")
         
@@ -44,7 +44,7 @@ class MeetingSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'created', 'due', 'min_people', 'max_people', 'description', 'state', 'kind', 'leader', 'picture', 'members', 'comments')
 
 class SnuUserSerializer(serializers.ModelSerializer):
-    lead_meeting = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
+    # lead_meeting = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
     # queryset = Meeting.objects.all())
 
         
