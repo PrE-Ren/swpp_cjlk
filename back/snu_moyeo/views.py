@@ -15,15 +15,10 @@ from django.http import HttpResponse
 from snu_moyeo.permissions import UserOnlyAccess, LeaderOnlyControl
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
-
-import random
-
-import sys
 from sdk.api.message import Message
 from sdk.exceptions import CoolsmsException
-
-
-
+import random
+import sys
 
 OPEN = 0
 CLOSED = 1
@@ -31,7 +26,7 @@ RE_OPEN = 2
 RE_CLOSED = 3
 BREAK_UP = 4
 
-def send_message(to_number, message):
+def send_message(to_number, code):
     # set api key, api secret
     api_key = "NCSTXGIWAWFV3UHU"
     api_secret = "4DO7XGNVKEOGGDDDDXWESGCVNW9MFBGP"
@@ -39,9 +34,9 @@ def send_message(to_number, message):
     ## 4 params(to, from, type, text) are mandatory. must be filled
     params = dict()
     params['type'] = 'sms' # Message type ( sms, lms, mms, ata )
-    params['to'] =  str(to_number)  # Recipients Number '01000000000,01000000001'
+    params['to'] =  str(to_number)  # Recipients Number '01000000000, 01000000001'
     params['from'] = '01040079493' # Sender number
-    params['text'] = str(message)  # Message
+    params['text'] = str(code)  # Authentication code
 
     cool = Message(api_key, api_secret)
     try:
@@ -57,92 +52,115 @@ def send_message(to_number, message):
         print("Error Code : %s" % e.code)
         print("Error Message : %s" % e.msg)
 
-    # sys.exit()
+class SMSAuthenticate (APIView):
+    # queryset = SnuUser.objects.all()
+    # serializer_class = SnuUserSerializer
+    # permission_class = ()
 
-
-
-
-class SMSVerificate (APIView):
-    queryset = SnuUser.objects.all()
-    serializer_class = SnuUserSerializer
-    permission_class = ()
-
-    def get(self, request, phone_token) :
-        try:
-            user = SnuUser.objects.get(phone_verification_token = phone_token)
-        except SnuUser.DoesNotExist:
-            return Response(status = status.HTTP_404_NOT_FOUND)
-        
-        if user.phone_verified:
-            return Response( {'details': 'Already verified'}, status = status.HTTP_400_BAD_REQUEST)
-        print('phone authenticationg...')
-
-        serializer = SnuUserSerializer(user, data = {'phone_number' : user.phone_number, 'phone_verified' : True}, partial = True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return HttpResponse("phone verification done!", status = 202)
-        else :
-            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
-
-class Authenticate (APIView):
-    queryset = SnuUser.objects.all()
-    seializer_class = SnuUserSerializer
-    permission_classes = ()
-
-    def get(self, request, mySNU_verification_token, format = None):
-        try:
-            user = SnuUser.objects.get(mySNU_verification_token = mySNU_verification_token)
-        except SnuUser.DoesNotExist:
-            return Response(status = status.HTTP_404_NOT_FOUND)
-
-        if user.mySNU_verified:
+    def get(self, request, phone_token, phone_number) :
+        print('Phone authenticationg...')
+        user = request.user
+        if (user.phone_verified):
             return Response({'details':'Already verified'}, status = status.HTTP_400_BAD_REQUEST)
+        if (user.phone_verification_token == phone_token):
+            user_serializer = SnuUserSerializer(user, data = {'phone_number':phone_number, 'phone_verified':True}, partial = True)
 
-        print ('Authenticating...')
-        serializer = SnuUserSerializer(user, data = {'email':user.email, 'mySNU_verified':True}, partial = True)
-
-        if serializer.is_valid():
-            serializer.save()
-            id = serializer.data['id']
-            username = serializer.data['username']
-            verified = serializer.data['mySNU_verified']
-            return HttpResponse("welcome! "+username+"'s mail is verified!", status = 202)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return HttpResponse("Phone verification done!", status = 202)
         else :
-            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+            return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class EmailAuthenticate (APIView):
+    # queryset = SnuUser.objects.all()
+    # seializer_class = SnuUserSerializer
+    # permission_classes = ()
+
+    def get(self, request, email_token, email):
+        print('Email authenticationg...')
+        user = request.user
+        if (user.mySNU_verified):
+            return Response({'details':'Already verified'}, status = status.HTTP_400_BAD_REQUEST)
+        if (user.mySNU_verification_token == email_token):
+            user_serializer = SnuUserSerializer(user, data = {'email':email, 'mySNU_verified':True}, partial = True)
+
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return HttpResponse("Email verification done!", status = 202)
+        else :
+            return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = SnuUser.objects.all()
     serializer_class = SnuUserSerializer
 
-    # It will have to be deleted later
+    # for debugging
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
     def post(self, request, format = None):
-        email = request.data['email']
-        phone = request.data['phone_number']
+        # email = request.data['email']
+        # phone = request.data['phone_number']
 
-        serializer = SnuUserSerializer(data = request.data)
+        user_serializer = SnuUserSerializer(data = request.data)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return Response(status.HTTP_201_CREATED)
+        else :
+            return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+        '''
         if serializer.is_valid():
-            email_token = get_random_string(length = 32)
-            link = "http://127.0.0.1:8000/auth/" + email_token + "/"
-            send_mail('SnuMoyeo Authenticate', 'please click this to authenticate\n' + link, 'toro.8906@gmail.com', [request.data['email']], fail_silently = False)
-            
-            phone_token = random.randint(100000,999999)
-            send_message(phone, phone_token) 
-            
+            email_token = random.randint(10000000, 99999999)
+            send_mail('SnuMoyeo Authenticate', 'Authentication Code : ' + str(email_token),
+                      'toro.8906@gmail.com', [request.data['email']], fail_silently = False)
+
+            phone_token = random.randint(10000000, 99999999)
+            send_message(phone, phone_token)
+
             serializer.save(mySNU_verification_token = email_token, mySNU_verified = False, phone_verification_token = phone_token, phone_verified = False)
 
             id =  serializer.data['id']
             username = serializer.data['username']
             email_verified = serializer.data['mySNU_verified']
             phone_verify = serializer.data['phone_verified']
-            return Response(data = {'id':id, 'username':username, 'mySNU_verified':email_verified , 'phone_verified' : phone_verify }, status = status.HTTP_201_CREATED)
+            return Response(data = {'id':id, 'username':username, 'mySNU_verified':email_verified , 'phone_verified' : phone_verify}, status = status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        '''
+
+class SendEmail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = SnuUser.objects.all()
+    serializer_class = SnuUserSerializer
+
+    def get(self, request, email):
+        user = request.user
+        email_token = random.randint(10000000, 99999999)
+        send_mail('SnuMoyeo Authenticate', 'Authentication Code : ' + str(email_token),
+                  'toro.8906@gmail.com', [email], fail_silently = False)
+
+        user_serializer = SnuUserSerializer(user, data = {'mySNU_verification_token':email_token}, partial = True)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return Response(status = status.HTTP_201_CREATED)
+        else :
+            return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class SendPhone(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = SnuUser.objects.all()
+    serializer_class = SnuUserSerializer
+
+    def get(self, request, phone_number):
+        user = request.user
+        phone_token = random.randint(10000000, 99999999)
+        send_message(phone_number, phone_token)
+
+        user_serializer = SnuUserSerializer(user, data = {'phone_verification_token':phone_token}, partial = True)
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return Response(status = status.HTTP_201_CREATED)
+        else :
+            return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class LogIn(APIView):
         queryset = SnuUser.objects.all()
@@ -182,7 +200,6 @@ class ParticipateList(generics.ListCreateAPIView):
     queryset = Participate.objects.all()
     serializer_class = ParticipateSerializer
 
-
 class ParticipateDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Participate.objects.all()
     serializer_class = ParticipateSerializer
@@ -215,7 +232,7 @@ class LeadList(generics.ListAPIView):
             lead_user = SnuUser.objects.get(id = user.id)
             return lead_user.lead_meeting.all()
         return Meeting.objects.none()
-    # Meeting.objects.filter(Q(leader = user) and ~Q(state = BREAK_UP))
+        # Meeting.objects.filter(Q(leader = user) and ~Q(state = BREAK_UP))
 
 class JoinList (generics.ListAPIView):
     serializer_class = MeetingSerializer
@@ -283,5 +300,4 @@ class CommentList(generics.ListCreateAPIView):
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    #permission_classes = (UserOnlyAccess,)
-
+    # permission_classes = (UserOnlyAccess,)
