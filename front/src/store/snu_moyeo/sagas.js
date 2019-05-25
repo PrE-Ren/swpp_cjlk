@@ -164,7 +164,6 @@ export function* login_func(action) {
   // 회원가입된 계정 O
   if (response_token.ok) {
     alert("로그인 성공") 
-    const response_token_data = yield call([response_token, response_token.json]);
     const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
     const response_user = yield call(fetch, url_user, {
       method: 'GET',
@@ -173,7 +172,7 @@ export function* login_func(action) {
     // 홈 페이지로 (인증 완료)
     if (response_user.ok) {
       const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_success_action(username, password, response_token_data.token, response_user_data.user_id, response_user_data.email, response_user_data.name))
+      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.phone_number, response_user_data.name))
       Object.defineProperty(window.location, 'href', {
         writable: true,
         value: '/'
@@ -181,14 +180,12 @@ export function* login_func(action) {
     }
     // 인증 페이지로 (인증 미완료)
     else{
-      yield put(actions.login_auth_action(username, password, response_token_data.token))
+      yield put(actions.login_auth_action(username, password))
       Object.defineProperty(window.location, 'href', {
         writable: true,
         value: '/auth'
       });
     }
-      
-    
   }
   // 회원가입된 계정 X
   else

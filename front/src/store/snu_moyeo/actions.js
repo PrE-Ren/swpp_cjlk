@@ -77,20 +77,20 @@ export const auth_email_success_action = (email, mySNU_verification_token) => {
   }
 };
 
-export const auth_phone_action = (username, password, phone) => {
+export const auth_phone_action = (username, password, phone_number) => {
   return {
       type : AUTH_PHONE_ACTION,
       username : username,
       password : password,
-      phone: phone
+      phone_number: phone_number
   }
 };
 
-export const auth_phone_success_action = (phone, phone_token) => {
+export const auth_phone_success_action = (phone_number, phone_token) => {
   return {
       type : AUTH_PHONE_SUCCESS_ACTION,
       data : {
-          phone : phone,
+          phone_number : phone_number,
           phone_token : phone_token
       }
   }
