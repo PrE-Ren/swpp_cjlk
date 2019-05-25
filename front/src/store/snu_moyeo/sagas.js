@@ -9,17 +9,31 @@ export function* watchLogin() {
   }
 }
 
-export function* watchEmail() {
+export function* watchSendEmail() {
   while(true) {
-    const action = yield take(actions.AUTH_EMAIL_ACTION)
-    yield call(email_func, action)
+    const action = yield take(actions.SEND_EMAIL_ACTION)
+    yield call(send_email_func, action)
   }
 }
 
-export function* watchPhone() {
+export function* watchSendPhone() {
   while(true) {
-    const action = yield take(actions.AUTH_PHONE_ACTION)
-    yield call(phone_func, action)
+    const action = yield take(actions.SEND_PHONE_ACTION)
+    yield call(send_phone_func, action)
+  }
+}
+
+export function* watchConfirmEmail() {
+  while(true) {
+    const action = yield take(actions.CONFIRM_EMAIL_ACTION)
+    yield call(confirm_email_func, action)
+  }
+}
+
+export function* watchConfirmPhone() {
+  while(true) {
+    const action = yield take(actions.CONFIRM_PHONE_ACTION)
+    yield call(confirm_phone_func, action)
   }
 }
 
@@ -138,12 +152,22 @@ export function* reload() {
   }
 }
 
-export function* email_func(action) {
+export function* send_email_func(action) {
   const username = action.username
   const password = action.password 
 }
 
-export function* phone_func(action) {
+export function* send_phone_func(action) {
+  const username = action.username
+  const password = action.password 
+}
+
+export function* confirm_email_func(action) {
+  const username = action.username
+  const password = action.password 
+}
+
+export function* confirm_phone_func(action) {
   const username = action.username
   const password = action.password 
 }
@@ -196,7 +220,6 @@ export function* signup_func(data) {
   let uid = data.username
   let upw = data.password
   let name = data.name
-  //let email = data.email+"@snu.ac.kr"
   const url = 'http://127.0.0.1:8000/sign_up/'
   const info = JSON.stringify({ username: uid, password: upw, name: name});
   const response = yield call(fetch, url, {
@@ -338,7 +361,6 @@ export function* withdraw_meeting_func(action) {
   const response = yield call(fetch, url, { method: 'GET' })
   const participate_id = yield call([response, response.json])
   const url_participate = `http://127.0.0.1:8000/participate/${participate_id}/`
-  const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: action.meeting_id });
   const response_participate = yield call(fetch, url_participate, {
       method: 'DELETE',
       headers: { 'Authorization': `Basic ${action.hash}` }
@@ -389,8 +411,10 @@ export function* change_page_num_func(action) {
 export default function* () {
   yield fork(reload)
   yield fork(watchLogin)
-  yield fork(watchEmail)
-  yield fork(watchPhone)
+  yield fork(watchSendEmail)
+  yield fork(watchSendPhone)
+  yield fork(watchConfirmEmail)
+  yield fork(watchConfirmPhone)
   yield fork(watchSignup)
   yield fork(watchNew)
   yield fork(watchChangeMeetingState)

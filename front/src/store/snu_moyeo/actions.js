@@ -2,10 +2,10 @@ export const RELOAD_ACTION = 'RELOAD_ACTION'
 export const LOGIN_ACTION = 'LOGIN_ACTION'
 export const LOGIN_SUCCESS_ACTION = 'LOGIN_SUCCESS_ACTION'
 export const LOGIN_AUTH_ACTION = 'LOGIN_AUTH_ACTION'
-export const AUTH_EMAIL_ACTION = 'AUTH_EMAIL_ACTION'
-export const AUTH_EMAIL_SUCCESS_ACTION = 'AUTH_EMAIL_SUCCESS_ACTION'
-export const AUTH_PHONE_ACTION = 'AUTH_PHONE_ACTION'
-export const AUTH_PHONE_SUCCESS_ACTION = 'AUTH_PHONE_SUCCESS_ACTION'
+export const SEND_EMAIL_ACTION = 'SEND_EMAIL_ACTION'
+export const CONFIRM_EMAIL_ACTION = 'CONFIRM_EMAIL_ACTION'
+export const SEND_PHONE_ACTION = 'SEND_PHONE_ACTION'
+export const CONFIRM_PHONE_ACTION = 'CONFIRM_PHONE_ACTION'
 export const LOGOUT_ACTION = 'LOGOUT_ACTION'
 export const SIGNUP_ACTION = 'SIGNUP_ACTION'
 export const SIGNUP_SUCCESS_ACTION = 'SIGNUP_SUCCESS_ACTION'
@@ -58,18 +58,18 @@ export const login_auth_action = (username, password) => {
   }
 };
 
-export const auth_email_action = (username, password, email) => {
+export const send_email_action = (username, password, email) => {
   return {
-      type : AUTH_EMAIL_ACTION,
+      type : SEND_EMAIL_ACTION,
       username : username,
       password : password,
       email: email
   }
 };
 
-export const auth_email_success_action = (email, mySNU_verification_token) => {
+export const confirm_email_action = (email, mySNU_verification_token) => {
   return {
-      type : AUTH_EMAIL_SUCCESS_ACTION,
+      type : CONFIRM_EMAIL_ACTION,
       data : {
           email : email,
           mySNU_verification_token : mySNU_verification_token
@@ -77,18 +77,18 @@ export const auth_email_success_action = (email, mySNU_verification_token) => {
   }
 };
 
-export const auth_phone_action = (username, password, phone_number) => {
+export const send_phone_action = (username, password, phone_number) => {
   return {
-      type : AUTH_PHONE_ACTION,
+      type : SEND_PHONE_ACTION,
       username : username,
       password : password,
       phone_number: phone_number
   }
 };
 
-export const auth_phone_success_action = (phone_number, phone_token) => {
+export const confirm_phone_action = (phone_number, phone_token) => {
   return {
-      type : AUTH_PHONE_SUCCESS_ACTION,
+      type : CONFIRM_PHONE_ACTION,
       data : {
           phone_number : phone_number,
           phone_token : phone_token
@@ -102,11 +102,12 @@ export const logout_action = () => {
     }
 };
 
-export const signup_action = (username, password) => {
+export const signup_action = (username, password, name) => {
     return {
         type : SIGNUP_ACTION,
         username,
-        password
+        password,
+        name
     }
 };
 
