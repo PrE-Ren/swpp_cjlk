@@ -51,20 +51,34 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         localStorage.setItem("token", action.data.mySNU_verification_token);
         localStorage.setItem("user_id", action.data.user_id);
         localStorage.setItem("email", action.data.email);
+        localStorage.setItem("phone_number", action.data.phone_number);
         localStorage.setItem("name", action.data.name);
         return {
           ...state,
           username: action.data.username,
-          paswword: action.data.password,
+          password: action.data.password,
           mySNU_verification_token: action.data.mySNU_verification_token,
           user_id: action.data.user_id,
           email: action.data.email,
+          phone_number: action.data.phone_number,
           name: action.data.name
         }
       }
+
+      case 'LOGIN_AUTH_ACTION': {
+        localStorage.setItem("username", action.data.username);
+        localStorage.setItem("password", action.data.password);
+        return {
+          ...state,
+          username: action.data.username,
+          password: action.data.password
+        }
+      }
+
       case 'SIGNUP_SUCCESS_ACTION': {
         return state
       }
+
       case 'LOGOUT_ACTION': {
        localStorage.removeItem("username");
        localStorage.removeItem("password");
@@ -82,7 +96,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
        return {
          ...state,
          username: null,
-         paswword: null,
+         password: null,
          mySNU_verification_token: null,
          user_id: null,
          email: null,

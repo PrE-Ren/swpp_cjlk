@@ -9,6 +9,20 @@ export function* watchLogin() {
   }
 }
 
+export function* watchEmail() {
+  while(true) {
+    const action = yield take(actions.AUTH_EMAIL_ACTION)
+    yield call(email_func, action)
+  }
+}
+
+export function* watchPhone() {
+  while(true) {
+    const action = yield take(actions.AUTH_PHONE_ACTION)
+    yield call(phone_func, action)
+  }
+}
+
 export function* watchSignup() {
   while(true) {
     const action = yield take(actions.SIGNUP_ACTION)
@@ -124,6 +138,16 @@ export function* reload() {
   }
 }
 
+export function* email_func(action) {
+  const username = action.username
+  const password = action.password 
+}
+
+export function* phone_func(action) {
+  const username = action.username
+  const password = action.password 
+}
+
 export function* login_func(action) {
   const username = action.username
   const password = action.password
@@ -139,39 +163,52 @@ export function* login_func(action) {
   })
   // 회원가입된 계정 O
   if (response_token.ok) {
+    alert("로그인 성공") 
+    const response_token_data = yield call([response_token, response_token.json]);
     const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
     const response_user = yield call(fetch, url_user, {
       method: 'GET',
       headers: { 'Authorization' : `Basic ${hash}` }
     })
-    // 로그인 성공 (인증 완료)
+    // 홈 페이지로 (인증 완료)
     if (response_user.ok) {
       const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.name))
+      yield put(actions.login_success_action(username, password, response_token_data.token, response_user_data.user_id, response_user_data.email, response_user_data.name))
+      Object.defineProperty(window.location, 'href', {
+        writable: true,
+        value: '/'
+      });
     }
-    // 로그인 실패 (인증 미완료)
-    else
-      alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
+    // 인증 페이지로 (인증 미완료)
+    else{
+      yield put(actions.login_auth_action(username, password, response_token_data.token))
+      Object.defineProperty(window.location, 'href', {
+        writable: true,
+        value: '/auth'
+      });
+    }
+      
+    
   }
   // 회원가입된 계정 X
   else
-    alert("존재하지 않는 ID나 비밀번호입니다.")
+    alert("로그인 실패 : 존재하지 않는 ID나 비밀번호입니다.")
 }
 
 export function* signup_func(data) {
   let uid = data.username
   let upw = data.password
   let name = data.name
-  let email = data.email+"@snu.ac.kr"
+  //let email = data.email+"@snu.ac.kr"
   const url = 'http://127.0.0.1:8000/sign_up/'
-  const info = JSON.stringify({ username: uid, password: upw, name: name, email: email });
+  const info = JSON.stringify({ username: uid, password: upw, name: name});
   const response = yield call(fetch, url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: info,
   })
   if (response.ok) {
-    alert("인증 링크가 당신의 SNU 메일로 전송되었습니다.")
+    alert("회원가입 성공")
     yield put(actions.signup_success_action())
     Object.defineProperty(window.location, 'href', {
       writable: true,
@@ -355,6 +392,8 @@ export function* change_page_num_func(action) {
 export default function* () {
   yield fork(reload)
   yield fork(watchLogin)
+  yield fork(watchEmail)
+  yield fork(watchPhone)
   yield fork(watchSignup)
   yield fork(watchNew)
   yield fork(watchChangeMeetingState)

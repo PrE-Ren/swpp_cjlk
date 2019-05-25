@@ -4,6 +4,7 @@ export const initialState = {
   password : localStorage.getItem("password"),
   name : localStorage.getItem("name"),
   email : localStorage.getItem("email"),
+  phone : localStorage.getItem("phone"),
   point : null,
   mySNU_verified : null,
   mySNU_verification_token : localStorage.getItem("token"),
