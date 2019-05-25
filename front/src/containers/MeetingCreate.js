@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { MeetingCreate } from '../components/molecules/MeetingCreate'
-import { new_action } from '../store/snu_moyeo/actions'
+import { new_action, modify_action } from '../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
   return {
@@ -14,6 +14,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     new_click: (username, password, user_id, title, due, min_people, max_people, description, kind, leader, picture) => {
       dispatch(new_action(username, password, kind, leader, title, due, min_people, max_people, description, user_id, picture))
+    },
+    modify_click : (username, password, user_id, title, due, min_people, max_people, description, kind, leader, picture) => {
+      dispatch(modify_action(username, password, kind, leader, title, due, min_people, max_people, description, user_id, picture))
     }
   }
 }

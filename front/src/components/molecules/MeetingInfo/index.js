@@ -28,12 +28,14 @@ const dateParse = (data) => {
     return day.split("&")[0]
 }
 
+
 /* meeting_entry 필드 : id, title, created, due, min_people, max_people, description, state, kind, leader, picture, members */
 
-export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click }) => {
+export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click, change_meeting_info_click}) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')
   const content =
     <Info_Box>
+      <Font>제목 : {meeting_info.title}</Font><br />
       <Font>주최자 : {meeting_info.leader}</Font><br />
       <Font>게시 날짜 : {dateParse(meeting_info.created)}</Font><br />
       <Font>분류 : {meeting_state.KIND_NUM_TO_STRING(meeting_info.kind)}</Font><br />
@@ -42,7 +44,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
       <pre style={{fontSize:'20px', fontFamily: 'Georgia'}}>{meeting_info.description}</pre>
     </Info_Box>
 
-  console.log(meeting_info.picture)
+  console.log(meeting_info)
   if(meeting_info.picture != null){
     if(meeting_info.picture.includes("http://") == false)
     {
@@ -60,6 +62,8 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
             {meeting_info.picture == null
               ?
               <div>
+              <Button type="submit" onClick={() => meeting_info.members.length == 1 ? change_meeting_info_click(meeting_info):
+                  alert('이미 멤버가 있는 상태입니다. 수정이 불가합니다')}>수정</Button>&nbsp;
                 <Button type="submit" onClick={() => meeting_info.members.length < meeting_info.min_people
                   ? alert('최소인원을 충족하지 못함')
                   : change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button> &nbsp;
@@ -69,6 +73,8 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
               <div>
                 <br />
                 <img src={meeting_info.picture} width="400" /><br />
+                <Button type="submit" onClick={() => meeting_info.members.length == 1 ? change_meeting_info_click(meeting_info):
+                    alert('이미 멤버가 있는 상태입니다. 수정이 불가합니다')}>수정</Button>&nbsp;
                 <Button type="submit" onClick={() => meeting_info.members.length < meeting_info.min_people
                   ? alert('최소인원을 충족하지 못함')
                   : change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button> &nbsp;

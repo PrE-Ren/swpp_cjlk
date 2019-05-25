@@ -51,10 +51,24 @@ export function* watchNew() {
   }
 }
 
+export function* watchModify() {
+  while(true) {
+    const action = yield take(actions.MODIFY_ACTION)
+    yield call(modify_func, action)
+  }
+}
+
 export function* watchChangeMeetingState() {
   while(true) {
     const action = yield take(actions.CHANGE_MEETING_STATE_ACTION)
     yield call(change_meeting_state_func, action)
+  }
+}
+
+export function* watchChangeMeetingInfo() {
+  while(true) {
+    const action = yield take(actions.CHANGE_MEETING_INFO_ACTION)
+    yield call(change_meeting_info_func, action)
   }
 }
 
@@ -148,7 +162,13 @@ export function* reload() {
     }
   }
   else {
-    //alert("Reload " + pathname + " : Do nothing")
+    const meetinglist_impending = yield call(get_meetinglist, 'impending')
+    const meetinglist_recent = yield call(get_meetinglist, 'recent')
+    if (meetinglist_impending !== null && meetinglist_recent !== null) {
+      console.log('<Dispatch reload_action>')
+      yield put(actions.reload_action('impending', meetinglist_impending))
+      yield put(actions.reload_action('recent', meetinglist_recent))
+    }
   }
 }
 
@@ -337,6 +357,50 @@ export function* new_func(action) {
   }
 }
 
+export function* modify_func(action) {
+  console.log(action)
+  let meeting_info = localStorage.getItem("meeting_info")
+  meeting_info = JSON.parse(meeting_info)
+
+  let meeting_id = meeting_info.id
+  const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`
+  const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
+  const formData = new FormData();
+
+  if (action.min_people > 1 && action.max_people > 1) {
+    formData.append('title', action.title);
+    formData.append('kind', action.kind);
+    formData.append('due', action.due);
+    formData.append('min_people', action.min_people);
+    formData.append('max_people', action.max_people);
+    formData.append('description', action.description);
+    formData.append('state', 0);
+    if (action.picture !== undefined) {
+      formData.append('picture', action.picture, action.picture.name);
+    }
+    else{
+      formData.append('picture', null, null)
+    }
+
+    const response_meeting = yield call(fetch, url_meeting, {
+        method: 'PUT',
+        headers: {
+            'Authorization': `Basic ${hash}`,
+        },
+        body: formData,
+    })
+    if (response_meeting.ok) {
+      console.log('PUT ok')
+      localStorage.removeItem('meeting_info')
+
+      window.location.href='/'
+    }
+    else {
+      console.log('PUT bad')
+    }
+  }
+
+}
 export function* change_meeting_state_func(action) {
   let meeting_id = action.meeting_info.id
   const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`
@@ -368,6 +432,12 @@ export function* change_meeting_state_func(action) {
       alert("모임 인원이 최소 인원을 충족하지 못했습니다")
     console.log('PUT bad')
   }
+}
+
+export function* change_meeting_info_func(action) {
+  let info = JSON.stringify(action.meeting_info)
+  localStorage.setItem("meeting_info", info)
+  window.location.href="/new"
 }
 
 export function* join_meeting_func(action) {
@@ -454,7 +524,9 @@ export default function* () {
   yield fork(watchConfirmPhone)
   yield fork(watchSignup)
   yield fork(watchNew)
+  yield fork(watchModify)
   yield fork(watchChangeMeetingState)
+  yield fork(watchChangeMeetingInfo)
   yield fork(watchJoinMeeting)
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)

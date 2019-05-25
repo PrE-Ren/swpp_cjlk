@@ -16,6 +16,8 @@ export const WITHDRAW_MEETING_ACTION = 'WITHDRAW_MEETING_ACTION'
 export const PARTICIPATE_ADD_ACTION = 'PARTICIPATE_ADD_ACTION'
 export const CHANGE_PAGE_NUM_ACTION = 'CHANGE_PAGE_NUM_ACTION'
 export const CHANGE_PAGE_NUM_SUCCESS_ACTION = 'CHANGE_PAGE_NUM_SUCCESS_ACTION'
+export const CHANGE_MEETING_INFO_ACTION = 'CHANGE_MEETING_INFO_ACTION'
+export const MODIFY_ACTION = 'MODIFY_ACTION'
 
 export const reload_action = (option, meetinglist) => {
   return {
@@ -128,6 +130,22 @@ export const new_action = (username, password, kind, leader, title, due, min_peo
   }
 };
 
+export const modify_action = (username, password, kind, leader, title, due, min_people, max_people, description, user_id, picture) => {
+  return {
+    type: MODIFY_ACTION,
+    username,
+    password,
+    kind,
+    leader,
+    title,
+    due,
+    min_people,
+    max_people,
+    description,
+    user_id,
+    picture
+  }
+};
 export const change_meeting_state_action = (hash, meeting_info, new_state) => {
   return {
     type: CHANGE_MEETING_STATE_ACTION,
@@ -136,6 +154,12 @@ export const change_meeting_state_action = (hash, meeting_info, new_state) => {
     new_state
   }
 };
+export const change_meeting_info_action = (meeting_info) => {
+  return {
+    type: CHANGE_MEETING_INFO_ACTION,
+    meeting_info
+  }
+}
 
 export const join_meeting_action = (hash, user_id, meeting_id) => {
   return {
