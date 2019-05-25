@@ -52,44 +52,6 @@ def send_message(to_number, code):
         print("Error Code : %s" % e.code)
         print("Error Message : %s" % e.msg)
 
-class SMSAuthenticate (APIView):
-    # queryset = SnuUser.objects.all()
-    # serializer_class = SnuUserSerializer
-    # permission_class = ()
-
-    def get(self, request, phone_token, phone_number) :
-        print('Phone authenticationg...')
-        user = request.user
-        if (user.phone_verified):
-            return Response({'details':'Already verified'}, status = status.HTTP_400_BAD_REQUEST)
-        if (user.phone_verification_token == phone_token):
-            user_serializer = SnuUserSerializer(user, data = {'phone_number':phone_number, 'phone_verified':True}, partial = True)
-
-        if user_serializer.is_valid():
-            user_serializer.save()
-            return HttpResponse("Phone verification done!", status = 202)
-        else :
-            return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
-class EmailAuthenticate (APIView):
-    # queryset = SnuUser.objects.all()
-    # seializer_class = SnuUserSerializer
-    # permission_classes = ()
-
-    def get(self, request, email_token, email):
-        print('Email authenticationg...')
-        user = request.user
-        if (user.mySNU_verified):
-            return Response({'details':'Already verified'}, status = status.HTTP_400_BAD_REQUEST)
-        if (user.mySNU_verification_token == email_token):
-            user_serializer = SnuUserSerializer(user, data = {'email':email, 'mySNU_verified':True}, partial = True)
-
-        if user_serializer.is_valid():
-            user_serializer.save()
-            return HttpResponse("Email verification done!", status = 202)
-        else :
-            return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
 class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = SnuUser.objects.all()
     serializer_class = SnuUserSerializer
@@ -146,6 +108,25 @@ class SendEmail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
         else :
             return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
+class EmailAuthenticate (APIView):
+    # queryset = SnuUser.objects.all()
+    # seializer_class = SnuUserSerializer
+    # permission_classes = ()
+
+    def get(self, request, email_token, email):
+        print('Email authenticationg...')
+        user = request.user
+        if (user.mySNU_verified):
+            return Response({'details':'Already verified'}, status = status.HTTP_400_BAD_REQUEST)
+        if (user.mySNU_verification_token == email_token):
+            user_serializer = SnuUserSerializer(user, data = {'email':email, 'mySNU_verified':True}, partial = True)
+
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return HttpResponse("Email verification done!", status = 202)
+        else :
+            return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
 class SendPhone(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = SnuUser.objects.all()
     serializer_class = SnuUserSerializer
@@ -159,6 +140,25 @@ class SendPhone(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
         if user_serializer.is_valid():
             user_serializer.save()
             return Response(status = status.HTTP_201_CREATED)
+        else :
+            return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+
+class SMSAuthenticate (APIView):
+    # queryset = SnuUser.objects.all()
+    # serializer_class = SnuUserSerializer
+    # permission_class = ()
+
+    def get(self, request, phone_token, phone_number) :
+        print('Phone authenticationg...')
+        user = request.user
+        if (user.phone_verified):
+            return Response({'details':'Already verified'}, status = status.HTTP_400_BAD_REQUEST)
+        if (user.phone_verification_token == phone_token):
+            user_serializer = SnuUserSerializer(user, data = {'phone_number':phone_number, 'phone_verified':True}, partial = True)
+
+        if user_serializer.is_valid():
+            user_serializer.save()
+            return HttpResponse("Phone verification done!", status = 202)
         else :
             return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
