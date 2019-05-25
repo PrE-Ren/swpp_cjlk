@@ -53,108 +53,63 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
   // 내가 만든 모임
   if (meeting_info.leader == state.username) {
     switch (meeting_info.state) {
-      case meeting_state.OPEN : {
+      case meeting_state.OPEN :
         return (
           <div>
             {content}
-            {meeting_info.picture == null
-              ?
-              <div>
+            <div>
+              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
               <Button type="submit" onClick={() => meeting_info.members.length == 1 ? change_meeting_info_click(meeting_info):
                   alert('이미 멤버가 있는 상태입니다. 수정이 불가합니다')}>수정</Button>&nbsp;
-                <Button type="submit" onClick={() => meeting_info.members.length < meeting_info.min_people
-                  ? alert('최소인원을 충족하지 못함')
-                  : change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button> &nbsp;
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-              </div>
-              :
-              <div>
-                <br />
-                <img src={meeting_info.picture} width="400" /><br />
-                <Button type="submit" onClick={() => meeting_info.members.length == 1 ? change_meeting_info_click(meeting_info):
-                    alert('이미 멤버가 있는 상태입니다. 수정이 불가합니다')}>수정</Button>&nbsp;
-                <Button type="submit" onClick={() => meeting_info.members.length < meeting_info.min_people
-                  ? alert('최소인원을 충족하지 못함')
-                  : change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button> &nbsp;
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-              </div>}
+              <Button type="submit" onClick={() => meeting_info.members.length < meeting_info.min_people
+                ? alert('최소인원을 충족하지 못함')
+                : change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button> &nbsp;
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>
           </div>
         )
-      }
-      case meeting_state.CLOSED : {
+
+      case meeting_state.CLOSED :
         return (
           <div>
             {content}
-            {meeting_info.picture == null
-              ?
-              <div>
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_OPEN)}>추가 모집 시작</Button>&nbsp;
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-              </div>
-              :
-              <div>
-                <br />
-                <img src={meeting_info.picture} width="400" /><br />
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_OPEN)}>추가 모집 시작</Button>&nbsp;
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-              </div>}
+            <div>
+              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_OPEN)}>추가 모집 시작</Button>&nbsp;
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>
           </div>
         )
-      }
-      case meeting_state.RE_OPEN : {
+
+      case meeting_state.RE_OPEN :
         return (
           <div>
             {content}
-            {meeting_info.picture == null
-              ?
-              <div>
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_CLOSED)}>추가 모집 중단</Button>&nbsp;
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-              </div>
-              :
-              <div>
-                <br />
-                <img src={meeting_info.picture} width="400" /><br />
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_CLOSED)}>추가 모집 중단</Button>&nbsp;
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-              </div>}
+            <div>
+              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_CLOSED)}>추가 모집 중단</Button>&nbsp;
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>
           </div>
         )
-      }
-      case meeting_state.RE_CLOSED : {
+
+      case meeting_state.RE_CLOSED :
         return (
           <div>
             {content}
-            {meeting_info.picture == null
-              ?
-              <div>
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-              </div>
-              :
-              <div>
-                <br />
-                <img src={meeting_info.picture} width="400" /><br />
-                <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-              </div>}
+            <div>
+              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
+            </div>}
           </div>
         )
-      }
-      case meeting_state.BREAK_UP : {
+      case meeting_state.BREAK_UP :
         return (
           <div>
             {content}
-            {meeting_info.picture == null
-              ?
-              <div></div>
-              :
-              <div>
-                <br />
-                <img src={meeting_info.picture} width="400" /><br />
-              </div>
-            }
+            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
           </div>
         )
-      }
     }
   }
 
@@ -165,15 +120,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
       return (
         <div>
           {content}
-          {meeting_info.picture == null
-            ?
-            <div></div>
-            :
-            <div>
-              <br />
-              <img src={meeting_info.picture} width="400" /><br />
-            </div>
-          }
+          {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
           <Button type="submit" onClick={() => withdraw_meeting_click(hash, state.user_id, meeting_info.id)}>탈퇴</Button>
         </div>
       )
@@ -183,15 +130,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
       return (
         <div>
           {content}
-          {meeting_info.picture == null
-            ?
-            <div></div>
-            :
-            <div>
-              <br />
-              <img src={meeting_info.picture} width="400" /><br />
-            </div>
-          }
+          {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
           {meeting_info.members.length >= meeting_info.max_people
             ?<div>FULL</div>
             :<Button type="submit" onClick={() => join_meeting_click(hash, state.user_id, meeting_info.id)}>참가</Button>}
