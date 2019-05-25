@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
@@ -6,14 +6,8 @@ import Button from '../../atoms/Button'
 import * as meeting_state from '../../../literal'
 import { ModifyButton, CloseButton, BreakUpButton, ReOpenButton, ReCloseButton } from '../../atoms/ButtonsInMeetingInfo'
 import { JoinButton, WithdrawButton } from '../../atoms/ButtonsInMeetingInfo'
+import { Modal, Image, Grid } from 'semantic-ui-react'
 
-const Info_Box = styled.div`
-  font-size: 20px;
-  font-weight: 400;
-  padding-top: 20px;
-  padding-left: 10px;
-  padding-bottom: 20px;
-`
 const Font = styled.div`
   float: right;
   font-size: 17px;
@@ -35,15 +29,15 @@ const dateParse = (data) => {
 export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click, change_meeting_info_click}) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')
   const content =
-    <Info_Box>
-      <Font>제목 : {meeting_info.title}</Font><br />
-      <Font>주최자 : {meeting_info.leader}</Font><br />
-      <Font>게시 날짜 : {dateParse(meeting_info.created)}</Font><br />
-      <Font>분류 : {meeting_state.KIND_NUM_TO_STRING(meeting_info.kind)}</Font><br />
-      <Font>현재 참여 인원 : {meeting_info.members.length}명</Font><br />
-      <Font>모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)}</Font><br />
-      <pre style={{fontSize:'20px', fontFamily: 'Georgia'}}>{meeting_info.description}</pre>
-    </Info_Box>
+    <Modal.Description>
+      <br/><br/>
+      ① 주최자 : {meeting_info.leader}<br/><br/>
+      ② 게시 날짜 : {dateParse(meeting_info.created)}<br/><br/>
+      ③ 분류 : {meeting_state.KIND_NUM_TO_STRING(meeting_info.kind)}<br/><br/>
+      ④ 현재 참여 인원 : {meeting_info.members.length}명<br/><br/>
+      ⑤ 모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)}<br/><br/>
+      <h4><p>{meeting_info.description}</p></h4>
+    </Modal.Description>
 
   if (meeting_info.picture != null) {
     if (meeting_info.picture.includes("http://") == false) {
@@ -58,51 +52,107 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
       case meeting_state.OPEN :
         return (
           <div>
-            {content}
-            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-            <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-            <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-            <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+            <Modal.Content image scrolling>
+              <Grid columns={2}>
+                <Grid.Column width={6}>
+                  <br/>
+                  <Modal.Actions>
+                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+                    <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                    <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  </Modal.Actions>
+                  <br/>
+                  <Image style={{float:'left'}} size='medium' src={meeting_info.picture} wrapped />
+                </Grid.Column>
+                <Grid.Column width={9}>
+                  {content}
+                </Grid.Column>
+              </Grid>
+            </Modal.Content>
           </div>
         )
 
       case meeting_state.CLOSED :
         return (
           <div>
-            {content}
-            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-            <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-            <ReOpenButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-            <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+            <Modal.Content image scrolling>
+              <Grid columns={2}>
+                <Grid.Column width={6}>
+                  <br/>
+                  <Modal.Actions>
+                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+                    <ReOpenButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                    <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  </Modal.Actions>
+                  <br/>
+                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                </Grid.Column>
+                <Grid.Column width={9}>
+                  {content}
+                </Grid.Column>
+              </Grid>
+            </Modal.Content>
           </div>
         )
 
       case meeting_state.RE_OPEN :
         return (
           <div>
-            {content}
-            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-            <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-            <ReCloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-            <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+            <Modal.Content image scrolling>
+              <Grid columns={2}>
+                <Grid.Column width={6}>
+                  <br/>
+                  <Modal.Actions>
+                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+                    <ReCloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                    <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  </Modal.Actions>
+                  <br/>
+                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                </Grid.Column>
+                <Grid.Column width={9}>
+                  {content}
+                </Grid.Column>
+              </Grid>
+            </Modal.Content>
           </div>
         )
 
       case meeting_state.RE_CLOSED :
         return (
           <div>
-            {content}
-            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-            <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-            <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+            <Modal.Content image scrolling>
+              <Grid columns={2}>
+                <Grid.Column width={6}>
+                  <br/>
+                  <Modal.Actions>
+                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+                    <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  </Modal.Actions>
+                  <br/>
+                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                </Grid.Column>
+                <Grid.Column width={9}>
+                  {content}
+                </Grid.Column>
+              </Grid>
+            </Modal.Content>
           </div>
         )
 
       case meeting_state.BREAK_UP :
         return (
           <div>
-            {content}
-            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+            <Modal.Content image scrolling>
+              <Grid columns={2}>
+                <Grid.Column width={6}>
+                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                </Grid.Column>
+                <Grid.Column width={9}>
+                  {content}
+                </Grid.Column>
+              </Grid>
+            </Modal.Content>
           </div>
         )
     }
@@ -114,9 +164,21 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
     if (meeting_info.members.includes(Number(state.user_id))) {
       return (
         <div>
-          {content}
-          {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-          <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
+          <Modal.Content image>
+            <Grid columns={2}>
+              <Grid.Column width={6}>
+                <br/>
+                <Modal.Actions>
+                  <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
+                </Modal.Actions>
+                <br/>
+                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              </Grid.Column>
+              <Grid.Column width={9}>
+                {content}
+              </Grid.Column>
+            </Grid>
+          </Modal.Content>
         </div>
       )
     }
@@ -124,9 +186,21 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
     else {
       return (
         <div>
-          {content}
-          {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-          <JoinButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {join_meeting_click} />
+          <Modal.Content image>
+            <Grid columns={2}>
+              <Grid.Column width={6}>
+                <br/>
+                <Modal.Actions>
+                  <JoinButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {join_meeting_click} />
+                </Modal.Actions>
+                <br/>
+                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              </Grid.Column>
+              <Grid.Column width={9}>
+                {content}
+              </Grid.Column>
+            </Grid>
+          </Modal.Content>
         </div>
       )
     }

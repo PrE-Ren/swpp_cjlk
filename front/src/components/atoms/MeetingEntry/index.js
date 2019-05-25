@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 import MeetingInfo from '../../../containers/MeetingInfo'
+import { Modal } from 'semantic-ui-react'
 
 const MeetingEntryCss = styled.span`
   display: inline-block;
@@ -91,8 +92,16 @@ class MeetingEntry extends React.Component {
         <FractionCss>{this.props.meeting_info.members.length}/{this.props.meeting_info.max_people}</FractionCss>
       </div>
     )
+    return (
+      <MeetingEntryCss>
+        <Modal trigger={meeting_entry}>
+          <Modal.Header>{this.props.meeting_info.title}</Modal.Header>
+          <MeetingInfo meeting_info = {this.props.meeting_info}/>
+        </Modal>
+      </MeetingEntryCss >
+    )
 
-    if (this.state.is_folded == true) {
+    /*if (this.state.is_folded == true) {
       return (
         <MeetingEntryCss >
           {meeting_entry}
@@ -102,11 +111,13 @@ class MeetingEntry extends React.Component {
     else {
       return (
         <MeetingEntryCss >
-          {meeting_entry}
-          <MeetingInfo meeting_info = {this.props.meeting_info}/>
+          <Modal trigger={meeting_entry}>
+            <Modal.Header>Meeting Information</Modal.Header>
+            <MeetingInfo meeting_info = {this.props.meeting_info}/>
+          </Modal>
         </MeetingEntryCss>
       )
-    }
+    }*/
   }
 }
 

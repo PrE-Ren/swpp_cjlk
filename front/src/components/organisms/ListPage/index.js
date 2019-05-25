@@ -1,40 +1,11 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-import ToHome from '../../atoms/ToHome'
-import ToMyPage from '../../atoms/ToMyPage'
-import Logout from '../../../containers/Logout'
 import Left_sidebar from '../../molecules/Left_sidebar'
 import KindList from '../../../containers/KindList'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import Button from '../../atoms/Button'
 import styled from 'styled-components'
-
-const Title_Font = styled.div`
-  display: flex;
-  font-size: 55px;
-  font-weight: bold;
-  justify-content: center;
-`
-
-const Upper_Box = styled.div`
-  display: block;
-  margin-top: 5px;
-  margin-left: 5px;
-  margin-bottom: 100px;
-  margin-right: 5px;
-`
-
-const Lower_Box = styled.div`
-  display: block;
-  margin-left: 5px;
-  margin-right: 5px;
-`
-
-const List_Box = styled.div`
-  float: left;
-  margin-left: 50px;
-  display: inline-block;
-`
+import { Grid, Header, Icon, Container } from 'semantic-ui-react'
 
 const Left_Arrow = styled.div`
   display: inline-block;
@@ -133,15 +104,20 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
 
     console.log(page_num)
     return (
-      <div>
-        <Upper_Box>
-          <Logout />
-          <ToMyPage />
-          <Title_Font>SNU Moyeo</Title_Font>
-        </Upper_Box>
-        <Lower_Box>
+      <Grid columns={3}>
+        <Grid.Column width={2}>
           <Left_sidebar />
-          <List_Box>
+        </Grid.Column>
+
+        <Grid.Column width={10}>
+          <Container>
+            <Header as='h1' icon textAlign='center'>
+              <Icon name='group' circular />
+              SNU Moyeo
+              <Header.Subheader>SNU web service that helps you construct and join a meeting </Header.Subheader><br /><br />
+            </Header>
+          </Container>
+          <Container>
             <KindList /><br />
             <Left_Arrow type = "submit" onClick={() => change_page_num_click(prev_page_num)}>Prev</Left_Arrow>&ensp;[
             <span key={current_page_num}>
@@ -161,13 +137,16 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
               페이지 이동
             </MovePage>&ensp;
             <Right_Arrow type = "submit" onClick={() => change_page_num_click(next_page_num)}>Next</Right_Arrow>&ensp;&ensp;
-          </List_Box>
+          </Container>
+        </Grid.Column>
+
+        <Grid.Column width={4}>
           <Right_sidebar />
-        </Lower_Box>
-      </div>
+        </Grid.Column>
+      </Grid>
     )
   }
   else {
-    return <div></div>
+    return (<div></div>)
   }
 }
