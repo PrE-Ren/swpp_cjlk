@@ -30,11 +30,11 @@ const dateParse = (data) => {
 
 /* meeting_entry 필드 : id, title, created, due, min_people, max_people, description, state, kind, leader, picture, members */
 
-export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click }) => {
+export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click}) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')
   const content =
     <Info_Box>
-      <Font>제목 : {meeting_info.title}</Font><br /> 
+      <Font>제목 : {meeting_info.title}</Font><br />
       <Font>주최자 : {meeting_info.leader}</Font><br />
       <Font>게시 날짜 : {dateParse(meeting_info.created)}</Font><br />
       <Font>분류 : {meeting_state.KIND_NUM_TO_STRING(meeting_info.kind)}</Font><br />
@@ -61,6 +61,11 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
             {meeting_info.picture == null
               ?
               <div>
+                <Button type="submit" onClick={() =>
+                  Object.defineProperty(window.location, 'href', {
+                    writable: true,
+                    value: '/new'
+                  })}>수정</Button>&nbsp;
                 <Button type="submit" onClick={() => meeting_info.members.length < meeting_info.min_people
                   ? alert('최소인원을 충족하지 못함')
                   : change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button> &nbsp;
