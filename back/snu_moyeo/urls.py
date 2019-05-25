@@ -8,8 +8,6 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    url(r'^auth/(?P<mySNU_verification_token>[a-zA-Z0-9]+)/$', views.Authenticate.as_view()),
-    url(r'^phone_auth/(?P<phone_token>[0-9]+)/$',views.SMSVerificate.as_view()),
     path('sign_up/', views.SignUp.as_view()),
     path('log_in/', views.LogIn.as_view()),
     path('user/', views.SnuUserList.as_view()),
@@ -22,13 +20,17 @@ urlpatterns = [
     path('meetinglist/recent/', views.RecentList.as_view()),
     path('meetinglist/impending/', views.ImpendingList.as_view()),
     path('list/<int:in_kind>/', views.ListView.as_view()),
-    url(r'^get_auth_token/', obtain_auth_token),
     path('meetinglist/lead/', views.LeadList.as_view()),
     path('meetinglist/join/', views.JoinList.as_view()),
     path('meetinglist/history/', views.HistoryList.as_view()),
+    path('comment/',views.CommentList.as_view()),
+    path('comment/<int:pk>/',views.CommentDetail.as_view()),
 
-    path('meeting/comment/',views.CommentList.as_view()),
-    path('meeting/comment/<int:pk>/',views.CommentDetail.as_view()),
+    url(r'^get_auth_token/', obtain_auth_token),
+    url(r'^email_auth/(?P<email>[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3})/(?P<email_token>[0-9]+)/$', views.EmailAuthenticate.as_view()),   # email regular expression
+    url(r'^send_email/(?P<email>[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3})/$', views.SendEmail.as_view()),   # email regular expression
+    url(r'^phone_auth/(?P<phone_number>[0-9]+)/(?P<phone_token>[0-9]+)/$', views.SMSAuthenticate.as_view()),
+    url(r'^send_phone/(?P<phone_number>[0-9]+)/$', views.SendPhone.as_view()),
 ]
 
 urlpatterns += [
