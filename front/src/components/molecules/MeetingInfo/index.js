@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 import Button from '../../atoms/Button'
 import * as meeting_state from '../../../literal'
+import { ModifyButton, CloseButton, BreakUpButton, ReOpenButton, ReCloseButton } from '../../atoms/ButtonsInMeetingInfo'
+import { JoinButton, WithdrawButton } from '../../atoms/ButtonsInMeetingInfo'
 
 const Info_Box = styled.div`
   font-size: 20px;
@@ -57,15 +59,10 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         return (
           <div>
             {content}
-            <div>
-              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              <Button type="submit" onClick={() => meeting_info.members.length == 1 ? change_meeting_info_click(meeting_info):
-                  alert('이미 멤버가 있는 상태입니다. 수정이 불가합니다')}>수정</Button>&nbsp;
-              <Button type="submit" onClick={() => meeting_info.members.length < meeting_info.min_people
-                ? alert('최소인원을 충족하지 못함')
-                : change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button> &nbsp;
-              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-            </div>
+            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+            <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+            <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+            <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
           </div>
         )
 
@@ -73,11 +70,10 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         return (
           <div>
             {content}
-            <div>
-              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_OPEN)}>추가 모집 시작</Button>&nbsp;
-              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-            </div>
+            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+            <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+            <ReOpenButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+            <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
           </div>
         )
 
@@ -85,11 +81,10 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         return (
           <div>
             {content}
-            <div>
-              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.RE_CLOSED)}>추가 모집 중단</Button>&nbsp;
-              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-            </div>
+            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+            <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+            <ReCloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+            <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
           </div>
         )
 
@@ -97,12 +92,12 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         return (
           <div>
             {content}
-            <div>
-              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              <Button type="submit" onClick={() => change_meeting_state_click(hash, meeting_info, meeting_state.BREAK_UP)}>해산</Button>
-            </div>}
+            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+            <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+            <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
           </div>
         )
+
       case meeting_state.BREAK_UP :
         return (
           <div>
@@ -121,7 +116,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         <div>
           {content}
           {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-          <Button type="submit" onClick={() => withdraw_meeting_click(hash, state.user_id, meeting_info.id)}>탈퇴</Button>
+          <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
         </div>
       )
     }
@@ -131,9 +126,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         <div>
           {content}
           {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-          {meeting_info.members.length >= meeting_info.max_people
-            ?<div>FULL</div>
-            :<Button type="submit" onClick={() => join_meeting_click(hash, state.user_id, meeting_info.id)}>참가</Button>}
+          <JoinButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {join_meeting_click} />
         </div>
       )
     }
