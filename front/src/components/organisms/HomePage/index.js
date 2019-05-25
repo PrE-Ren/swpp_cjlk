@@ -14,6 +14,7 @@ const Title_Font = styled.div`
   font-size: 55px;
   font-weight: bold;
   justify-content: center;
+  margin-top: 20px;
 `
 
 const Upper_Box = styled.div`

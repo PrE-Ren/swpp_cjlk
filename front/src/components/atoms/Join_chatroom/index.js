@@ -11,6 +11,8 @@ const Join_chatroom_Css = styled.div`
   width: 250px;
   margin-top: 10px;
   font-size: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 `
 
 const Join_chatroom = () => {
