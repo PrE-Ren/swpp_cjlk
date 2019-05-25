@@ -34,6 +34,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')
   const content =
     <Info_Box>
+      <Font>제목 : {meeting_info.title}</Font><br /> 
       <Font>주최자 : {meeting_info.leader}</Font><br />
       <Font>게시 날짜 : {dateParse(meeting_info.created)}</Font><br />
       <Font>분류 : {meeting_state.KIND_NUM_TO_STRING(meeting_info.kind)}</Font><br />

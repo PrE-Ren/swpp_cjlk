@@ -8,6 +8,7 @@ import ImpendingList from '../../../containers/ImpendingList'
 import RecentList from '../../../containers/RecentList'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import styled from 'styled-components'
+import { Nav, NavLink } from 'styled-nav-component';
 
 const Title_Font = styled.div`
   display: flex;
@@ -47,6 +48,7 @@ export const HomePage = ({ token }) => {
   else {
     return (
       <div>
+        <Alert success />
         <Upper_Box>
           <ToHome />
           <Logout />
