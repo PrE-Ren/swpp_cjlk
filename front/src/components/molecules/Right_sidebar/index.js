@@ -13,7 +13,7 @@ const Right_sidebar_Box = styled.div`
 const Right_sidebar = () => {
   return (
     <Right_sidebar_Box>
-      <Make_new type="submit" onClick={() => window.location.href = '/new'}>새 모임 만들기 +</Make_new>
+      <Make_new type="submit" onClick={() => {localStorage.removeItem("meeting_info"),window.location.href = '/new'}}>새 모임 만들기 +</Make_new>
       <Join_chatroom />
     </Right_sidebar_Box>
   )

@@ -18,6 +18,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     withdraw_meeting_click: (hash, user_id, meeting_id) => {
       dispatch(withdraw_meeting_action(hash, user_id, meeting_id))
+    },
+    change_meeting_info_click: (meeting_info) => {
+      dispatch(change_meeting_info_action(meeting_info))
     }
   }
 }

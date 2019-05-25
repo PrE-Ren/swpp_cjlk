@@ -49,7 +49,6 @@ export const HomePage = ({ token }) => {
   else {
     return (
       <div>
-        <Alert success />
         <Upper_Box>
           <ToHome />
           <Logout />
