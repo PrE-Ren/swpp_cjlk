@@ -42,13 +42,9 @@ export const SignupPage = ({ token, signup_click }) => {
             <p></p>
             이름 &nbsp;&nbsp;
             <input style={{border: "1px solid"}} size="23" ref={node => {name=node;}}/>
-            <p></p>
-            SNU email &nbsp;&nbsp;
-            <input style={{border: "1px solid"}} size="14" ref={node => {email=node;}}/>&nbsp;
-            @ snu.ac.kr
           </Font_Info>
-          <h4>&ensp;&ensp;메일 발송에 다소 시간이 걸릴 수 있으니 버튼을 누르고 기다려 주십시오.</h4>
-          <Button type = "submit" onClick={() => signup_click(username.value, password.value, name.value, email.value)}>제출</Button>
+          <p></p>
+          <Button type = "submit" onClick={() => signup_click(username.value, password.value, name.value)}>완료</Button>
           &ensp;&ensp;
           <Button type = "submit" onClick={() => window.location.href = "/login"}>돌아가기</Button>
         </Signup_Box>

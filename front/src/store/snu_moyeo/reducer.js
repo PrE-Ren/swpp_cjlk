@@ -66,12 +66,12 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
 
       case 'LOGIN_AUTH_ACTION': {
-        localStorage.setItem("username", action.data.username);
-        localStorage.setItem("password", action.data.password);
+        localStorage.setItem("username", action.username);
+        localStorage.setItem("password", action.password);
         return {
           ...state,
-          username: action.data.username,
-          password: action.data.password
+          username: action.username,
+          password: action.password
         }
       }
 

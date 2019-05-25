@@ -153,23 +153,59 @@ export function* reload() {
 }
 
 export function* send_email_func(action) {
-  const username = action.username
-  const password = action.password 
+  const url_send_email = 'http://127.0.0.1:8000/send_email/' + action.email + '/'
+  const response_email = yield call(fetch, url_send_email, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_email.ok) {
+    alert('이메일로 인증번호가 전송되었습니다.')
+  }
+  else {
+    alert('인증번호 전송 실패')
+  }
 }
 
 export function* send_phone_func(action) {
-  const username = action.username
-  const password = action.password 
+  const url_send_phone = 'http://127.0.0.1:8000/send_phone/' + action.phone_number + '/'
+  const response_phone = yield call(fetch, url_send_phone, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_phone.ok) {
+    alert('휴대폰으로 인증번호가 전송되었습니다.')
+  }
+  else {
+    alert('인증번호 전송 실패')
+  }
 }
 
 export function* confirm_email_func(action) {
-  const username = action.username
-  const password = action.password 
+  const url_send_email = 'http://127.0.0.1:8000/email_auth/' + action.email + '/' + action.email_code + '/'
+  const response_email = yield call(fetch, url_send_email, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_email.ok) {
+    alert('인증 완료')
+  }
+  else {
+    alert('인증번호가 틀렸습니다.')
+  }
 }
 
 export function* confirm_phone_func(action) {
-  const username = action.username
-  const password = action.password 
+  const url_send_phone = 'http://127.0.0.1:8000/phone_auth/' + action.phone_number + '/' + action.phone_code + '/'
+  const response_phone = yield call(fetch, url_send_phone, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_phone.ok) {
+    alert('인증 완료')
+  }
+  else {
+    alert('인증번호가 틀렸습니다.')
+  }
 }
 
 export function* login_func(action) {
@@ -187,7 +223,6 @@ export function* login_func(action) {
   })
   // 회원가입된 계정 O
   if (response_token.ok) {
-    alert("로그인 성공") 
     const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
     const response_user = yield call(fetch, url_user, {
       method: 'GET',
@@ -195,6 +230,7 @@ export function* login_func(action) {
     })
     // 홈 페이지로 (인증 완료)
     if (response_user.ok) {
+      alert('로그인 성공')
       const response_user_data = yield call([response_user, response_user.json]);
       yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.phone_number, response_user_data.name))
       Object.defineProperty(window.location, 'href', {
@@ -204,6 +240,7 @@ export function* login_func(action) {
     }
     // 인증 페이지로 (인증 미완료)
     else{
+      alert('인증 필요')
       yield put(actions.login_auth_action(username, password))
       Object.defineProperty(window.location, 'href', {
         writable: true,
@@ -216,10 +253,10 @@ export function* login_func(action) {
     alert("로그인 실패 : 존재하지 않는 ID나 비밀번호입니다.")
 }
 
-export function* signup_func(data) {
-  let uid = data.username
-  let upw = data.password
-  let name = data.name
+export function* signup_func(action) {
+  let uid = action.username
+  let upw = action.password
+  let name = action.name
   const url = 'http://127.0.0.1:8000/sign_up/'
   const info = JSON.stringify({ username: uid, password: upw, name: name});
   const response = yield call(fetch, url, {
@@ -228,11 +265,11 @@ export function* signup_func(data) {
     body: info,
   })
   if (response.ok) {
-    alert("회원가입 성공")
-    yield put(actions.signup_success_action())
+    alert("회원가입 성공 : 서비스를 이용하려면 이메일 인증과 휴대폰 인증을 완료해야 합니다.")
+    yield put(actions.login_auth_action(uid, upw))
     Object.defineProperty(window.location, 'href', {
       writable: true,
-      value: '/login'
+      value: '/auth'
     });
   }
   else

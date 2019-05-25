@@ -51,48 +51,42 @@ export const login_success_action = (username, password, mySNU_verification_toke
 export const login_auth_action = (username, password) => {
   return {
       type : LOGIN_AUTH_ACTION,
-      data : {
-          username : username,
-          password : password
-      }
+      username : username,
+      password : password
   }
 };
 
-export const send_email_action = (username, password, email) => {
+export const send_email_action = (hash, email) => {
   return {
       type : SEND_EMAIL_ACTION,
-      username : username,
-      password : password,
+      hash : hash,
       email: email
   }
 };
 
-export const confirm_email_action = (email, mySNU_verification_token) => {
+export const confirm_email_action = (hash, email, mySNU_verification_token) => {
   return {
       type : CONFIRM_EMAIL_ACTION,
-      data : {
-          email : email,
-          mySNU_verification_token : mySNU_verification_token
-      }
+      hash : hash,
+      email : email,
+      email_code : mySNU_verification_token
   }
 };
 
-export const send_phone_action = (username, password, phone_number) => {
+export const send_phone_action = (hash, phone_number) => {
   return {
       type : SEND_PHONE_ACTION,
-      username : username,
-      password : password,
+      hash : hash,
       phone_number: phone_number
   }
 };
 
-export const confirm_phone_action = (phone_number, phone_token) => {
+export const confirm_phone_action = (hash, phone_number, phone_token) => {
   return {
       type : CONFIRM_PHONE_ACTION,
-      data : {
-          phone_number : phone_number,
-          phone_token : phone_token
-      }
+      hash : hash,
+      phone_number : phone_number,
+      phone_code : phone_token
   }
 };
 
