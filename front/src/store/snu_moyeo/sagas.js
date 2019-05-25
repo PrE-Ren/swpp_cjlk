@@ -9,6 +9,13 @@ export function* watchLogin() {
   }
 }
 
+export function* watchSignup() {
+  while(true) {
+    const action = yield take(actions.SIGNUP_ACTION)
+    yield call(signup_func, action)
+  }
+}
+
 export function* watchSendEmail() {
   while(true) {
     const action = yield take(actions.SEND_EMAIL_ACTION)
@@ -34,13 +41,6 @@ export function* watchConfirmPhone() {
   while(true) {
     const action = yield take(actions.CONFIRM_PHONE_ACTION)
     yield call(confirm_phone_func, action)
-  }
-}
-
-export function* watchSignup() {
-  while(true) {
-    const action = yield take(actions.SIGNUP_ACTION)
-    yield call(signup_func, action)
   }
 }
 
@@ -172,62 +172,6 @@ export function* reload() {
   }
 }
 
-export function* send_email_func(action) {
-  const url_send_email = 'http://127.0.0.1:8000/send_email/' + action.email + '/'
-  const response_email = yield call(fetch, url_send_email, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_email.ok) {
-    alert('이메일로 인증번호가 전송되었습니다.')
-  }
-  else {
-    alert('인증번호 전송 실패')
-  }
-}
-
-export function* send_phone_func(action) {
-  const url_send_phone = 'http://127.0.0.1:8000/send_phone/' + action.phone_number + '/'
-  const response_phone = yield call(fetch, url_send_phone, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_phone.ok) {
-    alert('휴대폰으로 인증번호가 전송되었습니다.')
-  }
-  else {
-    alert('인증번호 전송 실패')
-  }
-}
-
-export function* confirm_email_func(action) {
-  const url_send_email = 'http://127.0.0.1:8000/email_auth/' + action.email + '/' + action.email_code + '/'
-  const response_email = yield call(fetch, url_send_email, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_email.ok) {
-    alert('인증 완료')
-  }
-  else {
-    alert('인증번호가 틀렸습니다.')
-  }
-}
-
-export function* confirm_phone_func(action) {
-  const url_send_phone = 'http://127.0.0.1:8000/phone_auth/' + action.phone_number + '/' + action.phone_code + '/'
-  const response_phone = yield call(fetch, url_send_phone, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_phone.ok) {
-    alert('인증 완료')
-  }
-  else {
-    alert('인증번호가 틀렸습니다.')
-  }
-}
-
 export function* login_func(action) {
   const username = action.username
   const password = action.password
@@ -296,28 +240,81 @@ export function* signup_func(action) {
     alert("회원가입 실패 : 정보를 바르게 입력하세요.")
 }
 
+export function* send_email_func(action) {
+  const url_send_email = 'http://127.0.0.1:8000/send_email/' + action.email + '/'
+  const response_email = yield call(fetch, url_send_email, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_email.ok) {
+    alert('이메일로 인증번호가 전송되었습니다.')
+  }
+  else {
+    alert('인증번호 전송 실패')
+  }
+}
+
+export function* send_phone_func(action) {
+  const url_send_phone = 'http://127.0.0.1:8000/send_phone/' + action.phone_number + '/'
+  const response_phone = yield call(fetch, url_send_phone, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_phone.ok) {
+    alert('휴대폰으로 인증번호가 전송되었습니다.')
+  }
+  else {
+    alert('인증번호 전송 실패')
+  }
+}
+
+export function* confirm_email_func(action) {
+  const url_send_email = 'http://127.0.0.1:8000/email_auth/' + action.email + '/' + action.email_code + '/'
+  const response_email = yield call(fetch, url_send_email, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_email.ok) {
+    alert('인증 완료')
+  }
+  else {
+    alert('인증번호가 틀렸습니다.')
+  }
+}
+
+export function* confirm_phone_func(action) {
+  const url_send_phone = 'http://127.0.0.1:8000/phone_auth/' + action.phone_number + '/' + action.phone_code + '/'
+  const response_phone = yield call(fetch, url_send_phone, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_phone.ok) {
+    alert('인증 완료')
+  }
+  else {
+    alert('인증번호가 틀렸습니다.')
+  }
+}
+
 export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
-  const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
   const formData = new FormData();
-  if (action.min_people > 1 && action.max_people > 1) {
-    formData.append('title', action.title);
-    formData.append('kind', action.kind);
-    formData.append('due', action.due);
-    formData.append('min_people', action.min_people);
-    formData.append('max_people', action.max_people);
-    formData.append('description', action.description);
+
+  if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
+    formData.append('title', action.meeting_info.title);
+    formData.append('due', action.meeting_info.due);
+    formData.append('min_people', action.meeting_info.min_people);
+    formData.append('max_people', action.meeting_info.max_people);
+    formData.append('description', action.meeting_info.description);
     formData.append('state', 0);
-    if (action.picture !== undefined) {
-      formData.append('picture', action.picture, action.picture.name);
-    }
+    formData.append('kind', action.meeting_info.kind);
+    if (action.meeting_info.picture !== undefined)
+      formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
 
     const response_meeting = yield call(fetch, url_meeting, {
         method: 'POST',
-        headers: {
-            'Authorization': `Basic ${hash}`,
-        },
+        headers: { 'Authorization': `Basic ${action.hash}` },
         body: formData,
     })
 
@@ -329,7 +326,7 @@ export function* new_func(action) {
       const response_participate = yield call(fetch, url_participate, {
           method: 'POST',
           headers: {
-              'Authorization': `Basic ${hash}`,
+              'Authorization': `Basic ${action.hash}`,
               'Content-Type': 'application/json',
           },
           body: info_participate,
@@ -346,61 +343,56 @@ export function* new_func(action) {
     }
     else {
       console.log('Meeting POST bad')
-      if(response_meeting_data.non_field_errors == "You can not participate more than 5")
-        alert('1인당 5개 이상의 열린 모임을 가질 수 없습니다')
+      if (response_meeting_data.non_field_errors == "You can not participate more than 5")
+        alert('인당 5개 이상의 열린 모임을 가질 수 없습니다.')
       else
-        alert('올바르지 않은 모임 형식입니다')
+        alert('올바르지 않은 모임 형식입니다.')
     }
   }
   else {
-    alert('최소 인원과 최대 인원은 2명 이상이어야 합니다')
+    alert('최소 인원과 최대 인원은 모두 2명 이상이어야 합니다.')
   }
 }
 
 export function* modify_func(action) {
-  console.log(action)
-  let meeting_info = localStorage.getItem("meeting_info")
-  meeting_info = JSON.parse(meeting_info)
-
-  let meeting_id = meeting_info.id
-  const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`
-  const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
+  const meeting_info = JSON.parse(localStorage.getItem("meeting_info"))
+  const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_info.id}/`
   const formData = new FormData();
 
-  if (action.min_people > 1 && action.max_people > 1) {
-    formData.append('title', action.title);
-    formData.append('kind', action.kind);
-    formData.append('due', action.due);
-    formData.append('min_people', action.min_people);
-    formData.append('max_people', action.max_people);
-    formData.append('description', action.description);
-    formData.append('state', 0);
-    if (action.picture !== undefined) {
-      formData.append('picture', action.picture, action.picture.name);
-    }
-    else{
+  if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
+    formData.append('title', action.meeting_info.title);
+    formData.append('due', action.meeting_info.due);
+    formData.append('min_people', action.meeting_info.min_people);
+    formData.append('max_people', action.meeting_info.max_people);
+    formData.append('description', action.meeting_info.description);
+    formData.append('state', action.meeting_info.state);
+    formData.append('kind', action.meeting_info.kind);
+    console.log("ㅎㅇㅎㅇ")
+    console.log(action.meeting_info.state)
+    if (action.meeting_info.picture !== undefined)
+      formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
+    else
       formData.append('picture', null, null)
-    }
 
     const response_meeting = yield call(fetch, url_meeting, {
         method: 'PUT',
-        headers: {
-            'Authorization': `Basic ${hash}`,
-        },
+        headers: { 'Authorization': `Basic ${action.hash}` },
         body: formData,
     })
     if (response_meeting.ok) {
-      console.log('PUT ok')
+      console.log('Meeting PUT ok')
       localStorage.removeItem('meeting_info')
-
-      window.location.href='/'
+      window.location.href = '/'
     }
     else {
-      console.log('PUT bad')
+      console.log('Meeting PUT bad')
     }
   }
-
+  else {
+    alert('최소 인원과 최대 인원은 모두 2명 이상이어야 합니다.')
+  }
 }
+
 export function* change_meeting_state_func(action) {
   let meeting_id = action.meeting_info.id
   const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`
@@ -435,9 +427,9 @@ export function* change_meeting_state_func(action) {
 }
 
 export function* change_meeting_info_func(action) {
-  let info = JSON.stringify(action.meeting_info)
-  localStorage.setItem("meeting_info", info)
-  window.location.href="/new"
+  const meeting_info = JSON.stringify(action.meeting_info)
+  localStorage.setItem("meeting_info", meeting_info)
+  window.location.href = "/new"
 }
 
 export function* join_meeting_func(action) {
@@ -518,11 +510,11 @@ export function* change_page_num_func(action) {
 export default function* () {
   yield fork(reload)
   yield fork(watchLogin)
+  yield fork(watchSignup)
   yield fork(watchSendEmail)
   yield fork(watchSendPhone)
   yield fork(watchConfirmEmail)
   yield fork(watchConfirmPhone)
-  yield fork(watchSignup)
   yield fork(watchNew)
   yield fork(watchModify)
   yield fork(watchChangeMeetingState)

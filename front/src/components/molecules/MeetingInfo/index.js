@@ -28,7 +28,6 @@ const dateParse = (data) => {
     return day.split("&")[0]
 }
 
-
 /* meeting_entry 필드 : id, title, created, due, min_people, max_people, description, state, kind, leader, picture, members */
 
 export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click, change_meeting_info_click}) => {
