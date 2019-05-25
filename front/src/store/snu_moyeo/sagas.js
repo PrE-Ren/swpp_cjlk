@@ -300,7 +300,7 @@ export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const formData = new FormData();
-
+  console.log(action.meeting_info)
   if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
     formData.append('title', action.meeting_info.title);
     formData.append('due', action.meeting_info.due);
@@ -309,7 +309,7 @@ export function* new_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', 0);
     formData.append('kind', action.meeting_info.kind);
-    if (action.meeting_info.picture !== undefined)
+    if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값이 설정됨
       formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
 
     const response_meeting = yield call(fetch, url_meeting, {
@@ -367,8 +367,11 @@ export function* modify_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', action.meeting_info.state);
     formData.append('kind', action.meeting_info.kind);
-    console.log("ㅎㅇㅎㅇ")
-    console.log(action.meeting_info.state)
+
+    // 사진 파일을 특별히 지정해주지 않은 채 수정 버튼을 누르면
+    // action.meeting_info.picture는 undefined이 되어(확인해봄)
+    // PUT을 한 결과 picture 필드의 값은 null이어야 함
+    // 근데 왜 사진이 사라지지를 않지..?
     if (action.meeting_info.picture !== undefined)
       formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
     else
