@@ -435,8 +435,6 @@ export function* change_meeting_state_func(action) {
 }
 
 export function* change_meeting_info_func(action) {
-  let meeting_id = action.meeting_info.id
-  const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`;
   let info = JSON.stringify(action.meeting_info)
   localStorage.setItem("meeting_info", info)
   window.location.href="/new"

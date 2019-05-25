@@ -4,40 +4,7 @@ import Left_sidebar from '../../molecules/Left_sidebar'
 import ImpendingList from '../../../containers/ImpendingList'
 import RecentList from '../../../containers/RecentList'
 import Right_sidebar from '../../molecules/Right_sidebar'
-<<<<<<< HEAD
-import styled from 'styled-components'
-import { Nav, NavLink } from 'styled-nav-component';
-
-const Title_Font = styled.div`
-  display: flex;
-  font-size: 55px;
-  font-weight: bold;
-  justify-content: center;
-  margin-top: 20px;
-`
-
-const Upper_Box = styled.div`
-  display: block;
-  margin-top: 5px;
-  margin-left: 5px;
-  margin-bottom: 100px;
-  margin-right: 5px;
-`
-
-const Lower_Box = styled.div`
-  display: block;
-  margin-left: 5px;
-  margin-right: 5px;
-`
-
-const List_Box = styled.div`
-  float: left;
-  margin-left: 10%;
-  display: inline-block;
-`
-=======
 import { Grid, Header, Icon, Container } from 'semantic-ui-react'
->>>>>>> 1ccdebb7e7c9eedc16812597c76b7362747d3a1f
 
 export const HomePage = ({ token }) => {
   if (token == null) {

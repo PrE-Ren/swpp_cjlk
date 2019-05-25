@@ -62,6 +62,8 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
             {meeting_info.picture == null
               ?
               <div>
+              <Button type="submit" onClick={() => meeting_info.members.length == 1 ? change_meeting_info_click(meeting_info):
+                  alert('이미 멤버가 있는 상태입니다. 수정이 불가합니다')}>수정</Button>&nbsp;
                 <Button type="submit" onClick={() => meeting_info.members.length < meeting_info.min_people
                   ? alert('최소인원을 충족하지 못함')
                   : change_meeting_state_click(hash, meeting_info, meeting_state.CLOSED)}>마감</Button> &nbsp;
