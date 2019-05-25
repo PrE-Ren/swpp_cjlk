@@ -1,7 +1,5 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-import styled, {css} from 'styled-components'
-import { font, palette } from 'styled-theme'
 import { Container, Form, Ref } from 'semantic-ui-react'
 
 const options = [

@@ -43,14 +43,13 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
       <pre style={{fontSize:'20px', fontFamily: 'Georgia'}}>{meeting_info.description}</pre>
     </Info_Box>
 
-  console.log(meeting_info)
-  if(meeting_info.picture != null){
-    if(meeting_info.picture.includes("http://") == false)
-    {
+  if (meeting_info.picture != null) {
+    if (meeting_info.picture.includes("http://") == false) {
       meeting_info.picture = "http://127.0.0.1:8000" + meeting_info.picture
       console.log(meeting_info.picture)
     }
   }
+
   // 내가 만든 모임
   if (meeting_info.leader == state.username) {
     switch (meeting_info.state) {
