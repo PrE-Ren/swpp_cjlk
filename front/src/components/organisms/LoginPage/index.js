@@ -7,7 +7,7 @@ import Button from '../../atoms/Button'
 const Login_Box = styled.div`
   border: 2px solid black;
   border-radius: 5px;
-  width: 300px;
+  width: 500px;
   padding: 40px;
   position: absolute;
   top: 47%;
@@ -42,6 +42,7 @@ export const LoginPage = ({ token, login_click }) => {
             ID &ensp;&ensp;
             <input style={{border: "1px solid"}} ref={node => {username=node;}}/>
           </Font_IDPW>
+          <p></p>
           <Font_IDPW>
             PW &ensp;
             <input style={{border: "1px solid"}} type="password" onKeyPress = {auto_login} ref={node => {password=node;}} />

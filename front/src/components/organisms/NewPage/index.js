@@ -41,7 +41,6 @@ export const NewPage = ({ token }) => {
     return (
       <div>
         <Upper_Box>
-          <ToHome />
           <Logout />
           <ToMyPage />
           <Title_Font>SNU Moyeo</Title_Font>

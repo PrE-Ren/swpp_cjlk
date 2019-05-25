@@ -135,7 +135,6 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
     return (
       <div>
         <Upper_Box>
-          <ToHome />
           <Logout />
           <ToMyPage />
           <Title_Font>SNU Moyeo</Title_Font>

@@ -1,12 +1,10 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-import ToHome from '../../atoms/ToHome'
-import ToMyPage from '../../atoms/ToMyPage'
-import Logout from '../../../containers/Logout'
 import Left_sidebar from '../../molecules/Left_sidebar'
 import ImpendingList from '../../../containers/ImpendingList'
 import RecentList from '../../../containers/RecentList'
 import Right_sidebar from '../../molecules/Right_sidebar'
+<<<<<<< HEAD
 import styled from 'styled-components'
 import { Nav, NavLink } from 'styled-nav-component';
 
@@ -37,6 +35,9 @@ const List_Box = styled.div`
   margin-left: 10%;
   display: inline-block;
 `
+=======
+import { Grid, Header, Icon, Container } from 'semantic-ui-react'
+>>>>>>> 1ccdebb7e7c9eedc16812597c76b7362747d3a1f
 
 export const HomePage = ({ token }) => {
   if (token == null) {
@@ -48,22 +49,29 @@ export const HomePage = ({ token }) => {
   }
   else {
     return (
-      <div>
-        <Upper_Box>
-          <ToHome />
-          <Logout />
-          <ToMyPage />
-          <Title_Font>SNU Moyeo</Title_Font>
-        </Upper_Box>
-        <Lower_Box>
+      <Grid columns={3}>
+        <Grid.Column width={2}>
           <Left_sidebar />
-          <List_Box>
+        </Grid.Column>
+
+        <Grid.Column width={10}>
+          <Container>
+            <Header as='h1' icon textAlign='center'>
+              <Icon name='group' circular />
+              SNU Moyeo
+              <Header.Subheader>SNU web service that helps you construct and join a meeting </Header.Subheader><br /><br />
+            </Header>
+          </Container>
+          <Container>
             <ImpendingList />
             <RecentList />
-          </List_Box>
+          </Container>
+        </Grid.Column>
+
+        <Grid.Column width={4}>
           <Right_sidebar />
-        </Lower_Box>
-      </div>
+        </Grid.Column>
+      </Grid>
     )
   }
 }

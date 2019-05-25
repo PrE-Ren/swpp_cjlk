@@ -170,8 +170,14 @@ class LogIn(APIView):
         def get(self, request, format = None):
                 print('Log in..')
                 user = request.user
-                if user.mySNU_verified == True:
-                    return Response(data = {'user_id':user.id, 'email':user.email, 'mySNU_verification_token':user.mySNU_verification_token, 'name':user.name}, status = status.HTTP_202_ACCEPTED)
+                if user.mySNU_verified == True and user.phone_verified == True:
+                    return Response(data = {
+                        'user_id':user.id,
+                        'email':user.email,
+                        'phone_number':user.phone_number,
+                        'mySNU_verification_token':user.mySNU_verification_token,
+                        'name':user.name
+                    }, status = status.HTTP_202_ACCEPTED)
                 else :
                     return Response(data = {'details':'Not SNU verified.'}, status = status.HTTP_403_FORBIDDEN)
 
