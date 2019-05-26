@@ -18,8 +18,6 @@ class MeetingSerializer(serializers.ModelSerializer):
         if 'picture' not in data.keys():
             print('not input picture')
             data['picture'] = ''
-        else :
-            picture = data['picture']
 
         due = data['due']
         created_when = django.utils.timezone.now()
