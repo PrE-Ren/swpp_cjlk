@@ -11,7 +11,7 @@ from rest_framework import mixins
 from rest_framework.authtoken.models import Token
 from django.utils.crypto import get_random_string
 from rest_framework import permissions
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from snu_moyeo.permissions import UserOnlyAccess, LeaderOnlyControl
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
@@ -342,10 +342,37 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
     permission_classes = (UserOnlyAccess,)
 
+
+class CommentOnMeeting(APIView):
+       
+    def get(self, request, in_meetingid):
+        comments = Comment.objects.filter(Q(meeting_id_id = in_meetingid))
+        serializer = CommentSerializer(comments, many = True)
+        return Response(serializer.data)
+
+def get_comments_on_meeting(request, in_meetingid):
+    temp = Meeting.objects.all()
+    return HttpResponse(temp.values(),status=200)
+    comments = Comment.objects.filter(Q(meeting_id_id = in_meetingid))
+    return HttpResponse(comments.values(),status = 200)
+    serializer = CommentSerializer(data = comments, many = True)
+    if serializer.is_valid() :
+        return HttpResponse(serializer.data, status = status.HTTP_200_OK)
+    else :
+        return HttpResponse(serializer.errors, status = 400)
+
 '''
-def changeState() :
-    meeting_objects = Meeting.objects.all()
-    for i in meeting_objects
-        if i.state ==  1 or i.state == 3 :
-            i.state = 2
+def get_participate(request, in_userid, in_meetingid):
+    participate_obj1 = Participate.objects.filter(Q(user_id_id = in_userid))
+    participate_list1 = participate_obj1.values()
+    participate_obj2 = participate_obj1.filter(Q(meeting_id_id = in_meetingid))
+    participate_list2 = participate_obj2.values()
+    # print(participate_obj2.values())
+
+    if len(participate_list2) == 0 :
+        return HttpResponse({}, status = status.HTTP_404_NOT_FOUND)
+    participate_id = participate_list2[0]['id']
+    return HttpResponse(participate_id, status = status.HTTP_200_OK)
 '''
+
+
