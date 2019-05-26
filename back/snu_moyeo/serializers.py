@@ -13,6 +13,7 @@ class MeetingSerializer(serializers.ModelSerializer):
     leader = serializers.ReadOnlyField(source = 'SnuUser.username')
     leader = serializers.CharField(read_only = True)
     picture = serializers.ImageField(use_url = True, allow_empty_file = True, required = False)
+    comments = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
 
     def validate(self, data):
         if 'picture' not in data.keys():
@@ -57,7 +58,7 @@ class MeetingSerializer(serializers.ModelSerializer):
             'leader',       # invisible (ReadOnlyField in serializers.py)
             'picture',
             'members',      # invisible (ManyToManyField in models.py)
-            'comments'
+            'comments'      # invisible (read_only = True in serializers.py)
         )
 
 class SnuUserSerializer(serializers.ModelSerializer):

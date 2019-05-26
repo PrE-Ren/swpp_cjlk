@@ -2,7 +2,7 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
-import MeetingEntry from '../../atoms/MeetingEntry'
+import MeetingEntry from '../../../containers/MeetingEntry'
 
 const JoinList_Box = styled.div`
   display: block;

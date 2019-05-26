@@ -15,5 +15,6 @@ export const initialState = {
   meetinglist_join : localStorage.getItem("join"),
   meetinglist_history : localStorage.getItem("history"),
   meetinglist_list : localStorage.getItem("list"),
-  page_num : localStorage.getItem("page_num")
+  page_num : localStorage.getItem("page_num"),
+  comments : null
 };

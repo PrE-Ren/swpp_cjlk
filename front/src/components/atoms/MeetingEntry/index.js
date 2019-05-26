@@ -76,15 +76,14 @@ const dateParse = (data) => {
     return day.split("&")[0]
 }
 
-
-class MeetingEntry extends React.Component {
+export class MeetingEntry extends React.Component {
   constructor(props) {
     super(props);
     this.state = { is_folded: true };
   }
   render() {
     let meeting_entry = (
-      <div style={{ cursor: 'pointer' }} onClick={() => { this.setState({ is_folded: !this.state.is_folded }) }}>
+      <div style={{ cursor: 'pointer' }} onClick={() => { this.props.load_comments_click(this.props.meeting_info.id) }}>
         <TitleCss>{this.props.meeting_info.title}</TitleCss><BorderCss>|</BorderCss>
         <DueCss>{dateParse(this.props.meeting_info.due)}</DueCss><BorderCss>|</BorderCss>
         <MinCss>{this.props.meeting_info.min_people}명</MinCss><BorderCss>|</BorderCss>
@@ -100,25 +99,5 @@ class MeetingEntry extends React.Component {
         </Modal>
       </MeetingEntryCss >
     )
-
-    /*if (this.state.is_folded == true) {
-      return (
-        <MeetingEntryCss >
-          {meeting_entry}
-        </MeetingEntryCss>
-      )
-    }
-    else {
-      return (
-        <MeetingEntryCss >
-          <Modal trigger={meeting_entry}>
-            <Modal.Header>Meeting Information</Modal.Header>
-            <MeetingInfo meeting_info = {this.props.meeting_info}/>
-          </Modal>
-        </MeetingEntryCss>
-      )
-    }*/
   }
 }
-
-export default MeetingEntry

@@ -93,6 +93,13 @@ export function* watchChangePageNum() {
   }
 }
 
+export function* watchLoadComments() {
+  while(true) {
+    const action = yield take(actions.LOAD_COMMENTS_ACTION)
+    yield call(load_comments_func, action)
+  }
+}
+
 function* get_meetinglist(type) {
   const get_token = (state) => state.snu_moyeo.mySNU_verification_token
   const token = yield select(get_token)
@@ -509,6 +516,20 @@ export function* change_page_num_func(action) {
   }
 }
 
+export function* load_comments_func(action) {
+  const url_comments = 'http://127.0.0.1:8000/comment/meeting/' + action.meeting_id + '/'
+  const response_comments = yield call(fetch, url_comments, { method : 'GET' })
+
+  if (response_comments.ok) {
+    const comments = yield call([response, response.json])
+    console.log('<Fetch comments of this meeting>')
+    console.log(comments)
+    yield put(actions.load_comments_success_action(comments))
+  }
+  else
+    alert('<Fail to fetch comments of this meeting>')
+}
+
 export default function* () {
   yield fork(reload)
   yield fork(watchLogin)
@@ -524,4 +545,5 @@ export default function* () {
   yield fork(watchJoinMeeting)
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
+  yield fork(watchLoadComments)
 }
