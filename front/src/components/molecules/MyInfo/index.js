@@ -1,25 +1,22 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-import styled from 'styled-components'
-import { font, palette } from 'styled-theme'
 import MeetingEntry from '../../atoms/MeetingEntry'
 import LeadList from '../../../containers/LeadList'
 import JoinList from '../../../containers/JoinList'
 import HistoryList from '../../../containers/HistoryList'
-import { Container } from 'semantic-ui-react'
-
-const Font_Info = styled.div`
-  font-size: 20px;
-  display: inline-block;
-`
+import { Container, Header } from 'semantic-ui-react'
 
 export const MyInfo = ({ state }) => {
   console.log('<MyInfo Rendering>')
   return (
     <Container>
       <Container>
-        <Font_Info>1. 이름 : {state.name}</Font_Info><br />
-        <Font_Info>2. SNU 메일 : {state.email}</Font_Info><br /><br />
+        <Header as='h3'>
+          1. 아이디 : {state.username}<br/>
+          2. 이름 : {state.name}<br/>
+          3. 이메일 : {state.email}<br/>
+          {/*4. 핸드폰 : {state.phone_number}*/}<br/>
+        </Header>
       </Container>
       <Container>
         <LeadList />
@@ -28,8 +25,4 @@ export const MyInfo = ({ state }) => {
       </Container>
     </Container>
   )
-}
-
-MyInfo.propTypes = {
-  reverse: PropTypes.bool,
 }
