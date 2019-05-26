@@ -154,8 +154,8 @@ class CommentSerializer(serializers.ModelSerializer) :
         model = Comment
         fields = (
             'id',           # invisible (AutoField in models.py)
-            'created',      # invisible (auto_now_add = True)
+            'created',      # invisible (auto_now_add = True in models.py)
             'writer',       # invisible (ReadOnlyField in serializers.py)
-            'meeting_id',
+            'meeting',
             'content'
         )
