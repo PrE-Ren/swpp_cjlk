@@ -83,20 +83,20 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
       <Form>
         <Form.Input fluid label='제목' placeholder='Title' defaultValue={meeting_info.title} onChange={handle_title}/>
         <Form.Group widths='equal'>
-          <Form.Select fluid label='모임 유형' options={options} placeholder='Meeting Type' width={6} defaultValue={meeting_info.kind} onChange={handle_kind} />
-          <Form.Input fluid label='모집 마감 기한' type="datetime-local" defaultValue={datetime} width={6} onChange={handle_due} />
-          <Form.Input fluid label='최소인원' placeholder='2' type="number" width={2} defaultValue={meeting_info.min_people} onChange={handle_min_people} />
-          <Form.Input fluid label='최대인원' placeholder='2' type="number" width={2} defaultValue={meeting_info.max_people} onChange={handle_max_people} />
+          <Form.Select disabled fluid label='모임 유형' options={options} placeholder='Meeting Type' width={6} defaultValue={meeting_info.kind} onChange={handle_kind} />
+          <Form.Input disabled fluid label='모집 마감 기한' type="datetime-local" defaultValue={datetime} width={6} onChange={handle_due} />
+          <Form.Input disabled fluid label='최소인원' placeholder='2' type="number" width={2} defaultValue={meeting_info.min_people} onChange={handle_min_people} />
+          <Form.Input disabled fluid label='최대인원' placeholder='2' type="number" width={2} defaultValue={meeting_info.max_people} onChange={handle_max_people} />
         </Form.Group>
         <Form.Input fluid label='사진' type="file" width={6} onChange={handle_picture} accept="image/*" />
         <Form.TextArea label='내용' placeholder='About this meeting...' defaultValue={meeting_info.description} onChange={handle_description} />
         <Form.Button onClick={() => modify_click(hash, user_id, {
           title: (title !== undefined) ? title : meeting_info.title,
-          due: (due !== undefined) ? due : meeting_info.due,
-          min_people: (min_people !== undefined) ? min_people : meeting_info.min_people,
-          max_people: (max_people !== undefined) ? max_people : meeting_info.min_people,
+          due: meeting_info.due,
+          min_people: meeting_info.min_people,
+          max_people: meeting_info.min_people,
           description: (description !== undefined) ? description : meeting_info.description,
-          kind: (kind !== undefined) ? kind : meeting_info.kind,
+          kind: meeting_info.kind,
           leader: username,
           picture: picture,
           state: meeting_info.state
