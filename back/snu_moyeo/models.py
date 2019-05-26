@@ -17,6 +17,7 @@ class Meeting (models.Model):
     description = models.TextField()
     kind = models.IntegerField()
     leader = models.ForeignKey('SnuUser', related_name = 'lead_meeting', on_delete = models.CASCADE)
+    leaderid = models.IntegerField(default = -1)
     picture = models.ImageField(blank = True, null = True)
     members = models.ManyToManyField('SnuUser', through = 'Participate')
     # comments : related field
@@ -74,5 +75,6 @@ class Comment (models.Model):
     id = models.AutoField(primary_key = True)
     created = models.DateTimeField(auto_now_add = True)
     writer = models.ForeignKey('SnuUser', on_delete = models.CASCADE)
+    writerid = models.IntegerField(default = -1)
     meeting_id = models.ForeignKey('Meeting', related_name = 'comments', on_delete = models.CASCADE)
     content = models.CharField(max_length = 100)
