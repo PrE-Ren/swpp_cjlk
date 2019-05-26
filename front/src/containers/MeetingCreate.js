@@ -12,11 +12,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    new_click: (username, password, user_id, title, due, min_people, max_people, description, kind, leader, picture) => {
-      dispatch(new_action(username, password, kind, leader, title, due, min_people, max_people, description, user_id, picture))
+    new_click: (hash, user_id, meeting_info) => {
+      dispatch(new_action(hash, user_id, meeting_info))
     },
-    modify_click : (username, password, user_id, title, due, min_people, max_people, description, kind, leader, picture) => {
-      dispatch(modify_action(username, password, kind, leader, title, due, min_people, max_people, description, user_id, picture))
+    modify_click : (hash, user_id, meeting_info) => {
+      dispatch(modify_action(hash, user_id, meeting_info))
     }
   }
 }

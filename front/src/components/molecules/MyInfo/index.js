@@ -6,48 +6,27 @@ import MeetingEntry from '../../atoms/MeetingEntry'
 import LeadList from '../../../containers/LeadList'
 import JoinList from '../../../containers/JoinList'
 import HistoryList from '../../../containers/HistoryList'
-
-const MyInfo_Box = styled.div`
-  border: 2px solid black;
-  border-radius: 5px;
-  float: left;
-  margin-left: 10%;
-  display: inline-block;
-`
-
-const Info_Box = styled.div`
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 20px;
-  margin-left: 20px;
-`
+import { Container } from 'semantic-ui-react'
 
 const Font_Info = styled.div`
   font-size: 20px;
   display: inline-block;
 `
 
-const List_Box = styled.div`
-  float: left;
-  display: inline-block;
-  margin-left: 20px;
-  margin-right: 20px;
-`
-
 export const MyInfo = ({ state }) => {
   console.log('<MyInfo Rendering>')
   return (
-    <MyInfo_Box>
-      <Info_Box>
+    <Container>
+      <Container>
         <Font_Info>1. 이름 : {state.name}</Font_Info><br />
-        <Font_Info>2. SNU 메일 : {state.email}</Font_Info><br />
-      </Info_Box>
-      <List_Box>
+        <Font_Info>2. SNU 메일 : {state.email}</Font_Info><br /><br />
+      </Container>
+      <Container>
         <LeadList />
         <JoinList />
         <HistoryList />
-      </List_Box>
-    </MyInfo_Box>
+      </Container>
+    </Container>
   )
 }
 
