@@ -19,6 +19,7 @@ from sdk.api.message import Message
 from sdk.exceptions import CoolsmsException
 import random
 import sys
+import django 
 
 OPEN = 0
 CLOSED = 1
@@ -190,12 +191,24 @@ class SnuUserDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SnuUserSerializer
     permission_classes = (UserOnlyAccess,)
 
+def changeState():
+    current = django.utils.timezone.now()
+    print(current)
+    Meeting.objects.filter(Q(state = OPEN) & Q(due__lt = current)).update(state = CLOSED)
+
+    for meeting_object in Meeting.objects.filter(Q(state = CLOSED) & Q(due__lt = current)):
+        meeting_object.save()
+
 class MeetingList(generics.ListCreateAPIView):
     queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     def perform_create(self, serializer):
         serializer.save(leader = self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        changeState()
+        return self.list(request, *args, **kwargs)
 
 class MeetingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Meeting.objects.all()
@@ -226,9 +239,17 @@ class RecentList(generics.ListAPIView):
     queryset = Meeting.objects.all().filter(Q(state = OPEN) | Q(state = RE_OPEN))[:5]
     serializer_class = MeetingSerializer
 
+    def get(self, request, *args, **kwargs):
+        changeState()
+        return self.list(request, *args, **kwargs)
+
 class ImpendingList(generics.ListAPIView):
     queryset = Meeting.objects.all().filter(Q(state = OPEN) | Q(state = RE_OPEN)).order_by('due')[:5]
     serializer_class = MeetingSerializer
+
+    def get(self, request, *args, **kwargs):
+        changeState()
+        return self.list(request, *args, **kwargs)
 
 class LeadList(generics.ListAPIView):
     serializer_class = MeetingSerializer
@@ -240,6 +261,10 @@ class LeadList(generics.ListAPIView):
         return Meeting.objects.none()
     # Meeting.objects.filter(Q(leader = user) and ~Q(state = BREAK_UP))
 
+    def get(self, request, *args, **kwargs):
+        changeState()
+        return self.list(request, *args, **kwargs)
+
 class JoinList (generics.ListAPIView):
     serializer_class = MeetingSerializer
     def get_queryset(self):
@@ -249,6 +274,10 @@ class JoinList (generics.ListAPIView):
             join_user = SnuUser.objects.get(id = user_id)
             return join_user.meetings.all().filter(~Q(state = BREAK_UP))
         return Meeting.objects.none()
+
+    def get(self, request, *args, **kwargs):
+        changeState()
+        return self.list(request, *args, **kwargs)
 
 class HistoryList (generics.ListAPIView):
     serializer_class = MeetingSerializer
@@ -260,6 +289,10 @@ class HistoryList (generics.ListAPIView):
             history_user = SnuUser.objects.get(id = user_id)
             return history_user.meetings.all().filter(Q(state = BREAK_UP))
         return Meeting.objects.none()
+
+    def get(self, request, *args, **kwargs):
+        changeState()
+        return self.list(request, *args, **kwargs)
 
 class CustomPagination(PageNumberPagination):
     page_size = 3
@@ -290,6 +323,7 @@ class TempList(generics.ListAPIView):
 
 class ListView(APIView):
     def get(self, request, in_kind, format = None):
+        changeState()
         kind_meeting = Meeting.objects.filter(Q(kind = in_kind) & (Q(state = OPEN) | Q(state = RE_OPEN)))
         paginator = CustomPagination()
         result_page = paginator.paginate_queryset(kind_meeting, request)
