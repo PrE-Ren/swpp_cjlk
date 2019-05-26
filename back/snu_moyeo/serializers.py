@@ -20,12 +20,17 @@ class MeetingSerializer(serializers.ModelSerializer):
             data['picture'] = ''
         else :
             picture = data['picture']
+
         due = data['due']
         created_when = django.utils.timezone.now()
 
-        if self.context['request'].method == 'POST' or self.context['request'].method == 'PUT' :
+        if self.context['request'].method == 'POST' :
             if (created_when >= due):
                 raise serializers.ValidationError("Meeting's Due should be future")
+
+        if self.context['request'].method == 'PUT' :
+            if (create_when >= due):
+                data['state'] = 4
 
         min_people = data['min_people']
         max_people = data['max_people']

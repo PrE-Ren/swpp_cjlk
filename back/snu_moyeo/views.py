@@ -306,4 +306,11 @@ class CommentList(generics.ListCreateAPIView):
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    # permission_classes = (UserOnlyAccess,)
+    permission_classes = (UserOnlyAccess,)
+
+
+#def changeState() :
+#    meeting_objects = Meeting.objects.all()
+#    for i in meeting_objects
+#        if i.state ==  1 or i.state == 3 :
+            
