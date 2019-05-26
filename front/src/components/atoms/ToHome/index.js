@@ -1,3 +1,5 @@
+/* Left_sidebar에 포함되어서 이제는 쓰지 않는 컴포넌트
+
 import React from 'react'
 import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
@@ -29,4 +31,4 @@ ToHome.defaultProps = {
     type: 'button',
 }
 
-export default ToHome
+export default ToHome */

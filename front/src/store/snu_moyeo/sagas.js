@@ -16,6 +16,34 @@ export function* watchSignup() {
   }
 }
 
+export function* watchSendEmail() {
+  while(true) {
+    const action = yield take(actions.SEND_EMAIL_ACTION)
+    yield call(send_email_func, action)
+  }
+}
+
+export function* watchSendPhone() {
+  while(true) {
+    const action = yield take(actions.SEND_PHONE_ACTION)
+    yield call(send_phone_func, action)
+  }
+}
+
+export function* watchConfirmEmail() {
+  while(true) {
+    const action = yield take(actions.CONFIRM_EMAIL_ACTION)
+    yield call(confirm_email_func, action)
+  }
+}
+
+export function* watchConfirmPhone() {
+  while(true) {
+    const action = yield take(actions.CONFIRM_PHONE_ACTION)
+    yield call(confirm_phone_func, action)
+  }
+}
+
 export function* watchNew() {
   while(true) {
     const action = yield take(actions.NEW_ACTION)
@@ -23,10 +51,24 @@ export function* watchNew() {
   }
 }
 
+export function* watchModify() {
+  while(true) {
+    const action = yield take(actions.MODIFY_ACTION)
+    yield call(modify_func, action)
+  }
+}
+
 export function* watchChangeMeetingState() {
   while(true) {
     const action = yield take(actions.CHANGE_MEETING_STATE_ACTION)
     yield call(change_meeting_state_func, action)
+  }
+}
+
+export function* watchChangeMeetingInfo() {
+  while(true) {
+    const action = yield take(actions.CHANGE_MEETING_INFO_ACTION)
+    yield call(change_meeting_info_func, action)
   }
 }
 
@@ -120,7 +162,13 @@ export function* reload() {
     }
   }
   else {
-    //alert("Reload " + pathname + " : Do nothing")
+    const meetinglist_impending = yield call(get_meetinglist, 'impending')
+    const meetinglist_recent = yield call(get_meetinglist, 'recent')
+    if (meetinglist_impending !== null && meetinglist_recent !== null) {
+      console.log('<Dispatch reload_action>')
+      yield put(actions.reload_action('impending', meetinglist_impending))
+      yield put(actions.reload_action('recent', meetinglist_recent))
+    }
   }
 }
 
@@ -144,66 +192,129 @@ export function* login_func(action) {
       method: 'GET',
       headers: { 'Authorization' : `Basic ${hash}` }
     })
-    // 로그인 성공 (인증 완료)
+    // 홈 페이지로 (인증 완료)
     if (response_user.ok) {
+      alert('로그인 성공')
       const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.name))
+      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.phone_number, response_user_data.name))
+      Object.defineProperty(window.location, 'href', {
+        writable: true,
+        value: '/'
+      });
     }
-    // 로그인 실패 (인증 미완료)
-    else
-      alert("인증되지 않은 사용자입니다. 메일 인증을 하십시오.")
+    // 인증 페이지로 (인증 미완료)
+    else{
+      alert('인증 필요')
+      yield put(actions.login_auth_action(username, password))
+      Object.defineProperty(window.location, 'href', {
+        writable: true,
+        value: '/auth'
+      });
+    }
   }
   // 회원가입된 계정 X
   else
-    alert("존재하지 않는 ID나 비밀번호입니다.")
+    alert("로그인 실패 : 존재하지 않는 ID나 비밀번호입니다.")
 }
 
-export function* signup_func(data) {
-  let uid = data.username
-  let upw = data.password
-  let name = data.name
-  let email = data.email+"@snu.ac.kr"
+export function* signup_func(action) {
+  let uid = action.username
+  let upw = action.password
+  let name = action.name
   const url = 'http://127.0.0.1:8000/sign_up/'
-  const info = JSON.stringify({ username: uid, password: upw, name: name, email: email });
+  const info = JSON.stringify({ username: uid, password: upw, name: name});
   const response = yield call(fetch, url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: info,
   })
   if (response.ok) {
-    alert("인증 링크가 당신의 SNU 메일로 전송되었습니다.")
-    yield put(actions.signup_success_action())
+    alert("회원가입 성공 : 서비스를 이용하려면 이메일 인증과 휴대폰 인증을 완료해야 합니다.")
+    yield put(actions.login_auth_action(uid, upw))
     Object.defineProperty(window.location, 'href', {
       writable: true,
-      value: '/login'
+      value: '/auth'
     });
   }
   else
     alert("회원가입 실패 : 정보를 바르게 입력하세요.")
 }
 
+export function* send_email_func(action) {
+  const url_send_email = 'http://127.0.0.1:8000/send_email/' + action.email + '/'
+  const response_email = yield call(fetch, url_send_email, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_email.ok) {
+    alert('이메일로 인증번호가 전송되었습니다.')
+  }
+  else {
+    alert('인증번호 전송 실패')
+  }
+}
+
+export function* send_phone_func(action) {
+  const url_send_phone = 'http://127.0.0.1:8000/send_phone/' + action.phone_number + '/'
+  const response_phone = yield call(fetch, url_send_phone, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_phone.ok) {
+    alert('휴대폰으로 인증번호가 전송되었습니다.')
+  }
+  else {
+    alert('인증번호 전송 실패')
+  }
+}
+
+export function* confirm_email_func(action) {
+  const url_send_email = 'http://127.0.0.1:8000/email_auth/' + action.email + '/' + action.email_code + '/'
+  const response_email = yield call(fetch, url_send_email, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_email.ok) {
+    alert('인증 완료')
+  }
+  else {
+    alert('인증번호가 틀렸습니다.')
+  }
+}
+
+export function* confirm_phone_func(action) {
+  const url_send_phone = 'http://127.0.0.1:8000/phone_auth/' + action.phone_number + '/' + action.phone_code + '/'
+  const response_phone = yield call(fetch, url_send_phone, {
+    method: 'GET',
+    headers: { 'Authorization' : `Basic ${action.hash}` }
+  })
+  if (response_phone.ok) {
+    alert('인증 완료')
+  }
+  else {
+    alert('인증번호가 틀렸습니다.')
+  }
+}
+
 export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
-  const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
   const formData = new FormData();
-  if (action.min_people > 1 && action.max_people > 1) {
-    formData.append('title', action.title);
-    formData.append('kind', action.kind);
-    formData.append('due', action.due);
-    formData.append('min_people', action.min_people);
-    formData.append('max_people', action.max_people);
-    formData.append('description', action.description);
+  console.log(action.meeting_info)
+  if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
+    formData.append('title', action.meeting_info.title);
+    formData.append('due', action.meeting_info.due);
+    formData.append('min_people', action.meeting_info.min_people);
+    formData.append('max_people', action.meeting_info.max_people);
+    formData.append('description', action.meeting_info.description);
     formData.append('state', 0);
-    if (action.picture !== undefined) {
-      formData.append('picture', action.picture, action.picture.name);
-    }
+    formData.append('kind', action.meeting_info.kind);
+    if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값이 설정됨
+      formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
 
     const response_meeting = yield call(fetch, url_meeting, {
         method: 'POST',
-        headers: {
-            'Authorization': `Basic ${hash}`,
-        },
+        headers: { 'Authorization': `Basic ${action.hash}` },
         body: formData,
     })
 
@@ -215,7 +326,7 @@ export function* new_func(action) {
       const response_participate = yield call(fetch, url_participate, {
           method: 'POST',
           headers: {
-              'Authorization': `Basic ${hash}`,
+              'Authorization': `Basic ${action.hash}`,
               'Content-Type': 'application/json',
           },
           body: info_participate,
@@ -232,14 +343,56 @@ export function* new_func(action) {
     }
     else {
       console.log('Meeting POST bad')
-      if(response_meeting_data.non_field_errors == "You can not participate more than 5")
-        alert('1인당 5개 이상의 열린 모임을 가질 수 없습니다')
+      if (response_meeting_data.non_field_errors == "You can not participate more than 5")
+        alert('인당 5개 이상의 열린 모임을 가질 수 없습니다.')
       else
-        alert('올바르지 않은 모임 형식입니다')
+        alert('올바르지 않은 모임 형식입니다.')
     }
   }
   else {
-    alert('최소 인원과 최대 인원은 2명 이상이어야 합니다')
+    alert('최소 인원과 최대 인원은 모두 2명 이상이어야 합니다.')
+  }
+}
+
+export function* modify_func(action) {
+  const meeting_info = JSON.parse(localStorage.getItem("meeting_info"))
+  const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_info.id}/`
+  const formData = new FormData();
+
+  if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
+    formData.append('title', action.meeting_info.title);
+    formData.append('due', action.meeting_info.due);
+    formData.append('min_people', action.meeting_info.min_people);
+    formData.append('max_people', action.meeting_info.max_people);
+    formData.append('description', action.meeting_info.description);
+    formData.append('state', action.meeting_info.state);
+    formData.append('kind', action.meeting_info.kind);
+
+    // 사진 파일을 특별히 지정해주지 않은 채 수정 버튼을 누르면
+    // action.meeting_info.picture는 undefined이 되어(확인해봄)
+    // PUT을 한 결과 picture 필드의 값은 null이어야 함
+    // 근데 왜 사진이 사라지지를 않지..?
+    if (action.meeting_info.picture !== undefined)
+      formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
+    else
+      formData.append('picture', null, null)
+
+    const response_meeting = yield call(fetch, url_meeting, {
+        method: 'PUT',
+        headers: { 'Authorization': `Basic ${action.hash}` },
+        body: formData,
+    })
+    if (response_meeting.ok) {
+      console.log('Meeting PUT ok')
+      localStorage.removeItem('meeting_info')
+      window.location.href = '/'
+    }
+    else {
+      console.log('Meeting PUT bad')
+    }
+  }
+  else {
+    alert('최소 인원과 최대 인원은 모두 2명 이상이어야 합니다.')
   }
 }
 
@@ -276,6 +429,12 @@ export function* change_meeting_state_func(action) {
   }
 }
 
+export function* change_meeting_info_func(action) {
+  const meeting_info = JSON.stringify(action.meeting_info)
+  localStorage.setItem("meeting_info", meeting_info)
+  window.location.href = "/new"
+}
+
 export function* join_meeting_func(action) {
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: action.meeting_id });
@@ -304,7 +463,6 @@ export function* withdraw_meeting_func(action) {
   const response = yield call(fetch, url, { method: 'GET' })
   const participate_id = yield call([response, response.json])
   const url_participate = `http://127.0.0.1:8000/participate/${participate_id}/`
-  const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: action.meeting_id });
   const response_participate = yield call(fetch, url_participate, {
       method: 'DELETE',
       headers: { 'Authorization': `Basic ${action.hash}` }
@@ -356,8 +514,14 @@ export default function* () {
   yield fork(reload)
   yield fork(watchLogin)
   yield fork(watchSignup)
+  yield fork(watchSendEmail)
+  yield fork(watchSendPhone)
+  yield fork(watchConfirmEmail)
+  yield fork(watchConfirmPhone)
   yield fork(watchNew)
+  yield fork(watchModify)
   yield fork(watchChangeMeetingState)
+  yield fork(watchChangeMeetingInfo)
   yield fork(watchJoinMeeting)
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)

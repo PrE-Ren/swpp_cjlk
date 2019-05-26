@@ -4,8 +4,15 @@ export const LOGIN_SUCCESS_ACTION = 'LOGIN_SUCCESS_ACTION'
 export const LOGOUT_ACTION = 'LOGOUT_ACTION'
 export const SIGNUP_ACTION = 'SIGNUP_ACTION'
 export const SIGNUP_SUCCESS_ACTION = 'SIGNUP_SUCCESS_ACTION'
+export const LOGIN_AUTH_ACTION = 'LOGIN_AUTH_ACTION'
+export const SEND_EMAIL_ACTION = 'SEND_EMAIL_ACTION'
+export const SEND_PHONE_ACTION = 'SEND_PHONE_ACTION'
+export const CONFIRM_EMAIL_ACTION = 'CONFIRM_EMAIL_ACTION'
+export const CONFIRM_PHONE_ACTION = 'CONFIRM_PHONE_ACTION'
 export const NEW_ACTION = 'NEW_ACTION'
+export const MODIFY_ACTION = 'MODIFY_ACTION'
 export const CHANGE_MEETING_STATE_ACTION = 'CHANGE_MEETING_STATE_ACTION'
+export const CHANGE_MEETING_INFO_ACTION = 'CHANGE_MEETING_INFO_ACTION'
 export const JOIN_MEETING_ACTION = 'JOIN_MEETING_ACTION'
 export const WITHDRAW_MEETING_ACTION = 'WITHDRAW_MEETING_ACTION'
 export const PARTICIPATE_ADD_ACTION = 'PARTICIPATE_ADD_ACTION'
@@ -28,15 +35,16 @@ export const login_action = (username, password) => {
     }
 };
 
-export const login_success_action = (username, password, token, user_id, email, name) => {
+export const login_success_action = (username, password, mySNU_verification_token, user_id, email, phone_number, name) => {
     return {
         type : LOGIN_SUCCESS_ACTION,
         data : {
             username : username,
             password : password,
-            mySNU_verification_token : token,
+            mySNU_verification_token : mySNU_verification_token,
             user_id : user_id,
             email : email,
+            phone_number : phone_number,
             name : name
         }
     }
@@ -48,13 +56,12 @@ export const logout_action = () => {
     }
 };
 
-export const signup_action = (username, password, name, email) => {
+export const signup_action = (username, password, name) => {
     return {
         type : SIGNUP_ACTION,
         username,
         password,
-        name,
-        email
+        name
     }
 };
 
@@ -64,20 +71,63 @@ export const signup_success_action = () => {
     }
 };
 
-export const new_action = (username, password, kind, leader, title, due, min_people, max_people, description, user_id, picture) => {
+export const login_auth_action = (username, password) => {
+  return {
+      type : LOGIN_AUTH_ACTION,
+      username : username,
+      password : password
+  }
+};
+
+export const send_email_action = (hash, email) => {
+  return {
+      type : SEND_EMAIL_ACTION,
+      hash : hash,
+      email: email
+  }
+};
+
+export const send_phone_action = (hash, phone_number) => {
+  return {
+      type : SEND_PHONE_ACTION,
+      hash : hash,
+      phone_number: phone_number
+  }
+};
+
+export const confirm_email_action = (hash, email, mySNU_verification_token) => {
+  return {
+      type : CONFIRM_EMAIL_ACTION,
+      hash : hash,
+      email : email,
+      email_code : mySNU_verification_token
+  }
+};
+
+export const confirm_phone_action = (hash, phone_number, phone_token) => {
+  return {
+      type : CONFIRM_PHONE_ACTION,
+      hash : hash,
+      phone_number : phone_number,
+      phone_code : phone_token
+  }
+};
+
+export const new_action = (hash, user_id, meeting_info) => {
   return {
     type: NEW_ACTION,
-    username,
-    password,
-    kind,
-    leader,
-    title,
-    due,
-    min_people,
-    max_people,
-    description,
+    hash,
     user_id,
-    picture
+    meeting_info
+  }
+};
+
+export const modify_action = (hash, user_id, meeting_info) => {
+  return {
+    type: MODIFY_ACTION,
+    hash,
+    user_id,
+    meeting_info
   }
 };
 
@@ -89,6 +139,13 @@ export const change_meeting_state_action = (hash, meeting_info, new_state) => {
     new_state
   }
 };
+
+export const change_meeting_info_action = (meeting_info) => {
+  return {
+    type: CHANGE_MEETING_INFO_ACTION,
+    meeting_info
+  }
+}
 
 export const join_meeting_action = (hash, user_id, meeting_id) => {
   return {

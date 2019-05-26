@@ -1,21 +1,10 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-import styled from 'styled-components'
-import { font, palette } from 'styled-theme'
-
-const Join_chatroom_Css = styled.div`
-  display: block;
-  border: 2px solid;
-  border-radius: 5px;
-  text-align: center;
-  width: 250px;
-  margin-top: 10px;
-  font-size: 25px;
-`
+import { Menu, Icon } from 'semantic-ui-react'
 
 const Join_chatroom = () => {
   return (
-    <Join_chatroom_Css>채팅방 빠른 입장</Join_chatroom_Css>
+    <Menu.Item><Icon name='chat' size='big' />채팅방 빠른 입장</Menu.Item>
   )
 }
 
