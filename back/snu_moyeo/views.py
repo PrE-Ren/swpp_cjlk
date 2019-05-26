@@ -349,7 +349,8 @@ class CommentOnMeeting(APIView):
         comments = Comment.objects.filter(Q(meeting_id_id = in_meetingid))
         serializer = CommentSerializer(comments, many = True)
         return Response(serializer.data)
-
+        
+'''
 def get_comments_on_meeting(request, in_meetingid):
     temp = Meeting.objects.all()
     return HttpResponse(temp.values(),status=200)
@@ -361,7 +362,6 @@ def get_comments_on_meeting(request, in_meetingid):
     else :
         return HttpResponse(serializer.errors, status = 400)
 
-'''
 def get_participate(request, in_userid, in_meetingid):
     participate_obj1 = Participate.objects.filter(Q(user_id_id = in_userid))
     participate_list1 = participate_obj1.values()
