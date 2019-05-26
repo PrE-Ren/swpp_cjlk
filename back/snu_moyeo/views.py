@@ -19,7 +19,7 @@ from sdk.api.message import Message
 from sdk.exceptions import CoolsmsException
 import random
 import sys
-import django 
+import django
 
 OPEN = 0
 CLOSED = 1
@@ -62,35 +62,12 @@ class SignUp(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPI
         return self.list(request, *args, **kwargs)
 
     def post(self, request, format = None):
-        # email = request.data['email']
-        # phone = request.data['phone_number']
-
         user_serializer = SnuUserSerializer(data = request.data)
         if user_serializer.is_valid():
             user_serializer.save()
             return Response(status.HTTP_201_CREATED)
         else :
             return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-
-        '''
-        if serializer.is_valid():
-            email_token = random.randint(10000000, 99999999)
-            send_mail('SnuMoyeo Authenticate', 'Authentication Code : ' + str(email_token),
-                      'toro.8906@gmail.com', [request.data['email']], fail_silently = False)
-
-            phone_token = random.randint(10000000, 99999999)
-            send_message(phone, phone_token)
-
-            serializer.save(mySNU_verification_token = email_token, mySNU_verified = False, phone_verification_token = phone_token, phone_verified = False)
-
-            id =  serializer.data['id']
-            username = serializer.data['username']
-            email_verified = serializer.data['mySNU_verified']
-            phone_verify = serializer.data['phone_verified']
-            return Response(data = {'id':id, 'username':username, 'mySNU_verified':email_verified , 'phone_verified' : phone_verify}, status = status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-        '''
 
 class SendEmail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
     queryset = SnuUser.objects.all()
@@ -110,10 +87,6 @@ class SendEmail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
             return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class EmailAuthenticate (APIView):
-    # queryset = SnuUser.objects.all()
-    # seializer_class = SnuUserSerializer
-    # permission_classes = ()
-
     def get(self, request, email_token, email):
         print('Email authenticationg...')
         user = request.user
@@ -145,10 +118,6 @@ class SendPhone(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
             return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class SMSAuthenticate (APIView):
-    # queryset = SnuUser.objects.all()
-    # serializer_class = SnuUserSerializer
-    # permission_class = ()
-
     def get(self, request, phone_token, phone_number) :
         print('Phone authenticationg...')
         user = request.user
@@ -178,7 +147,7 @@ class LogIn(APIView):
                 'phone_number':user.phone_number,
                 'mySNU_verification_token':user.mySNU_verification_token,
                 'name':user.name
-                }, status = status.HTTP_202_ACCEPTED)
+            }, status = status.HTTP_202_ACCEPTED)
         else :
             return Response(data = {'details':'Not SNU verified.'}, status = status.HTTP_403_FORBIDDEN)
 
@@ -196,6 +165,7 @@ def changeState():
     print(current)
     Meeting.objects.filter(Q(state = OPEN) & Q(due__lt = current)).update(state = CLOSED)
 
+    # Possibility for optimization
     for meeting_object in Meeting.objects.filter(Q(state = CLOSED) & Q(due__lt = current)):
         meeting_object.save()
 
@@ -228,7 +198,6 @@ def get_participate(request, in_userid, in_meetingid):
     participate_list1 = participate_obj1.values()
     participate_obj2 = participate_obj1.filter(Q(meeting_id_id = in_meetingid))
     participate_list2 = participate_obj2.values()
-    # print(participate_obj2.values())
 
     if len(participate_list2) == 0 :
         return HttpResponse({}, status = status.HTTP_404_NOT_FOUND)
@@ -253,13 +222,13 @@ class ImpendingList(generics.ListAPIView):
 
 class LeadList(generics.ListAPIView):
     serializer_class = MeetingSerializer
+
     def get_queryset(self):
         user = self.request.user
         if (not user.is_anonymous):
             lead_user = SnuUser.objects.get(id = user.id)
             return lead_user.lead_meeting.all()
         return Meeting.objects.none()
-    # Meeting.objects.filter(Q(leader = user) and ~Q(state = BREAK_UP))
 
     def get(self, request, *args, **kwargs):
         changeState()
@@ -267,6 +236,7 @@ class LeadList(generics.ListAPIView):
 
 class JoinList (generics.ListAPIView):
     serializer_class = MeetingSerializer
+
     def get_queryset(self):
         user = self.request.user
         if (not user.is_anonymous):
@@ -281,7 +251,7 @@ class JoinList (generics.ListAPIView):
 
 class HistoryList (generics.ListAPIView):
     serializer_class = MeetingSerializer
-    # queryset = SnuUser.objects.filter(Q(id = request.user.id))
+
     def get_queryset(self):
         user = self.request.user
         if (not user.is_anonymous):
@@ -342,14 +312,12 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
     permission_classes = (UserOnlyAccess,)
 
-
 class CommentOnMeeting(APIView):
-       
     def get(self, request, in_meetingid):
-        comments = Comment.objects.filter(Q(meeting_id_id = in_meetingid))
+        comments = Comment.objects.filter(Q(meeting_id = in_meetingid))
         serializer = CommentSerializer(comments, many = True)
         return Response(serializer.data)
-        
+
 '''
 def get_comments_on_meeting(request, in_meetingid):
     temp = Meeting.objects.all()
@@ -374,5 +342,3 @@ def get_participate(request, in_userid, in_meetingid):
     participate_id = participate_list2[0]['id']
     return HttpResponse(participate_id, status = status.HTTP_200_OK)
 '''
-
-

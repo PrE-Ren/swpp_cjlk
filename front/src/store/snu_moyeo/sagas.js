@@ -100,6 +100,13 @@ export function* watchLoadComments() {
   }
 }
 
+export function* watchAddComment() {
+  while(true) {
+    const action = yield take(actions.ADD_COMMENT_ACTION)
+    yield call(add_comment_func, action)
+  }
+}
+
 function* get_meetinglist(type) {
   const get_token = (state) => state.snu_moyeo.mySNU_verification_token
   const token = yield select(get_token)
@@ -521,13 +528,33 @@ export function* load_comments_func(action) {
   const response_comments = yield call(fetch, url_comments, { method : 'GET' })
 
   if (response_comments.ok) {
-    const comments = yield call([response, response.json])
+    const comments = yield call([response_comments, response_comments.json])
     console.log('<Fetch comments of this meeting>')
     console.log(comments)
     yield put(actions.load_comments_success_action(comments))
   }
   else
     alert('<Fail to fetch comments of this meeting>')
+}
+
+export function* add_comment_func(action) {
+  const url_comment = 'http://127.0.0.1:8000/comment/'
+  const info_comment = JSON.stringify({ meeting: action.meeting_id, content: action.description})
+  const response_comment = yield call(fetch, url_comment, {
+      method: 'POST',
+      headers: {
+          'Authorization': `Basic ${action.hash}`,
+          'Content-Type': 'application/json',
+      },
+      body: info_comment,
+  })
+
+  if (response_comment.ok) {
+    console.log('Comment POST ok')
+    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+  }
+  else
+    console.log('Comment POST bad')
 }
 
 export default function* () {
@@ -546,4 +573,5 @@ export default function* () {
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
   yield fork(watchLoadComments)
+  yield fork(watchAddComment)
 }

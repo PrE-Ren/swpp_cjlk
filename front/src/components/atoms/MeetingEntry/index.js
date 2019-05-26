@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 import MeetingInfo from '../../../containers/MeetingInfo'
-import { Modal } from 'semantic-ui-react'
+import { Modal, List, Image } from 'semantic-ui-react'
 
 const MeetingEntryCss = styled.span`
   display: inline-block;
@@ -83,21 +83,60 @@ export class MeetingEntry extends React.Component {
   }
   render() {
     let meeting_entry = (
-      <div style={{ cursor: 'pointer' }} onClick={() => { this.props.load_comments_click(this.props.meeting_info.id) }}>
-        <TitleCss>{this.props.meeting_info.title}</TitleCss><BorderCss>|</BorderCss>
-        <DueCss>{dateParse(this.props.meeting_info.due)}</DueCss><BorderCss>|</BorderCss>
-        <MinCss>{this.props.meeting_info.min_people}명</MinCss><BorderCss>|</BorderCss>
-        <MaxCss>{this.props.meeting_info.max_people}명</MaxCss><BorderCss>|</BorderCss>
-        <FractionCss>{this.props.meeting_info.members.length}/{this.props.meeting_info.max_people}</FractionCss>
-      </div>
+      <List.Item>
+        <Image avatar src='https://react.semantic-ui.com/images/avatar/small/helen.jpg' />
+        <List.Content>
+          <List.Header>{this.props.meeting_info.title} ({this.props.meeting_info.members.length}/{this.props.meeting_info.max_people})</List.Header>
+          {this.props.meeting_info.description}
+        </List.Content>
+      </List.Item>
     )
     return (
-      <MeetingEntryCss>
-        <Modal trigger={meeting_entry}>
-          <Modal.Header>{this.props.meeting_info.title}</Modal.Header>
-          <MeetingInfo meeting_info = {this.props.meeting_info}/>
-        </Modal>
-      </MeetingEntryCss >
+      /*<MeetingEntryCss>*/
+      <Modal trigger={meeting_entry} >
+        <Modal.Header>{this.props.meeting_info.title}</Modal.Header>
+        <MeetingInfo meeting_info = {this.props.meeting_info} />
+      </Modal>
+      /*</MeetingEntryCss >*/
     )
   }
 }
+
+
+/*
+<div style={{ cursor: 'pointer' }} onClick={() => { this.props.load_comments_click(this.props.meeting_info.id) }}>
+  <TitleCss>{this.props.meeting_info.title}</TitleCss><BorderCss>|</BorderCss>
+  <DueCss>{dateParse(this.props.meeting_info.due)}</DueCss><BorderCss>|</BorderCss>
+  <MinCss>{this.props.meeting_info.min_people}명</MinCss><BorderCss>|</BorderCss>
+  <MaxCss>{this.props.meeting_info.max_people}명</MaxCss><BorderCss>|</BorderCss>
+  <FractionCss>{this.props.meeting_info.members.length}/{this.props.meeting_info.max_people}</FractionCss>
+</div>
+*/
+
+/*
+
+<List celled>
+  <List.Item>
+    <Image avatar src='https://react.semantic-ui.com/images/avatar/small/helen.jpg' />
+    <List.Content>
+      <List.Header>{this.props.meeting_info.title}</List.Header>
+      An excellent companion
+    </List.Content>
+  </List.Item>
+  <List.Item>
+    <Image avatar src='https://react.semantic-ui.com/images/avatar/small/daniel.jpg' />
+    <List.Content>
+      <List.Header>Poodle</List.Header>
+      A poodle, it's pretty basic
+    </List.Content>
+  </List.Item>
+  <List.Item>
+    <Image avatar src='https://react.semantic-ui.com/images/avatar/small/daniel.jpg' />
+    <List.Content>
+      <List.Header>Paulo</List.Header>
+      He's also a dog
+    </List.Content>
+  </List.Item>
+</List>
+
+*/

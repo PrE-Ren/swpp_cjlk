@@ -14,7 +14,6 @@ class MeetingSerializer(serializers.ModelSerializer):
     leader = serializers.CharField(read_only = True)
     picture = serializers.ImageField(use_url = True, allow_empty_file = True, required = False)
     comments = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
-    # members = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
 
     def validate(self, data):
         if 'picture' not in data.keys():
@@ -68,15 +67,12 @@ class MeetingSerializer(serializers.ModelSerializer):
             'leaderid',
             'picture',
             'members',      # invisible (ManyToManyField in models.py)
-            'comments'      # invisible (read_only = True in serializers.py)
+            'comments',      # invisible (read_only = True in serializers.py)
+            'latitude',
+            'longitude'
         )
 
 class SnuUserSerializer(serializers.ModelSerializer):
-    # point = serializers.IntegerField(read_only = True)
-    # mySNU_verified = serializers.BooleanField(read_only = True)
-    # mySNU_verification_token = serializers.CharField(read_only = True)
-    # phone_verified = serializers.BooleanField(read_only = True)
-    # phone_verification_token = serializers.CharField(read_only = True)
     lead_meeting = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
 
     def create(self, validated_data):
@@ -109,7 +105,6 @@ class ParticipateSerializer(serializers.ModelSerializer):
     def validate(self, data):
         new_snuuser = data['user_id']
         new_meeting = data['meeting_id']
-        # print(new_meeting)
         cnt_participate = 0
         cnt_max = 0
 
@@ -160,7 +155,7 @@ class CommentSerializer(serializers.ModelSerializer) :
     writer = serializers.ReadOnlyField(source = 'SnuUser.username')
     writer = serializers.CharField(read_only = True)
 
-    def create(self,validated_data):
+    def create(self, validated_data):
         writer= validated_data['writer']
         idwriter = SnuUser.objects.get(username = writer).id
         validated_data['writerid'] = idwriter
@@ -175,6 +170,6 @@ class CommentSerializer(serializers.ModelSerializer) :
             'created',      # invisible (auto_now_add = True in models.py)
             'writer',       # invisible (ReadOnlyField in serializers.py)
             'writerid',
-            'meeting_id',
+            'meeting',
             'content'
         )

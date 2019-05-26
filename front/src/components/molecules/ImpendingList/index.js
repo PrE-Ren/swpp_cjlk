@@ -3,6 +3,7 @@ import { PropTypes } from 'prop-types'
 import styled from 'styled-components'
 import { font, palette } from 'styled-theme'
 import MeetingEntry from '../../../containers/MeetingEntry'
+import { List } from 'semantic-ui-react'
 
 const ImpendingList_Box = styled.div`
   display: inline-block;
@@ -38,9 +39,9 @@ export const ImpendingList = ({ meetinglist_impending }) => {
         <Font>&emsp;&emsp;제목&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
         마감기한&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;최소인원 최대인원 모집현황</Font>
         {meetings.map(meeting_entry =>
-          <div key = {meeting_entry.id} >
+          <List celled key = {meeting_entry.id} >
             <MeetingEntry meeting_info = {meeting_entry}/>
-          </div>
+          </List>
         )}
       </ImpendingList_Box>
     )
