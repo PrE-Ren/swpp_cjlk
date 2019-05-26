@@ -23,14 +23,15 @@ urlpatterns = [
     path('meetinglist/lead/', views.LeadList.as_view()),
     path('meetinglist/join/', views.JoinList.as_view()),
     path('meetinglist/history/', views.HistoryList.as_view()),
-    path('comment/',views.CommentList.as_view()),
-    path('comment/<int:pk>/',views.CommentDetail.as_view()),
-
+    path('comment/', views.CommentList.as_view()),
+    path('comment/<int:pk>/', views.CommentDetail.as_view()),
+    path('comment/meeting/<int:in_meetingid>/', views.CommentOnMeeting.as_view()),
     url(r'^get_auth_token/', obtain_auth_token),
     url(r'^email_auth/(?P<email>[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3})/(?P<email_token>[0-9]+)/$', views.EmailAuthenticate.as_view()),   # email regular expression
     url(r'^send_email/(?P<email>[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3})/$', views.SendEmail.as_view()),   # email regular expression
     url(r'^phone_auth/(?P<phone_number>[0-9]+)/(?P<phone_token>[0-9]+)/$', views.SMSAuthenticate.as_view()),
     url(r'^send_phone/(?P<phone_number>[0-9]+)/$', views.SendPhone.as_view()),
+    # url(meeting/<int:id>/commnet/ , comment_on_meeting_id.asview),
 ]
 
 urlpatterns += [

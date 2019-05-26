@@ -14,6 +14,7 @@ class MeetingSerializer(serializers.ModelSerializer):
     leader = serializers.CharField(read_only = True)
     picture = serializers.ImageField(use_url = True, allow_empty_file = True, required = False)
     comments = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
+    # members = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
 
     def validate(self, data):
         if 'picture' not in data.keys():
@@ -43,6 +44,14 @@ class MeetingSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("You can not participate more than 5")
         return data
 
+    def create(self, validated_data):
+        leader = validated_data['leader']
+        idleader = SnuUser.objects.get(username = leader).id
+        validated_data['leaderid'] = idleader
+        instance = self.Meta.model(**validated_data)
+        instance.save()
+        return instance
+
     class Meta:
         model = Meeting
         fields = (
@@ -56,6 +65,7 @@ class MeetingSerializer(serializers.ModelSerializer):
             'state',
             'kind',
             'leader',       # invisible (ReadOnlyField in serializers.py)
+            'leaderid',
             'picture',
             'members',      # invisible (ManyToManyField in models.py)
             'comments'      # invisible (read_only = True in serializers.py)
@@ -150,12 +160,21 @@ class CommentSerializer(serializers.ModelSerializer) :
     writer = serializers.ReadOnlyField(source = 'SnuUser.username')
     writer = serializers.CharField(read_only = True)
 
+    def create(self,validated_data):
+        writer= validated_data['writer']
+        idwriter = SnuUser.objects.get(username = writer).id
+        validated_data['writerid'] = idwriter
+        instance = self.Meta.model(**validated_data)
+        instance.save()
+        return instance
+
     class Meta:
         model = Comment
         fields = (
             'id',           # invisible (AutoField in models.py)
             'created',      # invisible (auto_now_add = True in models.py)
             'writer',       # invisible (ReadOnlyField in serializers.py)
-            'meeting',
+            'writerid',
+            'meeting_id',
             'content'
         )
