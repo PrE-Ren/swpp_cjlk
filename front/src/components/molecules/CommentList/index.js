@@ -2,10 +2,10 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 import { Button, Comment, Form, Header } from 'semantic-ui-react'
 
-export const CommentList = ({ username, password, comments, meeting_id, add_comment_click }) => {
+export const CommentList = ({ username, password, comments, meeting_id, add_comment_click, /*edit_comment_click, */delete_comment_click }) => {
   console.log('<CommentList Rendering>')
   const hash = new Buffer(`${username}:${password}`).toString('base64')
-
+  console.log(comments)
   if (comments != null) {
     let comment_list = JSON.parse(comments)
     let description
@@ -19,7 +19,12 @@ export const CommentList = ({ username, password, comments, meeting_id, add_comm
               <Comment.Author as='a'>{comment.writer}</Comment.Author>
               <Comment.Metadata><div>{comment.created}</div></Comment.Metadata>
               <Comment.Text>{comment.content}</Comment.Text>
-              <Comment.Actions><Comment.Action>Reply</Comment.Action></Comment.Actions>
+              {(username == comment.writer)
+                ? <Comment.Actions>
+                    {/*<Comment.Action onClick={() => edit_comment_click(hash, comment)}>Edit</Comment.Action>*/}
+                    <Comment.Action onClick={() => delete_comment_click(hash, comment.id)}>Delete</Comment.Action>
+                  </Comment.Actions>
+                : <div></div>}
             </Comment.Content>
           </Comment>)}
         <Form reply>

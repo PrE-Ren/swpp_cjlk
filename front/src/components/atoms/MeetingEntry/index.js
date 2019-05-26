@@ -83,7 +83,7 @@ export class MeetingEntry extends React.Component {
   }
   render() {
     let meeting_entry = (
-      <List.Item>
+      <List.Item onClick={() => { this.props.load_comments_click(this.props.meeting_info.id) }}>
         <Image avatar src='https://react.semantic-ui.com/images/avatar/small/helen.jpg' />
         <List.Content>
           <List.Header>{this.props.meeting_info.title} ({this.props.meeting_info.members.length}/{this.props.meeting_info.max_people})</List.Header>

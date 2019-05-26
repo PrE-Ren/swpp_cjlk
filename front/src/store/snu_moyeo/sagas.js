@@ -107,6 +107,20 @@ export function* watchAddComment() {
   }
 }
 
+/*export function* watchEditComment() {
+  while(true) {
+    const action = yield take(actions.EDIT_COMMENT_ACTION)
+    yield call(edit_comment_func, action)
+  }
+}*/
+
+export function* watchDeleteComment() {
+  while(true) {
+    const action = yield take(actions.DELETE_COMMENT_ACTION)
+    yield call(delete_comment_func, action)
+  }
+}
+
 function* get_meetinglist(type) {
   const get_token = (state) => state.snu_moyeo.mySNU_verification_token
   const token = yield select(get_token)
@@ -557,6 +571,41 @@ export function* add_comment_func(action) {
     console.log('Comment POST bad')
 }
 
+/*export function* edit_comment_func(action) {
+  const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment.id + '/'
+  const info_comment = JSON.stringify({ ~ })
+  const response_comment = yield call(fetch, url_comment, {
+      method: 'PUT',
+      headers: {
+          'Authorization': `Basic ${action.hash}`,
+          'Content-Type': 'application/json',
+      },
+      body: info_comment,
+  })
+
+  if (response_comment.ok) {
+    console.log('Comment PUT ok')
+    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+  }
+  else
+    console.log('Comment PUT bad')
+}*/
+
+export function* delete_comment_func(action) {
+  const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment_id + '/'
+  const response_comment = yield call(fetch, url_comment, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Basic ${action.hash}` },
+  })
+
+  if (response_comment.ok) {
+    console.log('Comment DELETE ok')
+    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+  }
+  else
+    console.log('Comment DELETE bad')
+}
+
 export default function* () {
   yield fork(reload)
   yield fork(watchLogin)
@@ -574,4 +623,6 @@ export default function* () {
   yield fork(watchChangePageNum)
   yield fork(watchLoadComments)
   yield fork(watchAddComment)
+  /*yield fork(watchEditComment)*/
+  yield fork(watchDeleteComment)
 }

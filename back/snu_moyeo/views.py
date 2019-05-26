@@ -310,7 +310,7 @@ class CommentList(generics.ListCreateAPIView):
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = (UserOnlyAccess,)
+    permission_classes = () # (UserOnlyAccess,) : 에러 발생
 
 class CommentOnMeeting(APIView):
     def get(self, request, in_meetingid):
