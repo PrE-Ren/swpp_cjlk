@@ -57,9 +57,9 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
                 <Grid.Column width={6}>
                   <br/>
                   <Modal.Actions>
-                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
                     <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
                     <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
                   </Modal.Actions>
                   <br/>
                   <Image style={{float:'left'}} size='medium' src={meeting_info.picture} wrapped />
@@ -80,9 +80,9 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
                 <Grid.Column width={6}>
                   <br/>
                   <Modal.Actions>
-                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
                     <ReOpenButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
                     <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
                   </Modal.Actions>
                   <br/>
                   {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
@@ -103,9 +103,9 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
                 <Grid.Column width={6}>
                   <br/>
                   <Modal.Actions>
-                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
                     <ReCloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
                     <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
                   </Modal.Actions>
                   <br/>
                   {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
@@ -126,8 +126,8 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
                 <Grid.Column width={6}>
                   <br/>
                   <Modal.Actions>
-                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
                     <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
                   </Modal.Actions>
                   <br/>
                   {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
@@ -162,25 +162,44 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
   else {
     // 참여 중 O
     if (meeting_info.members.includes(Number(state.user_id))) {
-      return (
-        <div>
-          <Modal.Content image>
-            <Grid columns={2}>
-              <Grid.Column width={6}>
-                <br/>
-                <Modal.Actions>
-                  <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
-                </Modal.Actions>
-                <br/>
-                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              </Grid.Column>
-              <Grid.Column width={9}>
-                {content}
-              </Grid.Column>
-            </Grid>
-          </Modal.Content>
-        </div>
-      )
+      switch (meeting_info.state) {
+        case meeting_state.BREAK_UP :
+          return (
+            <div>
+              <Modal.Content image>
+                <Grid columns={2}>
+                  <Grid.Column width={6}>
+                    {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                  </Grid.Column>
+                  <Grid.Column width={9}>
+                    {content}
+                  </Grid.Column>
+                </Grid>
+              </Modal.Content>
+            </div>
+          )
+
+        default :
+          return (
+            <div>
+              <Modal.Content image>
+                <Grid columns={2}>
+                  <Grid.Column width={6}>
+                    <br/>
+                    <Modal.Actions>
+                      <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
+                    </Modal.Actions>
+                    <br/>
+                    {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                  </Grid.Column>
+                  <Grid.Column width={9}>
+                    {content}
+                  </Grid.Column>
+                </Grid>
+              </Modal.Content>
+            </div>
+          )
+      }
     }
     // 참여 중 X
     else {
