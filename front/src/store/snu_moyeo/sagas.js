@@ -399,24 +399,24 @@ export function* modify_func(action) {
 export function* change_meeting_state_func(action) {
   let meeting_id = action.meeting_info.id
   const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`
-  const info_meeting = JSON.stringify(
-    {
-      title: action.meeting_info.title,
-      due: action.meeting_info.due,
-      min_people: action.meeting_info.min_people,
-      max_people: action.meeting_info.max_people,
-      description: action.meeting_info.description,
-      state: action.new_state,
-      kind: action.meeting_info.kind
-    }
-  );
+  const formData = new FormData();
+  formData.append('title', action.meeting_info.title);
+  formData.append('due', action.meeting_info.due);
+  formData.append('min_people', action.meeting_info.min_people);
+  formData.append('max_people', action.meeting_info.max_people);
+  formData.append('description', action.meeting_info.description);
+  formData.append('state', action.new_state);
+  formData.append('kind', action.meeting_info.kind);
+
+  if (action.meeting_info.picture !== null)
+    formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
+
   const response_meeting = yield call(fetch, url_meeting, {
       method: 'PUT',
       headers: {
-          'Authorization': `Basic ${action.hash}`,
-          'Content-Type': 'application/json',
+          'Authorization': `Basic ${action.hash}`
       },
-      body: info_meeting,
+      body: formData,
   })
   if (response_meeting.ok) {
     console.log('PUT ok')

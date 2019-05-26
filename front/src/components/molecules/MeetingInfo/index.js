@@ -56,18 +56,18 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
               <Grid columns={2}>
                 <Grid.Column width={6}>
                   <br/>
-                  <Modal.Actions>
-                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-                    <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                    <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                  </Modal.Actions>
-                  <br/>
                   <Image style={{float:'left'}} size='medium' src={meeting_info.picture} wrapped />
                 </Grid.Column>
                 <Grid.Column width={9}>
                   {content}
                 </Grid.Column>
               </Grid>
+              <Modal.Actions>
+                <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+                <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+              </Modal.Actions>
+              <br/>
             </Modal.Content>
           </div>
         )

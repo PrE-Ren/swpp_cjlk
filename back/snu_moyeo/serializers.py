@@ -15,12 +15,22 @@ class MeetingSerializer(serializers.ModelSerializer):
     picture = serializers.ImageField(use_url = True, allow_empty_file = True, required = False)
 
     def validate(self, data):
+        if 'picture' not in data.keys():
+            print('not input picture')
+            data['picture'] = ''
+        else :
+            picture = data['picture']
+
         due = data['due']
         created_when = django.utils.timezone.now()
 
-        if self.context['request'].method == 'POST' or self.context['request'].method == 'PUT' :
+        if self.context['request'].method == 'POST' :
             if (created_when >= due):
                 raise serializers.ValidationError("Meeting's Due should be future")
+
+        if self.context['request'].method == 'PUT' :
+            if (created_when >= due):
+                data['state'] = 4
 
         min_people = data['min_people']
         max_people = data['max_people']
