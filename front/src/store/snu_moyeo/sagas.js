@@ -300,7 +300,7 @@ export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const formData = new FormData();
-  console.log(action.meeting_info)
+
   if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
     formData.append('title', action.meeting_info.title);
     formData.append('due', action.meeting_info.due);
@@ -309,8 +309,10 @@ export function* new_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', 0);
     formData.append('kind', action.meeting_info.kind);
-    if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값이 설정됨
+    if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
       formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
+    else
+      formData.append('picture', null, null)
 
     const response_meeting = yield call(fetch, url_meeting, {
         method: 'POST',
@@ -368,11 +370,7 @@ export function* modify_func(action) {
     formData.append('state', action.meeting_info.state);
     formData.append('kind', action.meeting_info.kind);
 
-    // 사진 파일을 특별히 지정해주지 않은 채 수정 버튼을 누르면
-    // action.meeting_info.picture는 undefined이 되어(확인해봄)
-    // PUT을 한 결과 picture 필드의 값은 null이어야 함
-    // 근데 왜 사진이 사라지지를 않지..?
-    if (action.meeting_info.picture !== undefined)
+    if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
       formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
     else
       formData.append('picture', null, null)
@@ -409,13 +407,13 @@ export function* change_meeting_state_func(action) {
   formData.append('kind', action.meeting_info.kind);
 
   if (action.meeting_info.picture !== null)
-    formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
+    formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name)
+  else
+    formData.append('picture', null, null)
 
   const response_meeting = yield call(fetch, url_meeting, {
       method: 'PUT',
-      headers: {
-          'Authorization': `Basic ${action.hash}`
-      },
+      headers: { 'Authorization': `Basic ${action.hash}` },
       body: formData,
   })
   if (response_meeting.ok) {
@@ -423,7 +421,7 @@ export function* change_meeting_state_func(action) {
     window.location.reload()
   }
   else {
-    if(action.new_state == 1)
+    if (action.new_state == 1)
       alert("모임 인원이 최소 인원을 충족하지 못했습니다")
     console.log('PUT bad')
   }
