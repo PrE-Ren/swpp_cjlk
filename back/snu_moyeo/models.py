@@ -78,5 +78,5 @@ class Comment (models.Model):
     created = models.DateTimeField(auto_now_add = True)
     writer = models.ForeignKey('SnuUser', on_delete = models.CASCADE)
     writerid = models.IntegerField(default = -1)
-    meeting = models.ForeignKey('Meeting', related_name = 'comments', on_delete = models.CASCADE)
+    meetingid = models.ForeignKey('Meeting', related_name = 'comments', on_delete = models.CASCADE)
     content = models.CharField(max_length = 100)

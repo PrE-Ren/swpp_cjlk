@@ -21,7 +21,7 @@ export const CHANGE_PAGE_NUM_SUCCESS_ACTION = 'CHANGE_PAGE_NUM_SUCCESS_ACTION'
 export const LOAD_COMMENTS_ACTION = 'LOAD_COMMENTS_ACTION'
 export const LOAD_COMMENTS_SUCCESS_ACTION = 'LOAD_COMMENTS_SUCCESS_ACTION'
 export const ADD_COMMENT_ACTION = 'ADD_COMMENT_ACTION'
-/*export const EDIT_COMMENT_ACTION = 'EDIT_COMMENT_ACTION'*/
+export const EDIT_COMMENT_ACTION = 'EDIT_COMMENT_ACTION'
 export const DELETE_COMMENT_ACTION = 'DELETE_COMMENT_ACTION'
 
 export const reload_action = (option, meetinglist) => {
@@ -206,22 +206,25 @@ export const load_comments_success_action = (comments) => {
   }
 }
 
-export const add_comment_action = (hash, description, meeting_id) => {
+export const add_comment_action = (hash, content, meeting_id) => {
   return {
     type : ADD_COMMENT_ACTION,
     hash,
-    description,
+    content,
     meeting_id
   }
 }
 
-/*export const edit_comment_action = (hash, comment) => {
+export const edit_comment_action = (hash, comment_id, meeting_id, writer_id, content) => {
   return {
     type : EDIT_COMMENT_ACTION,
     hash,
-    comment
+    comment_id,
+    meeting_id,
+    writer_id, 
+    content
   }
-}*/
+}
 
 export const delete_comment_action = (hash, comment_id) => {
   return {

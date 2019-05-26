@@ -107,12 +107,12 @@ export function* watchAddComment() {
   }
 }
 
-/*export function* watchEditComment() {
+export function* watchEditComment() {
   while(true) {
     const action = yield take(actions.EDIT_COMMENT_ACTION)
     yield call(edit_comment_func, action)
   }
-}*/
+}
 
 export function* watchDeleteComment() {
   while(true) {
@@ -553,7 +553,7 @@ export function* load_comments_func(action) {
 
 export function* add_comment_func(action) {
   const url_comment = 'http://127.0.0.1:8000/comment/'
-  const info_comment = JSON.stringify({ meeting: action.meeting_id, content: action.description})
+  const info_comment = JSON.stringify({ meetingid: action.meeting_id, content: action.content})
   const response_comment = yield call(fetch, url_comment, {
       method: 'POST',
       headers: {
@@ -571,9 +571,9 @@ export function* add_comment_func(action) {
     console.log('Comment POST bad')
 }
 
-/*export function* edit_comment_func(action) {
-  const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment.id + '/'
-  const info_comment = JSON.stringify({ ~ })
+export function* edit_comment_func(action) {
+  const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment_id + '/'
+  const info_comment = JSON.stringify({ meetingid: action.meeting_id, writerid: action.writer_id, content: action.content })
   const response_comment = yield call(fetch, url_comment, {
       method: 'PUT',
       headers: {
@@ -589,7 +589,7 @@ export function* add_comment_func(action) {
   }
   else
     console.log('Comment PUT bad')
-}*/
+}
 
 export function* delete_comment_func(action) {
   const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment_id + '/'
@@ -623,6 +623,6 @@ export default function* () {
   yield fork(watchChangePageNum)
   yield fork(watchLoadComments)
   yield fork(watchAddComment)
-  /*yield fork(watchEditComment)*/
+  yield fork(watchEditComment)
   yield fork(watchDeleteComment)
 }

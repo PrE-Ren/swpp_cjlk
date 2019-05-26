@@ -170,6 +170,6 @@ class CommentSerializer(serializers.ModelSerializer) :
             'created',      # invisible (auto_now_add = True in models.py)
             'writer',       # invisible (ReadOnlyField in serializers.py)
             'writerid',
-            'meeting',
+            'meetingid',
             'content'
         )

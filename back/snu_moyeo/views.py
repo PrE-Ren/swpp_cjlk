@@ -314,7 +314,7 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class CommentOnMeeting(APIView):
     def get(self, request, in_meetingid):
-        comments = Comment.objects.filter(Q(meeting_id = in_meetingid))
+        comments = Comment.objects.filter(Q(meetingid_id = in_meetingid))
         serializer = CommentSerializer(comments, many = True)
         return Response(serializer.data)
 
