@@ -14,7 +14,7 @@ class MeetingSerializer(serializers.ModelSerializer):
     leader = serializers.CharField(read_only = True)
     picture = serializers.ImageField(use_url = True, allow_empty_file = True, required = False)
     comments = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
-    members = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
+    #members = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
 
     def validate(self, data):
         if 'picture' not in data.keys():
