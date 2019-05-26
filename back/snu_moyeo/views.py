@@ -99,7 +99,7 @@ class SendEmail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
         user = request.user
         email_token = random.randint(10000000, 99999999)
         send_mail('SnuMoyeo Authenticate', 'Authentication Code : ' + str(email_token),
-                  'toro.8906@gmail.com', [email], fail_silently = False)
+                'toro.8906@gmail.com', [email], fail_silently = False)
 
         user_serializer = SnuUserSerializer(user, data = {'mySNU_verification_token':email_token}, partial = True)
         if user_serializer.is_valid():
@@ -163,23 +163,23 @@ class SMSAuthenticate (APIView):
             return Response(user_serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 class LogIn(APIView):
-        queryset = SnuUser.objects.all()
-        serializer_class = SnuUserSerializer
-        permission_classes = ()
+    queryset = SnuUser.objects.all()
+    serializer_class = SnuUserSerializer
+    permission_classes = ()
 
-        def get(self, request, format = None):
-                print('Log in..')
-                user = request.user
-                if user.mySNU_verified == True and user.phone_verified == True:
-                    return Response(data = {
-                        'user_id':user.id,
-                        'email':user.email,
-                        'phone_number':user.phone_number,
-                        'mySNU_verification_token':user.mySNU_verification_token,
-                        'name':user.name
-                    }, status = status.HTTP_202_ACCEPTED)
-                else :
-                    return Response(data = {'details':'Not SNU verified.'}, status = status.HTTP_403_FORBIDDEN)
+    def get(self, request, format = None):
+        print('Log in..')
+        user = request.user
+        if user.mySNU_verified == True and user.phone_verified == True:
+            return Response(data = {
+                'user_id':user.id,
+                'email':user.email,
+                'phone_number':user.phone_number,
+                'mySNU_verification_token':user.mySNU_verification_token,
+                'name':user.name
+                }, status = status.HTTP_202_ACCEPTED)
+        else :
+            return Response(data = {'details':'Not SNU verified.'}, status = status.HTTP_403_FORBIDDEN)
 
 class SnuUserList(generics.ListAPIView):
     queryset = SnuUser.objects.all()
@@ -238,7 +238,7 @@ class LeadList(generics.ListAPIView):
             lead_user = SnuUser.objects.get(id = user.id)
             return lead_user.lead_meeting.all()
         return Meeting.objects.none()
-        # Meeting.objects.filter(Q(leader = user) and ~Q(state = BREAK_UP))
+    # Meeting.objects.filter(Q(leader = user) and ~Q(state = BREAK_UP))
 
 class JoinList (generics.ListAPIView):
     serializer_class = MeetingSerializer
@@ -271,11 +271,11 @@ class CustomPagination(PageNumberPagination):
             'links': {
                 'next': self.get_next_link(),
                 'previous': self.get_previous_link()
-            },
+                },
             'count': self.page.paginator.count,
             'page_size': self.page_size,
             'results': data
-        })
+            })
 
 '''
 simple version pagination (not used now)
@@ -308,9 +308,10 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
     permission_classes = (UserOnlyAccess,)
 
-
-#def changeState() :
-#    meeting_objects = Meeting.objects.all()
-#    for i in meeting_objects
-#        if i.state ==  1 or i.state == 3 :
-            
+'''
+def changeState() :
+    meeting_objects = Meeting.objects.all()
+    for i in meeting_objects
+        if i.state ==  1 or i.state == 3 :
+            i.state = 2
+'''
