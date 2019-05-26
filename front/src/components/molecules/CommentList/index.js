@@ -45,7 +45,7 @@ export const CommentList = ({ username, password, comments, meeting_id,
           </Comment>)}
         <Form reply>
           <Form.TextArea placeholder='Comment on this meeting...' onChange={(e) => { content = e.target.value }}/>
-          <Button content='Add Reply' labelPosition='left' icon='edit' primary onClick={() => add_comment_click(hash, content, meeting_id)}/>
+          <Button content='댓글 작성' labelPosition='left' icon='edit' primary onClick={() => add_comment_click(hash, content, meeting_id)}/>
         </Form>
       </Comment.Group>)
   }
