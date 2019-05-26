@@ -15,6 +15,11 @@ class MeetingSerializer(serializers.ModelSerializer):
     picture = serializers.ImageField(use_url = True, allow_empty_file = True, required = False)
 
     def validate(self, data):
+        if 'picture' not in data.keys():
+            print('not input picture')
+            data['picture'] = ''
+        else :
+            picture = data['picture']
         due = data['due']
         created_when = django.utils.timezone.now()
         
