@@ -568,6 +568,7 @@ export function* add_comment_func(action) {
     window.location.reload()  // 창 안 꺼지게 어떻게 하지
   }
   else
+    alert('댓글을 입력해주세요.')
     console.log('Comment POST bad')
 }
 
