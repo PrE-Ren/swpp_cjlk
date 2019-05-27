@@ -1,26 +1,37 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
-import styled from 'styled-components'
-import { font, palette } from 'styled-theme'
 import MeetingEntry from '../../atoms/MeetingEntry'
 import LeadList from '../../../containers/LeadList'
 import JoinList from '../../../containers/JoinList'
 import HistoryList from '../../../containers/HistoryList'
-import { Container } from 'semantic-ui-react'
-
-const Font_Info = styled.div`
-  font-size: 20px;
-  display: inline-block;
-`
+import { Container, Header, List, Segment, Label } from 'semantic-ui-react'
 
 export const MyInfo = ({ state }) => {
   console.log('<MyInfo Rendering>')
   return (
     <Container>
-      <Container>
-        <Font_Info>1. 이름 : {state.name}</Font_Info><br />
-        <Font_Info>2. SNU 메일 : {state.email}</Font_Info><br /><br />
-      </Container>
+      <Segment raised>
+        <Label as='a' color='purple' ribbon>My Information</Label>
+        <Header as='h1'>내 정보</Header>
+        <List>
+          <List.Item>
+            <List.Icon name='user' />
+            <List.Content>아이디 : {state.username}</List.Content>
+          </List.Item>
+          <List.Item>
+            <List.Icon name='pencil alternate' />
+            <List.Content>이름 : {state.name}</List.Content>
+          </List.Item>
+          <List.Item>
+            <List.Icon name='mail' />
+            <List.Content>이메일 : {state.email}</List.Content>
+          </List.Item>
+          <List.Item>
+            <List.Icon name='call' />
+            <List.Content>핸드폰 : {state.phone_number}</List.Content>
+          </List.Item>
+        </List>
+      </Segment>
       <Container>
         <LeadList />
         <JoinList />
@@ -28,8 +39,4 @@ export const MyInfo = ({ state }) => {
       </Container>
     </Container>
   )
-}
-
-MyInfo.propTypes = {
-  reverse: PropTypes.bool,
 }

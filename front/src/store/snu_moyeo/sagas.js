@@ -93,6 +93,34 @@ export function* watchChangePageNum() {
   }
 }
 
+export function* watchLoadComments() {
+  while(true) {
+    const action = yield take(actions.LOAD_COMMENTS_ACTION)
+    yield call(load_comments_func, action)
+  }
+}
+
+export function* watchAddComment() {
+  while(true) {
+    const action = yield take(actions.ADD_COMMENT_ACTION)
+    yield call(add_comment_func, action)
+  }
+}
+
+export function* watchEditComment() {
+  while(true) {
+    const action = yield take(actions.EDIT_COMMENT_ACTION)
+    yield call(edit_comment_func, action)
+  }
+}
+
+export function* watchDeleteComment() {
+  while(true) {
+    const action = yield take(actions.DELETE_COMMENT_ACTION)
+    yield call(delete_comment_func, action)
+  }
+}
+
 function* get_meetinglist(type) {
   const get_token = (state) => state.snu_moyeo.mySNU_verification_token
   const token = yield select(get_token)
@@ -509,6 +537,75 @@ export function* change_page_num_func(action) {
   }
 }
 
+export function* load_comments_func(action) {
+  const url_comments = 'http://127.0.0.1:8000/comment/meeting/' + action.meeting_id + '/'
+  const response_comments = yield call(fetch, url_comments, { method : 'GET' })
+
+  if (response_comments.ok) {
+    const comments = yield call([response_comments, response_comments.json])
+    console.log('<Fetch comments of this meeting>')
+    console.log(comments)
+    yield put(actions.load_comments_success_action(comments))
+  }
+  else
+    alert('<Fail to fetch comments of this meeting>')
+}
+
+export function* add_comment_func(action) {
+  const url_comment = 'http://127.0.0.1:8000/comment/'
+  const info_comment = JSON.stringify({ meetingid: action.meeting_id, content: action.content})
+  const response_comment = yield call(fetch, url_comment, {
+      method: 'POST',
+      headers: {
+          'Authorization': `Basic ${action.hash}`,
+          'Content-Type': 'application/json',
+      },
+      body: info_comment,
+  })
+
+  if (response_comment.ok) {
+    console.log('Comment POST ok')
+    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+  }
+  else
+    console.log('Comment POST bad')
+}
+
+export function* edit_comment_func(action) {
+  const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment_id + '/'
+  const info_comment = JSON.stringify({ meetingid: action.meeting_id, writerid: action.writer_id, content: action.content })
+  const response_comment = yield call(fetch, url_comment, {
+      method: 'PUT',
+      headers: {
+          'Authorization': `Basic ${action.hash}`,
+          'Content-Type': 'application/json',
+      },
+      body: info_comment,
+  })
+
+  if (response_comment.ok) {
+    console.log('Comment PUT ok')
+    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+  }
+  else
+    console.log('Comment PUT bad')
+}
+
+export function* delete_comment_func(action) {
+  const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment_id + '/'
+  const response_comment = yield call(fetch, url_comment, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Basic ${action.hash}` },
+  })
+
+  if (response_comment.ok) {
+    console.log('Comment DELETE ok')
+    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+  }
+  else
+    console.log('Comment DELETE bad')
+}
+
 export default function* () {
   yield fork(reload)
   yield fork(watchLogin)
@@ -524,4 +621,8 @@ export default function* () {
   yield fork(watchJoinMeeting)
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
+  yield fork(watchLoadComments)
+  yield fork(watchAddComment)
+  yield fork(watchEditComment)
+  yield fork(watchDeleteComment)
 }

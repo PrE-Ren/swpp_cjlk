@@ -10,7 +10,7 @@ const Font_Classify = styled.div`
   padding-bottom: 20px;
   text-align: center;
 `
-
+// style={{backgroundColor: '#35bdb2'}}
 export const Left_sidebar = () => {
   return (
     <Sidebar as={Menu} animation='overlay' icon='labeled' inverted vertical visible width='thin'>

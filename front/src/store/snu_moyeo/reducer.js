@@ -110,6 +110,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
          page_num : null
        }
       }
+
       case 'CHANGE_PAGE_NUM_SUCCESS_ACTION': {
         const meetinglist = JSON.stringify(action.meetinglist)
         localStorage.setItem("list", meetinglist)
@@ -120,6 +121,15 @@ const snu_moyeo_reducer = (state = initialState, action) => {
           page_num : action.page_num
         }
       }
+
+      case 'LOAD_COMMENTS_SUCCESS_ACTION': {
+        const comments = JSON.stringify(action.comments)
+        return {
+          ...state,
+          comments: comments
+        }
+      }
+
       default:
         return state
     }
