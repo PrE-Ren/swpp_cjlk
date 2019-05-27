@@ -6,38 +6,38 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         const meetinglist = JSON.stringify(action.meetinglist)
         switch(action.option) {
           case 'impending' :
-            localStorage.setItem(action.option, meetinglist)
+            sessionStorage.setItem(action.option, meetinglist)
             return {
               ...state,
               meetinglist_impending : meetinglist
             }
           case 'recent' :
-            localStorage.setItem(action.option, meetinglist)
+            sessionStorage.setItem(action.option, meetinglist)
             return {
               ...state,
               meetinglist_recent : meetinglist
             }
           case 'lead' :
-            localStorage.setItem(action.option, meetinglist)
+            sessionStorage.setItem(action.option, meetinglist)
             return {
               ...state,
               meetinglist_lead : meetinglist
             }
           case 'join' :
-            localStorage.setItem(action.option, meetinglist)
+            sessionStorage.setItem(action.option, meetinglist)
             return {
               ...state,
               meetinglist_join : meetinglist
             }
           case 'history' :
-            localStorage.setItem(action.option, meetinglist)
+            sessionStorage.setItem(action.option, meetinglist)
             return {
               ...state,
               meetinglist_history : meetinglist
             }
           default :
-          localStorage.setItem("list", meetinglist)
-          localStorage.setItem("page_num", 1)
+          sessionStorage.setItem("list", meetinglist)
+          sessionStorage.setItem("page_num", 1)
             return {
               ...state,
               meetinglist_list : meetinglist,
@@ -46,13 +46,13 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         }
       }
       case 'LOGIN_SUCCESS_ACTION': {
-        localStorage.setItem("username", action.data.username);
-        localStorage.setItem("password", action.data.password);
-        localStorage.setItem("token", action.data.mySNU_verification_token);
-        localStorage.setItem("user_id", action.data.user_id);
-        localStorage.setItem("email", action.data.email);
-        localStorage.setItem("phone_number", action.data.phone_number);
-        localStorage.setItem("name", action.data.name);
+        sessionStorage.setItem("username", action.data.username);
+        sessionStorage.setItem("password", action.data.password);
+        sessionStorage.setItem("token", action.data.mySNU_verification_token);
+        sessionStorage.setItem("user_id", action.data.user_id);
+        sessionStorage.setItem("email", action.data.email);
+        sessionStorage.setItem("phone_number", action.data.phone_number);
+        sessionStorage.setItem("name", action.data.name);
         return {
           ...state,
           username: action.data.username,
@@ -66,8 +66,8 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
 
       case 'LOGIN_AUTH_ACTION': {
-        localStorage.setItem("username", action.username);
-        localStorage.setItem("password", action.password);
+        sessionStorage.setItem("username", action.username);
+        sessionStorage.setItem("password", action.password);
         return {
           ...state,
           username: action.username,
@@ -80,19 +80,19 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
 
       case 'LOGOUT_ACTION': {
-       localStorage.removeItem("username");
-       localStorage.removeItem("password");
-       localStorage.removeItem("token");
-       localStorage.removeItem("user_id");
-       localStorage.removeItem("email");
-       localStorage.removeItem("name");
-       localStorage.removeItem("impending");
-       localStorage.removeItem("recent");
-       localStorage.removeItem("lead");
-       localStorage.removeItem("join");
-       localStorage.removeItem("history");
-       localStorage.removeItem("list");
-       localStorage.removeItem("page_num");
+       sessionStorage.removeItem("username");
+       sessionStorage.removeItem("password");
+       sessionStorage.removeItem("token");
+       sessionStorage.removeItem("user_id");
+       sessionStorage.removeItem("email");
+       sessionStorage.removeItem("name");
+       sessionStorage.removeItem("impending");
+       sessionStorage.removeItem("recent");
+       sessionStorage.removeItem("lead");
+       sessionStorage.removeItem("join");
+       sessionStorage.removeItem("history");
+       sessionStorage.removeItem("list");
+       sessionStorage.removeItem("page_num");
        return {
          ...state,
          username: null,
@@ -113,8 +113,8 @@ const snu_moyeo_reducer = (state = initialState, action) => {
 
       case 'CHANGE_PAGE_NUM_SUCCESS_ACTION': {
         const meetinglist = JSON.stringify(action.meetinglist)
-        localStorage.setItem("list", meetinglist)
-        localStorage.setItem("page_num", action.page_num)
+        sessionStorage.setItem("list", meetinglist)
+        sessionStorage.setItem("page_num", action.page_num)
         return {
           ...state,
           meetinglist_list : meetinglist,

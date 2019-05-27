@@ -385,7 +385,7 @@ export function* new_func(action) {
 }
 
 export function* modify_func(action) {
-  const meeting_info = JSON.parse(localStorage.getItem("meeting_info"))
+  const meeting_info = JSON.parse(sessionStorage.getItem("meeting_info"))
   const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_info.id}/`
   const formData = new FormData();
 
@@ -410,7 +410,7 @@ export function* modify_func(action) {
     })
     if (response_meeting.ok) {
       console.log('Meeting PUT ok')
-      localStorage.removeItem('meeting_info')
+      sessionStorage.removeItem('meeting_info')
       window.location.href = '/'
     }
     else {
@@ -458,7 +458,7 @@ export function* change_meeting_state_func(action) {
 
 export function* change_meeting_info_func(action) {
   const meeting_info = JSON.stringify(action.meeting_info)
-  localStorage.setItem("meeting_info", meeting_info)
+  sessionStorage.setItem("meeting_info", meeting_info)
   window.location.href = "/new"
 }
 
