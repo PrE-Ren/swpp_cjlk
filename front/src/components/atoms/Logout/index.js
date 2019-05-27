@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import { Button, Icon } from 'semantic-ui-react'
 
 export const Logout = ({ logout_click }) => {
@@ -11,8 +10,3 @@ export const Logout = ({ logout_click }) => {
     </div>
   );
 };
-
-Logout.defaultProps = {
-    palette: 'primary',
-    type: 'button',
-}

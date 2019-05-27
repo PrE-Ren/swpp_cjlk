@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import Left_sidebar from '../../molecules/Left_sidebar'
 import MyInfo from '../../../containers/MyInfo'
 import Right_sidebar from '../../molecules/Right_sidebar'

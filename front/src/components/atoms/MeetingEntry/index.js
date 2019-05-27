@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import MeetingInfo from '../../../containers/MeetingInfo'
 import { Modal, Card } from 'semantic-ui-react'
 

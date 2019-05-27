@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import Left_sidebar from '../../molecules/Left_sidebar'
 import ImpendingList from '../../../containers/ImpendingList'
 import RecentList from '../../../containers/RecentList'

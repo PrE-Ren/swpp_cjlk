@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import { Button, Icon } from 'semantic-ui-react'
 
 const ToMyPage = () => {
@@ -9,10 +8,5 @@ const ToMyPage = () => {
       </Button>
   );
 };
-
-ToMyPage.defaultProps = {
-    palette: 'primary',
-    type: 'button',
-}
 
 export default ToMyPage

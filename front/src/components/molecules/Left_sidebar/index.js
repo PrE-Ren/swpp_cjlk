@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import { Icon, Menu, Sidebar } from 'semantic-ui-react'
 import styled from 'styled-components'
 
@@ -10,6 +9,7 @@ const Font_Classify = styled.div`
   padding-bottom: 20px;
   text-align: center;
 `
+
 // style={{backgroundColor: '#35bdb2'}}
 export const Left_sidebar = () => {
   return (
@@ -23,11 +23,6 @@ export const Left_sidebar = () => {
       <Menu.Item as='a' href="/list/4"><Icon name='heart' />미팅</Menu.Item>
     </Sidebar>
   )
-}
-
-Left_sidebar.propTypes = {
-  reverse: PropTypes.bool,
-  children: PropTypes.node,
 }
 
 export default Left_sidebar

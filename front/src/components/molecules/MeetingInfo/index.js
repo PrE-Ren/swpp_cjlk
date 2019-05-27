@@ -1,17 +1,9 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
-import styled from 'styled-components'
 import CommentList from '../../../containers/CommentList'
 import * as meeting_state from '../../../literal'
 import { ModifyButton, CloseButton, BreakUpButton, ReOpenButton, ReCloseButton } from '../../atoms/ButtonsInMeetingInfo'
 import { JoinButton, WithdrawButton } from '../../atoms/ButtonsInMeetingInfo'
-import { Modal, Image, Grid, List, Container } from 'semantic-ui-react'
-
-const Font = styled.div`
-  float: right;
-  font-size: 17px;
-  font-weight: 600;
-`
+import { Modal, Image, List } from 'semantic-ui-react'
 
 const dateParse = (data) => {
     const year = data.substring(0, 19).replace("-", "년 ")
@@ -188,9 +180,4 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
       )
     }
   }
-}
-
-MeetingInfo.propTypes = {
-  reverse: PropTypes.bool,
-  children: PropTypes.node,
 }

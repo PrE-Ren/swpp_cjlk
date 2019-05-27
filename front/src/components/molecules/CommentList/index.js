@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import { Button, Comment, Form, Header, Modal } from 'semantic-ui-react'
 
 export const CommentList = ({ username, password, comments, meeting_id,
