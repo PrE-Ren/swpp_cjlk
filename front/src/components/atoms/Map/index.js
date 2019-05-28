@@ -43,8 +43,4 @@ class Map extends React.Component {
   }
 }
 
-$(document).ready(function () {
-    ReactDOM.render(<Map />, document.getElementById('map'));
-});
-
 export default Map;

@@ -28,7 +28,7 @@ export const CommentList = ({ username, password, comments, meeting_id,
                     <Form.TextArea defaultValue={comment.content} onChange={(e) => { new_content = e.target.value }}/>
                   </Form>
                   <Modal.Actions>
-                    <Button positive icon='checkmark' labelPosition='right' content='Edit' onClick={() => edit_comment_click(hash, comment.id, meeting_id, sessionStorage.getItem("user_id"), (new_content !== undefined) ? new_content : comment.content)}/>
+                    <Button positive icon='checkmark' labelPosition='right' content='완료' onClick={() => edit_comment_click(hash, comment.id, meeting_id, sessionStorage.getItem("user_id"), (new_content !== undefined) ? new_content : comment.content)}/>
                     <Button negative>취소</Button>
                   </Modal.Actions>
                 </Modal>
