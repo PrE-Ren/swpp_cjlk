@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import MeetingInfo from '../../../containers/MeetingInfo'
 import { Modal, Card } from 'semantic-ui-react'
 
@@ -22,7 +21,10 @@ export class MeetingEntry extends React.Component {
     let meeting_entry = (
       <Card.Content style={{ cursor: 'pointer' }} onClick={() => { this.props.load_comments_click(this.props.meeting_info.id) }}>
         <Card.Header as='h5'>{this.props.meeting_info.title}</Card.Header>
-        <Card.Meta>모집 현황 : {this.props.meeting_info.members.length}/{this.props.meeting_info.max_people}</Card.Meta>
+        <Card.Meta>
+          모집 현황 : {this.props.meeting_info.members.length}명/{this.props.meeting_info.max_people}명&ensp;
+          (최소 인원 : {this.props.meeting_info.min_people}명)
+        </Card.Meta>
         <Card.Meta>마감 기한 : {dateParse(this.props.meeting_info.due)}</Card.Meta>
         <Card.Description>{this.props.meeting_info.description}</Card.Description>
       </Card.Content>

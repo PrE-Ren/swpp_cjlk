@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import { Button, Icon } from 'semantic-ui-react'
 import * as meeting_state from '../../../literal'
 

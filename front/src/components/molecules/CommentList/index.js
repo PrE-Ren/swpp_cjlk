@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import { Button, Comment, Form, Header, Modal } from 'semantic-ui-react'
 
 export const CommentList = ({ username, password, comments, meeting_id,
@@ -13,7 +12,7 @@ export const CommentList = ({ username, password, comments, meeting_id,
 
     return (
       <Comment.Group style={{ marginLeft:'20px' }}>
-        <Header as='h3' dividing>Comments</Header>
+        <Header as='h3' dividing>관련 댓글</Header>
         {comment_list.map(comment =>
           <Comment key = {comment.id} >
             <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
@@ -22,24 +21,27 @@ export const CommentList = ({ username, password, comments, meeting_id,
               <Comment.Metadata><div>{comment.created}</div></Comment.Metadata>
               <Comment.Text>{comment.content}</Comment.Text>
               <Comment.Actions>
-                <Modal size='small' trigger={ (username == comment.writer) ? <Comment.Action>Edit</Comment.Action> : <div></div> }>
-                  <Modal.Header>Edit Your Comment</Modal.Header>
+
+                <Modal size='small' trigger={ (username == comment.writer) ? <Comment.Action>편집</Comment.Action> : <div></div> }>
+                  <Modal.Header>댓글 편집</Modal.Header>
                   <Form reply style={{ margin: '10px' }}>
                     <Form.TextArea defaultValue={comment.content} onChange={(e) => { new_content = e.target.value }}/>
                   </Form>
                   <Modal.Actions>
-                    <Button positive icon='checkmark' labelPosition='right' content='Edit' onClick={() => edit_comment_click(hash, comment.id, meeting_id, localStorage.getItem("user_id"), (new_content !== undefined) ? new_content : comment.content)}/>
-                    <Button negative>Cancle</Button>
+                    <Button positive icon='checkmark' labelPosition='right' content='Edit' onClick={() => edit_comment_click(hash, comment.id, meeting_id, sessionStorage.getItem("user_id"), (new_content !== undefined) ? new_content : comment.content)}/>
+                    <Button negative>취소</Button>
                   </Modal.Actions>
                 </Modal>
-                <Modal size='small' trigger={ (username == comment.writer) ? <Comment.Action>Delete</Comment.Action> : <div></div>}>
-                  <Modal.Header>Delete Your Comment</Modal.Header>
-                  <Modal.Content><p>Do you want to delete this comment?</p></Modal.Content>
+
+                <Modal size='small' trigger={ (username == comment.writer) ? <Comment.Action>삭제</Comment.Action> : <div></div>}>
+                  <Modal.Header>댓글 삭제</Modal.Header>
+                  <Modal.Content><p>정말로 이 댓글을 삭제하시겠습니까?</p></Modal.Content>
                   <Modal.Actions>
-                    <Button positive icon='checkmark' labelPosition='right' content='Yes' onClick={() => delete_comment_click(hash, comment.id)}/>
-                    <Button negative>No</Button>
+                    <Button positive icon='checkmark' labelPosition='right' content='예' onClick={() => delete_comment_click(hash, comment.id)}/>
+                    <Button negative>아니오</Button>
                   </Modal.Actions>
                 </Modal>
+
               </Comment.Actions>
             </Comment.Content>
           </Comment>)}

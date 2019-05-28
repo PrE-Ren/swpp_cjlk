@@ -1,6 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
-import { Container, Form, Ref } from 'semantic-ui-react'
+import { Form  } from 'semantic-ui-react'
 
 const options = [
   { key: 0, text: '음식배달', value: 0 },
@@ -104,8 +103,4 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
       </Form>
     )
   }
-}
-
-MeetingCreate.propTypes = {
-  reverse: PropTypes.bool,
 }

@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import MeetingEntry from '../../atoms/MeetingEntry'
 import LeadList from '../../../containers/LeadList'
 import JoinList from '../../../containers/JoinList'

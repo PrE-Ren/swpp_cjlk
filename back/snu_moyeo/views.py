@@ -163,10 +163,10 @@ class SnuUserDetail(generics.RetrieveUpdateDestroyAPIView):
 def changeState():
     current = django.utils.timezone.now()
     print(current)
-    Meeting.objects.filter(Q(state = OPEN) & Q(due__lt = current)).update(state = CLOSED)
 
-    # Possibility for optimization
-    for meeting_object in Meeting.objects.filter(Q(state = CLOSED) & Q(due__lt = current)):
+    # Need optimization !! (to Jongmin)
+    Meeting.objects.filter(Q(state = OPEN) & Q(due__lt = current)).update(state = BREAK_UP)
+    for meeting_object in Meeting.objects.filter(Q(state = BREAK_UP) & Q(due__lt = current)):
         meeting_object.save()
 
 class MeetingList(generics.ListCreateAPIView):

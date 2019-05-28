@@ -1,6 +1,5 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
-import { Button, Form, Grid, Header, Image, Message, Segment, Container } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment, Container } from 'semantic-ui-react'
 
 export const LoginAuthPage = ({ username, password, token,
                                 send_email_click, send_phone_click, confirm_email_click, confirm_phone_click, login_click }) => {

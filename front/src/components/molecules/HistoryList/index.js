@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import MeetingEntry from '../../../containers/MeetingEntry'
 import { Segment, Card, Header, Label } from 'semantic-ui-react'
 

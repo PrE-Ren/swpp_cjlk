@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import { Button, Icon } from 'semantic-ui-react'
 import styled from 'styled-components'
 
@@ -23,10 +22,5 @@ const Make_New = () => {
     </Make_New_Css>
   );
 };
-
-Make_New.defaultProps = {
-    palette: 'primary',
-    type: 'button',
-}
 
 export default Make_New
