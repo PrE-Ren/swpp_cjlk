@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import Left_sidebar from '../../molecules/Left_sidebar'
 import KindList from '../../../containers/KindList'
 import Right_sidebar from '../../molecules/Right_sidebar'
@@ -37,11 +36,16 @@ export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => 
           </Container>
           <Container>
             <KindList /><br />
-            <Search /><br />
-            <Pagination defaultActivePage={1} totalPages={last_page_num} onPageChange={(e, {activePage}) => change_page_num_click({activePage}.activePage)} />
+            <Grid columns={2}>
+              <Grid.Column width={12}>
+                <Pagination defaultActivePage={1} totalPages={last_page_num} onPageChange={(e, {activePage}) => change_page_num_click({activePage}.activePage)} />
+              </Grid.Column>
+              <Grid.Column width={4}>
+                <Search />
+              </Grid.Column>
+            </Grid>
           </Container>
         </Grid.Column>
-
         <Grid.Column width={4}>
           <Right_sidebar />
         </Grid.Column>

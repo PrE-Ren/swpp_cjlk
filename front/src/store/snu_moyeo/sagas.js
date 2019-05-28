@@ -328,7 +328,6 @@ export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const formData = new FormData();
-
   if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
     formData.append('title', action.meeting_info.title);
     formData.append('due', action.meeting_info.due);
@@ -337,10 +336,14 @@ export function* new_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', 0);
     formData.append('kind', action.meeting_info.kind);
+    formData.append('latitude', sessionStorage.getItem("lat"));
+    formData.append('longitude', sessionStorage.getItem("lng"));
     if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
       formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
     else
       formData.append('picture', null, null)
+
+
 
     const response_meeting = yield call(fetch, url_meeting, {
         method: 'POST',
@@ -397,7 +400,8 @@ export function* modify_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', action.meeting_info.state);
     formData.append('kind', action.meeting_info.kind);
-
+    formData.append('latitude', sessionStorage.getItem("lat"));
+    formData.append('longitude', sessionStorage.getItem("lng"));
     if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
       formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
     else

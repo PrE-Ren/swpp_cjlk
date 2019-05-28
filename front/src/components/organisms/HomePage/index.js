@@ -19,6 +19,7 @@ export const HomePage = ({ token }) => {
         <Grid.Column width={2}>
           <Left_sidebar />
         </Grid.Column>
+
         <Grid.Column width={10}>
           <Container>
             <Header as='h1' icon textAlign='center'>
