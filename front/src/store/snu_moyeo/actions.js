@@ -9,6 +9,8 @@ export const SEND_EMAIL_ACTION = 'SEND_EMAIL_ACTION'
 export const SEND_PHONE_ACTION = 'SEND_PHONE_ACTION'
 export const CONFIRM_EMAIL_ACTION = 'CONFIRM_EMAIL_ACTION'
 export const CONFIRM_PHONE_ACTION = 'CONFIRM_PHONE_ACTION'
+export const SUCCESS_EMAIL_ACTION = 'SUCCESS_EMAIL_ACTION'
+export const SUCCESS_PHONE_ACTION = 'SUCCESS_PHONE_ACTION'
 export const NEW_ACTION = 'NEW_ACTION'
 export const MODIFY_ACTION = 'MODIFY_ACTION'
 export const CHANGE_MEETING_STATE_ACTION = 'CHANGE_MEETING_STATE_ACTION'
@@ -40,13 +42,14 @@ export const login_action = (username, password) => {
     }
 };
 
-export const login_success_action = (username, password, mySNU_verification_token, user_id, email, phone_number, name) => {
+export const login_success_action = (username, password, mySNU_verification_token, phone_token, user_id, email, phone_number, name) => {
     return {
         type : LOGIN_SUCCESS_ACTION,
         data : {
             username : username,
             password : password,
             mySNU_verification_token : mySNU_verification_token,
+            phone_token : phone_token,
             user_id : user_id,
             email : email,
             phone_number : phone_number,
@@ -114,6 +117,20 @@ export const confirm_phone_action = (hash, phone_number, phone_token) => {
       type : CONFIRM_PHONE_ACTION,
       hash : hash,
       phone_number : phone_number,
+      phone_code : phone_token
+  }
+};
+
+export const success_email_action = (mySNU_verification_token) => {
+  return {
+      type : SUCCESS_EMAIL_ACTION,
+      email_code : mySNU_verification_token
+  }
+};
+
+export const success_phone_action = (phone_token) => {
+  return {
+      type : SUCCESS_PHONE_ACTION,
       phone_code : phone_token
   }
 };

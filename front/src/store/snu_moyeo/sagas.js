@@ -190,6 +190,7 @@ export function* reload() {
     }
   }
   else {
+    /*
     const meetinglist_impending = yield call(get_meetinglist, 'impending')
     const meetinglist_recent = yield call(get_meetinglist, 'recent')
     if (meetinglist_impending !== null && meetinglist_recent !== null) {
@@ -197,6 +198,7 @@ export function* reload() {
       yield put(actions.reload_action('impending', meetinglist_impending))
       yield put(actions.reload_action('recent', meetinglist_recent))
     }
+    */
   }
 }
 
@@ -224,7 +226,7 @@ export function* login_func(action) {
     if (response_user.ok) {
       alert('로그인 성공')
       const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.phone_number, response_user_data.name))
+      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.phone_token, response_user_data.user_id, response_user_data.email, response_user_data.phone_number, response_user_data.name))
       Object.defineProperty(window.location, 'href', {
         writable: true,
         value: '/'
@@ -304,6 +306,7 @@ export function* confirm_email_func(action) {
   })
   if (response_email.ok) {
     alert('인증 완료')
+    yield put(actions.success_email_action(action.email_code))
   }
   else {
     alert('인증번호가 틀렸습니다.')
@@ -318,6 +321,7 @@ export function* confirm_phone_func(action) {
   })
   if (response_phone.ok) {
     alert('인증 완료')
+    yield put(actions.success_phone_action(action.phone_code))
   }
   else {
     alert('인증번호가 틀렸습니다.')

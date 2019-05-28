@@ -1,9 +1,9 @@
 import React from 'react'
 import { Button, Form, Grid, Header, Segment, Message } from 'semantic-ui-react'
 
-export const SignupPage = ({ token, signup_click }) => {
+export const SignupPage = ({ mySNU_verification_token, phone_token, signup_click }) => {
   let username, password, nickname
-  if (token == null) {
+  if (mySNU_verification_token == null || phone_token == null) {
     return (
       <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>

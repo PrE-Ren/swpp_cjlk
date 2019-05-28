@@ -48,7 +48,8 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       case 'LOGIN_SUCCESS_ACTION': {
         sessionStorage.setItem("username", action.data.username);
         sessionStorage.setItem("password", action.data.password);
-        sessionStorage.setItem("token", action.data.mySNU_verification_token);
+        sessionStorage.setItem("mySNU_verification_token", action.data.mySNU_verification_token);
+        sessionStorage.setItem("phone_token", action.data.phone_token);
         sessionStorage.setItem("user_id", action.data.user_id);
         sessionStorage.setItem("email", action.data.email);
         sessionStorage.setItem("phone_number", action.data.phone_number);
@@ -58,6 +59,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
           username: action.data.username,
           password: action.data.password,
           mySNU_verification_token: action.data.mySNU_verification_token,
+          phone_token: phone_token,
           user_id: action.data.user_id,
           email: action.data.email,
           phone_number: action.data.phone_number,
@@ -74,6 +76,22 @@ const snu_moyeo_reducer = (state = initialState, action) => {
           password: action.password
         }
       }
+      
+      case 'SUCCESS_EMAIL_ACTION' : {
+        sessionStorage.setItem("mySNU_verification_token", action.email_code);
+        return{
+          ...state,
+          mySNU_verification_token: action.email_code
+        }
+      }
+
+      case 'SUCCESS_PHONE_ACTION' : {
+        sessionStorage.setItem("phone_token", action.phone_code);
+        return{
+          ...state,
+          phone_token: action.phone_code
+        }
+      }
 
       case 'SIGNUP_SUCCESS_ACTION': {
         return state
@@ -82,7 +100,8 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       case 'LOGOUT_ACTION': {
        sessionStorage.removeItem("username");
        sessionStorage.removeItem("password");
-       sessionStorage.removeItem("token");
+       sessionStorage.removeItem("mySNU_verification_token");
+       sessionStorage.removeItem("phone_token");
        sessionStorage.removeItem("user_id");
        sessionStorage.removeItem("email");
        sessionStorage.removeItem("name");
@@ -98,6 +117,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
          username: null,
          password: null,
          mySNU_verification_token: null,
+         phone_token: null,
          user_id: null,
          email: null,
          name: null,

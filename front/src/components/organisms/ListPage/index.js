@@ -55,8 +55,8 @@ const Right_Arrow = styled.div`
   }
 `
 
-export const ListPage = ({ token, meetinglist_list, change_page_num_click }) => {
-  if (token == null) {
+export const ListPage = ({ mySNU_verification_token, phone_token, meetinglist_list, change_page_num_click }) => {
+  if (mySNU_verification_token == null || phone_token == null) {
     Object.defineProperty(window.location, 'href', {
       writable: true,
       value: '/login'

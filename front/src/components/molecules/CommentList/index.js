@@ -6,6 +6,10 @@ export const CommentList = ({ username, password, comments, meeting_id,
   console.log('<CommentList Rendering>')
   const hash = new Buffer(`${username}:${password}`).toString('base64')
 
+  function change_date(str){
+    return str.substring(0,10) + " " + str.substring(11,19)
+  }
+
   if (comments != null) {
     let comment_list = JSON.parse(comments)
     let content, new_content
@@ -18,17 +22,17 @@ export const CommentList = ({ username, password, comments, meeting_id,
             <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
             <Comment.Content>
               <Comment.Author as='a'>{comment.writer}</Comment.Author>
-              <Comment.Metadata><div>{comment.created}</div></Comment.Metadata>
+              <Comment.Metadata><div>{change_date(comment.created)}</div></Comment.Metadata>
               <Comment.Text>{comment.content}</Comment.Text>
               <Comment.Actions>
 
-                <Modal size='small' trigger={ (username == comment.writer) ? <Comment.Action>편집</Comment.Action> : <div></div> }>
-                  <Modal.Header>댓글 편집</Modal.Header>
+                <Modal size='small' trigger={ (username == comment.writer) ? <Comment.Action>수정</Comment.Action> : <div></div> }>
+                  <Modal.Header>댓글 수정</Modal.Header>
                   <Form reply style={{ margin: '10px' }}>
                     <Form.TextArea defaultValue={comment.content} onChange={(e) => { new_content = e.target.value }}/>
                   </Form>
                   <Modal.Actions>
-                    <Button positive icon='checkmark' labelPosition='right' content='Edit' onClick={() => edit_comment_click(hash, comment.id, meeting_id, sessionStorage.getItem("user_id"), (new_content !== undefined) ? new_content : comment.content)}/>
+                    <Button positive icon='checkmark' labelPosition='right' content='수정' onClick={() => edit_comment_click(hash, comment.id, meeting_id, sessionStorage.getItem("user_id"), (new_content !== undefined) ? new_content : comment.content)}/>
                     <Button negative>취소</Button>
                   </Modal.Actions>
                 </Modal>

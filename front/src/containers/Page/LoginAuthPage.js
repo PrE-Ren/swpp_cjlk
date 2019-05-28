@@ -14,7 +14,8 @@ const mapStateToProps = (state) => {
   return {
     username: state.snu_moyeo.username,
     password: state.snu_moyeo.password,
-    token: state.snu_moyeo.mySNU_verification_token
+    mySNU_verification_token: state.snu_moyeo.mySNU_verification_token,
+    phone_token: state.snu_moyeo.phone_token
   }
 }
 

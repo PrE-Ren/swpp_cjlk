@@ -3,7 +3,8 @@ import { MyPagePage } from '../../components/organisms/MyPagePage'
 
 const mapStateToProps = (state) => {
   return {
-    token: state.snu_moyeo.mySNU_verification_token
+    mySNU_verification_token: state.snu_moyeo.mySNU_verification_token,
+    phone_token: state.snu_moyeo.phone_token
   }
 }
 

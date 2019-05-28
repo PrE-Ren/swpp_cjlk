@@ -4,8 +4,8 @@ import MeetingCreate from '../../../containers/MeetingCreate'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import { Grid, Header, Icon, Container } from 'semantic-ui-react'
 
-export const NewPage = ({ token }) => {
-  if (token == null) {
+export const NewPage = ({ mySNU_verification_token, phone_token }) => {
+  if (mySNU_verification_token == null || phone_token == null) {
     Object.defineProperty(window.location, 'href', {
       writable: true,
       value: '/login'
