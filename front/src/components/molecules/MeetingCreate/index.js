@@ -1,5 +1,6 @@
 import React from 'react'
 import { PropTypes } from 'prop-types'
+import Map from '../../atoms/Map'
 import { Container, Form, Ref } from 'semantic-ui-react'
 
 const options = [
@@ -61,6 +62,9 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
           <Form.Input fluid label='최대인원' placeholder='2' type="number" width={2} onChange={handle_max_people} />
         </Form.Group>
         <Form.Input fluid label='사진' type="file" width={6} onChange={handle_picture} accept="image/*" />
+        <div>
+          <Map />
+        </div>
         <Form.TextArea label='내용' placeholder='About this meeting...' onChange={handle_description} />
         <Form.Button onClick={() => new_click(hash, user_id, {
           title: title,

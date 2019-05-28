@@ -20,7 +20,6 @@ export const HomePage = ({ token }) => {
         <Grid.Column width={2}>
           <Left_sidebar />
         </Grid.Column>
-
         <Grid.Column width={10}>
           <Container>
             <Header as='h1' icon textAlign='center'>
@@ -34,7 +33,6 @@ export const HomePage = ({ token }) => {
             <RecentList />
           </Container>
         </Grid.Column>
-
         <Grid.Column width={4}>
           <Right_sidebar />
         </Grid.Column>
