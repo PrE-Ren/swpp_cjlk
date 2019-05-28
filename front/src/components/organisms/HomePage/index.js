@@ -33,7 +33,6 @@ export const HomePage = ({ token }) => {
             <RecentList />
           </Container>
         </Grid.Column>
-
         <Grid.Column width={4}>
           <Right_sidebar />
         </Grid.Column>

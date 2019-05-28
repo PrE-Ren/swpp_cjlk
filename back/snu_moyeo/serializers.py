@@ -27,6 +27,10 @@ class MeetingSerializer(serializers.ModelSerializer):
             if (created_when >= due):
                 raise serializers.ValidationError("Meeting's Due should be future")
 
+        if self.context['request'].method == 'PUT' :
+            if (created_when >= due):
+                data['state'] = 4
+
         min_people = data['min_people']
         max_people = data['max_people']
         if (min_people > max_people):

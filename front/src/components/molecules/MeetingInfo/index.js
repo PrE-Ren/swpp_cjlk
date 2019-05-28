@@ -1,5 +1,6 @@
 import React from 'react'
 import CommentList from '../../../containers/CommentList'
+import Map from '../../../containers/Map'
 import * as meeting_state from '../../../literal'
 import { ModifyButton, CloseButton, BreakUpButton, ReOpenButton, ReCloseButton } from '../../atoms/ButtonsInMeetingInfo'
 import { JoinButton, WithdrawButton } from '../../atoms/ButtonsInMeetingInfo'
@@ -43,6 +44,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
           <List.Content>모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)}</List.Content>
         </List.Item>
       </List>
+      <Map meeting_info = {meeting_info} write = {false} />
       <h4><p>{meeting_info.description}</p></h4>
       {/*<h4><p>A long description is a way to provide long alternative text for non-text elements, such as images. Generally, alternative text exceeding 250 characters, which cannot be made more concise without making it less descriptive or meaningful, should have a long description. Examples of suitable use of long description are charts, graphs, maps, infographics, and other complex images. Like alternative text, long description should be descriptive and meaningful. It should also include all text that is incorporated into the image. A long description should provide visually-impaired users with as much information as sighted users would understand from the image. There are four components to creating a long description in the Waterloo Content Management System (WCMS)</p></h4>*/}
     </Modal.Description>
