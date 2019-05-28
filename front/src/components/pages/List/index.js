@@ -1,13 +1,8 @@
 import React from 'react'
-import { PageTemplate } from 'components'
 import ListPage from '../../../containers/Page/ListPage'
 
 const List = () => {
-  return (
-    <div>
-      <ListPage/>
-    </div>
-  )
+  return <ListPage/>
 }
 
 export default List

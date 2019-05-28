@@ -17,8 +17,11 @@ class Meeting (models.Model):
     description = models.TextField()
     kind = models.IntegerField()
     leader = models.ForeignKey('SnuUser', related_name = 'lead_meeting', on_delete = models.CASCADE)
+    leaderid = models.IntegerField(default = -1)
     picture = models.ImageField(blank = True, null = True)
     members = models.ManyToManyField('SnuUser', through = 'Participate')
+    latitude = models.FloatField(default = 37.4615299)
+    longitude = models.FloatField(default = 126.9519267)
     # comments : related field
 
     class Meta:
@@ -51,7 +54,7 @@ class SnuUser (AbstractUser):
     # lead_meeting : related field
 
     '''
-    user_id = models.CharField(max_length= 100, primary_key=True) #changed variable name
+    user_id = models.CharField(max_length= 100, primary_key=True) # changed variable name
     snu_mail = models.EmailField(default = '')
     has inner validator(checker) whether it is valid email address
     -> EmailValidator with error: ValidationError, "ENter a valid email address" message will be out
@@ -74,5 +77,6 @@ class Comment (models.Model):
     id = models.AutoField(primary_key = True)
     created = models.DateTimeField(auto_now_add = True)
     writer = models.ForeignKey('SnuUser', on_delete = models.CASCADE)
-    meeting_id = models.ForeignKey('Meeting', related_name = 'comments', on_delete = models.CASCADE)
+    writerid = models.IntegerField(default = -1)
+    meetingid = models.ForeignKey('Meeting', related_name = 'comments', on_delete = models.CASCADE)
     content = models.CharField(max_length = 100)

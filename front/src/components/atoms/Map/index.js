@@ -5,6 +5,7 @@ declare var daum:any;
 class Map extends React.Component {
   constructor(props) {
     super(props);
+    this.state = { is_added_handler: false }
   }
   componentDidMount() {
     const el = document.getElementById('map');
@@ -20,6 +21,16 @@ class Map extends React.Component {
       position: daumMap.getCenter()
     });
     marker.setMap(daumMap);
+
+    if (this.state.is_added_handler == false) {
+      daum.maps.event.addListener(daumMap, 'click', function(mouseEvent) {
+        let latitue_longitude = mouseEvent.latLng;
+        marker.setPosition(latitue_longitude);
+        alert('위도:' + latitue_longitude.getLat() + ', 경도:' + latitue_longitude.getLng())
+      })
+      this.forceUpdate()
+      this.setState({ is_added_handler: true })
+    }
   }
   render() {
     return (

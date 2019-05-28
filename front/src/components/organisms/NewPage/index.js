@@ -1,5 +1,4 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import Left_sidebar from '../../molecules/Left_sidebar'
 import MeetingCreate from '../../../containers/MeetingCreate'
 import Right_sidebar from '../../molecules/Right_sidebar'
@@ -39,9 +38,4 @@ export const NewPage = ({ token }) => {
       </Grid>
     )
   }
-}
-
-NewPage.propTypes = {
-  reverse: PropTypes.bool,
-  children: PropTypes.node,
 }
