@@ -4,7 +4,7 @@ import Map from '../../../containers/Map'
 import * as meeting_state from '../../../literal'
 import { ModifyButton, CloseButton, BreakUpButton, ReOpenButton, ReCloseButton } from '../../atoms/ButtonsInMeetingInfo'
 import { JoinButton, WithdrawButton } from '../../atoms/ButtonsInMeetingInfo'
-import { Modal, Image, List } from 'semantic-ui-react'
+import { Modal, Image, List, Dropdown, Message } from 'semantic-ui-react'
 
 const dateParse = (data) => {
     const year = data.substring(0, 19).replace("-", "년 ")
@@ -18,14 +18,32 @@ const dateParse = (data) => {
 
 /* meeting_entry 필드 : id, title, created, due, min_people, max_people, description, state, kind, leader, picture, members */
 
-export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click, change_meeting_info_click}) => {
+export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click, change_meeting_info_click, load_userinfo_click}) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')
+
   const content =
     <Modal.Description style={{ marginLeft: '10px' }}>
       <List style={{ marginTop: '20px' }}>
         <List.Item>
           <List.Icon name='user circle' />
-          <List.Content>주최자 : {meeting_info.leader}</List.Content>
+          <List.Content>주최자 :&nbsp;
+            <Dropdown text={meeting_info.leader}>
+              <Dropdown.Menu>
+                <Dropdown.Item>
+                  <Dropdown text='정보보기' onClick={() => load_userinfo_click(meeting_info.leaderid)}>
+                    <Dropdown.Menu>
+                      <Message header='유저 정보' content={<div>
+                        이름 : {sessionStorage.getItem("leader.name")}<br/>
+                        이메일 : {sessionStorage.getItem("leader.email")}<br/>
+                        전화번호 : {sessionStorage.getItem("leader.phone_number")}<br/>
+                        </div>} />
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </Dropdown.Item>
+                <Dropdown.Item text='신고하기' />
+              </Dropdown.Menu>
+            </Dropdown>
+          </List.Content>
         </List.Item>
         <List.Item>
           <List.Icon name='calendar alternate outline' />

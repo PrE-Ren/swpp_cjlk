@@ -93,6 +93,13 @@ export function* watchChangePageNum() {
   }
 }
 
+export function* watchLoadUserinfo() {
+  while(true) {
+    const action = yield take(actions.LOAD_USERINFO_ACTION)
+    yield call(load_userinfo_func, action)
+  }
+}
+
 export function* watchLoadComments() {
   while(true) {
     const action = yield take(actions.LOAD_COMMENTS_ACTION)
@@ -540,6 +547,25 @@ export function* change_page_num_func(action) {
   }
 }
 
+export function* load_userinfo_func(action) {
+  const url_userinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
+  const response_userinfo = yield call(fetch, url_userinfo, { method : 'GET' })
+
+  sessionStorage.removeItem("leader.name")
+  sessionStorage.removeItem("leader.email")
+  sessionStorage.removeItem("leader.phone_number")
+
+  if(response_userinfo.ok){
+    const userinfo = yield call([response_userinfo, response_userinfo.json])
+    sessionStorage.setItem("leader.name",userinfo.name)
+    sessionStorage.setItem("leader.email",userinfo.email)
+    sessionStorage.setItem("leader.phone_number",userinfo.phone_number)
+  }
+  else {
+    alert('leader 정보 읽어오지 못함')
+  }
+}
+
 export function* load_comments_func(action) {
   const url_comments = 'http://127.0.0.1:8000/comment/meeting/' + action.meeting_id + '/'
   const response_comments = yield call(fetch, url_comments, { method : 'GET' })
@@ -625,6 +651,7 @@ export default function* () {
   yield fork(watchJoinMeeting)
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
+  yield fork(watchLoadUserinfo)
   yield fork(watchLoadComments)
   yield fork(watchAddComment)
   yield fork(watchEditComment)

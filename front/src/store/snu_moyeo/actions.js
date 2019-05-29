@@ -18,6 +18,7 @@ export const WITHDRAW_MEETING_ACTION = 'WITHDRAW_MEETING_ACTION'
 export const PARTICIPATE_ADD_ACTION = 'PARTICIPATE_ADD_ACTION'
 export const CHANGE_PAGE_NUM_ACTION = 'CHANGE_PAGE_NUM_ACTION'
 export const CHANGE_PAGE_NUM_SUCCESS_ACTION = 'CHANGE_PAGE_NUM_SUCCESS_ACTION'
+export const LOAD_USERINFO_ACTION = 'LOAD_USERINFO_ACTION'
 export const LOAD_COMMENTS_ACTION = 'LOAD_COMMENTS_ACTION'
 export const LOAD_COMMENTS_SUCCESS_ACTION = 'LOAD_COMMENTS_SUCCESS_ACTION'
 export const ADD_COMMENT_ACTION = 'ADD_COMMENT_ACTION'
@@ -192,6 +193,13 @@ export const change_page_num_success_action = (page_num, meetinglist) => {
   }
 }
 
+export const load_userinfo_action = (user_id) => {
+  return {
+    type : LOAD_USERINFO_ACTION,
+    user_id
+  }
+}
+
 export const load_comments_action = (meeting_id) => {
   return {
     type : LOAD_COMMENTS_ACTION,
@@ -221,7 +229,7 @@ export const edit_comment_action = (hash, comment_id, meeting_id, writer_id, con
     hash,
     comment_id,
     meeting_id,
-    writer_id, 
+    writer_id,
     content
   }
 }
