@@ -5,6 +5,7 @@ export const LOGOUT_ACTION = 'LOGOUT_ACTION'
 export const SIGNUP_ACTION = 'SIGNUP_ACTION'
 export const SIGNUP_SUCCESS_ACTION = 'SIGNUP_SUCCESS_ACTION'
 export const LOGIN_AUTH_ACTION = 'LOGIN_AUTH_ACTION'
+export const LOGIN_AUTH_RELOAD_ACTION = 'LOGIN_AUTH_RELOAD_ACTION'
 export const SEND_EMAIL_ACTION = 'SEND_EMAIL_ACTION'
 export const SEND_PHONE_ACTION = 'SEND_PHONE_ACTION'
 export const CONFIRM_EMAIL_ACTION = 'CONFIRM_EMAIL_ACTION'
@@ -42,14 +43,14 @@ export const login_action = (username, password) => {
     }
 };
 
-export const login_success_action = (username, password, mySNU_verification_token, phone_token, user_id, email, phone_number, name) => {
+export const login_success_action = (username, password, mySNU_verification_token, phone_verification_token, user_id, email, phone_number, name) => {
     return {
         type : LOGIN_SUCCESS_ACTION,
         data : {
             username : username,
             password : password,
             mySNU_verification_token : mySNU_verification_token,
-            phone_token : phone_token,
+            phone_verification_token : phone_verification_token,
             user_id : user_id,
             email : email,
             phone_number : phone_number,
@@ -79,11 +80,13 @@ export const signup_success_action = () => {
     }
 };
 
-export const login_auth_action = (username, password) => {
+export const login_auth_action = (username, password, user_id, name) => {
   return {
       type : LOGIN_AUTH_ACTION,
       username : username,
-      password : password
+      password : password,
+      user_id : user_id,
+      name :  name
   }
 };
 
@@ -112,26 +115,28 @@ export const confirm_email_action = (hash, email, mySNU_verification_token) => {
   }
 };
 
-export const confirm_phone_action = (hash, phone_number, phone_token) => {
+export const confirm_phone_action = (hash, phone_number, phone_verification_token) => {
   return {
       type : CONFIRM_PHONE_ACTION,
       hash : hash,
       phone_number : phone_number,
-      phone_code : phone_token
+      phone_code : phone_verification_token
   }
 };
 
-export const success_email_action = (mySNU_verification_token) => {
+export const success_email_action = (email, mySNU_verification_token) => {
   return {
       type : SUCCESS_EMAIL_ACTION,
+      email : email,
       email_code : mySNU_verification_token
   }
 };
 
-export const success_phone_action = (phone_token) => {
+export const success_phone_action = (phone_number, phone_verification_token) => {
   return {
       type : SUCCESS_PHONE_ACTION,
-      phone_code : phone_token
+      phone_number : phone_number,
+      phone_code : phone_verification_token
   }
 };
 

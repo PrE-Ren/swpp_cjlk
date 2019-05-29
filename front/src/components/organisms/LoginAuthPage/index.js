@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Form, Grid, Header, Segment, Container } from 'semantic-ui-react'
 
-export const LoginAuthPage = ({ username, password, mySNU_verification_token, phone_token,
+export const LoginAuthPage = ({ username, password, mySNU_verification_token, phone_verification_token,
                                 send_email_click, send_phone_click, confirm_email_click, confirm_phone_click, login_click }) => {
   const hash = new Buffer(`${username}:${password}`).toString('base64')
   let email, phone_number
@@ -13,7 +13,7 @@ export const LoginAuthPage = ({ username, password, mySNU_verification_token, ph
     </Header>
     <Form size='large'>
       <Segment stacked>
-        <Form.Input icon='mail' input iconPosition='left' placeholder='abc@snu.ac.kr' onChange={(e) => email = e.target.value} />
+        <Form.Input icon='mail' iconPosition='left' placeholder='abc@snu.ac.kr' onChange={(e) => email = e.target.value} />
         <Form.Input icon='code' iconPosition='left' placeholder='Type your email code' onChange={(e) => email_code = e.target.value} />
         <Grid columns={2}>
           <Grid.Column width={8}>
@@ -85,11 +85,11 @@ export const LoginAuthPage = ({ username, password, mySNU_verification_token, ph
     <Container>
       <Grid columns={3} textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
         {mySNU_verification_token == null ? emailform : emailfin}
-        {phone_token == null ? phoneform : phonefin}
+        {phone_verification_token == null ? phoneform : phonefin}
         <Grid.Column>
           <br /><br />
-          <Button size='massive' style={{ float:'top' }} onClick={() => login_click(username, password)}>인증완료</Button><br /><br />
-          <Button size='massive' style={{ float:'bottom' }} onClick={() => window.location.href = "/login"}>돌아가기</Button>
+          <Button size='massive' style={{ float:'top' }} onClick={() => Object.defineProperty(window.location, 'href', {writable: true, value: '/'})}>인증완료</Button><br /><br />
+          <Button size='massive' style={{ float:'bottom' }} onClick={() => Object.defineProperty(window.location, 'href', {writable: true, value: '/login'})}>돌아가기</Button>
         </Grid.Column>
       </Grid>
     </Container>

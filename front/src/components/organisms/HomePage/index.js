@@ -5,8 +5,8 @@ import RecentList from '../../../containers/RecentList'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import { Grid, Header, Icon, Container } from 'semantic-ui-react'
 
-export const HomePage = ({ mySNU_verification_token, phone_token }) => {
-  if (mySNU_verification_token == null || phone_token == null) {
+export const HomePage = ({ mySNU_verification_token, phone_verification_token }) => {
+  if (mySNU_verification_token == null || phone_verification_token == null) {
     Object.defineProperty(window.location, 'href', {
       writable: true,
       value: '/login'
