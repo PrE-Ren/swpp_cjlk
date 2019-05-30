@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { LoginAuthPage } from '../../components/organisms/LoginAuthPage'
-import { send_email_action, send_phone_action, confirm_email_action, confirm_phone_action, login_action } from '../../store/snu_moyeo/actions'
+import { send_email_action, send_phone_action, confirm_email_action, confirm_phone_action, logout_action } from '../../store/snu_moyeo/actions'
 
 const is_valid_email = (email) => {
   return email.includes('@snu.ac.kr') || email.includes('@mysnu.ac.kr')
@@ -14,7 +14,8 @@ const mapStateToProps = (state) => {
   return {
     username: state.snu_moyeo.username,
     password: state.snu_moyeo.password,
-    token: state.snu_moyeo.mySNU_verification_token
+    mySNU_verification_token: state.snu_moyeo.mySNU_verification_token,
+    phone_verification_token: state.snu_moyeo.phone_verification_token
   }
 }
 
@@ -44,8 +45,8 @@ const mapDispatchToProps = (dispatch) => {
       else
         alert('01012345678 형식으로 입력해주세요.')
     },
-    login_click: (username, password) => {
-      dispatch(login_action(username, password))
+    logout_click: () => {
+      dispatch(logout_action())
     }
   }
 }

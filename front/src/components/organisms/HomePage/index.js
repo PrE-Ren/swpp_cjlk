@@ -5,11 +5,21 @@ import RecentList from '../../../containers/RecentList'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import { Grid, Header, Icon, Container } from 'semantic-ui-react'
 
-export const HomePage = ({ token }) => {
-  if (token == null) {
+export const HomePage = ({ username, mySNU_verification_token, phone_verification_token }) => {
+  // 1. 로그인 X (username == null) : To 로그인 페이지
+  // 2. 로그인 O, 인증 X (username != null && (mySNU_verification_token == null || phone_verification_token == null)): To 인증 페이지
+  // 3. 로그인 O, 인증 O (else) : 정상 출력
+  if (username == null) {
     Object.defineProperty(window.location, 'href', {
       writable: true,
       value: '/login'
+    });
+    return (<div></div>)
+  }
+  else if (mySNU_verification_token == null || phone_verification_token == null) {
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/auth'
     });
     return (<div></div>)
   }
