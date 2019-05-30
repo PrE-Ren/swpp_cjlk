@@ -5,11 +5,18 @@ import Right_sidebar from '../../molecules/Right_sidebar'
 import Button from '../../atoms/Button'
 import { Grid, Header, Icon, Container, Pagination, Search} from 'semantic-ui-react'
 
-export const ListPage = ({ mySNU_verification_token, phone_verification_token, meetinglist_list, change_page_num_click }) => {
-  if (mySNU_verification_token == null || phone_verification_token == null) {
+export const ListPage = ({ username, mySNU_verification_token, phone_verification_token, meetinglist_list, change_page_num_click }) => {
+  if (username == null) {
     Object.defineProperty(window.location, 'href', {
       writable: true,
       value: '/login'
+    });
+    return (<div></div>)
+  }
+  else if (mySNU_verification_token == null || phone_verification_token == null) {
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/auth'
     });
     return (<div></div>)
   }

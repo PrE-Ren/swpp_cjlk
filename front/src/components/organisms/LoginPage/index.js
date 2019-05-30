@@ -1,9 +1,12 @@
 import React from 'react'
 import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react'
 
-export const LoginPage = ({ mySNU_verification_token, phone_verification_token, login_click }) => {
+export const LoginPage = ({ username_store, mySNU_verification_token, phone_verification_token, login_click }) => {
   let username, password
-  if (mySNU_verification_token == null || phone_verification_token == null) {
+  // 1. 로그인 X (username == null) : 정상 출력
+  // 2. 로그인 O, 인증 X (username != null && (mySNU_verification_token == null || phone_verification_token == null)): To 인증 페이지
+  // 3. 로그인 O, 인증 O (else) : To Home
+  if (username_store == null) {
     return (
       <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
         <Grid.Column style={{ maxWidth: 450 }}>
@@ -21,6 +24,13 @@ export const LoginPage = ({ mySNU_verification_token, phone_verification_token, 
         </Grid.Column>
       </Grid>
     )
+  }
+  else if (mySNU_verification_token == null || phone_verification_token == null) {
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/auth'
+    });
+    return (<div></div>)
   }
   else {
     Object.defineProperty(window.location, 'href', {

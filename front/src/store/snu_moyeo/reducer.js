@@ -48,13 +48,15 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       case 'LOGIN_SUCCESS_ACTION': {
         sessionStorage.setItem("username", action.data.username);
         sessionStorage.setItem("password", action.data.password);
-        if (action.data.mySNU_verification_token != null)
+        if (action.data.mySNU_verification_token != null) {
           sessionStorage.setItem("mySNU_verification_token", action.data.mySNU_verification_token);
-        if (action.data.phone_verification_token != null)
+          sessionStorage.setItem("email", action.data.email);
+        }
+        if (action.data.phone_verification_token != null) {
           sessionStorage.setItem("phone_verification_token", action.data.phone_verification_token);
+          sessionStorage.setItem("phone_number", action.data.phone_number);
+        } 
         sessionStorage.setItem("user_id", action.data.user_id);
-        sessionStorage.setItem("email", action.data.email);
-        sessionStorage.setItem("phone_number", action.data.phone_number);
         sessionStorage.setItem("name", action.data.name);
         return {
           ...state,
@@ -69,6 +71,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         }
       }
 
+      // 사실 username과 password만 설정해줘도 괜찮음 (근데 일단 수정이 귀찮아서 방치)
       case 'LOGIN_AUTH_ACTION': {
         sessionStorage.setItem("username", action.username);
         sessionStorage.setItem("password", action.password);
@@ -86,7 +89,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       case 'SUCCESS_EMAIL_ACTION' : {
         sessionStorage.setItem("email", action.email);
         sessionStorage.setItem("mySNU_verification_token", action.email_code);
-        return{
+        return {
           ...state,
           email: action.email,
           mySNU_verification_token: action.email_code
@@ -96,7 +99,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       case 'SUCCESS_PHONE_ACTION' : {
         sessionStorage.setItem("phone_number", action.phone_number);
         sessionStorage.setItem("phone_verification_token", action.phone_code);
-        return{
+        return {
           ...state,
           phone_number: action.phone_number,
           phone_verification_token: action.phone_code

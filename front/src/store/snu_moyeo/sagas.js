@@ -190,17 +190,18 @@ export function* reload() {
     }
   }
   else if (pathname == '/auth') {
-    const username = sessionStorage.getItem("username")
-    if(username == null){
-      alert('잘못된 접근입니다')
+    const username = sessionStorage.getItem("username") // 이미 로그인된 상태일 테니까 가져올 수 있음
+
+    // 로그인을 안 하고 URL로 바로 접속한 경우
+    if (username == null) {
+      alert('잘못된 접근입니다.')
       Object.defineProperty(window.location, 'href', {
         writable: true,
         value: '/login'
       });
     } 
-    else
-    {
-      const password = sessionStorage.getItem("password")
+    else {
+      const password = sessionStorage.getItem("password") // 이미 로그인된 상태일 테니까 가져올 수 있음
       const url_user = 'http://127.0.0.1:8000/log_in/'
       const hash = new Buffer(`${username}:${password}`).toString('base64')
       const response_user = yield call(fetch, url_user, {
@@ -208,33 +209,28 @@ export function* reload() {
         headers: { 'Authorization' : `Basic ${hash}` }
       })
 
-      if(response_user.ok)
-      {
-        alert('이미 인증을 완료한 유저입니다')
+      // 이미 둘 다 인증 완료
+      if (response_user.ok) {
+        alert('이미 인증을 완료한 유저입니다.')
         Object.defineProperty(window.location, 'href', {
           writable: true,
           value: '/'
         });
       }
-      else
-      {
+
+      // 최소 둘 중 하나가 인증 미완료
+      else {
         const response_user_data = yield call([response_user, response_user.json]);
         const mySNU_verification_token = response_user_data.mySNU_verified ? response_user_data.mySNU_verification_token : null
         const phone_verification_token = response_user_data.phone_verified ? response_user_data.phone_verification_token : null
-        yield put(actions.login_success_action(username, password, mySNU_verification_token, phone_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.phone_number, response_user_data.name))
+        const email = response_user_data.mySNU_verified ? response_user_data.email : null
+        const phone_number = response_user_data.phone_verified ? response_user_data.phone_number : null
+        yield put(actions.login_success_action(username, password, mySNU_verification_token, phone_verification_token, response_user_data.user_id, email, phone_number, response_user_data.name))
       }
     }
   }
   else {
-    /*
-    const meetinglist_impending = yield call(get_meetinglist, 'impending')
-    const meetinglist_recent = yield call(get_meetinglist, 'recent')
-    if (meetinglist_impending !== null && meetinglist_recent !== null) {
-      console.log('<Dispatch reload_action>')
-      yield put(actions.reload_action('impending', meetinglist_impending))
-      yield put(actions.reload_action('recent', meetinglist_recent))
-    }
-    */
+    /* do nothing */
   }
 }
 
@@ -251,6 +247,7 @@ export function* login_func(action) {
     },
     body: info,
   })
+
   // 회원가입된 계정 O
   if (response_token.ok) {
     const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
@@ -258,6 +255,7 @@ export function* login_func(action) {
       method: 'GET',
       headers: { 'Authorization' : `Basic ${hash}` }
     })
+
     // 홈 페이지로 (인증 완료)
     if (response_user.ok) {
       alert('로그인 성공')
@@ -268,17 +266,21 @@ export function* login_func(action) {
         value: '/'
       });
     }
+
     // 인증 페이지로 (인증 미완료)
     else{
       alert('인증 필요')
       const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_auth_action(username, password, response_user_data.user_id, response_user_data.name))
+      // LoginAuth 페이지에서 이미 로그인된 상태인지 판별하기 위해 필요
+      // 그래서 사실 username과 password만 설정해줘도 괜찮음 (근데 일단 수정이 귀찮아서 방치)
+      yield put(actions.login_auth_action(username, password, response_user_data.user_id, response_user_data.name)) 
       Object.defineProperty(window.location, 'href', {
         writable: true,
         value: '/auth'
       });
     }
   }
+  
   // 회원가입된 계정 X
   else
     alert("로그인 실패 : 존재하지 않는 ID나 비밀번호입니다.")

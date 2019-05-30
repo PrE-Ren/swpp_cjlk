@@ -4,6 +4,7 @@ import { signup_action } from '../../store/snu_moyeo/actions'
 
 const mapStateToProps = (state) => {
   return {
+    username_store: state.snu_moyeo.username,
     mySNU_verification_token: state.snu_moyeo.mySNU_verification_token,
     phone_verification_token: state.snu_moyeo.phone_verification_token
   }
