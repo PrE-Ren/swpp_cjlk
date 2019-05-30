@@ -18,7 +18,7 @@ const dateParse = (data) => {
 
 /* meeting_entry 필드 : id, title, created, due, min_people, max_people, description, state, kind, leader, picture, members */
 
-export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click, change_meeting_info_click, load_userinfo_click}) => {
+export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click, change_meeting_info_click, load_leaderinfo_click}) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')
 
   const content =
@@ -30,7 +30,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
             <Dropdown text={meeting_info.leader}>
               <Dropdown.Menu>
                 <Dropdown.Item>
-                  <Dropdown text='정보보기' onClick={() => load_userinfo_click(meeting_info.leaderid)}>
+                  <Dropdown text='정보보기' onClick={() => load_leaderinfo_click(meeting_info.leaderid)}>
                     <Dropdown.Menu>
                       <Message header='유저 정보' content={<div>
                         이름 : {sessionStorage.getItem("leader.name")}<br/>

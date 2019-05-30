@@ -93,10 +93,10 @@ export function* watchChangePageNum() {
   }
 }
 
-export function* watchLoadUserinfo() {
+export function* watchLoadLeaderinfo() {
   while(true) {
-    const action = yield take(actions.LOAD_USERINFO_ACTION)
-    yield call(load_userinfo_func, action)
+    const action = yield take(actions.LOAD_LEADERINFO_ACTION)
+    yield call(load_leaderinfo_func, action)
   }
 }
 
@@ -547,19 +547,19 @@ export function* change_page_num_func(action) {
   }
 }
 
-export function* load_userinfo_func(action) {
-  const url_userinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
-  const response_userinfo = yield call(fetch, url_userinfo, { method : 'GET' })
+export function* load_leaderinfo_func(action) {
+  const url_leaderinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
+  const response_leaderinfo = yield call(fetch, url_leaderinfo, { method : 'GET' })
 
-  sessionStorage.removeItem("leader.name")
-  sessionStorage.removeItem("leader.email")
-  sessionStorage.removeItem("leader.phone_number")
+  if(response_leaderinfo.ok){
+    const leaderinfo = yield call([response_leaderinfo, response_leaderinfo.json])
+    sessionStorage.removeItem("leader.name")
+    sessionStorage.removeItem("leader.email")
+    sessionStorage.removeItem("leader.phone_number")
 
-  if(response_userinfo.ok){
-    const userinfo = yield call([response_userinfo, response_userinfo.json])
-    sessionStorage.setItem("leader.name",userinfo.name)
-    sessionStorage.setItem("leader.email",userinfo.email)
-    sessionStorage.setItem("leader.phone_number",userinfo.phone_number)
+    sessionStorage.setItem("leader.name",leaderinfo.name)
+    sessionStorage.setItem("leader.email",leaderinfo.email)
+    sessionStorage.setItem("leader.phone_number",leaderinfo.phone_number)
   }
   else {
     alert('leader 정보 읽어오지 못함')
@@ -651,7 +651,7 @@ export default function* () {
   yield fork(watchJoinMeeting)
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
-  yield fork(watchLoadUserinfo)
+  yield fork(watchLoadLeaderinfo)
   yield fork(watchLoadComments)
   yield fork(watchAddComment)
   yield fork(watchEditComment)
