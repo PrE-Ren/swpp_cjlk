@@ -27,10 +27,10 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         <List.Item>
           <List.Icon name='user circle' />
           <List.Content>주최자 :&nbsp;
-            <Dropdown text={meeting_info.leader}>
+            <Dropdown text={meeting_info.leader} onClick={() => load_leaderinfo_click(meeting_info.leaderid)}>
               <Dropdown.Menu>
                 <Dropdown.Item>
-                  <Dropdown text='정보보기' onClick={() => load_leaderinfo_click(meeting_info.leaderid)}>
+                  <Dropdown text='정보보기' >
                     <Dropdown.Menu>
                       <Message header='유저 정보' content={<div>
                         이름 : {sessionStorage.getItem("leader.name")}<br/>

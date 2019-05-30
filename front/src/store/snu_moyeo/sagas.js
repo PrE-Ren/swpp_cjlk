@@ -206,7 +206,7 @@ export function* reload() {
         writable: true,
         value: '/login'
       });
-    } 
+    }
     else {
       const password = sessionStorage.getItem("password") // 이미 로그인된 상태일 테니까 가져올 수 있음
       const url_user = 'http://127.0.0.1:8000/log_in/'
@@ -280,14 +280,14 @@ export function* login_func(action) {
       const response_user_data = yield call([response_user, response_user.json]);
       // LoginAuth 페이지에서 이미 로그인된 상태인지 판별하기 위해 필요
       // 그래서 사실 username과 password만 설정해줘도 괜찮음 (근데 일단 수정이 귀찮아서 방치)
-      yield put(actions.login_auth_action(username, password, response_user_data.user_id, response_user_data.name)) 
+      yield put(actions.login_auth_action(username, password, response_user_data.user_id, response_user_data.name))
       Object.defineProperty(window.location, 'href', {
         writable: true,
         value: '/auth'
       });
     }
   }
-  
+
   // 회원가입된 계정 X
   else
     alert("로그인 실패 : 존재하지 않는 ID나 비밀번호입니다.")
@@ -594,15 +594,15 @@ export function* load_leaderinfo_func(action) {
   const url_leaderinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
   const response_leaderinfo = yield call(fetch, url_leaderinfo, { method : 'GET' })
 
-  if(response_leaderinfo.ok){
+  if (response_leaderinfo.ok) {
     const leaderinfo = yield call([response_leaderinfo, response_leaderinfo.json])
     sessionStorage.removeItem("leader.name")
     sessionStorage.removeItem("leader.email")
     sessionStorage.removeItem("leader.phone_number")
 
-    sessionStorage.setItem("leader.name",leaderinfo.name)
-    sessionStorage.setItem("leader.email",leaderinfo.email)
-    sessionStorage.setItem("leader.phone_number",leaderinfo.phone_number)
+    sessionStorage.setItem("leader.name", leaderinfo.name)
+    sessionStorage.setItem("leader.email", leaderinfo.email)
+    sessionStorage.setItem("leader.phone_number", leaderinfo.phone_number)
   }
   else {
     alert('leader 정보 읽어오지 못함')
