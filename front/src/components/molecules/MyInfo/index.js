@@ -32,9 +32,9 @@ export const MyInfo = ({ state }) => {
         </List>
       </Segment>
       <Container>
-        <LeadList />
-        <JoinList />
-        <HistoryList />
+        <LeadList/>
+        <JoinList/>
+        <HistoryList/>
       </Container>
     </Container>
   )

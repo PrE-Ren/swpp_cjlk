@@ -8,10 +8,10 @@ import { Menu, Sidebar } from 'semantic-ui-react'
 const Right_sidebar = () => {
   return (
     <Sidebar as={Menu} animation='overlay' direction='right' icon='labeled' inverted vertical visible width='wide'>
-      <ToMyPage />
-      <Logout />
-      <Make_new />
-      <Join_chatroom />
+      <ToMyPage/>
+      <Logout/>
+      <Make_new/>
+      <Join_chatroom/>
     </Sidebar>
   )
 }
