@@ -21,6 +21,9 @@ class Meeting (models.Model):
     picture = models.ImageField(blank = True, null = True)
     members = models.ManyToManyField('SnuUser', through = 'Participate')
     # comments : related field
+    latitude = models.FloatField(default = 37.4615299)
+    longitude = models.FloatField(default = 126.9519267)
+
 
     class Meta:
         ordering = ['-created']  # sorted in decreasing order of created time

@@ -68,7 +68,9 @@ class MeetingSerializer(serializers.ModelSerializer):
             'leaderid',
             'picture',
             'members',      # invisible (ManyToManyField in models.py)
-            'comments'
+            'comments',
+            'latitude',
+            'longitude'
         )
 
 class SnuUserSerializer(serializers.ModelSerializer):
