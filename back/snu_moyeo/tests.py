@@ -20,18 +20,18 @@ class MeetingModelsTests(TestCase):
    
        data = {'username':'test1', 'password':'hello', 'name':'nametest1', 'mySNU_verified':True }  # verified default false, change to true by email authentication, but for test, we will set this true.
        res = requests.post(link, data = data)
-       self.assertEqual(res.status_code,201)
+       self.assertEqual(int(res.status_code/100),2)
        print("test1 account generated successfully")
 
        data = {'username':'test2', 'password':'hello', 'name':'nametest2', 'mySNU_verified':True }  # verified default false, change to true by email authentication, but for test, we will set this true.
        res = requests.post(link, data = data)
-       self.assertEqual(res.status_code,201)
+       self.assertEqual(int(res.status_code/100),2)
        print("test2 account generated successfully")
        
        
        data = {'username':'test3', 'password':'hello', 'name':'nametest2', 'mySNU_verified':True }  # verified default false, change to true by email authentication, but for test, we will set this true.
        res = requests.post(link, data = data)
-       self.assertEqual(res.status_code,201)
+       self.assertEqual(int(res.status_code/100),2)
        print("test3 account generated successfully")
 
        print("sign_up done")
