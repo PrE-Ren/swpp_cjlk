@@ -10,6 +10,7 @@ matrix:
         - npm install
         - npm install --save cross-env
         - npm install jest
+        - npm install mock-local-storage --save-dev
       script:
         - npm test -- --coverage
 
