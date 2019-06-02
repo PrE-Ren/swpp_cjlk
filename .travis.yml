@@ -3,14 +3,11 @@ dist: xenial
 matrix:
   include:
     - language: node_js
-      cache:
-        directories:
-          - front/node_modules
       node_js: "10"
       before_install:
         - cd front
       install:
-        - npm install -g gulp
+        - npm install
         - npm install --save cross-env
         - npm install jest
         - npm install semantic-ui-react --save
