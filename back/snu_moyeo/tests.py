@@ -172,7 +172,8 @@ class MeetingModelsTests(TestCase):
         link = self.link + 'participate/'
         data = {'user_id' : 1, 'meeting_id' : 1}
         res = requests.post(link, data)
-        self.assertEqual(res.status_code, 201)
+        print('this meeting is closed you cannot participate')
+        self.assertEqual(res.status_code, 400)
 
         link = self.link + 'participate/'
         data = {'user_id' : 1, 'meeting_id' : 2}
@@ -212,7 +213,7 @@ class MeetingModelsTests(TestCase):
 
 
     def delete_participate_test(self):
-        link = self.link + 'participate/1/'
+        link = self.link + 'participate/2/'
 
         res = requests.delete(link)
         self.assertEqual(res.status_code,204)
@@ -221,7 +222,7 @@ class MeetingModelsTests(TestCase):
         res = requests.get(link, auth = ('test1','hello'))
         content = res.json()
 
-        self.assertEqual( 1 in content['meetings'], False)
+        self.assertEqual( 3 in content['meetings'], False)
     '''
     def put_participate_test(self):
         link = self.link + 'participate/1/'
@@ -257,6 +258,15 @@ class MeetingModelsTests(TestCase):
             self.assertEqual(content[0]['due']<= content[1]['due'], True)
 
     def my_history_lead_join_test(self):
+
+        link = self.link + 'meeting/2/'
+        data = {'title': 'putmeeting', 'due' : '2019-08-23T13:23:00+09:00', 'min_people': 10, 'max_people':100, 'description': 'puthello?','state': 4, 'kind': 1}
+
+        print('close meeting 2')
+        res = requests.put(link,data,auth = ('test1', 'hello'))
+        self.assertEqual(res.status_code, 200)
+
+
         history_link = self.link + 'meetinglist/history/'
         res = requests.get(history_link, auth = ('test1', 'hello'))
         self.assertEqual(res.status_code,200)
@@ -264,7 +274,7 @@ class MeetingModelsTests(TestCase):
         content = res.json()
         print('check history')
         self.assertEqual(content[0]['state'],4)
-        self.assertEqual(content[0]['id'],1)
+        self.assertEqual(content[0]['id'],2)
         
 
         lead_link = self.link + 'meetinglist/lead/'
@@ -272,6 +282,7 @@ class MeetingModelsTests(TestCase):
         self.assertEqual(res.status_code,200)
 
         content = res.json()
+
         print('check lead')
         for meeting in content:
             self.assertEqual(meeting['leader'],'test1')
@@ -290,6 +301,26 @@ class MeetingModelsTests(TestCase):
         res = requests.get(list_link)
         self.assertEqual(res.status_code,200)
 
+
+    def post_comment(self):
+        com_link = self.link + 'comment/'
+        data = {'meetingid' : 3, 'content' : 'test comment'}
+        res = requests.post(com_link, data, auth = ('test1', 'hello'))
+        self.assertEqual(res.status_code, 201)
+
+    def put_comment(self):
+        com_link = self.link + 'comment/1/'
+        data = {'meetingid' : 3, 'content' : 'test put comment'}
+        res = requests.put(com_link, data, auth = ('test1', 'hello'))
+        self.assertEqual(res.status_code, 200)
+
+    def delete_comment(self):
+        com_link = self.link + 'comment/1/'
+        
+        res = requests.delete(com_link)
+        self.assertEqual(res.status_code,204)
+
+        
     def test_all(self):
         
         os.system('rm db.sqlite3')
@@ -312,6 +343,10 @@ class MeetingModelsTests(TestCase):
         self.recent_impending_test()
         self.my_history_lead_join_test()
         self.list_test()
+        
+        self.post_comment()
+        self.put_comment()
+        self.delete_comment()
 
         
         self.delete_meeting_test()

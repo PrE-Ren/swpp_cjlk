@@ -267,6 +267,8 @@ class HistoryList (generics.ListAPIView):
         if (not user.is_anonymous):
             user_id = user.id
             history_user = SnuUser.objects.get(id = user_id)
+            print(history_user)
+            print(history_user.meetings.all())
             return history_user.meetings.all().filter(Q(state = BREAK_UP))
         return Meeting.objects.none()
 
