@@ -594,6 +594,7 @@ export function* load_leaderinfo_func(action) {
   const url_leaderinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
   const response_leaderinfo = yield call(fetch, url_leaderinfo, { method : 'GET' })
 
+  console.log(response_leaderinfo)
   if (response_leaderinfo.ok) {
     const leaderinfo = yield call([response_leaderinfo, response_leaderinfo.json])
     sessionStorage.removeItem("leader.name")
