@@ -5,7 +5,6 @@ import LeadList from '../../../containers/LeadList'
 import JoinList from '../../../containers/JoinList'
 import HistoryList from '../../../containers/HistoryList'
 
-
 const entry1 = {
   id : 0,
   title : '미팅',
@@ -42,12 +41,20 @@ it('renders page when passed in', () => {
   expect(wrapper.contains(<LeadList/>)).toBe(true)
   expect(wrapper.contains(<JoinList/>)).toBe(true)
   expect(wrapper.contains(<HistoryList/>)).toBe(true)
-  expect(wrapper.contains('1. 이름 : ')).toBe(true)
-  expect(wrapper.contains('2. SNU 메일 : ')).toBe(true)  
+  expect(wrapper.contains('My Information')).toBe(true)
+  expect(wrapper.contains('내 정보')).toBe(true)
+  expect(wrapper.contains('아이디 : ')).toBe(true)
+  expect(wrapper.contains('이름 : ')).toBe(true)
+  expect(wrapper.contains('이메일 : ')).toBe(true)
+  expect(wrapper.contains('핸드폰 : ')).toBe(true)   
   const wrapper2 = wrap({ state: state1})
   expect(wrapper2.contains(<LeadList/>)).toBe(true)
   expect(wrapper2.contains(<JoinList/>)).toBe(true)
-  expect(wrapper2.contains(<HistoryList/>)).toBe(true);
-  expect(wrapper2.contains('1. 이름 : ')).toBe(true)
-  expect(wrapper2.contains('2. SNU 메일 : ')).toBe(true)
+  expect(wrapper2.contains(<HistoryList/>)).toBe(true)
+  expect(wrapper2.contains('My Information')).toBe(true)
+  expect(wrapper2.contains('내 정보')).toBe(true)
+  expect(wrapper2.contains('아이디 : ')).toBe(true)
+  expect(wrapper2.contains('이름 : ')).toBe(true)
+  expect(wrapper2.contains('이메일 : ')).toBe(true)
+  expect(wrapper2.contains('핸드폰 : ')).toBe(true) 
 })

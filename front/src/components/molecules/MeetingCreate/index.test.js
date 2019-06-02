@@ -4,35 +4,30 @@ import { MeetingCreate } from '.'
 
 const wrap = (props = {}) => shallow(<MeetingCreate {...props} />)
 
-it('renders same sidebar when different childern, props passed in', () => {
-  const wrapper = wrap({ username: 'a' })
-  expect(wrapper.contains(<select ref={node => {kind=node;}} style={{width:'85px'}, {height:'30px'}}>
-  <option value="0">음식배달</option>
-  <option value="1">택시합승</option>
-  <option value="2">공동구매</option>
-  <option value="3">스터디</option>
-  <option value="4">운동</option>
-  <option value="5">미팅</option>
-</select>)).toBe(true)
-  expect(wrapper.contains(<input type="datetime-local" ref={node => {due=node;}} />)).toBe(true)
-  expect(wrapper.contains(<input placeholder = "제목을 입력하세요." style={{width:'350px', height:'20px'}} ref={node => {title=node;}} />)).toBe(true)
-  expect(wrapper.contains(<input type="number" ref={node => {min_people = node;}} style={{width:'45px'}} />)).toBe(true)
-  expect(wrapper.contains(<input type="number" ref={node => {max_people = node;}} style={{width:'45px'}} />)).toBe(true)
-  expect(wrapper.contains(<textarea placeholder = "내용을 입력하세요." rows="20" cols="80" ref={node => {description=node;}} />)).toBe(true)
+const onClick = jest.fn()
+const onClick2 = jest.fn()
 
-  const wrapper2 = wrap({ username: 'b' })
-  expect(wrapper2.contains(<select ref={node => {kind=node;}} style={{width:'85px'}, {height:'30px'}}>
-  <option value="0">음식배달</option>
-  <option value="1">택시합승</option>
-  <option value="2">공동구매</option>
-  <option value="3">스터디</option>
-  <option value="4">운동</option>
-  <option value="5">미팅</option>
-</select>)).toBe(true)
-  expect(wrapper2.contains(<input type="datetime-local" ref={node => {due=node;}} />)).toBe(true)
-  expect(wrapper2.contains(<input placeholder = "제목을 입력하세요." style={{width:'350px', height:'20px'}} ref={node => {title=node;}} />)).toBe(true)
-  expect(wrapper2.contains(<input type="number" ref={node => {min_people = node;}} style={{width:'45px'}} />)).toBe(true)
-  expect(wrapper2.contains(<input type="number" ref={node => {max_people = node;}} style={{width:'45px'}} />)).toBe(true)
-  expect(wrapper2.contains(<textarea placeholder = "내용을 입력하세요." rows="20" cols="80" ref={node => {description=node;}} />)).toBe(true)
+// New
+it('new meeting create', () => {
+  //onClick.mockClear()
+  const wrapper = wrap({ username: 'a', password: '1234', user_id: 0, new_click: onClick, modify_click: onClick2 })
+  expect(wrapper.contains('완료')).toBe(true)
+  /*
+  expect(onClick).not.toBeCalled()
+  wrapper.find('#Button').first().simulate('click')
+  expect(onClick).toBeCalled()
+  */
+})
 
+// Modify
+it('modify meeting', () => {
+  //onClick2.mockClear()
+  sessionStorage.setItem('meeting_info', JSON.stringify({id: 3, title: '미팅', created: '2019-05-10T19:00:00+09:00', leader: 'abc', min_people: 8, max_people: 10, state: 0, description: '미팅 구해요', kind: 5, due: '2019-05-16T19:00:00+09:00', picture: null, members: [1,2]}))
+  const wrapper = wrap({ username: 'a', password: '1234', user_id: 0, new_click: onClick, modify_click: onClick2 })
+  expect(wrapper.contains('수정')).toBe(true)
+  /*
+  expect(onClick2).not.toBeCalled()
+  wrapper.find('#Button').first().simulate('click')
+  expect(onClick2).toBeCalled()
+  */
 })

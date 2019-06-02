@@ -6,14 +6,14 @@ const onClick = jest.fn()
 const wrap = (props = {}) => shallow(<Logout {...props} />)
 
 it('renders same text when different childern, props passed in', () => {
-  const wrapper = wrap({logout_click : onClick})
+  const wrapper = wrap({logout_click: onClick})
   expect(wrapper.contains('로그아웃')).toBe(true)
 })
 
 it('calls onClick when Clicked', () => {
   onClick.mockClear()
-  const wrapper = wrap({logout_click : onClick})
+  const wrapper = wrap({logout_click: onClick})
   expect(onClick).not.toBeCalled()
-  wrapper.simulate('click')
+  wrapper.find('Button').first().simulate('click')
   expect(onClick).toBeCalled()
 })
