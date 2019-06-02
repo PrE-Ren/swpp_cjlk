@@ -10,7 +10,7 @@ matrix:
       before_install:
         - cd front
       install:
-        - npm install
+        - npm install -g gulp
         - npm install --save cross-env
         - npm install jest
         - npm install semantic-ui-react --save
