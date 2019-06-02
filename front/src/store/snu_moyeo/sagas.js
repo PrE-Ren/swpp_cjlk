@@ -93,6 +93,34 @@ export function* watchChangePageNum() {
   }
 }
 
+export function* watchLoadComments() {
+  while(true) {
+    const action = yield take(actions.LOAD_COMMENTS_ACTION)
+    yield call(load_comments_func, action)
+  }
+}
+
+export function* watchAddComment() {
+  while(true) {
+    const action = yield take(actions.ADD_COMMENT_ACTION)
+    yield call(add_comment_func, action)
+  }
+}
+
+export function* watchEditComment() {
+  while(true) {
+    const action = yield take(actions.EDIT_COMMENT_ACTION)
+    yield call(edit_comment_func, action)
+  }
+}
+
+export function* watchDeleteComment() {
+  while(true) {
+    const action = yield take(actions.DELETE_COMMENT_ACTION)
+    yield call(delete_comment_func, action)
+  }
+}
+
 function* get_meetinglist(type) {
   const get_token = (state) => state.snu_moyeo.mySNU_verification_token
   const token = yield select(get_token)
@@ -161,14 +189,48 @@ export function* reload() {
       yield put(actions.reload_action(pathname, meetinglist))
     }
   }
-  else {
-    const meetinglist_impending = yield call(get_meetinglist, 'impending')
-    const meetinglist_recent = yield call(get_meetinglist, 'recent')
-    if (meetinglist_impending !== null && meetinglist_recent !== null) {
-      console.log('<Dispatch reload_action>')
-      yield put(actions.reload_action('impending', meetinglist_impending))
-      yield put(actions.reload_action('recent', meetinglist_recent))
+  else if (pathname == '/auth') {
+    const username = sessionStorage.getItem("username") // 이미 로그인된 상태일 테니까 가져올 수 있음
+
+    // 로그인을 안 하고 URL로 바로 접속한 경우
+    if (username == null) {
+      alert('잘못된 접근입니다.')
+      Object.defineProperty(window.location, 'href', {
+        writable: true,
+        value: '/login'
+      });
+    } 
+    else {
+      const password = sessionStorage.getItem("password") // 이미 로그인된 상태일 테니까 가져올 수 있음
+      const url_user = 'http://127.0.0.1:8000/log_in/'
+      const hash = new Buffer(`${username}:${password}`).toString('base64')
+      const response_user = yield call(fetch, url_user, {
+        method: 'GET',
+        headers: { 'Authorization' : `Basic ${hash}` }
+      })
+
+      // 이미 둘 다 인증 완료
+      if (response_user.ok) {
+        alert('이미 인증을 완료한 유저입니다.')
+        Object.defineProperty(window.location, 'href', {
+          writable: true,
+          value: '/'
+        });
+      }
+
+      // 최소 둘 중 하나가 인증 미완료
+      else {
+        const response_user_data = yield call([response_user, response_user.json]);
+        const mySNU_verification_token = response_user_data.mySNU_verified ? response_user_data.mySNU_verification_token : null
+        const phone_verification_token = response_user_data.phone_verified ? response_user_data.phone_verification_token : null
+        const email = response_user_data.mySNU_verified ? response_user_data.email : null
+        const phone_number = response_user_data.phone_verified ? response_user_data.phone_number : null
+        yield put(actions.login_success_action(username, password, mySNU_verification_token, phone_verification_token, response_user_data.user_id, email, phone_number, response_user_data.name))
+      }
     }
+  }
+  else {
+    /* do nothing */
   }
 }
 
@@ -185,6 +247,7 @@ export function* login_func(action) {
     },
     body: info,
   })
+
   // 회원가입된 계정 O
   if (response_token.ok) {
     const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
@@ -192,26 +255,32 @@ export function* login_func(action) {
       method: 'GET',
       headers: { 'Authorization' : `Basic ${hash}` }
     })
+
     // 홈 페이지로 (인증 완료)
     if (response_user.ok) {
       alert('로그인 성공')
       const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.phone_number, response_user_data.name))
+      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.phone_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.phone_number, response_user_data.name))
       Object.defineProperty(window.location, 'href', {
         writable: true,
         value: '/'
       });
     }
+
     // 인증 페이지로 (인증 미완료)
     else{
       alert('인증 필요')
-      yield put(actions.login_auth_action(username, password))
+      const response_user_data = yield call([response_user, response_user.json]);
+      // LoginAuth 페이지에서 이미 로그인된 상태인지 판별하기 위해 필요
+      // 그래서 사실 username과 password만 설정해줘도 괜찮음 (근데 일단 수정이 귀찮아서 방치)
+      yield put(actions.login_auth_action(username, password, response_user_data.user_id, response_user_data.name)) 
       Object.defineProperty(window.location, 'href', {
         writable: true,
         value: '/auth'
       });
     }
   }
+  
   // 회원가입된 계정 X
   else
     alert("로그인 실패 : 존재하지 않는 ID나 비밀번호입니다.")
@@ -276,6 +345,7 @@ export function* confirm_email_func(action) {
   })
   if (response_email.ok) {
     alert('인증 완료')
+    yield put(actions.success_email_action(action.email, action.email_code))
   }
   else {
     alert('인증번호가 틀렸습니다.')
@@ -290,6 +360,7 @@ export function* confirm_phone_func(action) {
   })
   if (response_phone.ok) {
     alert('인증 완료')
+    yield put(actions.success_phone_action(action.phone_number, action.phone_code))
   }
   else {
     alert('인증번호가 틀렸습니다.')
@@ -300,7 +371,6 @@ export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const formData = new FormData();
-
   if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
     formData.append('title', action.meeting_info.title);
     formData.append('due', action.meeting_info.due);
@@ -309,10 +379,14 @@ export function* new_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', 0);
     formData.append('kind', action.meeting_info.kind);
+    formData.append('latitude', sessionStorage.getItem("lat"));
+    formData.append('longitude', sessionStorage.getItem("lng"));
     if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
       formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
     else
       formData.append('picture', null, null)
+
+
 
     const response_meeting = yield call(fetch, url_meeting, {
         method: 'POST',
@@ -357,7 +431,7 @@ export function* new_func(action) {
 }
 
 export function* modify_func(action) {
-  const meeting_info = JSON.parse(localStorage.getItem("meeting_info"))
+  const meeting_info = JSON.parse(sessionStorage.getItem("meeting_info"))
   const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_info.id}/`
   const formData = new FormData();
 
@@ -369,7 +443,8 @@ export function* modify_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', action.meeting_info.state);
     formData.append('kind', action.meeting_info.kind);
-
+    formData.append('latitude', sessionStorage.getItem("lat"));
+    formData.append('longitude', sessionStorage.getItem("lng"));
     if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
       formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
     else
@@ -382,7 +457,7 @@ export function* modify_func(action) {
     })
     if (response_meeting.ok) {
       console.log('Meeting PUT ok')
-      localStorage.removeItem('meeting_info')
+      sessionStorage.removeItem('meeting_info')
       window.location.href = '/'
     }
     else {
@@ -398,7 +473,6 @@ export function* change_meeting_state_func(action) {
   let meeting_id = action.meeting_info.id
   const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`
   const formData = new FormData();
-  console.log(action)
   formData.append('title', action.meeting_info.title);
   formData.append('due', action.meeting_info.due);
   formData.append('min_people', action.meeting_info.min_people);
@@ -430,7 +504,7 @@ export function* change_meeting_state_func(action) {
 
 export function* change_meeting_info_func(action) {
   const meeting_info = JSON.stringify(action.meeting_info)
-  localStorage.setItem("meeting_info", meeting_info)
+  sessionStorage.setItem("meeting_info", meeting_info)
   window.location.href = "/new"
 }
 
@@ -509,6 +583,76 @@ export function* change_page_num_func(action) {
   }
 }
 
+export function* load_comments_func(action) {
+  const url_comments = 'http://127.0.0.1:8000/comment/meeting/' + action.meeting_id + '/'
+  const response_comments = yield call(fetch, url_comments, { method : 'GET' })
+
+  if (response_comments.ok) {
+    const comments = yield call([response_comments, response_comments.json])
+    console.log('<Fetch comments of this meeting>')
+    console.log(comments)
+    yield put(actions.load_comments_success_action(comments))
+  }
+  else
+    alert('<Fail to fetch comments of this meeting>')
+}
+
+export function* add_comment_func(action) {
+  const url_comment = 'http://127.0.0.1:8000/comment/'
+  const info_comment = JSON.stringify({ meetingid: action.meeting_id, content: action.content})
+  const response_comment = yield call(fetch, url_comment, {
+      method: 'POST',
+      headers: {
+          'Authorization': `Basic ${action.hash}`,
+          'Content-Type': 'application/json',
+      },
+      body: info_comment,
+  })
+
+  if (response_comment.ok) {
+    console.log('Comment POST ok')
+    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+  }
+  else
+    alert('댓글을 입력해주세요.')
+    console.log('Comment POST bad')
+}
+
+export function* edit_comment_func(action) {
+  const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment_id + '/'
+  const info_comment = JSON.stringify({ meetingid: action.meeting_id, writerid: action.writer_id, content: action.content })
+  const response_comment = yield call(fetch, url_comment, {
+      method: 'PUT',
+      headers: {
+          'Authorization': `Basic ${action.hash}`,
+          'Content-Type': 'application/json',
+      },
+      body: info_comment,
+  })
+
+  if (response_comment.ok) {
+    console.log('Comment PUT ok')
+    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+  }
+  else
+    console.log('Comment PUT bad')
+}
+
+export function* delete_comment_func(action) {
+  const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment_id + '/'
+  const response_comment = yield call(fetch, url_comment, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Basic ${action.hash}` },
+  })
+
+  if (response_comment.ok) {
+    console.log('Comment DELETE ok')
+    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+  }
+  else
+    console.log('Comment DELETE bad')
+}
+
 export default function* () {
   yield fork(reload)
   yield fork(watchLogin)
@@ -524,4 +668,8 @@ export default function* () {
   yield fork(watchJoinMeeting)
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
+  yield fork(watchLoadComments)
+  yield fork(watchAddComment)
+  yield fork(watchEditComment)
+  yield fork(watchDeleteComment)
 }

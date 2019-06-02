@@ -1,18 +1,10 @@
-import React, { Fragment } from 'react'
-import { PropTypes } from 'prop-types'
-import styled from 'styled-components'
-import { font, palette } from 'styled-theme'
-import Button from '../../atoms/Button'
+import React from 'react'
+import CommentList from '../../../containers/CommentList'
+import Map from '../../../containers/Map'
 import * as meeting_state from '../../../literal'
 import { ModifyButton, CloseButton, BreakUpButton, ReOpenButton, ReCloseButton } from '../../atoms/ButtonsInMeetingInfo'
 import { JoinButton, WithdrawButton } from '../../atoms/ButtonsInMeetingInfo'
-import { Modal, Image, Grid } from 'semantic-ui-react'
-
-const Font = styled.div`
-  float: right;
-  font-size: 17px;
-  font-weight: 600;
-`
+import { Modal, Image, List } from 'semantic-ui-react'
 
 const dateParse = (data) => {
     const year = data.substring(0, 19).replace("-", "년 ")
@@ -29,14 +21,32 @@ const dateParse = (data) => {
 export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click, change_meeting_info_click}) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')
   const content =
-    <Modal.Description>
-      <br/><br/>
-      ① 주최자 : {meeting_info.leader}<br/><br/>
-      ② 게시 날짜 : {dateParse(meeting_info.created)}<br/><br/>
-      ③ 분류 : {meeting_state.KIND_NUM_TO_STRING(meeting_info.kind)}<br/><br/>
-      ④ 현재 참여 인원 : {meeting_info.members.length}명<br/><br/>
-      ⑤ 모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)}<br/><br/>
+    <Modal.Description style={{ marginLeft: '10px' }}>
+      <List style={{ marginTop: '20px' }}>
+        <List.Item>
+          <List.Icon name='user circle' />
+          <List.Content>주최자 : {meeting_info.leader}</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Icon name='calendar alternate outline' />
+          <List.Content>게시 날짜 : {dateParse(meeting_info.created)}</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Icon name='bars' />
+          <List.Content>분류 : {meeting_state.KIND_NUM_TO_STRING(meeting_info.kind)}</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Icon name='user' />
+          <List.Content>현재 참여 인원 : {meeting_info.members.length}명</List.Content>
+        </List.Item>
+        <List.Item>
+          <List.Icon name='circle' />
+          <List.Content>모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)}</List.Content>
+        </List.Item>
+      </List>
+      <Map meeting_info = {meeting_info} write = {false} />
       <h4><p>{meeting_info.description}</p></h4>
+      {/*<h4><p>A long description is a way to provide long alternative text for non-text elements, such as images. Generally, alternative text exceeding 250 characters, which cannot be made more concise without making it less descriptive or meaningful, should have a long description. Examples of suitable use of long description are charts, graphs, maps, infographics, and other complex images. Like alternative text, long description should be descriptive and meaningful. It should also include all text that is incorporated into the image. A long description should provide visually-impaired users with as much information as sighted users would understand from the image. There are four components to creating a long description in the Waterloo Content Management System (WCMS)</p></h4>*/}
     </Modal.Description>
 
   if (meeting_info.picture != null) {
@@ -53,22 +63,15 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         return (
           <div>
             <Modal.Content image scrolling>
-              <Grid columns={2}>
-                <Grid.Column width={6}>
-                  <br/>
-                  <Modal.Actions>
-                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-                    <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                    <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                  </Modal.Actions>
-                  <br/>
-                  <Image style={{float:'left'}} size='medium' src={meeting_info.picture} wrapped />
-                </Grid.Column>
-                <Grid.Column width={9}>
-                  {content}
-                </Grid.Column>
-              </Grid>
+              {meeting_info.picture != null ? <Image size='medium' src={meeting_info.picture} wrapped /> : <div></div>}
+              {content}
+              <CommentList meeting_id={meeting_info.id} />
             </Modal.Content>
+            <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+              <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+              <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+              <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+            </Modal.Actions>
           </div>
         )
 
@@ -76,22 +79,15 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         return (
           <div>
             <Modal.Content image scrolling>
-              <Grid columns={2}>
-                <Grid.Column width={6}>
-                  <br/>
-                  <Modal.Actions>
-                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-                    <ReOpenButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                    <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                  </Modal.Actions>
-                  <br/>
-                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-                </Grid.Column>
-                <Grid.Column width={9}>
-                  {content}
-                </Grid.Column>
-              </Grid>
+              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              {content}
+              <CommentList meeting_id={meeting_info.id} />
             </Modal.Content>
+            <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+              <ReOpenButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+              <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+              <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+            </Modal.Actions>
           </div>
         )
 
@@ -99,22 +95,15 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         return (
           <div>
             <Modal.Content image scrolling>
-              <Grid columns={2}>
-                <Grid.Column width={6}>
-                  <br/>
-                  <Modal.Actions>
-                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-                    <ReCloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                    <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                  </Modal.Actions>
-                  <br/>
-                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-                </Grid.Column>
-                <Grid.Column width={9}>
-                  {content}
-                </Grid.Column>
-              </Grid>
+              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              {content}
+              <CommentList meeting_id={meeting_info.id} />
             </Modal.Content>
+            <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+              <ReCloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+              <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+              <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+            </Modal.Actions>
           </div>
         )
 
@@ -122,21 +111,14 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         return (
           <div>
             <Modal.Content image scrolling>
-              <Grid columns={2}>
-                <Grid.Column width={6}>
-                  <br/>
-                  <Modal.Actions>
-                    <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-                    <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                  </Modal.Actions>
-                  <br/>
-                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-                </Grid.Column>
-                <Grid.Column width={9}>
-                  {content}
-                </Grid.Column>
-              </Grid>
+              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              {content}
+              <CommentList meeting_id={meeting_info.id} />
             </Modal.Content>
+            <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+              <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+              <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+            </Modal.Actions>
           </div>
         )
 
@@ -144,14 +126,9 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         return (
           <div>
             <Modal.Content image scrolling>
-              <Grid columns={2}>
-                <Grid.Column width={6}>
-                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-                </Grid.Column>
-                <Grid.Column width={9}>
-                  {content}
-                </Grid.Column>
-              </Grid>
+              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              {content}
+              <CommentList meeting_id={meeting_info.id} />
             </Modal.Content>
           </div>
         )
@@ -162,52 +139,47 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
   else {
     // 참여 중 O
     if (meeting_info.members.includes(Number(state.user_id))) {
-      return (
-        <div>
-          <Modal.Content image>
-            <Grid columns={2}>
-              <Grid.Column width={6}>
-                <br/>
-                <Modal.Actions>
-                  <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
-                </Modal.Actions>
-                <br/>
+      switch (meeting_info.state) {
+        case meeting_state.BREAK_UP :
+          return (
+            <div>
+              <Modal.Content image>
                 {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              </Grid.Column>
-              <Grid.Column width={9}>
                 {content}
-              </Grid.Column>
-            </Grid>
-          </Modal.Content>
-        </div>
-      )
+                <CommentList meeting_id={meeting_info.id} />
+              </Modal.Content>
+            </div>
+          )
+
+        default :
+          return (
+            <div>
+              <Modal.Content image>
+                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                {content}
+                <CommentList meeting_id={meeting_info.id} />
+              </Modal.Content>
+              <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
+              </Modal.Actions>
+            </div>
+          )
+      }
     }
     // 참여 중 X
     else {
       return (
         <div>
           <Modal.Content image>
-            <Grid columns={2}>
-              <Grid.Column width={6}>
-                <br/>
-                <Modal.Actions>
-                  <JoinButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {join_meeting_click} />
-                </Modal.Actions>
-                <br/>
-                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              </Grid.Column>
-              <Grid.Column width={9}>
-                {content}
-              </Grid.Column>
-            </Grid>
+            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+            {content}
+            <CommentList meeting_id={meeting_info.id} />
           </Modal.Content>
+          <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+            <JoinButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {join_meeting_click} />
+          </Modal.Actions>
         </div>
       )
     }
   }
-}
-
-MeetingInfo.propTypes = {
-  reverse: PropTypes.bool,
-  children: PropTypes.node,
 }

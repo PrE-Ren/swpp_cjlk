@@ -8,9 +8,4 @@ const Join_chatroom = () => {
   )
 }
 
-Join_chatroom.propTypes = {
-  reverse: PropTypes.bool,
-  children: PropTypes.node,
-}
-
 export default Join_chatroom

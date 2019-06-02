@@ -1,14 +1,8 @@
 import React from 'react'
 import LoginPage from '../../../containers/Page/LoginPage'
 
-import { PageTemplate } from 'components'
-
 const Login = () => {
-  return (
-    <div>
-      <LoginPage/>
-    </div>
-  )
+  return <LoginPage/>
 }
 
 export default Login

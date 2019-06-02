@@ -1,15 +1,21 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
 import Left_sidebar from '../../molecules/Left_sidebar'
 import MeetingCreate from '../../../containers/MeetingCreate'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import { Grid, Header, Icon, Container } from 'semantic-ui-react'
 
-export const NewPage = ({ token }) => {
-  if (token == null) {
+export const NewPage = ({ username, mySNU_verification_token, phone_verification_token }) => {
+  if (username == null) {
     Object.defineProperty(window.location, 'href', {
       writable: true,
       value: '/login'
+    });
+    return (<div></div>)
+  }
+  else if (mySNU_verification_token == null || phone_verification_token == null) {
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/auth'
     });
     return (<div></div>)
   }
@@ -39,9 +45,4 @@ export const NewPage = ({ token }) => {
       </Grid>
     )
   }
-}
-
-NewPage.propTypes = {
-  reverse: PropTypes.bool,
-  children: PropTypes.node,
 }

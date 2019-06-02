@@ -18,18 +18,18 @@ class MeetingModelsTests(TestCase):
     def sign_up_post(self) :  #do sign up (= post user)
        link = self.link + "sign_up/"
    
-       data = {'username':'test1', 'password':'hello', 'name':'nametest1', 'email':'sdrjseka96@snu.ac.kr', 'mySNU_verified':True }  # verified default false, change to true by email authentication, but for test, we will set this true.
+       data = {'username':'test1', 'password':'hello', 'name':'nametest1', 'mySNU_verified':True }  # verified default false, change to true by email authentication, but for test, we will set this true.
        res = requests.post(link, data = data)
        self.assertEqual(res.status_code,201)
        print("test1 account generated successfully")
 
-       data = {'username':'test2', 'password':'hello', 'name':'nametest2', 'email':'sdrjseka96@snu.ac.kr', 'mySNU_verified':True }  # verified default false, change to true by email authentication, but for test, we will set this true.
+       data = {'username':'test2', 'password':'hello', 'name':'nametest2', 'mySNU_verified':True }  # verified default false, change to true by email authentication, but for test, we will set this true.
        res = requests.post(link, data = data)
        self.assertEqual(res.status_code,201)
        print("test2 account generated successfully")
        
        
-       data = {'username':'test3', 'password':'hello', 'name':'nametest2', 'email':'sdrjseka96@snu.ac.kr', 'mySNU_verified':True }  # verified default false, change to true by email authentication, but for test, we will set this true.
+       data = {'username':'test3', 'password':'hello', 'name':'nametest2', 'mySNU_verified':True }  # verified default false, change to true by email authentication, but for test, we will set this true.
        res = requests.post(link, data = data)
        self.assertEqual(res.status_code,201)
        print("test3 account generated successfully")

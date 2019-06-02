@@ -1,54 +1,37 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
-import styled from 'styled-components'
-import { font, palette } from 'styled-theme'
-import Button from '../../atoms/Button'
+import { Button, Form, Grid, Header, Segment, Message } from 'semantic-ui-react'
 
-const Signup_Box = styled.div`
-  border: 2px solid black;
-  width: 600px;
-  padding: 40px;
-  position: absolute;
-  top: 47%;
-  left: 47%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-`
-
-const Font_Signup = styled.h1`
-  font-size: 38px;
-  font-weight: bold;
-`
-
-const Font_Info = styled.div`
-  font-size: 20px;
-  font-weight: bold;
-`
-
-export const SignupPage = ({ token, signup_click }) => {
-  let username, password, name, email
-
-  if (token == null) {
+export const SignupPage = ({ username_store, mySNU_verification_token, phone_verification_token, signup_click }) => {
+  let username, password, nickname
+  // 1. 로그인 X (username == null) : 정상 출력
+  // 2. 로그인 O, 인증 X (username != null && (mySNU_verification_token == null || phone_verification_token == null)): To 인증 페이지
+  // 3. 로그인 O, 인증 O (else) : To Home
+  if (username_store == null) {
     return (
-        <Signup_Box>
-          <Font_Signup>회원가입</Font_Signup>
-          <Font_Info>
-            <p></p>
-            ID &nbsp;&nbsp;&nbsp;&nbsp;
-            <input style={{border: "1px solid"}} size="23" ref={node => {username=node;}}/>
-            <p></p>
-            PW &nbsp;&nbsp;&nbsp;
-            <input style={{border: "1px solid"}} size="23" ref={node => {password=node;}}/>
-            <p></p>
-            이름 &nbsp;&nbsp;
-            <input style={{border: "1px solid"}} size="23" ref={node => {name=node;}}/>
-          </Font_Info>
-          <p></p>
-          <Button type = "submit" onClick={() => signup_click(username.value, password.value, name.value)}>완료</Button>
-          &ensp;&ensp;
-          <Button type = "submit" onClick={() => window.location.href = "/login"}>돌아가기</Button>
-        </Signup_Box>
+      <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+        <Grid.Column style={{ maxWidth: 450 }}>
+          <Header as='h1' color='teal' textAlign='center'>
+            Sign up your account
+          </Header>
+          <Form size='large'>
+            <Segment stacked>
+              <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' onChange={(e) => username = e.target.value}/>
+              <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password' onChange={(e) => password = e.target.value} type='password' />
+              <Form.Input fluid icon='signup' iconPosition='left' placeholder='nickname' onChange={(e) => nickname = e.target.value} />
+              <Button color='teal' fluid size='large' onClick={() => signup_click(username, password, nickname)}>회원가입</Button>
+            </Segment>
+          </Form>
+          <Message><a href='/login'>돌아가기</a></Message>
+        </Grid.Column>
+      </Grid>
     )
+  }
+  else if (mySNU_verification_token == null || phone_verification_token == null) {
+    Object.defineProperty(window.location, 'href', {
+      writable: true,
+      value: '/auth'
+    });
+    return (<div></div>)
   }
   else {
     Object.defineProperty(window.location, 'href', {
@@ -57,9 +40,4 @@ export const SignupPage = ({ token, signup_click }) => {
     });
     return (<div></div>)
   }
-}
-
-SignupPage.propTypes = {
-  reverse: PropTypes.bool,
-  children: PropTypes.node,
 }
