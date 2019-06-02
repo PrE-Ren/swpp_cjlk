@@ -3,6 +3,9 @@ dist: xenial
 matrix:
   include:
     - language: node_js
+      cache:
+        directories:
+          - node_modules
       node_js: "10"
       before_install:
         - cd front
