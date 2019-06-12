@@ -5,10 +5,17 @@ import MeetingCreate from '../../../containers/MeetingCreate'
 
 const wrap = (props = {}) => shallow(<NewPage {...props} />)
 
-it('does not render wrong thing when passed in', () => {
-  const wrapper = wrap({ token : "abc" })
-  expect(wrapper.contains('SNU Moyeo')).toBe(true)
-  expect(wrapper.contains(<MeetingCreate />)).toBe(true)
-  const wrapper2 = wrap({ token : null })
-  expect(wrapper2.contains(<MeetingCreate />)).toBe(false)
+it('username null', () => {
+  const wrapper = wrap({ username : null })
+  expect(wrapper.contains(<div></div>)).toBe(true)
+})
+
+it('username not null, token null', () => {
+  const wrapper2 = wrap({ username : 'abs', mySNU_verification_token: null, phone_verification_token: null })
+  expect(wrapper2.contains(<div></div>)).toBe(true)
+})
+
+it('username not null, token not null', () => {
+  const wrapper3 = wrap({ username : 'abs', mySNU_verification_token: 'aqeq', phone_verification_token: 'qweaca' })
+  expect(wrapper3.contains(<MeetingCreate />)).toBe(true)
 })

@@ -8,7 +8,7 @@ export const HistoryList = ({ meetinglist_history }) => {
     let meetings = JSON.parse(meetinglist_history)
     return (
       <Segment raised>
-        <Label as='a' color='pink' ribbon>Now</Label>
+        <Label as='a' color='pink' ribbon>History</Label>
         <Header as='h1'>내가 참여했던 모임</Header>
         <Card.Group>
           {meetings.map(meeting_entry =>

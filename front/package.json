@@ -30,7 +30,8 @@
       "^(components|containers)$": "<rootDir>/test/componentsMock.js",
       "^(store|\\.\\.)\\/selectors$": "<rootDir>/test/selectorsMock.js",
       "^(store|\\.\\.)\\/actions$": "<rootDir>/test/actionsMock.js"
-    }
+    },
+    "setupTestFrameworkScriptFile": "mock-local-storage"
   },
   "devDependencies": {
     "@kadira/storybook": "^2.35.2",
@@ -60,6 +61,7 @@
     "happypack": "^3.0.3",
     "html-webpack-plugin": "^2.26.0",
     "jest-cli": "^19.0.0",
+    "mock-local-storage": "^1.1.8",
     "opn-cli": "^3.1.0",
     "raw-loader": "^0.5.1",
     "react-addons-test-utils": "^15.4.1",
