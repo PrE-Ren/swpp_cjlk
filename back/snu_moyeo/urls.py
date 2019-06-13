@@ -32,8 +32,18 @@ urlpatterns = [
     url(r'^phone_auth/(?P<phone_number>[0-9]+)/(?P<phone_token>[0-9]+)/$', views.SMSAuthenticate.as_view()),
     url(r'^send_phone/(?P<phone_number>[0-9]+)/$', views.SendPhone.as_view()),
 
+    url('searchall/', views.MeetingSearchAllView.as_view()),
+    url('search0/', views.MeetingSearch0View.as_view()),
+    url('search1/', views.MeetingSearch1View.as_view()),
+    url('search2/', views.MeetingSearch2View.as_view()),
+    url('search3/', views.MeetingSearch3View.as_view()),
+    url('search4/', views.MeetingSearch4View.as_view()),
+    url('search5/', views.MeetingSearch5View.as_view()),
+    url('search6/', views.MeetingSearch6View.as_view()),
 
-    url('searchlist/', views.MeetingSearchAllView.as_view())
+    url('reportlist/', views.ReportList.as_view()),
+    #url('reportlist/<int:pk>/', views.ReportDetail.as_view()),
+    #url('reportcreate/', views.ReportCreate.as_view())
     # url(meeting/<int:id>/commnet/ , comment_on_meeting_id.asview),
 ]
 
