@@ -19,7 +19,14 @@ const routes = (
     <Route path={"/list/"+kind.STUDY} component={List} />
     <Route path={"/list/"+kind.EXERCISE} component={List} />
     <Route path={"/list/"+kind.MEETING} component={List} />
-    <Route path="/all/:keyword" component={All} />
+
+    <Route path={"/list/"+kind.DELIVER+"/:keyword"} component={List} />
+    <Route path={"/list/"+kind.TAXI+"/:keyword"} component={List} />
+    <Route path={"/list/"+kind.BUY+"/:keyword"} component={List} />
+    <Route path={"/list/"+kind.STUDY+"/:keyword"} component={List} />
+    <Route path={"/list/"+kind.EXERCISE+"/:keyword"} component={List} />
+    <Route path={"/list/"+kind.MEETING+"/:keyword"} component={List} />
+    <Route path="/searchall/:keyword" component={All} />
   </div>
 )
 

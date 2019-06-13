@@ -45,8 +45,8 @@ const snu_moyeo_reducer = (state = initialState, action) => {
                   page_num : 1
                 }
             }
-            else if (action.option.includes('/all')) {
-              sessionStorage.setItem("all", meetinglist)
+            else if (action.option.includes('/searchall')) {
+              sessionStorage.setItem("searchall", meetinglist)
               sessionStorage.setItem("page_num", 1)
                 return {
                   ...state,

@@ -2,8 +2,9 @@ import React from 'react'
 import Left_sidebar from '../../molecules/Left_sidebar'
 import KindList from '../../../containers/KindList'
 import Right_sidebar from '../../molecules/Right_sidebar'
-import Button from '../../atoms/Button'
-import { Grid, Header, Icon, Container, Pagination, Search } from 'semantic-ui-react'
+import { Grid, Header, Icon, Container, Pagination, Input, Button } from 'semantic-ui-react'
+
+let keyword
 
 export const ListPage = ({ username, mySNU_verification_token, phone_verification_token, meetinglist_list, change_page_num_click }) => {
   if (username == null) {
@@ -48,7 +49,16 @@ export const ListPage = ({ username, mySNU_verification_token, phone_verificatio
                 <Pagination defaultActivePage={1} totalPages={last_page_num} onPageChange={(e, {activePage}) => change_page_num_click({activePage}.activePage)} />
               </Grid.Column>
               <Grid.Column width={4}>
-                <Search />
+                <Input type='text' placeholder='Search...' action>
+                  <input ref={node => {keyword = node}}/>
+                  <Button type='submit' onClick={() => {
+                    const kind = window.location.pathname[6]
+                    if (keyword.value == "")
+                      alert('Type Search Keyword')
+                    else
+                      window.location.href = '/list/' + kind + '/' + keyword.value;
+                  }}>Search</Button>
+                </Input>
               </Grid.Column>
             </Grid>
           </Container>

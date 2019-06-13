@@ -134,9 +134,16 @@ function* get_meetinglist(type) {
 
   if (token !== null) {
     let url
-    if (type.includes('/list'))
-      url = 'http://127.0.0.1:8000' + type + '/?page=1'
-    else if (type.includes('/all')) {
+    if (type.includes('/list')) {
+      if (type.length >= 8) {
+        const kind = type[6]
+        const keyword = type.substring(8)
+        url = 'http://127.0.0.1:8000/search' + kind + '/?page=1&search=' + keyword
+      }
+      else
+        url = 'http://127.0.0.1:8000' + type + '/?page=1'
+    }
+    else if (type.includes('/searchall')) {
       const keyword = type.substring(5)
       url = 'http://127.0.0.1:8000/searchall/?page=1&search=' + keyword
     }
@@ -201,7 +208,7 @@ export function* reload() {
       yield put(actions.reload_action(pathname, meetinglist))
     }
   }
-  else if (pathname.includes('/all')) {
+  else if (pathname.includes('/searchall')) {
     //alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist = yield call(get_meetinglist, pathname)
     if (meetinglist !== null) {
@@ -575,15 +582,20 @@ export function* change_page_num_func(action) {
   if (token !== null) {
     switch(action.option) {
       case "kind" : {
-        url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
+        if (pathname.length >= 8) {
+          const kind = pathname[6]
+          const keyword = pathname.substring(8)
+          url = 'http://127.0.0.1:8000/search' + kind + '/?page=' + action.page_num + '&search=' + keyword
+        }
+        else {
+          url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
+        }
+        break
       }
       case "searchall" : {
         const keyword = pathname.substring(5)
         url = 'http://127.0.0.1:8000/searchall/?page=' + action.page_num + '&search=' + keyword
-      }
-      case "searchkind" : {
-      }
-      default : {
+        break
       }
     }
     const get_username = (state) => state.snu_moyeo.username
