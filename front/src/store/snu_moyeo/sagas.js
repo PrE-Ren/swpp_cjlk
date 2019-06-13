@@ -93,6 +93,20 @@ export function* watchChangePageNum() {
   }
 }
 
+export function* watchSearchAll() {
+  while(true) {
+    const action = yield take(actions.SEARCH_ACTION)
+    yield call(search_all_func, action)
+  }
+}
+
+export function* watchSearchKind() {
+  while(true) {
+    const action = yield take(actions.SEARCH_ACTION)
+    yield call(search_kind_func, action)
+  }
+}
+
 export function* watchLoadLeaderinfo() {
   while(true) {
     const action = yield take(actions.LOAD_LEADERINFO_ACTION)
@@ -588,6 +602,14 @@ export function* change_page_num_func(action) {
   }
 }
 
+export function* search_all_func(action) {
+  //
+}
+
+export function* search_kind_func(action) {
+  //
+}
+
 export function* load_leaderinfo_func(action) {
   const url_leaderinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
   const response_leaderinfo = yield call(fetch, url_leaderinfo, { method : 'GET' })
@@ -693,6 +715,7 @@ export default function* () {
   yield fork(watchJoinMeeting)
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
+  yield fork(watchSearch)
   yield fork(watchLoadLeaderinfo)
   yield fork(watchLoadComments)
   yield fork(watchAddComment)

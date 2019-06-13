@@ -3,7 +3,7 @@ import Left_sidebar from '../../molecules/Left_sidebar'
 import KindList from '../../../containers/KindList'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import Button from '../../atoms/Button'
-import { Grid, Header, Icon, Container, Pagination, Search} from 'semantic-ui-react'
+import { Grid, Header, Icon, Container, Pagination, Search } from 'semantic-ui-react'
 
 export const ListPage = ({ username, mySNU_verification_token, phone_verification_token, meetinglist_list, change_page_num_click }) => {
   if (username == null) {

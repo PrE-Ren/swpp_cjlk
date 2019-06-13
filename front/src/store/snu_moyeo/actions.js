@@ -21,6 +21,8 @@ export const WITHDRAW_MEETING_ACTION = 'WITHDRAW_MEETING_ACTION'
 export const PARTICIPATE_ADD_ACTION = 'PARTICIPATE_ADD_ACTION'
 export const CHANGE_PAGE_NUM_ACTION = 'CHANGE_PAGE_NUM_ACTION'
 export const CHANGE_PAGE_NUM_SUCCESS_ACTION = 'CHANGE_PAGE_NUM_SUCCESS_ACTION'
+export const SEARCH_ALL_ACTION ='SEARCH_ALL_ACTION'
+export const SEARCH_KIND_ACTION ='SEARCH_KIND_ACTION'
 export const LOAD_LEADERINFO_ACTION = 'LOAD_LEADERINFO_ACTION'
 export const LOAD_COMMENTS_ACTION = 'LOAD_COMMENTS_ACTION'
 export const LOAD_COMMENTS_SUCCESS_ACTION = 'LOAD_COMMENTS_SUCCESS_ACTION'
@@ -212,6 +214,20 @@ export const change_page_num_success_action = (page_num, meetinglist) => {
     type: CHANGE_PAGE_NUM_SUCCESS_ACTION,
     page_num,
     meetinglist
+  }
+}
+
+export const search_all_action = (keyword) => {
+  return {
+    type: SEARCH_ALL_ACTION,
+    keyword
+  }
+}
+
+export const search_kind_action = (keyword) => {
+  return {
+    type: SEARCH_KIND_ACTION,
+    keyword
   }
 }
 
