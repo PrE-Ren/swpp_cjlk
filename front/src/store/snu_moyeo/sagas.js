@@ -138,7 +138,7 @@ function* get_meetinglist(type) {
       url = 'http://127.0.0.1:8000' + type + '/?page=1'
     else if (type.includes('/all')) {
       const keyword = type.substring(5)
-      url = 'http://127.0.0.1:8000/searchlist/?page=1&search=' + keyword
+      url = 'http://127.0.0.1:8000/searchall/?page=1&search=' + keyword
     }
     else
       url = 'http://127.0.0.1:8000/meetinglist/' + type
@@ -579,7 +579,7 @@ export function* change_page_num_func(action) {
       }
       case "searchall" : {
         const keyword = pathname.substring(5)
-        url = 'http://127.0.0.1:8000/searchlist/?page=' + action.page_num + '&search=' + keyword
+        url = 'http://127.0.0.1:8000/searchall/?page=' + action.page_num + '&search=' + keyword
       }
       case "searchkind" : {
       }
