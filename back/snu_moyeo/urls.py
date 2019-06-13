@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^phone_auth/(?P<phone_number>[0-9]+)/(?P<phone_token>[0-9]+)/$', views.SMSAuthenticate.as_view()),
     url(r'^send_phone/(?P<phone_number>[0-9]+)/$', views.SendPhone.as_view()),
 
-    url('searchlist/', views.MeetingSearchAllView.as_view())
+    path('searchlist/', views.MeetingSearchAllView.as_view())
     # url(meeting/<int:id>/commnet/ , comment_on_meeting_id.asview),
 ]
 
