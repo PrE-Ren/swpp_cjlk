@@ -19,3 +19,13 @@ class LeaderOnlyControl(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return obj.leader == request.user
+
+class SuperUserOnlyAccess(permissions.BasePermission):
+    
+    def has_object_permission(self, request, view, obj):
+        print('wtf')
+        if request.user.is_superuser:
+            print('wow?')
+            return True
+
+        return False
