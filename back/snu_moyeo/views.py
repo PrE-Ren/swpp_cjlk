@@ -490,7 +490,12 @@ class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
             return Report.objects.all()
         return Meeting.objects.none()
 
-
+    def delete(self, request, *args, **kwargs) :
+        target = SnuUser.objects.get(pk = self.get_object().reporteeid)
+        target_point = self.get_object().point
+        target.point -= target_point
+        target.save()
+        return self.destroy(request, *args, **kwargs)
 
 
 '''
