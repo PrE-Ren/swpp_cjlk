@@ -35,14 +35,26 @@ const snu_moyeo_reducer = (state = initialState, action) => {
               ...state,
               meetinglist_history : meetinglist
             }
-          default :
-          sessionStorage.setItem("list", meetinglist)
-          sessionStorage.setItem("page_num", 1)
-            return {
-              ...state,
-              meetinglist_list : meetinglist,
-              page_num : 1
+          default : {
+            if (action.option.includes('/list')) {
+              sessionStorage.setItem("list", meetinglist)
+              sessionStorage.setItem("page_num", 1)
+                return {
+                  ...state,
+                  meetinglist_list : meetinglist,
+                  page_num : 1
+                }
             }
+            else if (action.option.includes('/all')) {
+              sessionStorage.setItem("all", meetinglist)
+              sessionStorage.setItem("page_num", 1)
+                return {
+                  ...state,
+                  meetinglist_all : meetinglist,
+                  page_num : 1
+                }
+            }
+          }
         }
       }
       case 'LOGIN_SUCCESS_ACTION': {
@@ -55,7 +67,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         if (action.data.phone_verification_token != null) {
           sessionStorage.setItem("phone_verification_token", action.data.phone_verification_token);
           sessionStorage.setItem("phone_number", action.data.phone_number);
-        } 
+        }
         sessionStorage.setItem("user_id", action.data.user_id);
         sessionStorage.setItem("name", action.data.name);
         return {
@@ -85,7 +97,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
           name: action.name
         }
       }
-      
+
       case 'SUCCESS_EMAIL_ACTION' : {
         sessionStorage.setItem("email", action.email);
         sessionStorage.setItem("mySNU_verification_token", action.email_code);
@@ -111,7 +123,8 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
 
       case 'LOGOUT_ACTION': {
-       sessionStorage.removeItem("username");
+       sessionStorage.clear();
+       /*sessionStorage.removeItem("username");
        sessionStorage.removeItem("password");
        sessionStorage.removeItem("mySNU_verification_token");
        sessionStorage.removeItem("phone_verification_token");
@@ -124,34 +137,54 @@ const snu_moyeo_reducer = (state = initialState, action) => {
        sessionStorage.removeItem("join");
        sessionStorage.removeItem("history");
        sessionStorage.removeItem("list");
-       sessionStorage.removeItem("page_num");
+       sessionStorage.removeItem("page_num");*/
        return {
          ...state,
+         user_id: null,
          username: null,
          password: null,
+         name: null,
+         email: null,
+         phone_number: null,
+         point: null,
          mySNU_verification_token: null,
          phone_verification_token: null,
-         user_id: null,
-         email: null,
-         name: null,
          meetinglist_impending : null,
          meetinglist_recent : null,
          meetinglist_lead : null,
          meetinglist_join : null,
          meetinglist_history : null,
          meetinglist_list : null,
-         page_num : null
+         meetinglist_all : null,
+         page_num : null,
+         comments : null,
        }
       }
 
       case 'CHANGE_PAGE_NUM_SUCCESS_ACTION': {
         const meetinglist = JSON.stringify(action.meetinglist)
-        sessionStorage.setItem("list", meetinglist)
-        sessionStorage.setItem("page_num", action.page_num)
-        return {
-          ...state,
-          meetinglist_list : meetinglist,
-          page_num : action.page_num
+        switch (action.option) {
+          case "kind" : {
+            sessionStorage.setItem("list", meetinglist)
+            sessionStorage.setItem("page_num", action.page_num)
+            return {
+              ...state,
+              meetinglist_list : meetinglist,
+              page_num : action.page_num
+            }
+          }
+          case "searchall" : {
+            sessionStorage.setItem("all", meetinglist)
+            sessionStorage.setItem("page_num", action.page_num)
+            return {
+              ...state,
+              meetinglist_all : meetinglist,
+              page_num : action.page_num
+            }
+          }
+          case "searchkind" : {
+
+          }
         }
       }
 

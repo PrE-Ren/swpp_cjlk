@@ -93,20 +93,6 @@ export function* watchChangePageNum() {
   }
 }
 
-export function* watchSearchAll() {
-  while(true) {
-    const action = yield take(actions.SEARCH_ACTION)
-    yield call(search_all_func, action)
-  }
-}
-
-export function* watchSearchKind() {
-  while(true) {
-    const action = yield take(actions.SEARCH_ACTION)
-    yield call(search_kind_func, action)
-  }
-}
-
 export function* watchLoadLeaderinfo() {
   while(true) {
     const action = yield take(actions.LOAD_LEADERINFO_ACTION)
@@ -150,6 +136,10 @@ function* get_meetinglist(type) {
     let url
     if (type.includes('/list'))
       url = 'http://127.0.0.1:8000' + type + '/?page=1'
+    else if (type.includes('/all')) {
+      const keyword = type.substring(5)
+      url = 'http://127.0.0.1:8000/searchlist/?page=1&search=' + keyword
+    }
     else
       url = 'http://127.0.0.1:8000/meetinglist/' + type
 
@@ -180,6 +170,7 @@ function* get_meetinglist(type) {
 
 export function* reload() {
   const pathname = window.location.pathname
+
   if (pathname == '/') {
     //alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist_impending = yield call(get_meetinglist, 'impending')
@@ -203,6 +194,14 @@ export function* reload() {
     }
   }
   else if (pathname.includes('/list')) {
+    //alert("Reload " + pathname + " : Set state by data from back-end")
+    const meetinglist = yield call(get_meetinglist, pathname)
+    if (meetinglist !== null) {
+      console.log('<Dispatch reload_action>')
+      yield put(actions.reload_action(pathname, meetinglist))
+    }
+  }
+  else if (pathname.includes('/all')) {
     //alert("Reload " + pathname + " : Set state by data from back-end")
     const meetinglist = yield call(get_meetinglist, pathname)
     if (meetinglist !== null) {
@@ -568,46 +567,45 @@ export function* withdraw_meeting_func(action) {
 }
 
 export function* change_page_num_func(action) {
-  if (action.page_num > 0) {
-    const pathname = window.location.pathname
-    const get_token = (state) => state.snu_moyeo.mySNU_verification_token
-    const token = yield select(get_token)
+  const pathname = window.location.pathname
+  const get_token = (state) => state.snu_moyeo.mySNU_verification_token
+  const token = yield select(get_token)
+  let url
 
-    if (token !== null) {
-      const url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
-
-      const get_username = (state) => state.snu_moyeo.username
-      const get_password = (state) => state.snu_moyeo.password
-      const username = yield select(get_username)
-      const password = yield select(get_password)
-      const hash = new Buffer(`${username}:${password}`).toString('base64')
-
-      const response = yield call(fetch, url, {
-        method : 'GET',
-        headers: { 'Authorization' : `Basic ${hash}` }
-      })
-      if (response.ok) {
-        const meetinglist = yield call([response, response.json])
-        console.log('<Fetch ' + action.page_num + 'th meeting list from back-end (by reload)>')
-        console.log(meetinglist)
-        yield put(actions.change_page_num_success_action(action.page_num, meetinglist))
+  if (token !== null) {
+    switch(action.option) {
+      case "kind" : {
+        url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
       }
-      else {
-        alert('Fail to fetch ' + action.page_num + 'th meeting list from back-end')
+      case "searchall" : {
+        const keyword = pathname.substring(5)
+        url = 'http://127.0.0.1:8000/searchlist/?page=' + action.page_num + '&search=' + keyword
+      }
+      case "searchkind" : {
+      }
+      default : {
       }
     }
-  }
-  else {
-    alert('No page')
-  }
-}
+    const get_username = (state) => state.snu_moyeo.username
+    const get_password = (state) => state.snu_moyeo.password
+    const username = yield select(get_username)
+    const password = yield select(get_password)
+    const hash = new Buffer(`${username}:${password}`).toString('base64')
 
-export function* search_all_func(action) {
-  //
-}
-
-export function* search_kind_func(action) {
-  //
+    const response = yield call(fetch, url, {
+      method : 'GET',
+      headers: { 'Authorization' : `Basic ${hash}` }
+    })
+    if (response.ok) {
+      const meetinglist = yield call([response, response.json])
+      console.log('<Fetch ' + action.page_num + 'th meeting list from back-end (by reload)>')
+      console.log(meetinglist)
+      yield put(actions.change_page_num_success_action(action.option, action.page_num, meetinglist))
+    }
+    else {
+      alert('Fail to fetch ' + action.page_num + 'th meeting list from back-end')
+    }
+  }
 }
 
 export function* load_leaderinfo_func(action) {
@@ -715,7 +713,6 @@ export default function* () {
   yield fork(watchJoinMeeting)
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
-  yield fork(watchSearch)
   yield fork(watchLoadLeaderinfo)
   yield fork(watchLoadComments)
   yield fork(watchAddComment)

@@ -3,14 +3,19 @@ import ToMyPage from '../../atoms/ToMyPage'
 import Logout from '../../../containers/Logout'
 import Make_new from '../../atoms/Make_new'
 import Join_chatroom from '../../atoms/Join_chatroom'
-import { Menu, Sidebar, Search } from 'semantic-ui-react'
+import { Menu, Sidebar, Input, Button } from 'semantic-ui-react'
+
+let keyword
 
 const Right_sidebar = () => {
   return (
     <Sidebar as={Menu} animation='overlay' direction='right' icon='labeled' inverted vertical visible width='wide'>
       <ToMyPage/>
       <Logout/><br /><br />
-      <Search placeholder="Search"/>
+      <Input type='text' placeholder='Search...' action>
+        <input ref={node => {keyword = node}}/>
+        <Button type='submit' onClick={() => { window.location.href = '/all/' + keyword.value }}>Search</Button>
+      </Input>
       <Make_new/>
       <Join_chatroom/>
     </Sidebar>
