@@ -88,7 +88,7 @@ class Report (models.Model) :
     created = models.DateTimeField(auto_now_add = True)
     reason = models.CharField(max_length = 100)
     isHandled = models.BooleanField(default = False)
-    point = models.BooleanField(default = 0)
+    point = models.IntegerField(default = 0)
 
     reporter = models.ForeignKey('SnuUser', on_delete = models.CASCADE)
     reporterid = models.IntegerField(default = -1)

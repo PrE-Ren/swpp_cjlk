@@ -188,9 +188,10 @@ class ReportSerializer (serializers.ModelSerializer) :
         print('hi')
         if self.context['request'].user.username != 'admin' :
             print('not admin')
-            if self.context['request'].method != 'POST' :
+            if self.context['request'].method == 'PUT' :
                 raise serializers.ValidationError("ADMIN PAGE")
         return data
+
     def create(self, validated_data):
         reporter = validated_data['reporter']
         idreporter = SnuUser.objects.get(username = reporter).id
