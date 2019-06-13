@@ -22,7 +22,7 @@ export const HomePage = ({ username, mySNU_verification_token, phone_verificatio
     return (<div></div>)
   }
 
-  // 로그인 O, 인증 O : 홈 페이지 화면 정상 출력
+  // 로그인 O, 인증 O : 정상 출력
   else {
     return (
       <Grid columns={3}>
