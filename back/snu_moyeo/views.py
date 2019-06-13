@@ -330,6 +330,7 @@ class CommentOnMeeting(APIView):
         serializer = CommentSerializer(comments, many = True)
         return Response(serializer.data)
 
+'''
 class MeetingTitleAllView(generics.ListAPIView):
     queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer
@@ -342,8 +343,7 @@ class MeetingTitleAllView(generics.ListAPIView):
         result_page = paginator.paginate_queryset(self.queryset, request)
         serializer = MeetingSerializer(result_page, many = True)
         return paginator.get_paginated_response(serializer.data)
-        #return self.list(request, *args, **kwargs)
-
+        # return self.list(request, *args, **kwargs)
 
 class MeetingContentAllView(generics.ListAPIView):
     queryset = Meeting.objects.all()
@@ -357,7 +357,8 @@ class MeetingContentAllView(generics.ListAPIView):
         result_page = paginator.paginate_queryset(self.queryset, request)
         serializer = MeetingSerializer(result_page, many = True)
         return paginator.get_paginated_response(serializer.data)
-        #return self.list(request, *args, **kwargs)
+        # return self.list(request, *args, **kwargs)
+'''
 
 class MeetingSearchAllView(generics.ListAPIView):
     queryset = Meeting.objects.all()
@@ -369,7 +370,7 @@ class MeetingSearchAllView(generics.ListAPIView):
         self.filter_backends = (filters.SearchFilter,)
         self.search_fields = ('title', 'description',)
         queryset = self.filter_queryset(self.get_queryset())
-        #serializer = self.get_serializer(queryset, many=True)  
+        #serializer = self.get_serializer(queryset, many=True)
         paginator = CustomPagination()
         result_page = paginator.paginate_queryset(queryset, request)
         serializer = MeetingSerializer(result_page, many = True)

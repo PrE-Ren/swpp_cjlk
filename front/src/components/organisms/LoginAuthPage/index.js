@@ -1,14 +1,13 @@
 import React from 'react'
 import { Button, Form, Grid, Header, Segment, Container } from 'semantic-ui-react'
 
-// login_click -> logout_click
 export const LoginAuthPage = ({ username, password, mySNU_verification_token, phone_verification_token,
                                 send_email_click, send_phone_click, confirm_email_click, confirm_phone_click, logout_click }) => {
   const hash = new Buffer(`${username}:${password}`).toString('base64')
   let email, phone_number
   let email_code, phone_code
-  
-  const emailform = 
+
+  const emailform =
     <Grid.Column style={{ maxWidth: 450 }}>
       <Header as='h2' color='teal' textAlign='center'>
         Authenticate your MySNU email
@@ -29,7 +28,7 @@ export const LoginAuthPage = ({ username, password, mySNU_verification_token, ph
       </Form>
     </Grid.Column>
 
-  const emailfin = 
+  const emailfin =
     <Grid.Column style={{ maxWidth: 450 }}>
       <Header as='h2' color='teal' textAlign='center'>
         Authenticate your MySNU email
@@ -46,8 +45,8 @@ export const LoginAuthPage = ({ username, password, mySNU_verification_token, ph
         </Segment>
       </Form>
     </Grid.Column>
-  
-  const phoneform = 
+
+  const phoneform =
     <Grid.Column style={{ maxWidth: 450 }}>
       <Header as='h2' color='teal' textAlign='center'>
         Authenticate your phone
@@ -68,7 +67,7 @@ export const LoginAuthPage = ({ username, password, mySNU_verification_token, ph
       </Form>
     </Grid.Column>
 
-  const phonefin = 
+  const phonefin =
     <Grid.Column style={{ maxWidth: 450 }}>
       <Header as='h2' color='teal' textAlign='center'>
         Authenticate your phone
@@ -85,11 +84,11 @@ export const LoginAuthPage = ({ username, password, mySNU_verification_token, ph
         </Segment>
       </Form>
     </Grid.Column>
-  
-  if(username == null){
+
+  if (username == null) {
     return (<div></div>)
   }
-  else{
+  else {
     return (
       <Container>
         <Grid columns={3} textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
