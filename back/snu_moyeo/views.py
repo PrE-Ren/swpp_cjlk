@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.mail import send_mail
-from rest_framework import mixins
+from rest_framework import mixins, filters
 from rest_framework.authtoken.models import Token
 from django.utils.crypto import get_random_string
 from rest_framework import permissions
@@ -267,6 +267,8 @@ class HistoryList (generics.ListAPIView):
         if (not user.is_anonymous):
             user_id = user.id
             history_user = SnuUser.objects.get(id = user_id)
+            print(history_user)
+            print(history_user.meetings.all())
             return history_user.meetings.all().filter(Q(state = BREAK_UP))
         return Meeting.objects.none()
 
@@ -328,6 +330,61 @@ class CommentOnMeeting(APIView):
         serializer = CommentSerializer(comments, many = True)
         return Response(serializer.data)
 
+class MeetingTitleAllView(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title',)
+
+    def get(self, request, *args, **kwargs):
+        changeState()
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(self.queryset, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+        #return self.list(request, *args, **kwargs)
+
+
+class MeetingContentAllView(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('description',)
+
+    def get(self, request, *args, **kwargs):
+        changeState()
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(self.queryset, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+        #return self.list(request, *args, **kwargs)
+
+class MeetingSearchAllView(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'description')
+    def get(self, request, *args, **kwargs):
+        changeState()
+        self.filter_backends = (filters.SearchFilter,)
+        self.search_fields = ('title', 'description',)
+        queryset = self.filter_queryset(self.get_queryset())
+        #serializer = self.get_serializer(queryset, many=True)  
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+        #return self.list(request, *args, **kwargs)
+'''
+class ListView(APIView):
+    def get(self, request, search):
+        changeState()
+        meeting = Meeting.objects.filter(
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(meeting, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+'''
 '''
 def get_comments_on_meeting(request, in_meetingid):
     temp = Meeting.objects.all()

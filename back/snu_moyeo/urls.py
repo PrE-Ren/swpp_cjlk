@@ -31,6 +31,9 @@ urlpatterns = [
     url(r'^send_email/(?P<email>[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3})/$', views.SendEmail.as_view()),   # email regular expression
     url(r'^phone_auth/(?P<phone_number>[0-9]+)/(?P<phone_token>[0-9]+)/$', views.SMSAuthenticate.as_view()),
     url(r'^send_phone/(?P<phone_number>[0-9]+)/$', views.SendPhone.as_view()),
+
+
+    url('searchlist/', views.MeetingSearchAllView.as_view())
     # url(meeting/<int:id>/commnet/ , comment_on_meeting_id.asview),
 ]
 
