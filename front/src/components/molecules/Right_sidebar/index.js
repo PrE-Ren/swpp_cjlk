@@ -14,7 +14,12 @@ const Right_sidebar = () => {
       <Logout/><br /><br />
       <Input type='text' placeholder='Search...' action>
         <input ref={node => {keyword = node}}/>
-        <Button type='submit' onClick={() => { window.location.href = '/all/' + keyword.value }}>Search</Button>
+        <Button type='submit' onClick={() => {
+          if (keyword.value == "")
+            alert('Type Search Keyword')
+          else
+            window.location.href = '/all/' + keyword.value;
+        }}>Search</Button>
       </Input>
       <Make_new/>
       <Join_chatroom/>
