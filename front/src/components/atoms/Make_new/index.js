@@ -15,7 +15,7 @@ const Font_Css = styled.span`
 const Make_New = () => {
   return (
     <Make_New_Css>
-      <Button secondary onClick={() => {sessionStorage.removeItem("meeting_info"),window.location.href = '/new'}} size='big'>
+      <Button secondary onClick={() => { sessionStorage.removeItem("meeting_info"); window.location.href = '/new' }} size='big'>
         <Icon name='plus' size='big' />
         <Font_Css>새 모임 만들기</Font_Css>
       </Button>

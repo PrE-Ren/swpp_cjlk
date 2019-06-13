@@ -378,6 +378,7 @@ class MeetingSearch1View(generics.ListAPIView):
         serializer = MeetingSerializer(result_page, many = True)
         return paginator.get_paginated_response(serializer.data)
 
+
 class MeetingSearch2View(generics.ListAPIView):
     queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer

@@ -6,8 +6,8 @@ export const CommentList = ({ username, password, comments, meeting_id,
   console.log('<CommentList Rendering>')
   const hash = new Buffer(`${username}:${password}`).toString('base64')
 
-  function change_date(str){
-    return str.substring(0,10) + " " + str.substring(11,19)
+  function change_date(str) {
+    return str.substring(0, 10) + " " + str.substring(11, 19)
   }
 
   if (comments != null) {
