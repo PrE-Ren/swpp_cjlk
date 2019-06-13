@@ -648,7 +648,7 @@ export function* load_comments_func(action) {
     const comments = yield call([response_comments, response_comments.json])
     console.log('<Fetch comments of this meeting>')
     console.log(comments)
-    yield put(actions.load_comments_success_action(comments))
+    yield put(actions.load_comments_success_action(comments))  //  댓글 리스트 로드
   }
   else
     alert('<Fail to fetch comments of this meeting>')
@@ -666,10 +666,11 @@ export function* add_comment_func(action) {
       body: info_comment,
   })
 
+  // 댓글 작성
   if (response_comment.ok) {
     console.log('Comment POST ok')
     const load_action = { type : 'LOAD_COMMENTS_ACTION', meeting_id : action.meeting_id }
-    yield call(load_comments_func, load_action)
+    yield call(load_comments_func, load_action)  //  새로 댓글 리스트를 로드하여 리렌더링
   }
   else {
     alert('댓글을 입력해주세요.')
@@ -689,13 +690,16 @@ export function* edit_comment_func(action) {
       body: info_comment,
   })
 
+  // 댓글 수정
   if (response_comment.ok) {
     console.log('Comment PUT ok')
     const load_action = { type : 'LOAD_COMMENTS_ACTION', meeting_id : action.meeting_id }
-    yield call(load_comments_func, load_action)
+    yield call(load_comments_func, load_action)  //  새로 댓글 리스트를 로드하여 리렌더링
   }
-  else
+  else {
+    alert('댓글을 입력해주세요.')
     console.log('Comment PUT bad')
+  }
 }
 
 export function* delete_comment_func(action) {
@@ -705,10 +709,11 @@ export function* delete_comment_func(action) {
       headers: { 'Authorization': `Basic ${action.hash}` },
   })
 
+  // 댓글 삭제
   if (response_comment.ok) {
     console.log('Comment DELETE ok')
     const load_action = { type : 'LOAD_COMMENTS_ACTION', meeting_id : action.meeting_id }
-    yield call(load_comments_func, load_action)
+    yield call(load_comments_func, load_action)  //  새로 댓글 리스트를 로드하여 리렌더링
   }
   else
     console.log('Comment DELETE bad')
