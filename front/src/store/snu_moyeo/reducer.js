@@ -1,4 +1,5 @@
 import { initialState } from "./selectors";
+import { isNullOrUndefined } from "util";
 
 const snu_moyeo_reducer = (state = initialState, action) => {
     switch(action.type) {
@@ -125,6 +126,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
        sessionStorage.removeItem("history");
        sessionStorage.removeItem("list");
        sessionStorage.removeItem("page_num");
+       sessionStorage.removeItem("report")
        return {
          ...state,
          username: null,
@@ -140,7 +142,9 @@ const snu_moyeo_reducer = (state = initialState, action) => {
          meetinglist_join : null,
          meetinglist_history : null,
          meetinglist_list : null,
-         page_num : null
+         report_info_list : null,
+         page_num : null,
+         comments : null
        }
       }
 
@@ -160,6 +164,15 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         return {
           ...state,
           comments: comments
+        }
+      }
+
+      case 'GET_REPORT_INFO_SUCCESS_ACTION': {
+        const report_info_list = JSON.stringify(action.report_info_list)
+        sessionStorage.setItem("report", report_info_list)
+        return {
+          ...state,
+          report_info_list: report_info_list
         }
       }
 

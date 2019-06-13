@@ -128,6 +128,13 @@ export function* watchDeleteComment() {
   }
 }
 
+export function* watchGivePenalty() {
+  while(true) {
+    const action = yield take(actions.GIVE_PENALTY_ACTION)
+    yield call(give_penalty_func, action)
+  }
+}
+
 function* get_meetinglist(type) {
   const get_token = (state) => state.snu_moyeo.mySNU_verification_token
   const token = yield select(get_token)
@@ -235,6 +242,9 @@ export function* reload() {
         yield put(actions.login_success_action(username, password, mySNU_verification_token, phone_verification_token, response_user_data.user_id, email, phone_number, response_user_data.name))
       }
     }
+  }
+  else if (pathname == '/admin') {
+    yield put(actions.get_report_info_success_action())
   }
   else {
     /* do nothing */
@@ -680,6 +690,11 @@ export function* delete_comment_func(action) {
     console.log('Comment DELETE bad')
 }
 
+export function* give_penalty_func(action) {
+  const user_id = action.user_id
+  const points = action.points
+}
+
 export default function* () {
   yield fork(reload)
   yield fork(watchLogin)
@@ -700,4 +715,5 @@ export default function* () {
   yield fork(watchAddComment)
   yield fork(watchEditComment)
   yield fork(watchDeleteComment)
+  yield fork(watchGivePenalty)
 }

@@ -27,6 +27,8 @@ export const LOAD_COMMENTS_SUCCESS_ACTION = 'LOAD_COMMENTS_SUCCESS_ACTION'
 export const ADD_COMMENT_ACTION = 'ADD_COMMENT_ACTION'
 export const EDIT_COMMENT_ACTION = 'EDIT_COMMENT_ACTION'
 export const DELETE_COMMENT_ACTION = 'DELETE_COMMENT_ACTION'
+export const GIVE_PENALTY_ACTION = 'GIVE_PENALTY_ACTION'
+export const GET_REPORT_INFO_SUCCESS_ACTION = 'GET_REPORT_INFO_SUCCESS_ACTION'
 
 export const reload_action = (option, meetinglist) => {
   return {
@@ -261,5 +263,20 @@ export const delete_comment_action = (hash, comment_id) => {
     type : DELETE_COMMENT_ACTION,
     hash,
     comment_id
+  }
+}
+
+export const get_report_info_success_action = () => {
+  return {
+    type : GET_REPORT_INFO_SUCCESS_ACTION,
+    report_info_list
+  }
+}
+
+export const give_penalty_action = (user_id, points) => {
+  return {
+    type : GIVE_PENALTY_ACTION,
+    user_id,
+    points
   }
 }

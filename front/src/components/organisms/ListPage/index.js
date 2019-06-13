@@ -38,7 +38,7 @@ export const ListPage = ({ username, mySNU_verification_token, phone_verificatio
             <Header as='h1' icon textAlign='center'>
               <Icon name='group' circular />
               SNU Moyeo
-              <Header.Subheader>SNU web service that helps you construct and join a meeting </Header.Subheader><br /><br />
+              <Header.Subheader>SNU web service that helps you construct and join a meeting</Header.Subheader><br /><br />
             </Header>
           </Container>
           <Container>
