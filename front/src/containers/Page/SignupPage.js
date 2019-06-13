@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signup_click: (username, password, name) => {
+    signup_click: (username, password, name) => {  //  유저 아이디, 유저 패스워드, 이름(닉네임)을 넘겨서 회원가입 시도
       dispatch(signup_action(username, password, name))
     }
   }
