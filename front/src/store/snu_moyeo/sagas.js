@@ -393,8 +393,6 @@ export function* new_func(action) {
     else
       formData.append('picture', null, null)
 
-
-
     const response_meeting = yield call(fetch, url_meeting, {
         method: 'POST',
         headers: { 'Authorization': `Basic ${action.hash}` },
