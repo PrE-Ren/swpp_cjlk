@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    signup_click: (username, password, name) =>{
+    signup_click: (username, password, name) => {
       dispatch(signup_action(username, password, name))
     }
   }

@@ -24,7 +24,6 @@ class Meeting (models.Model):
     longitude = models.FloatField(default = 126.9519267)
     # comments : related field
 
-
     class Meta:
         ordering = ['-created']  # sorted in decreasing order of created time
 
