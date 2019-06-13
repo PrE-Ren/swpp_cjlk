@@ -4,7 +4,6 @@ import * as actions from './actions'
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
 export function* watchChangePageNum() {
   while(true) {
     const action = yield take(actions.CHANGE_PAGE_NUM_ACTION)
@@ -230,7 +229,7 @@ export function* reload() {
 
   // LoginAuth 페이지
   else if (pathname == '/auth') {
-    const username = sessionStorage.getItem("username")  //  이미 로그인된 상태이므로 가져올 수 있음
+    const username = sessionStorage.getItem("username")  //  로그인 페이지에서 넘어올 때 혹은 회원가입 직후 스토어에 저장됨
 
     // 로그인 X : 로그인 페이지로 리다이렉트
     if (username == null) {
@@ -240,7 +239,7 @@ export function* reload() {
 
     // 로그인 O
     else {
-      const password = sessionStorage.getItem("password") // 이미 로그인된 상태이므로 가져올 수 있음
+      const password = sessionStorage.getItem("password")  //  로그인 페이지에서 넘어올 때 혹은 회원가입 직후 스토어에 저장됨
       const url_user = 'http://127.0.0.1:8000/log_in/'
       const hash = new Buffer(`${username}:${password}`).toString('base64')
       const response_user = yield call(fetch, url_user, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
@@ -258,7 +257,16 @@ export function* reload() {
         const phone_verification_token = response_user_data.phone_verified ? response_user_data.phone_verification_token : null
         const email = response_user_data.mySNU_verified ? response_user_data.email : null
         const phone_number = response_user_data.phone_verified ? response_user_data.phone_number : null
-        yield put(actions.login_success_action(username, password, mySNU_verification_token, phone_verification_token, response_user_data.user_id, email, phone_number, response_user_data.name))
+        yield put(actions.login_success_action(  //  <인증 페이지에서 이미 인증된 필드의 유무 판단을 위한 정보 스토어에 저장>
+          username,                              //  유저 아이디
+          password,                              //  유저 패스워드
+          mySNU_verification_token,              //  이메일 토큰 : 이걸 설정하는 게 진짜 목적 (나머진 사실 불필요)
+          phone_verification_token,              //  폰 토큰 : 이걸 설정하는 게 진짜 목적 (나머진 사실 불필요)
+          response_user_data.user_id,            //  고유값
+          email,                                 //  이메일
+          phone_number,                          //  폰 번호
+          response_user_data.name                //  이름(닉네임)
+        ))
       }
     }
   }
@@ -314,49 +322,45 @@ export function* change_page_num_func(action) {
 }
 
 export function* login_func(action) {
-  const username = action.username
-  const password = action.password
+  const username = action.username  //  입력한 유저 아이디
+  const password = action.password  //  입력한 유저 패스워드
   const url_token = 'http://127.0.0.1:8000/get_auth_token/'
   const url_user = 'http://127.0.0.1:8000/log_in/'
-  const info = JSON.stringify({ username: username, password: password });
+  const info = JSON.stringify({ username: username, password: password })
+
   const response_token = yield call(fetch, url_token, {
     method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: info,
   })
 
   // 회원가입된 계정 O
   if (response_token.ok) {
-    const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
-    const response_user = yield call(fetch, url_user, {
-      method: 'GET',
-      headers: { 'Authorization' : `Basic ${hash}` }
-    })
+    const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저의 해시값
+    const response_user = yield call(fetch, url_user, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
 
-    // 홈 페이지로 (인증 완료)
+    // 인증 O : 홈 페이지로 리다이렉트
     if (response_user.ok) {
-      alert('로그인 성공')
       const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.phone_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.phone_number, response_user_data.name))
-      Object.defineProperty(window.location, 'href', {
-        writable: true,
-        value: '/'
-      });
+      yield put(actions.login_success_action(         //  <로그인 성공 : 유저 정보 스토어에 저장>
+        username,                                     //  유저 아이디
+        password,                                     //  유저 패스워드
+        response_user_data.mySNU_verification_token,  //  이메일 토큰
+        response_user_data.phone_verification_token,  //  폰 토큰
+        response_user_data.user_id,                   //  고유값
+        response_user_data.email,                     //  이메일
+        response_user_data.phone_number,              //  폰 번호
+        response_user_data.name                       //  이름(닉네임)
+      ))
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/' })
     }
 
-    // 인증 페이지로 (인증 미완료)
-    else{
-      alert('인증 필요')
-      const response_user_data = yield call([response_user, response_user.json]);
-      // LoginAuth 페이지에서 이미 로그인된 상태인지 판별하기 위해 필요
-      // 그래서 사실 username과 password만 설정해줘도 괜찮음 (근데 일단 수정이 귀찮아서 방치)
-      yield put(actions.login_auth_action(username, password, response_user_data.user_id, response_user_data.name))
-      Object.defineProperty(window.location, 'href', {
-        writable: true,
-        value: '/auth'
-      });
+    // 인증 X : 인증 페이지로 리다이렉트
+    else {
+      alert('인증 절차가 필요합니다.')
+      const response_user_data = yield call([response_user, response_user.json])
+      yield put(actions.login_auth_action(username, password))  //  유저 아이디와 유저 패스워드 스토어에 저장 (인증 페이지에서 필요한 정보)
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/auth' })
     }
   }
 
@@ -366,84 +370,73 @@ export function* login_func(action) {
 }
 
 export function* signup_func(action) {
-  let uid = action.username
-  let upw = action.password
-  let name = action.name
+  let uid = action.username  //  입력한 유저 아이디
+  let upw = action.password  //  입력한 유저 패스워드
+  let name = action.name     //  입력한 이름(닉네임)
   const url = 'http://127.0.0.1:8000/sign_up/'
   const info = JSON.stringify({ username: uid, password: upw, name: name});
+
+  // 새로운 SnuUser 객체 생성 (POST)
   const response = yield call(fetch, url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: info,
+    body: info
   })
+
+  // 회원가입 성공 : 인증 페이지로 리다이렉트
   if (response.ok) {
     alert("회원가입 성공 : 서비스를 이용하려면 이메일 인증과 휴대폰 인증을 완료해야 합니다.")
-    yield put(actions.login_auth_action(uid, upw))
-    Object.defineProperty(window.location, 'href', {
-      writable: true,
-      value: '/auth'
-    });
+    yield put(actions.login_auth_action(uid, upw))  //  유저 아이디와 유저 패스워드 스토어에 저장 (인증 페이지에서 필요한 정보)
+    Object.defineProperty(window.location, 'href', { writable: true, value: '/auth' })
   }
+
+  // 회원가입 실패
   else
     alert("회원가입 실패 : 정보를 바르게 입력하세요.")
 }
 
 export function* send_email_func(action) {
   const url_send_email = 'http://127.0.0.1:8000/send_email/' + action.email + '/'
-  const response_email = yield call(fetch, url_send_email, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_email.ok) {
+  const response_email = yield call(fetch, url_send_email, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
+
+  if (response_email.ok)  //  해당 유저의 이메일 토큰 필드 설정 (by BACK-END)
     alert('이메일로 인증번호가 전송되었습니다.')
-  }
-  else {
+  else
     alert('인증번호 전송 실패')
-  }
 }
 
 export function* send_phone_func(action) {
   const url_send_phone = 'http://127.0.0.1:8000/send_phone/' + action.phone_number + '/'
-  const response_phone = yield call(fetch, url_send_phone, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_phone.ok) {
+  const response_phone = yield call(fetch, url_send_phone, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
+
+  if (response_phone.ok)  //  해당 유저의 폰 토큰 필드 설정 (by BACK-END)
     alert('휴대폰으로 인증번호가 전송되었습니다.')
-  }
-  else {
+  else
     alert('인증번호 전송 실패')
-  }
 }
 
 export function* confirm_email_func(action) {
   const url_send_email = 'http://127.0.0.1:8000/email_auth/' + action.email + '/' + action.email_code + '/'
-  const response_email = yield call(fetch, url_send_email, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_email.ok) {
+  const response_email = yield call(fetch, url_send_email, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
+
+  if (response_email.ok) {  //  해당 유저의 이메일 및 이메일 인증 여부 필드 설정 (by BACK-END)
     alert('인증 완료')
-    yield put(actions.success_email_action(action.email, action.email_code))
+    yield put(actions.success_email_action(action.email, action.email_code))  //  이메일 및 이메일 토큰 설정 (-> 인증 페이지 리렌더링)
   }
-  else {
+  else
     alert('인증번호가 틀렸습니다.')
-  }
 }
 
 export function* confirm_phone_func(action) {
   const url_send_phone = 'http://127.0.0.1:8000/phone_auth/' + action.phone_number + '/' + action.phone_code + '/'
-  const response_phone = yield call(fetch, url_send_phone, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_phone.ok) {
+  const response_phone = yield call(fetch, url_send_phone, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
+
+  if (response_phone.ok) {  //  해당 유저의 폰 번호 및 폰 인증 여부 필드 설정 (by BACK-END)
     alert('인증 완료')
-    yield put(actions.success_phone_action(action.phone_number, action.phone_code))
+    yield put(actions.success_phone_action(action.phone_number, action.phone_code))  //  폰 번호 및 폰 토큰 설정 (-> 인증 페이지 리렌더링)
   }
-  else {
+  else
     alert('인증번호가 틀렸습니다.')
-  }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

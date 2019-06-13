@@ -12,7 +12,7 @@ const Right_sidebar = () => {
     <Sidebar as={Menu} animation='overlay' direction='right' icon='labeled' inverted vertical visible width='wide'>
       <ToMyPage/>
       <Logout/><br /><br />
-      <Input type='text' placeholder='Search...' action>
+      <Input type='text' placeholder='Search all . . .' action>
         <input ref={node => {keyword = node}}/>
         <Button type='submit' onClick={() => {
           if (keyword.value == "")

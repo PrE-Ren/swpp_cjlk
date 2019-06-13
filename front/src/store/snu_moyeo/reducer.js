@@ -3,7 +3,7 @@ import { initialState } from "./selectors";
 const snu_moyeo_reducer = (state = initialState, action) => {
     switch(action.type) {
 
-      case 'RELOAD_ACTION' : {
+      case 'RELOAD_ACTION' : {  //  페이지 리로드 시 백엔드에서 새로 로드한 미팅 리스트 설정
         const meetinglist = JSON.stringify(action.meetinglist)  //  불러온 미팅 리스트를 스토어에 저장 가능한 형태로 변환
         switch(action.option) {
 
@@ -73,7 +73,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         }
       }
 
-      case 'CHANGE_PAGE_NUM_SUCCESS_ACTION': {
+      case 'CHANGE_PAGE_NUM_SUCCESS_ACTION': {  //  페이지 넘길 때 백엔드에서 가져온 미팅 리스트 설정
         const meetinglist = JSON.stringify(action.meetinglist)  //  불러온 미팅 리스트를 스토어에 저장 가능한 형태로 변환
         switch (action.option) {
 
@@ -101,7 +101,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         }
       }
 
-      case 'LOGIN_SUCCESS_ACTION': {
+      case 'LOGIN_SUCCESS_ACTION': {  //  로그인 성공 시 유저 정보 설정 (하나만 인증된 경우에도 사용되는 액션)
         sessionStorage.setItem("username", action.data.username);
         sessionStorage.setItem("password", action.data.password);
         if (action.data.mySNU_verification_token != null) {
@@ -124,41 +124,6 @@ const snu_moyeo_reducer = (state = initialState, action) => {
           email: action.data.email,
           phone_number: action.data.phone_number,
           name: action.data.name
-        }
-      }
-
-      // 사실 username과 password만 설정해줘도 괜찮음 (근데 일단 수정이 귀찮아서 방치)
-      case 'LOGIN_AUTH_ACTION': {
-        sessionStorage.setItem("username", action.username);
-        sessionStorage.setItem("password", action.password);
-        sessionStorage.setItem("user_id", action.user_id);
-        sessionStorage.setItem("name", action.name);
-        return {
-          ...state,
-          username: action.username,
-          password: action.password,
-          user_id: action.user_id,
-          name: action.name
-        }
-      }
-
-      case 'SUCCESS_EMAIL_ACTION' : {
-        sessionStorage.setItem("email", action.email);
-        sessionStorage.setItem("mySNU_verification_token", action.email_code);
-        return {
-          ...state,
-          email: action.email,
-          mySNU_verification_token: action.email_code
-        }
-      }
-
-      case 'SUCCESS_PHONE_ACTION' : {
-        sessionStorage.setItem("phone_number", action.phone_number);
-        sessionStorage.setItem("phone_verification_token", action.phone_code);
-        return {
-          ...state,
-          phone_number: action.phone_number,
-          phone_verification_token: action.phone_code
         }
       }
 
@@ -185,6 +150,36 @@ const snu_moyeo_reducer = (state = initialState, action) => {
          page_num : null,
          comments : null,
        }
+      }
+
+      case 'LOGIN_AUTH_ACTION': {  // 인증 페이지에서 필요한 정보 설정
+        sessionStorage.setItem("username", action.username);  //  유저 아이디
+        sessionStorage.setItem("password", action.password);  //  유저 패스워드
+        return {
+          ...state,
+          username: action.username,
+          password: action.password
+        }
+      }
+
+      case 'SUCCESS_EMAIL_ACTION' : {  //  인증 성공 시 이메일 및 이메일 토큰 설정 (-> 인증 페이지 리렌더링)
+        sessionStorage.setItem("email", action.email);
+        sessionStorage.setItem("mySNU_verification_token", action.email_code);
+        return {
+          ...state,
+          email: action.email,
+          mySNU_verification_token: action.email_code
+        }
+      }
+
+      case 'SUCCESS_PHONE_ACTION' : {  //  인증 성공 시 폰 번호 및 폰 토큰 설정 (-> 인증 페이지 리렌더링)
+        sessionStorage.setItem("phone_number", action.phone_number);
+        sessionStorage.setItem("phone_verification_token", action.phone_code);
+        return {
+          ...state,
+          phone_number: action.phone_number,
+          phone_verification_token: action.phone_code
+        }
       }
 
       case 'LOAD_COMMENTS_SUCCESS_ACTION': {

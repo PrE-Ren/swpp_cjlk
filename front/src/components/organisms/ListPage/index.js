@@ -50,12 +50,12 @@ export const ListPage = ({ username, mySNU_verification_token, phone_verificatio
           <Container>
             <KindList /><br />
             <Grid columns={2}>
-              <Grid.Column width={12}>
+              <Grid.Column width={11}>
                 <Pagination defaultActivePage={1} totalPages={last_page_num}
                             onPageChange={(e, {activePage}) => change_page_num_click({activePage}.activePage)} />
               </Grid.Column>
               <Grid.Column width={4}>
-                <Input type='text' placeholder='Search...' action>
+                <Input type='text' placeholder='Search . . . ' action>
                   <input ref={node => {keyword = node}}/>
                   <Button type='submit' onClick={() => {
                     const kind = window.location.pathname[6]  //  "/list/n"에서 "n"을 추출
