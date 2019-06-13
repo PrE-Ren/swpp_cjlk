@@ -219,13 +219,10 @@ export function* reload() {
   else if (pathname == '/auth') {
     const username = sessionStorage.getItem("username") // 이미 로그인된 상태일 테니까 가져올 수 있음
 
-    // 로그인을 안 하고 URL로 바로 접속한 경우
+    // 로그인 X : 로그인 페이지로 리다이렉트
     if (username == null) {
       alert('잘못된 접근입니다.')
-      Object.defineProperty(window.location, 'href', {
-        writable: true,
-        value: '/login'
-      });
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/login' })
     }
     else {
       const password = sessionStorage.getItem("password") // 이미 로그인된 상태일 테니까 가져올 수 있음
