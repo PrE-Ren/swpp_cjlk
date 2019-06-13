@@ -1,15 +1,8 @@
 import React from 'react'
-
-import { PageTemplate, Header, Footer } from 'components'
-import { PostForm, PostList } from 'containers'
+import ReportAdminPage from '../../../containers/Page/ReportAdminPage'
 
 const ReportAdmin = () => {
-  return (
-    <PageTemplate header={<Header />} footer={<Footer />}>
-      <PostForm />
-      <PostList limit={15} />
-    </PageTemplate>
-  )
+  return <ReportAdminPage />
 }
 
 export default ReportAdmin
