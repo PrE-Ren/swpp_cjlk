@@ -23,8 +23,6 @@ class Meeting (models.Model):
     latitude = models.FloatField(default = 37.4615299)
     longitude = models.FloatField(default = 126.9519267)
     # comments : related field
-    latitude = models.FloatField(default = 37.4615299)
-    longitude = models.FloatField(default = 126.9519267)
 
 
     class Meta:
