@@ -4,7 +4,7 @@ import { logout_action } from '../store/snu_moyeo/actions'
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    logout_click: () => {
+    logout_click: () => {  //  세션 스토리지 및 리덕스 스토어 초기화
       dispatch(logout_action())
     }
   }

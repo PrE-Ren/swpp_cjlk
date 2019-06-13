@@ -5,9 +5,9 @@ import Make_new from '../../atoms/Make_new'
 import Join_chatroom from '../../atoms/Join_chatroom'
 import { Menu, Sidebar, Input, Button } from 'semantic-ui-react'
 
-let keyword
-
 const Right_sidebar = () => {
+  let keyword  //  입력한 검색 키워드
+
   return (
     <Sidebar as={Menu} animation='overlay' direction='right' icon='labeled' inverted vertical visible width='wide'>
       <ToMyPage/>

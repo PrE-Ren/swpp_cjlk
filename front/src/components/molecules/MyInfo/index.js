@@ -5,29 +5,30 @@ import JoinList from '../../../containers/JoinList'
 import HistoryList from '../../../containers/HistoryList'
 import { Container, Header, List, Segment, Label } from 'semantic-ui-react'
 
+// state : 상태 전부 (나의 정보를 띄우기 위함)
 export const MyInfo = ({ state }) => {
   console.log('<MyInfo Rendering>')
   return (
     <Container>
       <Segment raised>
-        <Label as='a' color='purple' ribbon>My Information</Label>
-        <Header as='h1'>내 정보</Header>
+        <Label as='a' color='purple' ribbon> My Information </Label>
+        <Header as='h1'> 내 정보 </Header>
         <List>
           <List.Item>
             <List.Icon name='user' />
-            <List.Content>아이디 : {state.username}</List.Content>
+            <List.Content> 아이디 : {state.username} </List.Content>
           </List.Item>
           <List.Item>
             <List.Icon name='pencil alternate' />
-            <List.Content>이름 : {state.name}</List.Content>
+            <List.Content> 이름 : {state.name} </List.Content>
           </List.Item>
           <List.Item>
             <List.Icon name='mail' />
-            <List.Content>이메일 : {state.email}</List.Content>
+            <List.Content> 이메일 : {state.email} </List.Content>
           </List.Item>
           <List.Item>
             <List.Icon name='call' />
-            <List.Content>핸드폰 : {state.phone_number}</List.Content>
+            <List.Content> 핸드폰 : {state.phone_number} </List.Content>
           </List.Item>
         </List>
       </Segment>
