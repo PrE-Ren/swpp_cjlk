@@ -668,11 +668,13 @@ export function* add_comment_func(action) {
 
   if (response_comment.ok) {
     console.log('Comment POST ok')
-    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+    const load_action = { type : 'LOAD_COMMENTS_ACTION', meeting_id : action.meeting_id }
+    yield call(load_comments_func, load_action)
   }
-  else
+  else {
     alert('댓글을 입력해주세요.')
     console.log('Comment POST bad')
+  }
 }
 
 export function* edit_comment_func(action) {
@@ -689,7 +691,8 @@ export function* edit_comment_func(action) {
 
   if (response_comment.ok) {
     console.log('Comment PUT ok')
-    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+    const load_action = { type : 'LOAD_COMMENTS_ACTION', meeting_id : action.meeting_id }
+    yield call(load_comments_func, load_action)
   }
   else
     console.log('Comment PUT bad')
@@ -704,7 +707,8 @@ export function* delete_comment_func(action) {
 
   if (response_comment.ok) {
     console.log('Comment DELETE ok')
-    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+    const load_action = { type : 'LOAD_COMMENTS_ACTION', meeting_id : action.meeting_id }
+    yield call(load_comments_func, load_action)
   }
   else
     console.log('Comment DELETE bad')

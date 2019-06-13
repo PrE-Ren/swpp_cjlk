@@ -247,10 +247,11 @@ export const edit_comment_action = (hash, comment_id, meeting_id, writer_id, con
   }
 }
 
-export const delete_comment_action = (hash, comment_id) => {
+export const delete_comment_action = (hash, comment_id, meeting_id) => {
   return {
     type : DELETE_COMMENT_ACTION,
     hash,
-    comment_id
+    comment_id,
+    meeting_id
   }
 }
