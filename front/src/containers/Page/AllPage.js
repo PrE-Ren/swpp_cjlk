@@ -13,8 +13,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    change_page_num_click: (page_num) => {
-      dispatch(change_page_num_action("searchall", page_num))
+    change_page_num_click: (page_num) => {  //  All 페이지에서 해당 페이지로의 변경을 시도
+      dispatch(change_page_num_action("all", page_num))
     }
   }
 }

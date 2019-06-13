@@ -2,42 +2,55 @@ import { initialState } from "./selectors";
 
 const snu_moyeo_reducer = (state = initialState, action) => {
     switch(action.type) {
+
       case 'RELOAD_ACTION' : {
-        const meetinglist = JSON.stringify(action.meetinglist)
+        const meetinglist = JSON.stringify(action.meetinglist)  //  불러온 미팅 리스트를 스토어에 저장 가능한 형태로 변환
         switch(action.option) {
+
+          // Impending 리스트
           case 'impending' :
-            sessionStorage.setItem(action.option, meetinglist)
+            sessionStorage.setItem('impending', meetinglist)
             return {
               ...state,
               meetinglist_impending : meetinglist
             }
+
+          // Recent 리스트
           case 'recent' :
-            sessionStorage.setItem(action.option, meetinglist)
+            sessionStorage.setItem('recent', meetinglist)
             return {
               ...state,
               meetinglist_recent : meetinglist
             }
+
+          // Lead 리스트
           case 'lead' :
-            sessionStorage.setItem(action.option, meetinglist)
+            sessionStorage.setItem('lead', meetinglist)
             return {
               ...state,
               meetinglist_lead : meetinglist
             }
+
+          // Join 리스트
           case 'join' :
-            sessionStorage.setItem(action.option, meetinglist)
+            sessionStorage.setItem('join', meetinglist)
             return {
               ...state,
               meetinglist_join : meetinglist
             }
+
+          // History 리스트
           case 'history' :
-            sessionStorage.setItem(action.option, meetinglist)
+            sessionStorage.setItem('history', meetinglist)
             return {
               ...state,
               meetinglist_history : meetinglist
             }
+
           default : {
+            // List 페이지에서 불러온 미팅 리스트
             if (action.option.includes('/list')) {
-              sessionStorage.setItem("list", meetinglist)
+              sessionStorage.setItem("kind", meetinglist)
               sessionStorage.setItem("page_num", 1)
                 return {
                   ...state,
@@ -45,8 +58,10 @@ const snu_moyeo_reducer = (state = initialState, action) => {
                   page_num : 1
                 }
             }
-            else if (action.option.includes('/searchall')) {
-              sessionStorage.setItem("searchall", meetinglist)
+
+            // All 페이지에서 불러온 미팅 리스트
+            else if (action.option.includes('/all')) {
+              sessionStorage.setItem("all", meetinglist)
               sessionStorage.setItem("page_num", 1)
                 return {
                   ...state,
@@ -57,6 +72,35 @@ const snu_moyeo_reducer = (state = initialState, action) => {
           }
         }
       }
+
+      case 'CHANGE_PAGE_NUM_SUCCESS_ACTION': {
+        const meetinglist = JSON.stringify(action.meetinglist)  //  불러온 미팅 리스트를 스토어에 저장 가능한 형태로 변환
+        switch (action.option) {
+
+          // List 페이지에서 페이지를 넘기는 경우
+          case "kind" : {
+            sessionStorage.setItem("kind", meetinglist)
+            sessionStorage.setItem("page_num", action.page_num)
+            return {
+              ...state,
+              meetinglist_list : meetinglist,
+              page_num : action.page_num
+            }
+          }
+
+          // All 페이지에서 페이지를 넘기는 경우
+          case "all" : {
+            sessionStorage.setItem("all", meetinglist)
+            sessionStorage.setItem("page_num", action.page_num)
+            return {
+              ...state,
+              meetinglist_all : meetinglist,
+              page_num : action.page_num
+            }
+          }
+        }
+      }
+
       case 'LOGIN_SUCCESS_ACTION': {
         sessionStorage.setItem("username", action.data.username);
         sessionStorage.setItem("password", action.data.password);
@@ -118,26 +162,8 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         }
       }
 
-      case 'SIGNUP_SUCCESS_ACTION': {
-        return state
-      }
-
-      case 'LOGOUT_ACTION': {
+      case 'LOGOUT_ACTION': {  //  세션 스토리지 및 리덕스 스토어 초기화
        sessionStorage.clear();
-       /*sessionStorage.removeItem("username");
-       sessionStorage.removeItem("password");
-       sessionStorage.removeItem("mySNU_verification_token");
-       sessionStorage.removeItem("phone_verification_token");
-       sessionStorage.removeItem("user_id");
-       sessionStorage.removeItem("email");
-       sessionStorage.removeItem("name");
-       sessionStorage.removeItem("impending");
-       sessionStorage.removeItem("recent");
-       sessionStorage.removeItem("lead");
-       sessionStorage.removeItem("join");
-       sessionStorage.removeItem("history");
-       sessionStorage.removeItem("list");
-       sessionStorage.removeItem("page_num");*/
        return {
          ...state,
          user_id: null,
@@ -159,33 +185,6 @@ const snu_moyeo_reducer = (state = initialState, action) => {
          page_num : null,
          comments : null,
        }
-      }
-
-      case 'CHANGE_PAGE_NUM_SUCCESS_ACTION': {
-        const meetinglist = JSON.stringify(action.meetinglist)
-        switch (action.option) {
-          case "kind" : {
-            sessionStorage.setItem("list", meetinglist)
-            sessionStorage.setItem("page_num", action.page_num)
-            return {
-              ...state,
-              meetinglist_list : meetinglist,
-              page_num : action.page_num
-            }
-          }
-          case "searchall" : {
-            sessionStorage.setItem("all", meetinglist)
-            sessionStorage.setItem("page_num", action.page_num)
-            return {
-              ...state,
-              meetinglist_all : meetinglist,
-              page_num : action.page_num
-            }
-          }
-          case "searchkind" : {
-
-          }
-        }
       }
 
       case 'LOAD_COMMENTS_SUCCESS_ACTION': {

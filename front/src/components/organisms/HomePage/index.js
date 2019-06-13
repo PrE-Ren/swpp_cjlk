@@ -32,7 +32,7 @@ export const HomePage = ({ username, mySNU_verification_token, phone_verificatio
           <Left_sidebar />
         </Grid.Column>
 
-        {/* Center : Header + ImpendingList + RecentList */}
+        {/* Center : Header + Impending List + Recent List */}
         <Grid.Column width={10}>
           <Container>
             <Header as='h1' icon textAlign='center'>

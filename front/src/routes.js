@@ -26,7 +26,7 @@ const routes = (
     <Route path={"/list/"+kind.STUDY+"/:keyword"} component={List} />
     <Route path={"/list/"+kind.EXERCISE+"/:keyword"} component={List} />
     <Route path={"/list/"+kind.MEETING+"/:keyword"} component={List} />
-    <Route path="/searchall/:keyword" component={All} />
+    <Route path="/all/:keyword" component={All} />
   </div>
 )
 

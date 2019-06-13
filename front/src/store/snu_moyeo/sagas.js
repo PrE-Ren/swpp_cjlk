@@ -2,6 +2,16 @@ import {take, put, call, fork, select} from 'redux-saga/effects'
 import api from 'services/api'
 import * as actions from './actions'
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+export function* watchChangePageNum() {
+  while(true) {
+    const action = yield take(actions.CHANGE_PAGE_NUM_ACTION)
+    yield call(change_page_num_func, action)
+  }
+}
+
 export function* watchLogin() {
   while(true) {
     const action = yield take(actions.LOGIN_ACTION)
@@ -43,6 +53,8 @@ export function* watchConfirmPhone() {
     yield call(confirm_phone_func, action)
   }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export function* watchNew() {
   while(true) {
@@ -86,13 +98,6 @@ export function* watchWithdrawMeeting() {
   }
 }
 
-export function* watchChangePageNum() {
-  while(true) {
-    const action = yield take(actions.CHANGE_PAGE_NUM_ACTION)
-    yield call(change_page_num_func, action)
-  }
-}
-
 export function* watchLoadLeaderinfo() {
   while(true) {
     const action = yield take(actions.LOAD_LEADERINFO_ACTION)
@@ -128,121 +133,125 @@ export function* watchDeleteComment() {
   }
 }
 
-function* get_meetinglist(type) {
-  const get_token = (state) => state.snu_moyeo.mySNU_verification_token
-  const token = yield select(get_token)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function* get_meetinglist(opt) {
+  const get_token = (state) => state.snu_moyeo.mySNU_verification_token
+  const token = yield select(get_token)  //  이메일 토큰
+
+  // 인증된 유저
   if (token !== null) {
     let url
-    if (type.includes('/list')) {
-      if (type.length >= 8) {
-        const kind = type[6]
-        const keyword = type.substring(8)
+
+    // List 페이지에서 미팅 리스트를 불러오는 경우
+    if (opt.includes('/list')) {
+      // 검색을 한 경우
+      if (opt.length >= 8) {
+        const kind = opt[6]               //  미팅 유형
+        const keyword = opt.substring(8)  //  검색 키워드
         url = 'http://127.0.0.1:8000/search' + kind + '/?page=1&search=' + keyword
       }
+      // 일반적인 경우
       else
-        url = 'http://127.0.0.1:8000' + type + '/?page=1'
+        url = 'http://127.0.0.1:8000' + opt + '/?page=1'
     }
-    else if (type.includes('/searchall')) {
-      const keyword = type.substring(5)
+
+    // All 페이지에서 미팅 리스트를 불러오는 경우
+    else if (opt.includes('/all')) {
+      const keyword = opt.substring(5)  //  검색 키워드
       url = 'http://127.0.0.1:8000/searchall/?page=1&search=' + keyword
     }
     else
-      url = 'http://127.0.0.1:8000/meetinglist/' + type
+      url = 'http://127.0.0.1:8000/meetinglist/' + opt
 
     const get_username = (state) => state.snu_moyeo.username
     const get_password = (state) => state.snu_moyeo.password
-    const username = yield select(get_username)
-    const password = yield select(get_password)
-    const hash = new Buffer(`${username}:${password}`).toString('base64')
+    const username = yield select(get_username)  //  유저 아이디
+    const password = yield select(get_password)  //  유저 패스워드
+    const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저 해시값
 
-    const response = yield call(fetch, url, {
-      method : 'GET',
-      headers: { 'Authorization' : `Basic ${hash}` }
-    })
+    // 미팅 리스트 로드
+    const response = yield call(fetch, url, { method : 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
     if (response.ok) {
       const meetinglist = yield call([response, response.json])
-      console.log('<Fetch ' + type + ' list from back-end (by reload)>')
+      console.log('<Fetch ' + opt + ' list from back-end (by reload)>')
       console.log(meetinglist)
       return meetinglist
     }
     else {
-      alert('Fail to fetch ' + type + ' list from back-end')
+      alert('<Fail to fetch ' + opt + ' list from back-end>')
       return null
     }
   }
+
+  // 인증되지 않은 유저
   else
     return null
 }
 
 export function* reload() {
-  const pathname = window.location.pathname
+  const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
 
+  // Home 페이지
   if (pathname == '/') {
-    //alert("Reload " + pathname + " : Set state by data from back-end")
-    const meetinglist_impending = yield call(get_meetinglist, 'impending')
-    const meetinglist_recent = yield call(get_meetinglist, 'recent')
+    const meetinglist_impending = yield call(get_meetinglist, 'impending')  //  백엔드에서 미팅 리스트 로드
+    const meetinglist_recent = yield call(get_meetinglist, 'recent')        //  백엔드에서 미팅 리스트 로드
     if (meetinglist_impending !== null && meetinglist_recent !== null) {
-      console.log('<Dispatch reload_action>')
-      yield put(actions.reload_action('impending', meetinglist_impending))
-      yield put(actions.reload_action('recent', meetinglist_recent))
+      yield put(actions.reload_action('impending', meetinglist_impending))  //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+      yield put(actions.reload_action('recent', meetinglist_recent))        //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
     }
   }
+
+  // MyPage 페이지
   else if (pathname == '/mypage') {
-    //alert("Reload " + pathname + " : Set state by data from back-end")
-    const meetinglist_lead = yield call(get_meetinglist, 'lead')
-    const meetinglist_join = yield call(get_meetinglist, 'join')
-    const meetinglist_history = yield call(get_meetinglist, 'history')
+    const meetinglist_lead = yield call(get_meetinglist, 'lead')        //  백엔드에서 미팅 리스트 로드
+    const meetinglist_join = yield call(get_meetinglist, 'join')        //  백엔드에서 미팅 리스트 로드
+    const meetinglist_history = yield call(get_meetinglist, 'history')  //  백엔드에서 미팅 리스트 로드
     if (meetinglist_lead !== null && meetinglist_join !== null && meetinglist_history !== null) {
-      console.log('<Dispatch reload_action>')
-      yield put(actions.reload_action('lead', meetinglist_lead))
-      yield put(actions.reload_action('join', meetinglist_join))
-      yield put(actions.reload_action('history', meetinglist_history))
+      yield put(actions.reload_action('lead', meetinglist_lead))        //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+      yield put(actions.reload_action('join', meetinglist_join))        //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+      yield put(actions.reload_action('history', meetinglist_history))  //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
     }
   }
+
+  // List 페이지
   else if (pathname.includes('/list')) {
-    //alert("Reload " + pathname + " : Set state by data from back-end")
-    const meetinglist = yield call(get_meetinglist, pathname)
-    if (meetinglist !== null) {
-      console.log('<Dispatch reload_action>')
-      yield put(actions.reload_action(pathname, meetinglist))
-    }
+    const meetinglist = yield call(get_meetinglist, pathname)  //  백엔드에서 미팅 리스트 로드
+    if (meetinglist !== null)
+      yield put(actions.reload_action(pathname, meetinglist))  //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
   }
-  else if (pathname.includes('/searchall')) {
-    //alert("Reload " + pathname + " : Set state by data from back-end")
-    const meetinglist = yield call(get_meetinglist, pathname)
-    if (meetinglist !== null) {
-      console.log('<Dispatch reload_action>')
-      yield put(actions.reload_action(pathname, meetinglist))
-    }
+
+  // All 페이지
+  else if (pathname.includes('/all')) {
+    const meetinglist = yield call(get_meetinglist, pathname)  //  백엔드에서 미팅 리스트 로드
+    if (meetinglist !== null)
+      yield put(actions.reload_action(pathname, meetinglist))  //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
   }
+
+  // LoginAuth 페이지
   else if (pathname == '/auth') {
-    const username = sessionStorage.getItem("username") // 이미 로그인된 상태일 테니까 가져올 수 있음
+    const username = sessionStorage.getItem("username")  //  이미 로그인된 상태이므로 가져올 수 있음
 
     // 로그인 X : 로그인 페이지로 리다이렉트
     if (username == null) {
       alert('잘못된 접근입니다.')
       Object.defineProperty(window.location, 'href', { writable: true, value: '/login' })
     }
+
+    // 로그인 O
     else {
-      const password = sessionStorage.getItem("password") // 이미 로그인된 상태일 테니까 가져올 수 있음
+      const password = sessionStorage.getItem("password") // 이미 로그인된 상태이므로 가져올 수 있음
       const url_user = 'http://127.0.0.1:8000/log_in/'
       const hash = new Buffer(`${username}:${password}`).toString('base64')
-      const response_user = yield call(fetch, url_user, {
-        method: 'GET',
-        headers: { 'Authorization' : `Basic ${hash}` }
-      })
+      const response_user = yield call(fetch, url_user, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
 
-      // 이미 둘 다 인증 완료
+      // 인증 O : 홈 페이지로 리다이렉트
       if (response_user.ok) {
         alert('이미 인증을 완료한 유저입니다.')
-        Object.defineProperty(window.location, 'href', {
-          writable: true,
-          value: '/'
-        });
+        Object.defineProperty(window.location, 'href', { writable: true, value: '/' });
       }
 
-      // 최소 둘 중 하나가 인증 미완료
+      // 인증 X
       else {
         const response_user_data = yield call([response_user, response_user.json]);
         const mySNU_verification_token = response_user_data.mySNU_verified ? response_user_data.mySNU_verification_token : null
@@ -253,8 +262,54 @@ export function* reload() {
       }
     }
   }
-  else {
-    /* do nothing */
+}
+
+export function* change_page_num_func(action) {
+  const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
+  const get_token = (state) => state.snu_moyeo.mySNU_verification_token
+  const token = yield select(get_token)  //  이메일 토큰
+
+  // 인증된 유저
+  if (token !== null) {
+    let url
+
+    // List 페이지에서 페이지를 넘기는 경우
+    if (action.option == "kind") {
+      // 검색을 한 경우
+      if (pathname.length >= 8) {
+        const kind = pathname[6]               //  미팅 유형
+        const keyword = pathname.substring(8)  //  검색 키워드
+        url = 'http://127.0.0.1:8000/search' + kind + '/?page=' + action.page_num + '&search=' + keyword
+      }
+
+      // 일반적인 경우
+      else
+        url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
+    }
+
+    // All 페이지에서 페이지를 넘기는 경우
+    else if (action.option == "all") {
+      const keyword = pathname.substring(5)  //  검색 키워드
+      url = 'http://127.0.0.1:8000/searchall/?page=' + action.page_num + '&search=' + keyword
+    }
+
+    const get_username = (state) => state.snu_moyeo.username
+    const get_password = (state) => state.snu_moyeo.password
+    const username = yield select(get_username)  //  유저 아이디
+    const password = yield select(get_password)  //  유저 패스워드
+    const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저 해시값
+
+    // 미팅 리스트 로드
+    const response = yield call(fetch, url, { method : 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
+    if (response.ok) {
+      const meetinglist = yield call([response, response.json])
+      console.log('<Fetch ' + action.page_num + 'th meeting list from back-end (by reload)>')
+      console.log(meetinglist)
+      yield put(actions.change_page_num_success_action(action.option, action.page_num, meetinglist))
+    }
+    else {
+      alert('<Fail to fetch ' + action.page_num + 'th meeting list from back-end>')
+    }
   }
 }
 
@@ -390,6 +445,8 @@ export function* confirm_phone_func(action) {
     alert('인증번호가 틀렸습니다.')
   }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
@@ -570,53 +627,6 @@ export function* withdraw_meeting_func(action) {
     console.log('Participate DELETE bad')
 }
 
-export function* change_page_num_func(action) {
-  const pathname = window.location.pathname
-  const get_token = (state) => state.snu_moyeo.mySNU_verification_token
-  const token = yield select(get_token)
-  let url
-
-  if (token !== null) {
-    switch(action.option) {
-      case "kind" : {
-        if (pathname.length >= 8) {
-          const kind = pathname[6]
-          const keyword = pathname.substring(8)
-          url = 'http://127.0.0.1:8000/search' + kind + '/?page=' + action.page_num + '&search=' + keyword
-        }
-        else {
-          url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
-        }
-        break
-      }
-      case "searchall" : {
-        const keyword = pathname.substring(5)
-        url = 'http://127.0.0.1:8000/searchall/?page=' + action.page_num + '&search=' + keyword
-        break
-      }
-    }
-    const get_username = (state) => state.snu_moyeo.username
-    const get_password = (state) => state.snu_moyeo.password
-    const username = yield select(get_username)
-    const password = yield select(get_password)
-    const hash = new Buffer(`${username}:${password}`).toString('base64')
-
-    const response = yield call(fetch, url, {
-      method : 'GET',
-      headers: { 'Authorization' : `Basic ${hash}` }
-    })
-    if (response.ok) {
-      const meetinglist = yield call([response, response.json])
-      console.log('<Fetch ' + action.page_num + 'th meeting list from back-end (by reload)>')
-      console.log(meetinglist)
-      yield put(actions.change_page_num_success_action(action.option, action.page_num, meetinglist))
-    }
-    else {
-      alert('Fail to fetch ' + action.page_num + 'th meeting list from back-end')
-    }
-  }
-}
-
 export function* load_leaderinfo_func(action) {
   const url_leaderinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
   const response_leaderinfo = yield call(fetch, url_leaderinfo, { method : 'GET' })
@@ -706,6 +716,8 @@ export function* delete_comment_func(action) {
   else
     console.log('Comment DELETE bad')
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export default function* () {
   yield fork(reload)
