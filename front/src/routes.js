@@ -3,7 +3,7 @@ import { Route, IndexRoute } from 'react-router'
 import * as kind from './literal'
 
 import App from 'components/App'
-import { Home, Login, Signup, LoginAuth, New, MyPage, List } from 'components'
+import { Home, Login, Signup, LoginAuth, New, MyPage, List, All } from 'components'
 
 const routes = (
   <div>
@@ -19,6 +19,14 @@ const routes = (
     <Route path={"/list/"+kind.STUDY} component={List} />
     <Route path={"/list/"+kind.EXERCISE} component={List} />
     <Route path={"/list/"+kind.MEETING} component={List} />
+
+    <Route path={"/list/"+kind.DELIVER+"/:keyword"} component={List} />
+    <Route path={"/list/"+kind.TAXI+"/:keyword"} component={List} />
+    <Route path={"/list/"+kind.BUY+"/:keyword"} component={List} />
+    <Route path={"/list/"+kind.STUDY+"/:keyword"} component={List} />
+    <Route path={"/list/"+kind.EXERCISE+"/:keyword"} component={List} />
+    <Route path={"/list/"+kind.MEETING+"/:keyword"} component={List} />
+    <Route path="/all/:keyword" component={All} />
   </div>
 )
 

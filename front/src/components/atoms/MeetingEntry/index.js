@@ -4,10 +4,10 @@ import { Modal, Card } from 'semantic-ui-react'
 
 const dateParse = (data) => {
     const year = data.substring(0, 19).replace("-", "년 ")
-    const month = year.replace("-", "월")
+    const month = year.replace("-", "월 ")
     let day = month.replace("T", "일 ")
     day = day.split('+')[0]
-    day = day.replace(":", "시")
+    day = day.replace(":", "시 ")
     day = day.replace(":", "분&")
     return day.split("&")[0]
 }

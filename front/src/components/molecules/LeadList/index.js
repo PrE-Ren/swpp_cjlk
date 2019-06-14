@@ -2,15 +2,16 @@ import React from 'react'
 import MeetingEntry from '../../../containers/MeetingEntry'
 import { Segment, Card, Header, Label } from 'semantic-ui-react'
 
+// meetinglist_lead : MyPage 페이지에서 보여줄 Lead 리스트 정보
 export const LeadList = ({ meetinglist_lead }) => {
   console.log('<Lead Rendering>')
   if (meetinglist_lead != null) {
-    let meetings = JSON.parse(meetinglist_lead)
+    let meetings = JSON.parse(meetinglist_lead)  //  미팅 리스트
     return (
       <Segment raised>
-        <Label as='a' color='yellow' ribbon>I am leader!</Label>
-        <Header as='h1'>내가 만든 모임</Header>
-        <Card.Group>
+        <Label as='a' color='yellow' ribbon> I am leader! </Label>  {/* 라벨 */}
+        <Header as='h1'> 내가 만든 모임 </Header>                    {/* 제목 */}
+        <Card.Group>                                                {/* 각각의 카드는 하나의 미팅 엔트리를 담고 있음 */}
           {meetings.map(meeting_entry =>
             <Card key = {meeting_entry.id} >
               <MeetingEntry meeting_info = {meeting_entry}/>
@@ -21,5 +22,5 @@ export const LeadList = ({ meetinglist_lead }) => {
     )
   }
   else
-    return <div></div>
+    return (<div></div>)
 }
