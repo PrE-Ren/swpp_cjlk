@@ -200,6 +200,15 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         }
       }
 
+      case 'LOAD_MEMBERINFO_SUCCESS_ACTION': {
+        sessionStorage.setItem("member_list", action.member_list)
+        return {
+          ...state,
+          member_list : action.member_list,
+          check_member_click: true
+        }
+      }
+
       default:
         return state
     }

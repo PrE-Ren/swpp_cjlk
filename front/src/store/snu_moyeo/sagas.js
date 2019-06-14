@@ -1,4 +1,4 @@
-import {take, put, call, fork, select} from 'redux-saga/effects'
+import {take, put, call, fork, select, all} from 'redux-saga/effects'
 import api from 'services/api'
 import * as actions from './actions'
 
@@ -101,6 +101,13 @@ export function* watchLoadLeaderinfo() {
   while(true) {
     const action = yield take(actions.LOAD_LEADERINFO_ACTION)
     yield call(load_leaderinfo_func, action)
+  }
+}
+
+export function* watchLoadMemberinfo() {
+  while(true) {
+    const action = yield take(actions.LOAD_MEMBERINFO_ACTION)
+    yield call(load_memberinfo_func, action)
   }
 }
 
@@ -650,6 +657,39 @@ export function* load_leaderinfo_func(action) {
   }
 }
 
+export function* load_memberinfo_func(action) {
+  let url_memberinfo = new Array();
+  let response_memberinfo
+  let memberinfo
+  let member_list = new Array();
+  let i = 0, j= 0
+  let x = 0
+  action.members.map((member_id) =>
+  {
+    url_memberinfo[i] = 'http://127.0.0.1:8000/user/' + member_id + '/',
+    i = i + 1;
+  })
+
+  while(j < i){
+    response_memberinfo = yield call(fetch, url_memberinfo[j], { method : 'GET' })
+    member_list[x] = new Array();
+    if(response_memberinfo.ok) {
+      memberinfo = yield call([response_memberinfo, response_memberinfo.json])
+      member_list[x][0] = memberinfo.username
+      member_list[x][1] = memberinfo.name
+      member_list[x][2] = memberinfo.email
+      member_list[x][3] = memberinfo.phone_number
+      x = x + 1;
+    }
+    else {
+      alert('member정보 읽어오지 못 함')
+    }
+
+    j = j + 1;
+  }
+  yield put(actions.load_memberinfo_success_action(member_list))
+}
+
 export function* load_comments_func(action) {
   const url_comments = 'http://127.0.0.1:8000/comment/meeting/' + action.meeting_id + '/'
   const response_comments = yield call(fetch, url_comments, { method : 'GET' })
@@ -747,6 +787,7 @@ export default function* () {
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
   yield fork(watchLoadLeaderinfo)
+  yield fork(watchLoadMemberinfo)
   yield fork(watchLoadComments)
   yield fork(watchAddComment)
   yield fork(watchEditComment)

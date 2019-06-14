@@ -23,6 +23,8 @@ export const JOIN_MEETING_ACTION = 'JOIN_MEETING_ACTION'
 export const WITHDRAW_MEETING_ACTION = 'WITHDRAW_MEETING_ACTION'
 export const LOAD_LEADERINFO_ACTION = 'LOAD_LEADERINFO_ACTION'
 export const LOAD_LEADERINFO_SUCCESS_ACTION = 'LOAD_LEADERINFO_SUCCESS_ACTION'
+export const LOAD_MEMBERINFO_ACTION = 'LOAD_MEMBERINFO_ACTION'
+export const LOAD_MEMBERINFO_SUCCESS_ACTION = 'LOAD_MEMBERINFO_SUCCESS_ACTION'
 export const LOAD_COMMENTS_ACTION = 'LOAD_COMMENTS_ACTION'
 export const LOAD_COMMENTS_SUCCESS_ACTION = 'LOAD_COMMENTS_SUCCESS_ACTION'
 export const ADD_COMMENT_ACTION = 'ADD_COMMENT_ACTION'
@@ -214,6 +216,12 @@ export const load_leaderinfo_action = (user_id) => {
   }
 }
 
+export const load_memberinfo_action = (members) => {
+  return {
+    type : LOAD_MEMBERINFO_ACTION,
+    members
+  }
+}
 export const load_comments_action = (meeting_id) => {
   return {
     type : LOAD_COMMENTS_ACTION,
@@ -236,6 +244,14 @@ export const load_leaderinfo_success_action = (leader_name, leader_email, leader
     leader_phone_number
   }
 }
+
+export const load_memberinfo_success_action = (member_list) => {
+  return {
+    type : LOAD_MEMBERINFO_SUCCESS_ACTION,
+    member_list
+  }
+}
+
 
 export const add_comment_action = (hash, content, meeting_id) => {
   return {
