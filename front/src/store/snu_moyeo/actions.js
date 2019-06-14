@@ -168,11 +168,10 @@ export const new_action = (hash, user_id, meeting_info) => {
   }
 };
 
-export const modify_action = (hash, user_id, meeting_info) => {
+export const modify_action = (hash, meeting_info) => {
   return {
     type: MODIFY_ACTION,
     hash,
-    user_id,
     meeting_info
   }
 };

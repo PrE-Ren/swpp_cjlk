@@ -102,7 +102,7 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
         <Form.Input fluid label='사진' type="file" width={6} onChange={handle_picture} accept="image/*" />
         <div><Map meeting_info = {meeting_info} write = {true} /></div>
         <Form.TextArea label='내용' placeholder='About this meeting...' defaultValue={meeting_info.description} onChange={handle_description} />
-        <Form.Button onClick={() => modify_click(hash, user_id, {
+        <Form.Button onClick={() => modify_click(hash, {
           title: (title !== undefined) ? title : meeting_info.title,                          // 수정 가능 (안 바꿨으면 기존 값 사용)
           due: meeting_info.due,                                                              // 수정 불가능 (기존 값 사용)
           min_people: meeting_info.min_people,                                                // 수정 불가능 (기존 값 사용)
