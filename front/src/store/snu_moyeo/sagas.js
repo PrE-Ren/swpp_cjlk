@@ -1,4 +1,4 @@
-import {take, put, call, fork, select} from 'redux-saga/effects'
+import {take, put, call, fork, select, all} from 'redux-saga/effects'
 import api from 'services/api'
 import * as actions from './actions'
 
@@ -101,6 +101,13 @@ export function* watchLoadLeaderinfo() {
   while(true) {
     const action = yield take(actions.LOAD_LEADERINFO_ACTION)
     yield call(load_leaderinfo_func, action)
+  }
+}
+
+export function* watchLoadMemberinfo() {
+  while(true) {
+    const action = yield take(actions.LOAD_MEMBERINFO_ACTION)
+    yield call(load_memberinfo_func, action)
   }
 }
 
@@ -478,6 +485,7 @@ export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const formData = new FormData();
+
   if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
     formData.append('title', action.meeting_info.title);
     formData.append('due', action.meeting_info.due);
@@ -486,6 +494,14 @@ export function* new_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', 0);
     formData.append('kind', action.meeting_info.kind);
+
+    if(sessionStorage.getItem("lat") == null){
+      sessionStorage.setItem("lat", 37.4615299)
+    }
+    if(sessionStorage.getItem("lng") == null){
+      sessionStorage.setItem("lng", 126.9519267)
+    }
+
     formData.append('latitude', sessionStorage.getItem("lat"));
     formData.append('longitude', sessionStorage.getItem("lng"));
     if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
@@ -548,6 +564,14 @@ export function* modify_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', action.meeting_info.state);
     formData.append('kind', action.meeting_info.kind);
+
+    if(sessionStorage.getItem("lat") == null){
+      sessionStorage.setItem("lat", 37.4615299)
+    }
+    if(sessionStorage.getItem("lng") == null){
+      sessionStorage.setItem("lng", 126.9519267)
+    }
+
     formData.append('latitude', sessionStorage.getItem("lat"));
     formData.append('longitude', sessionStorage.getItem("lng"));
     if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
@@ -657,20 +681,46 @@ export function* load_leaderinfo_func(action) {
   const url_leaderinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
   const response_leaderinfo = yield call(fetch, url_leaderinfo, { method : 'GET' })
 
-  console.log(response_leaderinfo)
   if (response_leaderinfo.ok) {
     const leaderinfo = yield call([response_leaderinfo, response_leaderinfo.json])
-    sessionStorage.removeItem("leader.name")
-    sessionStorage.removeItem("leader.email")
-    sessionStorage.removeItem("leader.phone_number")
-
-    sessionStorage.setItem("leader.name", leaderinfo.name)
-    sessionStorage.setItem("leader.email", leaderinfo.email)
-    sessionStorage.setItem("leader.phone_number", leaderinfo.phone_number)
+    yield put(actions.load_leaderinfo_success_action(leaderinfo.name, leaderinfo.email, leaderinfo.phone_number))
   }
   else {
     alert('leader 정보 읽어오지 못함')
   }
+}
+
+export function* load_memberinfo_func(action) {
+  let url_memberinfo = new Array();
+  let response_memberinfo
+  let memberinfo
+  let member_list = new Array();
+  let i = 0, j= 0
+  let x = 0
+  action.members.map((member_id) =>
+  {
+    url_memberinfo[i] = 'http://127.0.0.1:8000/user/' + member_id + '/',
+    i = i + 1;
+  })
+
+  while(j < i){
+    response_memberinfo = yield call(fetch, url_memberinfo[j], { method : 'GET' })
+    member_list[x] = new Array();
+    if(response_memberinfo.ok) {
+      memberinfo = yield call([response_memberinfo, response_memberinfo.json])
+      member_list[x][0] = memberinfo.username
+      member_list[x][1] = memberinfo.name
+      member_list[x][2] = memberinfo.email
+      member_list[x][3] = memberinfo.phone_number
+      x = x + 1;
+    }
+    else {
+      alert('member정보 읽어오지 못 함')
+    }
+
+    j = j + 1;
+  }
+  yield put(actions.load_memberinfo_success_action(member_list))
 }
 
 export function* load_comments_func(action) {
@@ -789,6 +839,7 @@ export default function* () {
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
   yield fork(watchLoadLeaderinfo)
+  yield fork(watchLoadMemberinfo)
   yield fork(watchLoadComments)
   yield fork(watchAddComment)
   yield fork(watchEditComment)

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { MeetingInfo } from '../components/molecules/MeetingInfo'
-import { change_meeting_state_action, join_meeting_action, withdraw_meeting_action, change_meeting_info_action, load_leaderinfo_action } from '../store/snu_moyeo/actions'
+import { change_meeting_state_action, join_meeting_action, withdraw_meeting_action, change_meeting_info_action, load_leaderinfo_action, load_memberinfo_action } from '../store/snu_moyeo/actions'
 
 const mapStateToProps = (state, own_props) => {
   return {
@@ -24,6 +24,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     load_leaderinfo_click : (user_id) => {
       dispatch(load_leaderinfo_action(user_id))
+    },
+    load_memberinfo_click : (members) => {
+      dispatch(load_memberinfo_action(members))
     }
   }
 }
