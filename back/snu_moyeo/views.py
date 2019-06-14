@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from snu_moyeo.serializers import MeetingSerializer, SnuUserSerializer, ParticipateSerializer, CommentSerializer
+from snu_moyeo.serializers import MeetingSerializer, SnuUserSerializer, ParticipateSerializer, CommentSerializer, ReportSerializer
 from rest_framework import generics
 from django.contrib.auth.models import User
-from snu_moyeo.models import SnuUser, Meeting, Participate, Comment
+from snu_moyeo.models import SnuUser, Meeting, Participate, Comment, Report
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -12,7 +12,7 @@ from rest_framework.authtoken.models import Token
 from django.utils.crypto import get_random_string
 from rest_framework import permissions
 from django.http import HttpResponse, JsonResponse
-from snu_moyeo.permissions import UserOnlyAccess, LeaderOnlyControl
+from snu_moyeo.permissions import UserOnlyAccess, LeaderOnlyControl, SuperUserOnlyAccess
 from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 from sdk.api.message import Message
@@ -330,52 +330,174 @@ class CommentOnMeeting(APIView):
         serializer = CommentSerializer(comments, many = True)
         return Response(serializer.data)
 
-'''
-class MeetingTitleAllView(generics.ListAPIView):
-    queryset = Meeting.objects.all()
-    serializer_class = MeetingSerializer
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('title',)
-
-    def get(self, request, *args, **kwargs):
-        changeState()
-        paginator = CustomPagination()
-        result_page = paginator.paginate_queryset(self.queryset, request)
-        serializer = MeetingSerializer(result_page, many = True)
-        return paginator.get_paginated_response(serializer.data)
-        # return self.list(request, *args, **kwargs)
-
-class MeetingContentAllView(generics.ListAPIView):
-    queryset = Meeting.objects.all()
-    serializer_class = MeetingSerializer
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('description',)
-
-    def get(self, request, *args, **kwargs):
-        changeState()
-        paginator = CustomPagination()
-        result_page = paginator.paginate_queryset(self.queryset, request)
-        serializer = MeetingSerializer(result_page, many = True)
-        return paginator.get_paginated_response(serializer.data)
-        # return self.list(request, *args, **kwargs)
-'''
 
 class MeetingSearchAllView(generics.ListAPIView):
     queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('title', 'description')
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         changeState()
         self.filter_backends = (filters.SearchFilter,)
         self.search_fields = ('title', 'description',)
-        queryset = self.filter_queryset(self.get_queryset())
-        #serializer = self.get_serializer(queryset, many=True)
+        queryset = self.filter_queryset(self.get_queryset()).filter((Q(state = OPEN) | Q(state = RE_OPEN)))
         paginator = CustomPagination()
         result_page = paginator.paginate_queryset(queryset, request)
         serializer = MeetingSerializer(result_page, many = True)
         return paginator.get_paginated_response(serializer.data)
-        #return self.list(request, *args, **kwargs)
+
+
+
+class MeetingSearch0View(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'description')
+    def get(self, request):
+        changeState()
+        self.filter_backends = (filters.SearchFilter,)
+        self.search_fields = ('title', 'description',)
+        queryset = self.filter_queryset(self.get_queryset()).filter(Q(kind=0)&(Q(state = OPEN) | Q(state = RE_OPEN)))
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+
+class MeetingSearch1View(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'description')
+    def get(self, request):
+        changeState()
+        self.filter_backends = (filters.SearchFilter,)
+        self.search_fields = ('title', 'description',)
+        queryset = self.filter_queryset(self.get_queryset()).filter(Q(kind=1)&(Q(state = OPEN) | Q(state = RE_OPEN)))
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+
+
+class MeetingSearch2View(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'description')
+    def get(self, request):
+        changeState()
+        self.filter_backends = (filters.SearchFilter,)
+        self.search_fields = ('title', 'description',)
+        queryset = self.filter_queryset(self.get_queryset()).filter(Q(kind=2)&(Q(state = OPEN) | Q(state = RE_OPEN)))
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+
+
+class MeetingSearch3View(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'description')
+    def get(self, request):
+        changeState()
+        self.filter_backends = (filters.SearchFilter,)
+        self.search_fields = ('title', 'description',)
+        queryset = self.filter_queryset(self.get_queryset()).filter(Q(kind=3)&(Q(state = OPEN) | Q(state = RE_OPEN)))
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+
+
+class MeetingSearch4View(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'description')
+    def get(self, request):
+        print('hi')
+        changeState()
+        self.filter_backends = (filters.SearchFilter,)
+        self.search_fields = ('title', 'description',)
+        queryset = self.filter_queryset(self.get_queryset()).filter(Q(kind=4)&(Q(state = OPEN) | Q(state = RE_OPEN)))
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+
+
+class MeetingSearch5View(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'description')
+    def get(self, request):
+        changeState()
+        self.filter_backends = (filters.SearchFilter,)
+        self.search_fields = ('title', 'description',)
+        queryset = self.filter_queryset(self.get_queryset()).filter(Q(kind=5)&(Q(state = OPEN) | Q(state = RE_OPEN)))
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+
+
+class MeetingSearch6View(generics.ListAPIView):
+    queryset = Meeting.objects.all()
+    serializer_class = MeetingSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('title', 'description')
+    def get(self, request):
+        changeState()
+        self.filter_backends = (filters.SearchFilter,)
+        self.search_fields = ('title', 'description',)
+        queryset = self.filter_queryset(self.get_queryset()).filter(Q(kind=6)&(Q(state = OPEN) | Q(state = RE_OPEN)))
+        paginator = CustomPagination()
+        result_page = paginator.paginate_queryset(queryset, request)
+        serializer = MeetingSerializer(result_page, many = True)
+        return paginator.get_paginated_response(serializer.data)
+
+
+
+
+
+class ReportList(generics.ListCreateAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(reporter = self.request.user)
+    
+    def get_queryset(self):
+        user = self.request.user
+        if (user.is_superuser):
+            return Report.objects.all()
+        return Meeting.objects.none()
+    
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+    def get_queryset(self):
+        user = self.request.user
+        if (user.is_superuser):
+            return Report.objects.all()
+        return Meeting.objects.none()
+
+    def delete(self, request, *args, **kwargs) :
+        target = SnuUser.objects.get(pk = self.get_object().reporteeid)
+        target_point = self.get_object().point
+        target.point -= target_point
+        target.save()
+        return self.destroy(request, *args, **kwargs)
+
+
 '''
 class ListView(APIView):
     def get(self, request, search):
