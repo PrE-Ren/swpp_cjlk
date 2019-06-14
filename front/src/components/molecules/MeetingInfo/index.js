@@ -91,7 +91,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
           <List.Content> 현재 참여 인원 :
             {state.check_member_click
               ?
-              <Dropdown text = {meeting_info.members.length + '명'}
+              <Dropdown text = {' ' + meeting_info.members.length + '명'}
                         onClick={() => {state.check_member_click = false; load_memberinfo_click(meeting_info.members)}}>
                 <Dropdown.Menu>
                   {member_list.map(member =>
@@ -153,6 +153,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
   // 내가 만든 모임
   if (meeting_info.leader == state.username) {
     switch (meeting_info.state) {
+      // 모집 중
       case meeting_state.OPEN :
         return (
           <div>
@@ -168,7 +169,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
             </Modal.Actions>
           </div>
         )
-
+      // 마감
       case meeting_state.CLOSED :
         return (
           <div>
@@ -184,7 +185,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
             </Modal.Actions>
           </div>
         )
-
+      // 추가모집 중
       case meeting_state.RE_OPEN :
         return (
           <div>
@@ -200,7 +201,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
             </Modal.Actions>
           </div>
         )
-
+      // 추가모집 마감
       case meeting_state.RE_CLOSED :
         return (
           <div>
@@ -215,7 +216,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
             </Modal.Actions>
           </div>
         )
-
+      // 해산
       case meeting_state.BREAK_UP :
         return (
           <div>

@@ -674,10 +674,10 @@ export function* load_leaderinfo_func(action) {
 
   if (response_leaderinfo.ok) {
     const leaderinfo = yield call([response_leaderinfo, response_leaderinfo.json])
-    sessionStorage.setItem("leader.name", action.leader_name)                  //  리더 이름(닉네임) 로드 후 세션 스토리지에 저장
-    sessionStorage.setItem("leader.email", action.leader_email)                //  리더 이메일 로드 후 세션 스토리지에 저장
-    sessionStorage.setItem("leader.phone_number", action.leader_phone_number)  //  리더 폰 번호 로드 후 세션 스토리지에 저장
-    yield put(actions.load_leaderinfo_success_action())                        //  리더 정보 로드 완료
+    sessionStorage.setItem("leader.name", leaderinfo.name)                  //  리더 이름(닉네임) 로드 후 세션 스토리지에 저장
+    sessionStorage.setItem("leader.email", leaderinfo.email)                //  리더 이메일 로드 후 세션 스토리지에 저장
+    sessionStorage.setItem("leader.phone_number", leaderinfo.phone_number)  //  리더 폰 번호 로드 후 세션 스토리지에 저장
+    yield put(actions.load_leaderinfo_success_action())                     //  리더 정보 로드 완료
   }
   else
     alert('<Fail to fetch leader information>')
