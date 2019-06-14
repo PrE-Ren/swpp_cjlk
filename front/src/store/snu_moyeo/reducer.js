@@ -188,21 +188,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
 
       case 'LOGOUT_ACTION': {
-       sessionStorage.removeItem("username");
-       sessionStorage.removeItem("password");
-       sessionStorage.removeItem("mySNU_verification_token");
-       sessionStorage.removeItem("phone_verification_token");
-       sessionStorage.removeItem("user_id");
-       sessionStorage.removeItem("email");
-       sessionStorage.removeItem("name");
-       sessionStorage.removeItem("impending");
-       sessionStorage.removeItem("recent");
-       sessionStorage.removeItem("lead");
-       sessionStorage.removeItem("join");
-       sessionStorage.removeItem("history");
-       sessionStorage.removeItem("list");
-       sessionStorage.removeItem("page_num");
-       sessionStorage.removeItem("report")
+       sessionStorage.clear();
        return {
          ...state,
          username: null,
