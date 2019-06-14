@@ -486,68 +486,61 @@ export function* new_func(action) {
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const formData = new FormData();
 
-  if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
-    formData.append('title', action.meeting_info.title);
-    formData.append('due', action.meeting_info.due);
-    formData.append('min_people', action.meeting_info.min_people);
-    formData.append('max_people', action.meeting_info.max_people);
-    formData.append('description', action.meeting_info.description);
-    formData.append('state', 0);
-    formData.append('kind', action.meeting_info.kind);
+  formData.append('title', action.meeting_info.title);              //  제목 (입력)
+  formData.append('due', action.meeting_info.due);                  //  마감 기한 (입력)
+  formData.append('min_people', action.meeting_info.min_people);    //  최소 인원 (입력)
+  formData.append('max_people', action.meeting_info.max_people);    //  최대 인원 (입력)
+  formData.append('description', action.meeting_info.description);  //  본문 (입력)
+  formData.append('state', 0);                                      //  상태 (자동 입력)
+  formData.append('kind', action.meeting_info.kind);                //  유형 (입력)
 
-    if(sessionStorage.getItem("lat") == null){
-      sessionStorage.setItem("lat", 37.4615299)
-    }
-    if(sessionStorage.getItem("lng") == null){
-      sessionStorage.setItem("lng", 126.9519267)
-    }
+  // 위도 및 경도 (지도를 클릭할 때 세션 스토리지에 저장)
+  // 지도를 한 번도 안 클릭하면 null 값으로 되어 있기 때문에 이때는 기본값으로 설정
+  if (sessionStorage.getItem("lat") != null) formData.append('latitude', sessionStorage.getItem("lat"))
+  else                                       formData.append('latitude', 37.4615299)
+  if (sessionStorage.getItem("lng") != null) formData.append('longitude', sessionStorage.getItem("lng"))
+  else                                       formData.append('longitude', 126.9519267)
 
-    formData.append('latitude', sessionStorage.getItem("lat"));
-    formData.append('longitude', sessionStorage.getItem("lng"));
-    if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
-      formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
-    else
-      formData.append('picture', null, null)
+  // 사진을 지정해주지 않으면 undefined 값이 넘어오므로 이때는 null 값으로 설정
+  if (action.meeting_info.picture !== undefined) formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
+  else                                           formData.append('picture', null, null)
 
-    const response_meeting = yield call(fetch, url_meeting, {
+  // Meeting 모델 POST
+  const response_meeting = yield call(fetch, url_meeting, {
+      method: 'POST',
+      headers: { 'Authorization': `Basic ${action.hash}` },
+      body: formData,
+  })
+
+  const response_meeting_data = yield call([response_meeting, response_meeting.json]);  //  POST된 Meeting 객체의 정보
+
+  if (response_meeting.ok) {
+    console.log('Meeting POST ok')
+    const meeting_id = response_meeting_data.id  //  POST된 Meeting 모델의 고유값
+    const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: meeting_id });  //  POST할 Participate 객체의 정보
+
+    // Participate 모델 POST
+    const response_participate = yield call(fetch, url_participate, {
         method: 'POST',
-        headers: { 'Authorization': `Basic ${action.hash}` },
-        body: formData,
+        headers: {
+            'Authorization': `Basic ${action.hash}`,
+            'Content-Type': 'application/json',
+        },
+        body: info_participate,
     })
-
-    const response_meeting_data = yield call([response_meeting, response_meeting.json]);
-    if (response_meeting.ok) {
-      console.log('Meeting POST ok')
-      const meeting_id = response_meeting_data.id
-      const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: meeting_id });
-      const response_participate = yield call(fetch, url_participate, {
-          method: 'POST',
-          headers: {
-              'Authorization': `Basic ${action.hash}`,
-              'Content-Type': 'application/json',
-          },
-          body: info_participate,
-      })
-      if (response_participate.ok) {
-        console.log('Participate POST ok')
-        Object.defineProperty(window.location, 'href', {
-          writable: true,
-          value: '/'
-        });
-      }
-      else
-        console.log('Participate POST bad')
+    if (response_participate.ok) {
+      console.log('Participate POST ok')
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/' })
     }
-    else {
-      console.log('Meeting POST bad')
-      if (response_meeting_data.non_field_errors == "You can not participate more than 5")
-        alert('인당 5개 이상의 열린 모임을 가질 수 없습니다.')
-      else
-        alert('올바르지 않은 모임 형식입니다.')
-    }
+    else
+      console.log('Participate POST bad')
   }
   else {
-    alert('최소 인원과 최대 인원은 모두 2명 이상이어야 합니다.')
+    console.log('Meeting POST bad')
+    if (response_meeting_data.non_field_errors == "You can not participate more than 5")
+      alert('인당 5개 이상의 열린 모임을 가질 수 없습니다.')
+    else
+      alert('올바르지 않은 모임 형식입니다.')
   }
 }
 
@@ -556,45 +549,39 @@ export function* modify_func(action) {
   const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_info.id}/`
   const formData = new FormData();
 
-  if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
-    formData.append('title', action.meeting_info.title);
-    formData.append('due', action.meeting_info.due);
-    formData.append('min_people', action.meeting_info.min_people);
-    formData.append('max_people', action.meeting_info.max_people);
-    formData.append('description', action.meeting_info.description);
-    formData.append('state', action.meeting_info.state);
-    formData.append('kind', action.meeting_info.kind);
+  formData.append('title', action.meeting_info.title);              //  제목 (새로 입력)
+  formData.append('due', action.meeting_info.due);                  //  마감 기한 (기존 값)
+  formData.append('min_people', action.meeting_info.min_people);    //  최소 인원 (기존 값)
+  formData.append('max_people', action.meeting_info.max_people);    //  최대 인원 (기존 값)
+  formData.append('description', action.meeting_info.description);  //  본문 (새로 입력)
+  formData.append('state', action.meeting_info.state);              //  상태 (기존 값)
+  formData.append('kind', action.meeting_info.kind);                //  유형 (기존 값)
 
-    if(sessionStorage.getItem("lat") == null){
-      sessionStorage.setItem("lat", 37.4615299)
-    }
-    if(sessionStorage.getItem("lng") == null){
-      sessionStorage.setItem("lng", 126.9519267)
-    }
+  // 위도 및 경도 (지도를 클릭할 때 세션 스토리지에 저장)
+  // 지도를 한 번도 안 클릭하면 null 값으로 되어 있기 때문에 이때는 기존 값으로 설정
+  if (sessionStorage.getItem("lat") != null) formData.append('latitude', sessionStorage.getItem("lat"))
+  else                                       formData.append('latitude', 37.4615299)
+  if (sessionStorage.getItem("lng") != null) formData.append('longitude', sessionStorage.getItem("lng"))
+  else                                       formData.append('longitude', 126.9519267)
 
-    formData.append('latitude', sessionStorage.getItem("lat"));
-    formData.append('longitude', sessionStorage.getItem("lng"));
-    if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
-      formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
-    else
-      formData.append('picture', null, null)
+  // 사진을 지정해주지 않으면 undefined 값이 넘어오므로 이때는 null 값으로 설정
+  if (action.meeting_info.picture !== undefined) formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
+  else                                           formData.append('picture', null, null)
 
-    const response_meeting = yield call(fetch, url_meeting, {
-        method: 'PUT',
-        headers: { 'Authorization': `Basic ${action.hash}` },
-        body: formData,
-    })
-    if (response_meeting.ok) {
-      console.log('Meeting PUT ok')
-      sessionStorage.removeItem('meeting_info')
-      window.location.href = '/'
-    }
-    else {
-      console.log('Meeting PUT bad')
-    }
+  // Meeting 모델 PUT
+  const response_meeting = yield call(fetch, url_meeting, {
+      method: 'PUT',
+      headers: { 'Authorization': `Basic ${action.hash}` },
+      body: formData,
+  })
+  if (response_meeting.ok) {
+    console.log('Meeting PUT ok')
+    sessionStorage.removeItem('meeting_info')  //  사실 불필요한 것 같음
+    window.location.href = '/'
   }
   else {
-    alert('최소 인원과 최대 인원은 모두 2명 이상이어야 합니다.')
+    alert('올바르지 않은 모임 형식입니다.')
+    console.log('Meeting PUT bad')
   }
 }
 
