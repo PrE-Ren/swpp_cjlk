@@ -186,24 +186,30 @@ class ReportSerializer (serializers.ModelSerializer) :
 
     def validate(self, data):
         if self.context['request'].method == 'PUT' :
-            if data['isHandled'] == False :
-                raise serializers.ValidationError('Check the Handle')
-            if data['point'] <= 0 :
-                raise serializers.ValidationError('point has to be positive')
+            if data['point'] < 0 :
+                raise serializers.ValidationError('point has to be positive or zero')
 
-        if (self.instance) :
-            if (self.instance.isHandled == True):
-                raise serializers.ValidationError('Already Handled')
+
         if self.context['request'].user.username != 'admin' :
             if self.context['request'].method == 'PUT' :
                 raise serializers.ValidationError("ADMIN PAGE")
 
         if (self.instance) :
-            target_point = SnuUser.objects.get(pk = data['reporteeid']).point 
-            target_point += data['point']
-            print(target_point)
-            target = SnuUser.objects.get(pk = data['reporteeid']) 
-            target.point = target_point
+            if (self.instance.isHandled == True):
+                if data['isHandled'] == False :
+                    print('true')
+                    target_point = SnuUser.objects.get(pk = data['reporteeid']).point
+                    target = SnuUser.objects.get(pk = data['reporteeid'])
+                    target_point -= self.instance.point
+                    target.point = target_point
+            else :
+                print('false')
+                target_point = SnuUser.objects.get(pk = data['reporteeid']).point 
+                target_point += data['point']
+                print(target_point)
+                target = SnuUser.objects.get(pk = data['reporteeid']) 
+                target.point = target_point
+            
             target.save()
         return data
 

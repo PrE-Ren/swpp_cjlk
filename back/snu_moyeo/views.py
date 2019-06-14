@@ -20,6 +20,8 @@ from sdk.exceptions import CoolsmsException
 import random
 import sys
 import django
+import urllib.request
+import json
 
 OPEN = 0
 CLOSED = 1
@@ -489,13 +491,34 @@ class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
         if (user.is_superuser):
             return Report.objects.all()
         return Meeting.objects.none()
-
+    '''
     def delete(self, request, *args, **kwargs) :
-        target = SnuUser.objects.get(pk = self.get_object().reporteeid)
-        target_point = self.get_object().point
-        target.point -= target_point
-        target.save()
+        if self.get_object().isHandled == True :
+            target = SnuUser.objects.get(pk = self.get_object().reporteeid)
+            target_point = self.get_object().point
+            target.point -= target_point
+            target.save()
         return self.destroy(request, *args, **kwargs)
+    '''
+
+def searchShop(request, search_word) :
+    client_id = "N6c7MAUvz7uiaMUNt1Ww" # 애플리케이션 등록시 발급 받은 값 입력
+    client_secret = "1hdjaYpmI6" # 애플리케이션 등록시 발급 받은 값 입력
+    encText = urllib.parse.quote(search_word)
+    url = "https://openapi.naver.com/v1/search/shop?query=" + encText +"&display=3&sort=count"
+    request = urllib.request.Request(url)
+    print(request)
+    request.add_header("X-Naver-Client-Id",client_id)
+    request.add_header("X-Naver-Client-Secret",client_secret)
+    response = urllib.request.urlopen(request)
+    rescode = response.getcode()
+    if(rescode==200):
+        response_body = response.read()
+        print(response_body.decode('utf-8'))
+        return HttpResponse(response_body.decode('utf-8'), status.HTTP_200_OK)
+    else:
+        print("Error Code:" + rescode)
+        return HttpResponse({}, status = status.HTTP_404_NOT_FOUND)
 
 
 '''
