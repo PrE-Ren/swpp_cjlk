@@ -277,7 +277,25 @@ export function* reload() {
     }
   }
   else if (pathname == '/admin') {
-    yield put(actions.get_report_info_success_action())
+    const username = sessionStorage.getItem("username")
+    // 로그인 X : 로그인 페이지로 리다이렉트
+    if (username != 'admin') {
+      alert('잘못된 접근입니다.')
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/login' })
+    }
+    else
+    {
+      const password = sessionStorage.getItem("password")
+      const url_report = 'http://127.0.0.1:8000/reportlist/'
+      const hash = new Buffer(`${username}:${password}`).toString('base64')
+      const response_report = yield call(fetch, url_report, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
+      if (response_user.ok) {
+        const response_report_data = yield call([response_report, response_report.json]);
+        console.log(response_report_data)
+      }
+      yield put(actions.get_report_info_success_action())
+
+    }
   }
   else {
     /* do nothing */
