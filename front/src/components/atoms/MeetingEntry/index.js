@@ -46,9 +46,9 @@ export class MeetingEntry extends React.Component {
     )
 
     return (
-      <Modal trigger={meeting_entry} >  //  해당 카드를 누르면 미팅 정보 창이 뜸
-        <Modal.Header> {this.props.meeting_info.title} </Modal.Header>  //  제목
-        <MeetingInfo meeting_info = {this.props.meeting_info} />        //  미팅 정보
+      <Modal trigger={meeting_entry} >  {/* 해당 카드를 누르면 미팅 정보 창이 뜸 */}
+        <Modal.Header> {this.props.meeting_info.title} </Modal.Header>  {/* 제목 */}
+        <MeetingInfo meeting_info = {this.props.meeting_info} />        {/* 미팅 정보 */}
       </Modal>
     )
   }
