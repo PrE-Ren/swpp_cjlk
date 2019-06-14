@@ -2,6 +2,15 @@ import {take, put, call, fork, select} from 'redux-saga/effects'
 import api from 'services/api'
 import * as actions from './actions'
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export function* watchChangePageNum() {
+  while(true) {
+    const action = yield take(actions.CHANGE_PAGE_NUM_ACTION)
+    yield call(change_page_num_func, action)
+  }
+}
+
 export function* watchLogin() {
   while(true) {
     const action = yield take(actions.LOGIN_ACTION)
@@ -43,6 +52,8 @@ export function* watchConfirmPhone() {
     yield call(confirm_phone_func, action)
   }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export function* watchNew() {
   while(true) {
@@ -86,13 +97,6 @@ export function* watchWithdrawMeeting() {
   }
 }
 
-export function* watchChangePageNum() {
-  while(true) {
-    const action = yield take(actions.CHANGE_PAGE_NUM_ACTION)
-    yield call(change_page_num_func, action)
-  }
-}
-
 export function* watchLoadLeaderinfo() {
   while(true) {
     const action = yield take(actions.LOAD_LEADERINFO_ACTION)
@@ -128,163 +132,235 @@ export function* watchDeleteComment() {
   }
 }
 
-function* get_meetinglist(type) {
-  const get_token = (state) => state.snu_moyeo.mySNU_verification_token
-  const token = yield select(get_token)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function* get_meetinglist(opt) {
+  const get_token = (state) => state.snu_moyeo.mySNU_verification_token
+  const token = yield select(get_token)  //  이메일 토큰
+
+  // 인증된 유저
   if (token !== null) {
     let url
-    if (type.includes('/list'))
-      url = 'http://127.0.0.1:8000' + type + '/?page=1'
+
+    // List 페이지에서 미팅 리스트를 불러오는 경우
+    if (opt.includes('/list')) {
+      // 검색을 한 경우
+      if (opt.length >= 8) {
+        const kind = opt[6]               //  미팅 유형
+        const keyword = opt.substring(8)  //  검색 키워드
+        url = 'http://127.0.0.1:8000/search' + kind + '/?page=1&search=' + keyword
+      }
+      // 일반적인 경우
+      else
+        url = 'http://127.0.0.1:8000' + opt + '/?page=1'
+    }
+
+    // All 페이지에서 미팅 리스트를 불러오는 경우
+    else if (opt.includes('/all')) {
+      const keyword = opt.substring(5)  //  검색 키워드
+      url = 'http://127.0.0.1:8000/searchall/?page=1&search=' + keyword
+    }
     else
-      url = 'http://127.0.0.1:8000/meetinglist/' + type
+      url = 'http://127.0.0.1:8000/meetinglist/' + opt
 
     const get_username = (state) => state.snu_moyeo.username
     const get_password = (state) => state.snu_moyeo.password
-    const username = yield select(get_username)
-    const password = yield select(get_password)
-    const hash = new Buffer(`${username}:${password}`).toString('base64')
+    const username = yield select(get_username)  //  유저 아이디
+    const password = yield select(get_password)  //  유저 패스워드
+    const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저 해시값
 
-    const response = yield call(fetch, url, {
-      method : 'GET',
-      headers: { 'Authorization' : `Basic ${hash}` }
-    })
+    // 미팅 리스트 로드
+    const response = yield call(fetch, url, { method : 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
     if (response.ok) {
       const meetinglist = yield call([response, response.json])
-      console.log('<Fetch ' + type + ' list from back-end (by reload)>')
+      console.log('<Fetch ' + opt + ' list from back-end (by reload)>')
       console.log(meetinglist)
       return meetinglist
     }
     else {
-      alert('Fail to fetch ' + type + ' list from back-end')
+      alert('<Fail to fetch ' + opt + ' list from back-end>')
       return null
     }
   }
+
+  // 인증되지 않은 유저
   else
     return null
 }
 
 export function* reload() {
-  const pathname = window.location.pathname
-  if (pathname == '/') {
-    //alert("Reload " + pathname + " : Set state by data from back-end")
-    const meetinglist_impending = yield call(get_meetinglist, 'impending')
-    const meetinglist_recent = yield call(get_meetinglist, 'recent')
-    if (meetinglist_impending !== null && meetinglist_recent !== null) {
-      console.log('<Dispatch reload_action>')
-      yield put(actions.reload_action('impending', meetinglist_impending))
-      yield put(actions.reload_action('recent', meetinglist_recent))
-    }
-  }
-  else if (pathname == '/mypage') {
-    //alert("Reload " + pathname + " : Set state by data from back-end")
-    const meetinglist_lead = yield call(get_meetinglist, 'lead')
-    const meetinglist_join = yield call(get_meetinglist, 'join')
-    const meetinglist_history = yield call(get_meetinglist, 'history')
-    if (meetinglist_lead !== null && meetinglist_join !== null && meetinglist_history !== null) {
-      console.log('<Dispatch reload_action>')
-      yield put(actions.reload_action('lead', meetinglist_lead))
-      yield put(actions.reload_action('join', meetinglist_join))
-      yield put(actions.reload_action('history', meetinglist_history))
-    }
-  }
-  else if (pathname.includes('/list')) {
-    //alert("Reload " + pathname + " : Set state by data from back-end")
-    const meetinglist = yield call(get_meetinglist, pathname)
-    if (meetinglist !== null) {
-      console.log('<Dispatch reload_action>')
-      yield put(actions.reload_action(pathname, meetinglist))
-    }
-  }
-  else if (pathname == '/auth') {
-    const username = sessionStorage.getItem("username") // 이미 로그인된 상태일 테니까 가져올 수 있음
+  const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
 
-    // 로그인을 안 하고 URL로 바로 접속한 경우
+  // Home 페이지
+  if (pathname == '/') {
+    const meetinglist_impending = yield call(get_meetinglist, 'impending')  //  백엔드에서 미팅 리스트 로드
+    const meetinglist_recent = yield call(get_meetinglist, 'recent')        //  백엔드에서 미팅 리스트 로드
+    if (meetinglist_impending !== null && meetinglist_recent !== null) {
+      yield put(actions.reload_action('impending', meetinglist_impending))  //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+      yield put(actions.reload_action('recent', meetinglist_recent))        //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+    }
+  }
+
+  // MyPage 페이지
+  else if (pathname == '/mypage') {
+    const meetinglist_lead = yield call(get_meetinglist, 'lead')        //  백엔드에서 미팅 리스트 로드
+    const meetinglist_join = yield call(get_meetinglist, 'join')        //  백엔드에서 미팅 리스트 로드
+    const meetinglist_history = yield call(get_meetinglist, 'history')  //  백엔드에서 미팅 리스트 로드
+    if (meetinglist_lead !== null && meetinglist_join !== null && meetinglist_history !== null) {
+      yield put(actions.reload_action('lead', meetinglist_lead))        //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+      yield put(actions.reload_action('join', meetinglist_join))        //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+      yield put(actions.reload_action('history', meetinglist_history))  //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+    }
+  }
+
+  // List 페이지
+  else if (pathname.includes('/list')) {
+    const meetinglist = yield call(get_meetinglist, pathname)  //  백엔드에서 미팅 리스트 로드
+    if (meetinglist !== null)
+      yield put(actions.reload_action(pathname, meetinglist))  //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+  }
+
+  // All 페이지
+  else if (pathname.includes('/all')) {
+    const meetinglist = yield call(get_meetinglist, pathname)  //  백엔드에서 미팅 리스트 로드
+    if (meetinglist !== null)
+      yield put(actions.reload_action(pathname, meetinglist))  //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+  }
+
+  // LoginAuth 페이지
+  else if (pathname == '/auth') {
+    const username = sessionStorage.getItem("username")  //  로그인 페이지에서 넘어올 때 혹은 회원가입 직후 스토어에 저장됨
+
+    // 로그인 X : 로그인 페이지로 리다이렉트
     if (username == null) {
       alert('잘못된 접근입니다.')
-      Object.defineProperty(window.location, 'href', {
-        writable: true,
-        value: '/login'
-      });
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/login' })
     }
+
+    // 로그인 O
     else {
-      const password = sessionStorage.getItem("password") // 이미 로그인된 상태일 테니까 가져올 수 있음
+      const password = sessionStorage.getItem("password")  //  로그인 페이지에서 넘어올 때 혹은 회원가입 직후 스토어에 저장됨
       const url_user = 'http://127.0.0.1:8000/log_in/'
       const hash = new Buffer(`${username}:${password}`).toString('base64')
-      const response_user = yield call(fetch, url_user, {
-        method: 'GET',
-        headers: { 'Authorization' : `Basic ${hash}` }
-      })
+      const response_user = yield call(fetch, url_user, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
 
-      // 이미 둘 다 인증 완료
+      // 인증 O : 홈 페이지로 리다이렉트
       if (response_user.ok) {
         alert('이미 인증을 완료한 유저입니다.')
-        Object.defineProperty(window.location, 'href', {
-          writable: true,
-          value: '/'
-        });
+        Object.defineProperty(window.location, 'href', { writable: true, value: '/' });
       }
 
-      // 최소 둘 중 하나가 인증 미완료
+      // 인증 X
       else {
         const response_user_data = yield call([response_user, response_user.json]);
         const mySNU_verification_token = response_user_data.mySNU_verified ? response_user_data.mySNU_verification_token : null
         const phone_verification_token = response_user_data.phone_verified ? response_user_data.phone_verification_token : null
         const email = response_user_data.mySNU_verified ? response_user_data.email : null
         const phone_number = response_user_data.phone_verified ? response_user_data.phone_number : null
-        yield put(actions.login_success_action(username, password, mySNU_verification_token, phone_verification_token, response_user_data.user_id, email, phone_number, response_user_data.name))
+        yield put(actions.login_success_action(  //  <인증 페이지에서 이미 인증된 필드의 유무 판단을 위한 정보 스토어에 저장>
+          username,                              //  유저 아이디
+          password,                              //  유저 패스워드
+          mySNU_verification_token,              //  이메일 토큰 : 이걸 설정하는 게 진짜 목적 (나머진 사실 불필요)
+          phone_verification_token,              //  폰 토큰 : 이걸 설정하는 게 진짜 목적 (나머진 사실 불필요)
+          response_user_data.user_id,            //  고유값
+          email,                                 //  이메일
+          phone_number,                          //  폰 번호
+          response_user_data.name                //  이름(닉네임)
+        ))
       }
     }
   }
-  else {
-    /* do nothing */
+}
+
+export function* change_page_num_func(action) {
+  const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
+  const get_token = (state) => state.snu_moyeo.mySNU_verification_token
+  const token = yield select(get_token)  //  이메일 토큰
+
+  // 인증된 유저
+  if (token !== null) {
+    let url
+
+    // List 페이지에서 페이지를 넘기는 경우
+    if (action.option == "kind") {
+      // 검색을 한 경우
+      if (pathname.length >= 8) {
+        const kind = pathname[6]               //  미팅 유형
+        const keyword = pathname.substring(8)  //  검색 키워드
+        url = 'http://127.0.0.1:8000/search' + kind + '/?page=' + action.page_num + '&search=' + keyword
+      }
+
+      // 일반적인 경우
+      else
+        url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
+    }
+
+    // All 페이지에서 페이지를 넘기는 경우
+    else if (action.option == "all") {
+      const keyword = pathname.substring(5)  //  검색 키워드
+      url = 'http://127.0.0.1:8000/searchall/?page=' + action.page_num + '&search=' + keyword
+    }
+
+    const get_username = (state) => state.snu_moyeo.username
+    const get_password = (state) => state.snu_moyeo.password
+    const username = yield select(get_username)  //  유저 아이디
+    const password = yield select(get_password)  //  유저 패스워드
+    const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저 해시값
+
+    // 미팅 리스트 로드
+    const response = yield call(fetch, url, { method : 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
+    if (response.ok) {
+      const meetinglist = yield call([response, response.json])
+      console.log('<Fetch ' + action.page_num + 'th meeting list from back-end (by reload)>')
+      console.log(meetinglist)
+      yield put(actions.change_page_num_success_action(action.option, action.page_num, meetinglist))
+    }
+    else {
+      alert('<Fail to fetch ' + action.page_num + 'th meeting list from back-end>')
+    }
   }
 }
 
 export function* login_func(action) {
-  const username = action.username
-  const password = action.password
+  const username = action.username  //  입력한 유저 아이디
+  const password = action.password  //  입력한 유저 패스워드
   const url_token = 'http://127.0.0.1:8000/get_auth_token/'
   const url_user = 'http://127.0.0.1:8000/log_in/'
-  const info = JSON.stringify({ username: username, password: password });
+  const info = JSON.stringify({ username: username, password: password })
+
   const response_token = yield call(fetch, url_token, {
     method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: info,
   })
 
   // 회원가입된 계정 O
   if (response_token.ok) {
-    const hash = new Buffer(`${action.username}:${action.password}`).toString('base64')
-    const response_user = yield call(fetch, url_user, {
-      method: 'GET',
-      headers: { 'Authorization' : `Basic ${hash}` }
-    })
+    const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저의 해시값
+    const response_user = yield call(fetch, url_user, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
 
-    // 홈 페이지로 (인증 완료)
+    // 인증 O : 홈 페이지로 리다이렉트
     if (response_user.ok) {
-      alert('로그인 성공')
       const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_success_action(username, password, response_user_data.mySNU_verification_token, response_user_data.phone_verification_token, response_user_data.user_id, response_user_data.email, response_user_data.phone_number, response_user_data.name))
-      Object.defineProperty(window.location, 'href', {
-        writable: true,
-        value: '/'
-      });
+      yield put(actions.login_success_action(         //  <로그인 성공 : 유저 정보 스토어에 저장>
+        username,                                     //  유저 아이디
+        password,                                     //  유저 패스워드
+        response_user_data.mySNU_verification_token,  //  이메일 토큰
+        response_user_data.phone_verification_token,  //  폰 토큰
+        response_user_data.user_id,                   //  고유값
+        response_user_data.email,                     //  이메일
+        response_user_data.phone_number,              //  폰 번호
+        response_user_data.name                       //  이름(닉네임)
+      ))
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/' })
     }
 
-    // 인증 페이지로 (인증 미완료)
-    else{
-      alert('인증 필요')
-      const response_user_data = yield call([response_user, response_user.json]);
-      // LoginAuth 페이지에서 이미 로그인된 상태인지 판별하기 위해 필요
-      // 그래서 사실 username과 password만 설정해줘도 괜찮음 (근데 일단 수정이 귀찮아서 방치)
-      yield put(actions.login_auth_action(username, password, response_user_data.user_id, response_user_data.name))
-      Object.defineProperty(window.location, 'href', {
-        writable: true,
-        value: '/auth'
-      });
+    // 인증 X : 인증 페이지로 리다이렉트
+    else {
+      alert('인증 절차가 필요합니다.')
+      const response_user_data = yield call([response_user, response_user.json])
+      yield put(actions.login_auth_action(username, password))  //  유저 아이디와 유저 패스워드 스토어에 저장 (인증 페이지에서 필요한 정보)
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/auth' })
     }
   }
 
@@ -294,85 +370,76 @@ export function* login_func(action) {
 }
 
 export function* signup_func(action) {
-  let uid = action.username
-  let upw = action.password
-  let name = action.name
+  let uid = action.username  //  입력한 유저 아이디
+  let upw = action.password  //  입력한 유저 패스워드
+  let name = action.name     //  입력한 이름(닉네임)
   const url = 'http://127.0.0.1:8000/sign_up/'
   const info = JSON.stringify({ username: uid, password: upw, name: name});
+
+  // 새로운 SnuUser 객체 생성 (POST)
   const response = yield call(fetch, url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: info,
+    body: info
   })
+
+  // 회원가입 성공 : 인증 페이지로 리다이렉트
   if (response.ok) {
     alert("회원가입 성공 : 서비스를 이용하려면 이메일 인증과 휴대폰 인증을 완료해야 합니다.")
-    yield put(actions.login_auth_action(uid, upw))
-    Object.defineProperty(window.location, 'href', {
-      writable: true,
-      value: '/auth'
-    });
+    yield put(actions.login_auth_action(uid, upw))  //  유저 아이디와 유저 패스워드 스토어에 저장 (인증 페이지에서 필요한 정보)
+    Object.defineProperty(window.location, 'href', { writable: true, value: '/auth' })
   }
+
+  // 회원가입 실패
   else
     alert("회원가입 실패 : 정보를 바르게 입력하세요.")
 }
 
 export function* send_email_func(action) {
   const url_send_email = 'http://127.0.0.1:8000/send_email/' + action.email + '/'
-  const response_email = yield call(fetch, url_send_email, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_email.ok) {
+  const response_email = yield call(fetch, url_send_email, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
+
+  if (response_email.ok)  //  해당 유저의 이메일 토큰 필드 설정 (by BACK-END)
     alert('이메일로 인증번호가 전송되었습니다.')
-  }
-  else {
+  else
     alert('인증번호 전송 실패')
-  }
 }
 
 export function* send_phone_func(action) {
   const url_send_phone = 'http://127.0.0.1:8000/send_phone/' + action.phone_number + '/'
-  const response_phone = yield call(fetch, url_send_phone, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_phone.ok) {
+  const response_phone = yield call(fetch, url_send_phone, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
+
+  if (response_phone.ok)  //  해당 유저의 폰 토큰 필드 설정 (by BACK-END)
     alert('휴대폰으로 인증번호가 전송되었습니다.')
-  }
-  else {
+  else
     alert('인증번호 전송 실패')
-  }
 }
 
 export function* confirm_email_func(action) {
   const url_send_email = 'http://127.0.0.1:8000/email_auth/' + action.email + '/' + action.email_code + '/'
-  const response_email = yield call(fetch, url_send_email, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_email.ok) {
+  const response_email = yield call(fetch, url_send_email, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
+
+  if (response_email.ok) {  //  해당 유저의 이메일 및 이메일 인증 여부 필드 설정 (by BACK-END)
     alert('인증 완료')
-    yield put(actions.success_email_action(action.email, action.email_code))
+    yield put(actions.success_email_action(action.email, action.email_code))  //  이메일 및 이메일 토큰 설정 (-> 인증 페이지 리렌더링)
   }
-  else {
+  else
     alert('인증번호가 틀렸습니다.')
-  }
 }
 
 export function* confirm_phone_func(action) {
   const url_send_phone = 'http://127.0.0.1:8000/phone_auth/' + action.phone_number + '/' + action.phone_code + '/'
-  const response_phone = yield call(fetch, url_send_phone, {
-    method: 'GET',
-    headers: { 'Authorization' : `Basic ${action.hash}` }
-  })
-  if (response_phone.ok) {
+  const response_phone = yield call(fetch, url_send_phone, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
+
+  if (response_phone.ok) {  //  해당 유저의 폰 번호 및 폰 인증 여부 필드 설정 (by BACK-END)
     alert('인증 완료')
-    yield put(actions.success_phone_action(action.phone_number, action.phone_code))
+    yield put(actions.success_phone_action(action.phone_number, action.phone_code))  //  폰 번호 및 폰 토큰 설정 (-> 인증 페이지 리렌더링)
   }
-  else {
+  else
     alert('인증번호가 틀렸습니다.')
-  }
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
@@ -392,8 +459,6 @@ export function* new_func(action) {
       formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
     else
       formData.append('picture', null, null)
-
-
 
     const response_meeting = yield call(fetch, url_meeting, {
         method: 'POST',
@@ -555,41 +620,6 @@ export function* withdraw_meeting_func(action) {
     console.log('Participate DELETE bad')
 }
 
-export function* change_page_num_func(action) {
-  if (action.page_num > 0) {
-    const pathname = window.location.pathname
-    const get_token = (state) => state.snu_moyeo.mySNU_verification_token
-    const token = yield select(get_token)
-
-    if (token !== null) {
-      const url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
-
-      const get_username = (state) => state.snu_moyeo.username
-      const get_password = (state) => state.snu_moyeo.password
-      const username = yield select(get_username)
-      const password = yield select(get_password)
-      const hash = new Buffer(`${username}:${password}`).toString('base64')
-
-      const response = yield call(fetch, url, {
-        method : 'GET',
-        headers: { 'Authorization' : `Basic ${hash}` }
-      })
-      if (response.ok) {
-        const meetinglist = yield call([response, response.json])
-        console.log('<Fetch ' + action.page_num + 'th meeting list from back-end (by reload)>')
-        console.log(meetinglist)
-        yield put(actions.change_page_num_success_action(action.page_num, meetinglist))
-      }
-      else {
-        alert('Fail to fetch ' + action.page_num + 'th meeting list from back-end')
-      }
-    }
-  }
-  else {
-    alert('No page')
-  }
-}
-
 export function* load_leaderinfo_func(action) {
   const url_leaderinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
   const response_leaderinfo = yield call(fetch, url_leaderinfo, { method : 'GET' })
@@ -618,7 +648,7 @@ export function* load_comments_func(action) {
     const comments = yield call([response_comments, response_comments.json])
     console.log('<Fetch comments of this meeting>')
     console.log(comments)
-    yield put(actions.load_comments_success_action(comments))
+    yield put(actions.load_comments_success_action(comments))  //  댓글 리스트 로드
   }
   else
     alert('<Fail to fetch comments of this meeting>')
@@ -636,13 +666,16 @@ export function* add_comment_func(action) {
       body: info_comment,
   })
 
+  // 댓글 작성
   if (response_comment.ok) {
     console.log('Comment POST ok')
-    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+    const load_action = { type : 'LOAD_COMMENTS_ACTION', meeting_id : action.meeting_id }
+    yield call(load_comments_func, load_action)  //  새로 댓글 리스트를 로드하여 리렌더링
   }
-  else
+  else {
     alert('댓글을 입력해주세요.')
     console.log('Comment POST bad')
+  }
 }
 
 export function* edit_comment_func(action) {
@@ -657,12 +690,16 @@ export function* edit_comment_func(action) {
       body: info_comment,
   })
 
+  // 댓글 수정
   if (response_comment.ok) {
     console.log('Comment PUT ok')
-    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+    const load_action = { type : 'LOAD_COMMENTS_ACTION', meeting_id : action.meeting_id }
+    yield call(load_comments_func, load_action)  //  새로 댓글 리스트를 로드하여 리렌더링
   }
-  else
+  else {
+    alert('댓글을 입력해주세요.')
     console.log('Comment PUT bad')
+  }
 }
 
 export function* delete_comment_func(action) {
@@ -672,13 +709,17 @@ export function* delete_comment_func(action) {
       headers: { 'Authorization': `Basic ${action.hash}` },
   })
 
+  // 댓글 삭제
   if (response_comment.ok) {
     console.log('Comment DELETE ok')
-    window.location.reload()  // 창 안 꺼지게 어떻게 하지
+    const load_action = { type : 'LOAD_COMMENTS_ACTION', meeting_id : action.meeting_id }
+    yield call(load_comments_func, load_action)  //  새로 댓글 리스트를 로드하여 리렌더링
   }
   else
     console.log('Comment DELETE bad')
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 export default function* () {
   yield fork(reload)

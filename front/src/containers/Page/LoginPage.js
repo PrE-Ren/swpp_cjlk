@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    login_click: (username, password) => {
+    login_click: (username, password) => {  //  유저 아이디와 유저 패스워드를 넘겨서 로그인 시도
       dispatch(login_action(username, password))
     }
   }
