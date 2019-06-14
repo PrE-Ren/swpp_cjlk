@@ -648,7 +648,8 @@ export function* load_comments_func(action) {
     const comments = yield call([response_comments, response_comments.json])
     console.log('<Fetch comments of this meeting>')
     console.log(comments)
-    yield put(actions.load_comments_success_action(comments))  //  댓글 리스트 로드
+    sessionStorage.setItem("comments", JSON.stringify(comments))  //  댓글 목록 로드 후 세션 스토리지에 저장
+    yield put(actions.load_comments_success_action())             //  댓글 목록 로드 완료
   }
   else
     alert('<Fail to fetch comments of this meeting>')

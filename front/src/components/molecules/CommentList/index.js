@@ -1,21 +1,22 @@
 import React from 'react'
-import { Button, Comment, Form, Header, Modal } from 'semantic-ui-react'
+import { Button, Comment, Form, Header, Modal, Loader } from 'semantic-ui-react'
 
 // username : 유저 아이디 (해시값을 얻기 위해 필요)
 // password : 유저 패스워드 (해시값을 얻기 위해 필요)
-// comments : 댓글 리스트
+// check_meeting_click : 댓글 리스트 로드 여부
 // meeting_id : 미팅 게시물 고유값
 // add_comment_click : 댓글 작성할 때 액션을 디스패치할 함수
 // edit_comment_click : 댓글 수정할 때 액션을 디스패치할 함수
 // delete_comment_click : 댓글 삭제할 때 액션을 디스패치할 함수
-export const CommentList = ({ username, password, comments, meeting_id,
+export const CommentList = ({ username, password, check_meeting_click, meeting_id,
                               add_comment_click, edit_comment_click, delete_comment_click }) => {
   console.log('<CommentList Rendering>')
   const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저의 해시값
   const change_date = (str) => str.substring(0, 10) + " " + str.substring(11, 19)  //  날짜 보기 좋게 바꾸는 함수
 
-  if (comments != null) {
-    let comment_list = JSON.parse(comments)  //  댓글 리스트
+  // 댓글 목록 로드가 완료되었다면
+  if (check_meeting_click) {
+    let comment_list = JSON.parse(sessionStorage.getItem("comments"))
     let content      //  댓글 작성 시 입력하는 내용
     let new_content  //  댓글 수정 시 새로 입력하는 내용
 
@@ -67,5 +68,5 @@ export const CommentList = ({ username, password, comments, meeting_id,
       </Comment.Group>)
   }
   else
-    return (<div></div>)
+    return <Loader active inline />
 }

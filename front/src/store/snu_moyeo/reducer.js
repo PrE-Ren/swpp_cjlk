@@ -182,11 +182,10 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         }
       }
 
-      case 'LOAD_COMMENTS_SUCCESS_ACTION': {
-        const comments = JSON.stringify(action.comments)
+      case 'LOAD_COMMENTS_SUCCESS_ACTION': {  //  댓글 목록 로드 완료 플래그 설정
         return {
           ...state,
-          comments: comments
+          check_meeting_click: true
         }
       }
 
