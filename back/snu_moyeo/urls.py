@@ -41,8 +41,8 @@ urlpatterns = [
     url('search5/', views.MeetingSearch5View.as_view()),
     url('search6/', views.MeetingSearch6View.as_view()),
 
-    url('reportlist/', views.ReportList.as_view()),
-    #url('reportlist/<int:pk>/', views.ReportDetail.as_view()),
+    path('reportlist/', views.ReportList.as_view()),
+    path('reportlist/<int:pk>/', views.ReportDetail.as_view()),
     #url('reportcreate/', views.ReportCreate.as_view())
     # url(meeting/<int:id>/commnet/ , comment_on_meeting_id.asview),
 ]
