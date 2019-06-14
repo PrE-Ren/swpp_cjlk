@@ -29,3 +29,13 @@ python manage.py migrate
 # run backend server
 python manage.py runserver
 ```
+
+## Frontend (Window)
+```
+# setup javascript package libraries
+cd front
+npm install (Automatic 선택, Yes 선택, semantic/ 선택)
+
+# run frontend server
+npm start
+```
