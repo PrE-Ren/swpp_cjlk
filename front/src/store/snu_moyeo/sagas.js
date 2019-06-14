@@ -497,13 +497,8 @@ export function* new_func(action) {
   formData.append('description', action.meeting_info.description);  //  본문 (입력)
   formData.append('state', 0);                                      //  상태 (자동 입력)
   formData.append('kind', action.meeting_info.kind);                //  유형 (입력)
-
-  // 위도 및 경도 (지도를 클릭할 때 세션 스토리지에 저장)
-  // 지도를 한 번도 안 클릭하면 null 값으로 되어 있기 때문에 이때는 기본값으로 설정
-  if (sessionStorage.getItem("lat") != null) formData.append('latitude', sessionStorage.getItem("lat"))
-  else                                       formData.append('latitude', 37.4615299)
-  if (sessionStorage.getItem("lng") != null) formData.append('longitude', sessionStorage.getItem("lng"))
-  else                                       formData.append('longitude', 126.9519267)
+  formData.append('latitude', sessionStorage.getItem("lat"))        //  위도 (클릭 시 세션 스토리지에 저장, 안 클릭했으면 기본 값)
+  formData.append('longitude', sessionStorage.getItem("lng"))       //  경도 (클릭 시 세션 스토리지에 저장, 안 클릭했으면 기본 값)
 
   // 사진을 지정해주지 않으면 undefined 값이 넘어오므로 이때는 null 값으로 설정
   if (action.meeting_info.picture !== undefined) formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
@@ -560,13 +555,8 @@ export function* modify_func(action) {
   formData.append('description', action.meeting_info.description);  //  본문 (새로 입력)
   formData.append('state', action.meeting_info.state);              //  상태 (기존 값)
   formData.append('kind', action.meeting_info.kind);                //  유형 (기존 값)
-
-  // 위도 및 경도 (지도를 클릭할 때 세션 스토리지에 저장)
-  // 지도를 한 번도 안 클릭하면 null 값으로 되어 있기 때문에 이때는 기존 값으로 설정
-  if (sessionStorage.getItem("lat") != null) formData.append('latitude', sessionStorage.getItem("lat"))
-  else                                       formData.append('latitude', 37.4615299)
-  if (sessionStorage.getItem("lng") != null) formData.append('longitude', sessionStorage.getItem("lng"))
-  else                                       formData.append('longitude', 126.9519267)
+  formData.append('latitude', sessionStorage.getItem("lat"))        //  위도 (클릭 시 세션 스토리지에 저장, 안 클릭했으면 기존 값)
+  formData.append('longitude', sessionStorage.getItem("lng"))       //  경도 (클릭 시 세션 스토리지에 저장, 안 클릭했으면 기존 값)
 
   // 사진을 지정해주지 않으면 undefined 값이 넘어오므로 이때는 null 값으로 설정
   if (action.meeting_info.picture !== undefined) formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
