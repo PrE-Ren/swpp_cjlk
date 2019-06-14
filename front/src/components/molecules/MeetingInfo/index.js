@@ -21,28 +21,39 @@ const dateParse = (data) => {
 export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click, change_meeting_info_click, load_leaderinfo_click}) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')
 
+  const members_text = meeting_info.members.length + '명'
+
+  let result = meeting_info.members.map((num) => console.log(num));
+
   const content =
     <Modal.Description style={{ marginLeft: '10px' }}>
       <List style={{ marginTop: '20px' }}>
         <List.Item>
           <List.Icon name='user circle' />
           <List.Content>주최자 :&nbsp;
-            <Dropdown text={meeting_info.leader} onClick={() => load_leaderinfo_click(meeting_info.leaderid)}>
-              <Dropdown.Menu>
-                <Dropdown.Item>
-                  <Dropdown text='정보보기' >
-                    <Dropdown.Menu>
-                      <Message header='유저 정보' content={<div>
-                        이름 : {sessionStorage.getItem("leader.name")}<br/>
-                        이메일 : {sessionStorage.getItem("leader.email")}<br/>
-                        전화번호 : {sessionStorage.getItem("leader.phone_number")}<br/>
-                        </div>} />
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Dropdown.Item>
-                <Dropdown.Item text='신고하기' />
-              </Dropdown.Menu>
-            </Dropdown>
+            {state.check_leader_click ?
+              <Dropdown text={meeting_info.leader} onClick={() => {state.check_leader_click = false, load_leaderinfo_click(meeting_info.leaderid)}}>
+                <Dropdown.Menu>
+                  <Dropdown.Item>
+                    <Dropdown text='정보보기'>
+                      <Dropdown.Menu>
+                        <Message header='리더 정보' content={<div>
+                          이름 : {sessionStorage.getItem("leader.name")}<br/>
+                          이메일 : {sessionStorage.getItem("leader.email")}<br/>
+                          전화번호 : {sessionStorage.getItem("leader.phone_number")}<br/>
+                          </div>} />
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Dropdown.Item>
+                  <Dropdown.Item text='신고하기' />
+                </Dropdown.Menu>
+              </Dropdown>
+              :
+              <Dropdown text={meeting_info.leader} onClick={() => {state.check_leader_click = false, load_leaderinfo_click(meeting_info.leaderid)}}>
+                <Dropdown.Menu>
+                </Dropdown.Menu>
+              </Dropdown>
+             }
           </List.Content>
         </List.Item>
         <List.Item>
@@ -55,7 +66,18 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         </List.Item>
         <List.Item>
           <List.Icon name='user' />
-          <List.Content>현재 참여 인원 : {meeting_info.members.length}명</List.Content>
+          <List.Content>현재 참여 인원 :
+            <Dropdown text = {members_text}>
+              <Dropdown.Menu>
+                {meeting_info.members.map(mem =>
+                  <Dropdown.Item>
+                    <Dropdown key={mem} text={'유저'+ mem}>
+                    </Dropdown>
+                  </Dropdown.Item>
+                )}
+              </Dropdown.Menu>
+            </Dropdown>
+          </List.Content>
         </List.Item>
         <List.Item>
           <List.Icon name='circle' />

@@ -22,6 +22,7 @@ export const PARTICIPATE_ADD_ACTION = 'PARTICIPATE_ADD_ACTION'
 export const CHANGE_PAGE_NUM_ACTION = 'CHANGE_PAGE_NUM_ACTION'
 export const CHANGE_PAGE_NUM_SUCCESS_ACTION = 'CHANGE_PAGE_NUM_SUCCESS_ACTION'
 export const LOAD_LEADERINFO_ACTION = 'LOAD_LEADERINFO_ACTION'
+export const LOAD_LEADERINFO_SUCCESS_ACTION = 'LOAD_LEADERINFO_SUCCESS_ACTION'
 export const LOAD_COMMENTS_ACTION = 'LOAD_COMMENTS_ACTION'
 export const LOAD_COMMENTS_SUCCESS_ACTION = 'LOAD_COMMENTS_SUCCESS_ACTION'
 export const ADD_COMMENT_ACTION = 'ADD_COMMENT_ACTION'
@@ -233,6 +234,15 @@ export const load_comments_success_action = (comments) => {
   return {
     type : LOAD_COMMENTS_SUCCESS_ACTION,
     comments
+  }
+}
+
+export const load_leaderinfo_success_action = (leader_name, leader_email, leader_phone_number) => {
+  return {
+    type : LOAD_LEADERINFO_SUCCESS_ACTION,
+    leader_name,
+    leader_email,
+    leader_phone_number
   }
 }
 

@@ -55,7 +55,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         if (action.data.phone_verification_token != null) {
           sessionStorage.setItem("phone_verification_token", action.data.phone_verification_token);
           sessionStorage.setItem("phone_number", action.data.phone_number);
-        } 
+        }
         sessionStorage.setItem("user_id", action.data.user_id);
         sessionStorage.setItem("name", action.data.name);
         return {
@@ -85,7 +85,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
           name: action.name
         }
       }
-      
+
       case 'SUCCESS_EMAIL_ACTION' : {
         sessionStorage.setItem("email", action.email);
         sessionStorage.setItem("mySNU_verification_token", action.email_code);
@@ -160,6 +160,16 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         return {
           ...state,
           comments: comments
+        }
+      }
+
+      case 'LOAD_LEADERINFO_SUCCESS_ACTION': {
+        sessionStorage.setItem("leader.name", action.leader_name)
+        sessionStorage.setItem("leader.email", action.leader_email)
+        sessionStorage.setItem("leader.phone_number", action.leader_phone_number)
+        return {
+          ...state,
+          check_leader_click: true
         }
       }
 

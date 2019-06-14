@@ -16,5 +16,7 @@ export const initialState = {
   meetinglist_history : sessionStorage.getItem("history"),
   meetinglist_list : sessionStorage.getItem("list"),
   page_num : sessionStorage.getItem("page_num"),
-  comments : null
+  comments : null,
+  
+  check_leader_click : false
 };
