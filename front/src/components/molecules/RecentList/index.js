@@ -9,7 +9,7 @@ export const RecentList = ({ meetinglist_recent }) => {
     let meetings = JSON.parse(meetinglist_recent)  //  미팅 리스트
     return (
       <Segment raised>
-        <Label as='a' color='blue' ribbon> New </Label>     {/* 라벨 */}
+        <Label as='a' color='blue' ribbon> New! </Label>    {/* 라벨 */}
         <Header as='h2'> 따끈따끈 방금 올라온 모임 </Header>  {/* 제목 */}
         <Card.Group>                                        {/* 각각의 카드는 하나의 미팅 엔트리를 담고 있음 */}
           {meetings.map(meeting_entry =>

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { MeetingCreate } from '../components/molecules/MeetingCreate'
-import { new_action, modify_action } from '../store/snu_moyeo/actions'
+import { new_action, modify_action } from '../store/snu_moyeo/MeetingCreateModify/actions'
 
 const mapStateToProps = (state) => {
   return {

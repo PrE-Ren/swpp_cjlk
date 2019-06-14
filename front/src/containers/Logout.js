@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { Logout } from '../components/atoms/Logout'
-import { logout_action } from '../store/snu_moyeo/actions'
+import { logout_action } from '../store/snu_moyeo/Account/actions'
 
 const mapDispatchToProps = (dispatch) => {
   return {

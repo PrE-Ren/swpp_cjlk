@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { ReportInfo } from '../components/molecules/ReportInfo'
-import { penalty_action } from '../store/snu_moyeo/actions'
+import { penalty_action } from '../store/snu_moyeo/Admin/actions'
 
 const mapStateToProps = (state) => {
   return {

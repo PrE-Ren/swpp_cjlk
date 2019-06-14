@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { MeetingEntry } from '../components/atoms/MeetingEntry'
-import { load_comments_action } from '../store/snu_moyeo/actions'
+import { load_comments_action } from '../store/snu_moyeo/Comment/actions'
 
 const mapStateToProps = (state) => {
   return {

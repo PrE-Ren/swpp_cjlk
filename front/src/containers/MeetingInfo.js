@@ -1,6 +1,8 @@
 import { connect } from 'react-redux'
 import { MeetingInfo } from '../components/molecules/MeetingInfo'
-import { change_meeting_state_action, join_meeting_action, withdraw_meeting_action, change_meeting_info_action, load_leaderinfo_action, load_memberinfo_action } from '../store/snu_moyeo/actions'
+import { change_meeting_state_action, change_meeting_info_action } from '../store/snu_moyeo/MeetingCreateModify/actions'
+import { join_meeting_action, withdraw_meeting_action } from '../store/snu_moyeo/MeetingJoinWithdraw/actions'
+import { load_leaderinfo_action, load_memberinfo_action } from '../store/snu_moyeo/UserLoad/actions'
 
 const mapStateToProps = (state, own_props) => {
   return {

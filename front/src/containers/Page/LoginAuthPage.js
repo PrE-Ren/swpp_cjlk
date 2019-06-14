@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { LoginAuthPage } from '../../components/organisms/LoginAuthPage'
-import { send_email_action, send_phone_action, confirm_email_action, confirm_phone_action, logout_action } from '../../store/snu_moyeo/actions'
+import { send_email_action, send_phone_action, confirm_email_action, confirm_phone_action, logout_action } from '../../store/snu_moyeo/Account/actions'
 
 // 이메일 형식 체크
 const is_valid_email = (email) => {
