@@ -80,3 +80,20 @@ class Comment (models.Model):
     writerid = models.IntegerField(default = -1)
     meetingid = models.ForeignKey('Meeting', related_name = 'comments', on_delete = models.CASCADE)
     content = models.CharField(max_length = 100)
+
+
+class Report (models.Model) :
+    id = models.AutoField(primary_key = True)
+    created = models.DateTimeField(auto_now_add = True)
+    reason = models.CharField(max_length = 100)
+    isHandled = models.BooleanField(default = False)
+    point = models.IntegerField(default = 0)
+
+    reporter = models.ForeignKey('SnuUser', on_delete = models.CASCADE)
+    reporterid = models.IntegerField(default = -1)
+    reportee = models.CharField(max_length = 100, blank = True)
+    #ForeignKey('SnuUser', related_name = 'temp2', on_delete = models.CASCADE)
+    reporteeid = models.IntegerField(default = -1)
+    
+    
+    

@@ -27,10 +27,23 @@ urlpatterns = [
     path('comment/<int:pk>/', views.CommentDetail.as_view()),
     path('comment/meeting/<int:in_meetingid>/', views.CommentOnMeeting.as_view()),
     url(r'^get_auth_token/', obtain_auth_token),
-    url(r'^email_auth/(?P<email>[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3})/(?P<email_token>[0-9]+)/$', views.EmailAuthenticate.as_view()),   # email regular expression
-    url(r'^send_email/(?P<email>[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3})/$', views.SendEmail.as_view()),   # email regular expression
+    url(r'^email_auth/(?P<email>[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3})/(?P<email_token>[0-9]+)/$', views.EmailAuthenticate.as_view()),
+    url(r'^send_email/(?P<email>[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3})/$', views.SendEmail.as_view()),
     url(r'^phone_auth/(?P<phone_number>[0-9]+)/(?P<phone_token>[0-9]+)/$', views.SMSAuthenticate.as_view()),
     url(r'^send_phone/(?P<phone_number>[0-9]+)/$', views.SendPhone.as_view()),
+
+    url('searchall/', views.MeetingSearchAllView.as_view()),
+    url('search0/', views.MeetingSearch0View.as_view()),
+    url('search1/', views.MeetingSearch1View.as_view()),
+    url('search2/', views.MeetingSearch2View.as_view()),
+    url('search3/', views.MeetingSearch3View.as_view()),
+    url('search4/', views.MeetingSearch4View.as_view()),
+    url('search5/', views.MeetingSearch5View.as_view()),
+    url('search6/', views.MeetingSearch6View.as_view()),
+
+    path('reportlist/', views.ReportList.as_view()),
+    path('reportlist/<int:pk>/', views.ReportDetail.as_view()),
+    #url('reportcreate/', views.ReportCreate.as_view())
     # url(meeting/<int:id>/commnet/ , comment_on_meeting_id.asview),
 ]
 

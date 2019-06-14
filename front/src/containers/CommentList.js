@@ -12,14 +12,14 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    add_comment_click: (hash, content, meeting_id) => {
+    add_comment_click: (hash, content, meeting_id) => {  //  댓글 작성
       dispatch(add_comment_action(hash, content, meeting_id))
     },
-    edit_comment_click: (hash, comment_id, meeting_id, writer_id, content) => {
+    edit_comment_click: (hash, comment_id, meeting_id, writer_id, content) => {  //  댓글 수정
       dispatch(edit_comment_action(hash, comment_id, meeting_id, writer_id, content))
     },
-    delete_comment_click: (hash, comment_id) => {
-      dispatch(delete_comment_action(hash, comment_id))
+    delete_comment_click: (hash, comment_id, meeting_id) => {  //  댓글 삭제
+      dispatch(delete_comment_action(hash, comment_id, meeting_id))
     }
   }
 }

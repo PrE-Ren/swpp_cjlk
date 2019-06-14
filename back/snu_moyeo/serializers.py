@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from snu_moyeo.models import Meeting, SnuUser, Participate, Comment
+from snu_moyeo.models import Meeting, SnuUser, Participate, Comment, Report
 from django.db.models import Q
 import django
 
@@ -159,7 +159,9 @@ class CommentSerializer(serializers.ModelSerializer) :
     writer = serializers.ReadOnlyField(source = 'SnuUser.username')
     writer = serializers.CharField(read_only = True)
 
+
     def create(self, validated_data):
+        print(validated_data)
         writer= validated_data['writer']
         idwriter = SnuUser.objects.get(username = writer).id
         validated_data['writerid'] = idwriter
@@ -177,3 +179,60 @@ class CommentSerializer(serializers.ModelSerializer) :
             'meetingid',
             'content'
         )
+
+class ReportSerializer (serializers.ModelSerializer) : 
+    reporter = serializers.ReadOnlyField(source = 'SnuUser.username')
+    reporter = serializers.CharField(read_only = True)
+
+    def validate(self, data):
+        if self.context['request'].method == 'PUT' :
+            if data['isHandled'] == False :
+                raise serializers.ValidationError('Check the Handle')
+            if data['point'] <= 0 :
+                raise serializers.ValidationError('point has to be positive')
+
+        if (self.instance) :
+            if (self.instance.isHandled == True):
+                raise serializers.ValidationError('Already Handled')
+        if self.context['request'].user.username != 'admin' :
+            if self.context['request'].method == 'PUT' :
+                raise serializers.ValidationError("ADMIN PAGE")
+
+        if (self.instance) :
+            target_point = SnuUser.objects.get(pk = data['reporteeid']).point 
+            target_point += data['point']
+            print(target_point)
+            target = SnuUser.objects.get(pk = data['reporteeid']) 
+            target.point = target_point
+            target.save()
+        return data
+
+    def create(self, validated_data):
+        reporter = validated_data['reporter']
+        print(reporter)
+        idreporter = SnuUser.objects.get(username = reporter).id
+        validated_data['reporterid'] = idreporter
+        instance = self.Meta.model(**validated_data)
+
+        reporteeid = validated_data['reporteeid']
+        reporteeusername = SnuUser.objects.get(pk = reporteeid).username
+        validated_data['reportee'] = reporteeusername
+        instance = self.Meta.model(**validated_data)
+        instance.save()
+
+        return instance
+
+    class Meta:
+        model = Report
+        fields = (
+                'id',
+                'created',
+                'reason',
+                'isHandled',
+                'point',
+                'reporter',
+                'reporterid',
+                'reportee',
+                'reporteeid'
+                )
+
