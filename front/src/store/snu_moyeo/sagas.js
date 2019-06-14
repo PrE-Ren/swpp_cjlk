@@ -1,4 +1,4 @@
-import {take, put, call, fork, select} from 'redux-saga/effects'
+import {take, put, call, fork, select, all} from 'redux-saga/effects'
 import api from 'services/api'
 import * as actions from './actions'
 
@@ -104,6 +104,13 @@ export function* watchLoadLeaderinfo() {
   }
 }
 
+export function* watchLoadMemberinfo() {
+  while(true) {
+    const action = yield take(actions.LOAD_MEMBERINFO_ACTION)
+    yield call(load_memberinfo_func, action)
+  }
+}
+
 export function* watchLoadComments() {
   while(true) {
     const action = yield take(actions.LOAD_COMMENTS_ACTION)
@@ -132,6 +139,12 @@ export function* watchDeleteComment() {
   }
 }
 
+export function* watchPenalty() {
+  while(true) {
+    const action = yield take(actions.PENALTY_ACTION)
+    yield call(penalty_func, action)
+  }
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function* get_meetinglist(opt) {
@@ -270,6 +283,34 @@ export function* reload() {
       }
     }
   }
+  else if (pathname == '/admin') {
+    const username = sessionStorage.getItem("username")
+    // 로그인 X : 로그인 페이지로 리다이렉트
+    if (username == null) {
+      alert('잘못된 접근입니다.')
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/login' })
+    }
+    // 관리자 아님 : 홈 페이지로 리다이렉트
+    else if (username != 'admin') {
+      alert('오직 관리자만이 볼 수 있습니다.')
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/' })
+    }
+    else
+    {
+      const password = sessionStorage.getItem("password")
+      const url_report = 'http://127.0.0.1:8000/report/'
+      const hash = new Buffer(`${username}:${password}`).toString('base64')
+      const response_report = yield call(fetch, url_report, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
+      if (response_report.ok) {
+        const response_report_data = yield call([response_report, response_report.json]);
+        console.log(response_report_data)
+        yield put(actions.get_report_info_success_action(response_report_data))
+      }
+    }
+  }
+  else {
+    /* do nothing */
+  }
 }
 
 export function* change_page_num_func(action) {
@@ -358,7 +399,6 @@ export function* login_func(action) {
     // 인증 X : 인증 페이지로 리다이렉트
     else {
       alert('인증 절차가 필요합니다.')
-      const response_user_data = yield call([response_user, response_user.json])
       yield put(actions.login_auth_action(username, password))  //  유저 아이디와 유저 패스워드 스토어에 저장 (인증 페이지에서 필요한 정보)
       Object.defineProperty(window.location, 'href', { writable: true, value: '/auth' })
     }
@@ -445,6 +485,7 @@ export function* new_func(action) {
   const url_meeting = 'http://127.0.0.1:8000/meeting/'
   const url_participate = 'http://127.0.0.1:8000/participate/'
   const formData = new FormData();
+
   if (action.meeting_info.min_people > 1 && action.meeting_info.max_people > 1) {
     formData.append('title', action.meeting_info.title);
     formData.append('due', action.meeting_info.due);
@@ -453,6 +494,14 @@ export function* new_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', 0);
     formData.append('kind', action.meeting_info.kind);
+
+    if(sessionStorage.getItem("lat") == null){
+      sessionStorage.setItem("lat", 37.4615299)
+    }
+    if(sessionStorage.getItem("lng") == null){
+      sessionStorage.setItem("lng", 126.9519267)
+    }
+
     formData.append('latitude', sessionStorage.getItem("lat"));
     formData.append('longitude', sessionStorage.getItem("lng"));
     if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
@@ -515,6 +564,14 @@ export function* modify_func(action) {
     formData.append('description', action.meeting_info.description);
     formData.append('state', action.meeting_info.state);
     formData.append('kind', action.meeting_info.kind);
+
+    if(sessionStorage.getItem("lat") == null){
+      sessionStorage.setItem("lat", 37.4615299)
+    }
+    if(sessionStorage.getItem("lng") == null){
+      sessionStorage.setItem("lng", 126.9519267)
+    }
+
     formData.append('latitude', sessionStorage.getItem("lat"));
     formData.append('longitude', sessionStorage.getItem("lng"));
     if (action.meeting_info.picture !== undefined)  //  사진을 지정해주지 않으면(undefined) null 값으로 설정
@@ -624,20 +681,46 @@ export function* load_leaderinfo_func(action) {
   const url_leaderinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
   const response_leaderinfo = yield call(fetch, url_leaderinfo, { method : 'GET' })
 
-  console.log(response_leaderinfo)
   if (response_leaderinfo.ok) {
     const leaderinfo = yield call([response_leaderinfo, response_leaderinfo.json])
-    sessionStorage.removeItem("leader.name")
-    sessionStorage.removeItem("leader.email")
-    sessionStorage.removeItem("leader.phone_number")
-
-    sessionStorage.setItem("leader.name", leaderinfo.name)
-    sessionStorage.setItem("leader.email", leaderinfo.email)
-    sessionStorage.setItem("leader.phone_number", leaderinfo.phone_number)
+    yield put(actions.load_leaderinfo_success_action(leaderinfo.name, leaderinfo.email, leaderinfo.phone_number))
   }
   else {
     alert('leader 정보 읽어오지 못함')
   }
+}
+
+export function* load_memberinfo_func(action) {
+  let url_memberinfo = new Array();
+  let response_memberinfo
+  let memberinfo
+  let member_list = new Array();
+  let i = 0, j= 0
+  let x = 0
+  action.members.map((member_id) =>
+  {
+    url_memberinfo[i] = 'http://127.0.0.1:8000/user/' + member_id + '/',
+    i = i + 1;
+  })
+
+  while(j < i){
+    response_memberinfo = yield call(fetch, url_memberinfo[j], { method : 'GET' })
+    member_list[x] = new Array();
+    if(response_memberinfo.ok) {
+      memberinfo = yield call([response_memberinfo, response_memberinfo.json])
+      member_list[x][0] = memberinfo.username
+      member_list[x][1] = memberinfo.name
+      member_list[x][2] = memberinfo.email
+      member_list[x][3] = memberinfo.phone_number
+      x = x + 1;
+    }
+    else {
+      alert('member정보 읽어오지 못 함')
+    }
+
+    j = j + 1;
+  }
+  yield put(actions.load_memberinfo_success_action(member_list))
 }
 
 export function* load_comments_func(action) {
@@ -720,7 +803,26 @@ export function* delete_comment_func(action) {
     console.log('Comment DELETE bad')
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+export function* penalty_func(action) {
+  const report_info = action.report_info
+  const url_confirm_report = 'http://127.0.0.1:8000/report/' + report_info.id + '/'
+  console.log(report_info)
+  const report_info_modified = JSON.stringify({ reason: report_info.reason, isHandled: action.flag, point: action.points, reporterid: report_info.reporterid, reportee: report_info.reportee, reporteeid: report_info.reporteeid})
+  const response_report = yield call(fetch, url_confirm_report, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Basic ${action.hash}`,
+        'Content-Type': 'application/json',
+      },
+      body: report_info_modified,
+  })
+  if (response_report.ok) {
+    console.log('REPORT PUT ok')
+    window.location.reload()
+  }
+  else
+    console.log('REPORT PUT bad')
+}
 
 export default function* () {
   yield fork(reload)
@@ -738,8 +840,10 @@ export default function* () {
   yield fork(watchWithdrawMeeting)
   yield fork(watchChangePageNum)
   yield fork(watchLoadLeaderinfo)
+  yield fork(watchLoadMemberinfo)
   yield fork(watchLoadComments)
   yield fork(watchAddComment)
   yield fork(watchEditComment)
   yield fork(watchDeleteComment)
+  yield fork(watchPenalty)
 }
