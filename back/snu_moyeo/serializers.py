@@ -185,14 +185,31 @@ class ReportSerializer (serializers.ModelSerializer) :
     reporter = serializers.CharField(read_only = True)
 
     def validate(self, data):
-        print('hi')
+        if self.context['request'].method == 'PUT' :
+            if data['isHandled'] == False :
+                raise serializers.ValidationError('Check the Handle')
+            if data['point'] <= 0 :
+                raise serializers.ValidationError('point has to be positive')
+
+        if (self.instance) :
+            if (self.instance.isHandled == True):
+                raise serializers.ValidationError('Already Handled')
         if self.context['request'].user.username != 'admin' :
-            print('not admin')
-            if self.context['request'].method != 'POST' :
+            if self.context['request'].method == 'PUT' :
                 raise serializers.ValidationError("ADMIN PAGE")
+
+        if (self.instance) :
+            target_point = SnuUser.objects.get(pk = data['reporteeid']).point 
+            target_point += data['point']
+            print(target_point)
+            target = SnuUser.objects.get(pk = data['reporteeid']) 
+            target.point = target_point
+            target.save()
         return data
+
     def create(self, validated_data):
         reporter = validated_data['reporter']
+        print(reporter)
         idreporter = SnuUser.objects.get(username = reporter).id
         validated_data['reporterid'] = idreporter
         instance = self.Meta.model(**validated_data)
@@ -204,6 +221,7 @@ class ReportSerializer (serializers.ModelSerializer) :
         instance.save()
 
         return instance
+
     class Meta:
         model = Report
         fields = (

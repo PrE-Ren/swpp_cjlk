@@ -469,18 +469,33 @@ class ReportList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(reporter = self.request.user)
+    
+    def get_queryset(self):
+        user = self.request.user
+        if (user.is_superuser):
+            return Report.objects.all()
+        return Meeting.objects.none()
+    
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
 
 
-
 class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportSerializer
-    #permission_classes = (SuperUserOnlyAccess,)
+    def get_queryset(self):
+        user = self.request.user
+        if (user.is_superuser):
+            return Report.objects.all()
+        return Meeting.objects.none()
 
-
+    def delete(self, request, *args, **kwargs) :
+        target = SnuUser.objects.get(pk = self.get_object().reporteeid)
+        target_point = self.get_object().point
+        target.point -= target_point
+        target.save()
+        return self.destroy(request, *args, **kwargs)
 
 
 '''
