@@ -145,6 +145,7 @@ export function* watchPenalty() {
     yield call(penalty_func, action)
   }
 }
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 function* get_meetinglist(opt) {
@@ -583,19 +584,20 @@ export function* change_meeting_state_func(action) {
   let meeting_id = action.meeting_info.id
   const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`
   const formData = new FormData();
-  formData.append('title', action.meeting_info.title);
-  formData.append('due', action.meeting_info.due);
-  formData.append('min_people', action.meeting_info.min_people);
-  formData.append('max_people', action.meeting_info.max_people);
-  formData.append('description', action.meeting_info.description);
-  formData.append('state', action.new_state);
-  formData.append('kind', action.meeting_info.kind);
 
-  if (action.meeting_info.picture !== null)
-    formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name)
-  else
-    formData.append('picture', null, null)
+  formData.append('title', action.meeting_info.title);              //  제목 (기존값)
+  formData.append('due', action.meeting_info.due);                  //  마감 기한 (기존 값)
+  formData.append('min_people', action.meeting_info.min_people);    //  최소 인원 (기존 값)
+  formData.append('max_people', action.meeting_info.max_people);    //  최대 인원 (기존 값)
+  formData.append('description', action.meeting_info.description);  //  본문 (기존 값)
+  formData.append('state', action.new_state);                       //  새로운 상태 값
+  formData.append('kind', action.meeting_info.kind);                //  유형 (기존 값)
 
+  // 사진 (기존 값)
+  if (action.meeting_info.picture !== null) formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name)
+  else                                      formData.append('picture', null, null)
+
+  // Meeting 모델 PUT
   const response_meeting = yield call(fetch, url_meeting, {
       method: 'PUT',
       headers: { 'Authorization': `Basic ${action.hash}` },
@@ -613,14 +615,16 @@ export function* change_meeting_state_func(action) {
 }
 
 export function* change_meeting_info_func(action) {
-  const meeting_info = JSON.stringify(action.meeting_info)
-  sessionStorage.setItem("meeting_info", meeting_info)
-  window.location.href = "/new"
+  const meeting_info = JSON.stringify(action.meeting_info)  //  수정하려는 미팅 정보를
+  sessionStorage.setItem("meeting_info", meeting_info)      //  세션 스토리지에 저장하고
+  window.location.href = "/new"                             //  New 페이지로 리다이렉트
 }
 
 export function* join_meeting_func(action) {
   const url_participate = 'http://127.0.0.1:8000/participate/'
-  const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: action.meeting_id });
+  const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: action.meeting_id });  //  POST할 Participate 객체 정보
+
+  // Participate 모델 POST
   const response_participate = yield call(fetch, url_participate, {
       method: 'POST',
       headers: {
@@ -631,11 +635,9 @@ export function* join_meeting_func(action) {
   })
   if (response_participate.ok) {
     console.log('Participate POST ok')
-    // const participate_info = yield call([response_participate, response_participate.json])
     window.location.reload()
   }
-  else
-  {
+  else {
     alert("참여하고자 하는 모임의 인원이 가득 찼습니다")
     console.log('Participate POST bad')
   }
@@ -644,8 +646,10 @@ export function* join_meeting_func(action) {
 export function* withdraw_meeting_func(action) {
   const url = `http://127.0.0.1:8000/participate/${action.user_id}/${action.meeting_id}/`
   const response = yield call(fetch, url, { method: 'GET' })
-  const participate_id = yield call([response, response.json])
+  const participate_id = yield call([response, response.json])  //  DELETE할 Participate 객체의 고유값
   const url_participate = `http://127.0.0.1:8000/participate/${participate_id}/`
+
+  // Participate 모델 DELETE
   const response_participate = yield call(fetch, url_participate, {
       method: 'DELETE',
       headers: { 'Authorization': `Basic ${action.hash}` }
@@ -787,10 +791,18 @@ export function* delete_comment_func(action) {
 
 export function* penalty_func(action) {
   const report_info = action.report_info
-  const url_confirm_report = 'http://127.0.0.1:8000/report/' + report_info.id + '/'
-  console.log(report_info)
-  const report_info_modified = JSON.stringify({ reason: report_info.reason, isHandled: action.flag, point: action.points, reporterid: report_info.reporterid, reportee: report_info.reportee, reporteeid: report_info.reporteeid})
-  const response_report = yield call(fetch, url_confirm_report, {
+  const url_report = 'http://127.0.0.1:8000/report/' + report_info.id + '/'
+  const report_info_modified = JSON.stringify({
+    reason: report_info.reason,
+    isHandled: action.flag,  //  관리자가 입력한 값
+    point: action.points,    //  관리자가 입력한 값
+    reporterid: report_info.reporterid,
+    reportee: report_info.reportee,
+    reporteeid: report_info.reporteeid
+  })
+
+  // Report 모델 PUT
+  const response_report = yield call(fetch, url_report, {
       method: 'PUT',
       headers: {
         'Authorization': `Basic ${action.hash}`,
