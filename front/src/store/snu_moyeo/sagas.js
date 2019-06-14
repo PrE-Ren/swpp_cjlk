@@ -202,7 +202,7 @@ function* get_meetinglist(opt) {
     return null
 }
 
-export function* reload() {
+export function* reload_meeting() {
   const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
 
   // Home 페이지
@@ -240,9 +240,13 @@ export function* reload() {
     if (meetinglist !== null)
       yield put(actions.reload_action(pathname, meetinglist))  //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
   }
+}
+
+export function* reload_auth() {
+  const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
 
   // LoginAuth 페이지
-  else if (pathname == '/auth') {
+  if (pathname == '/auth') {
     const username = sessionStorage.getItem("username")  //  로그인 페이지에서 넘어올 때 혹은 회원가입 직후 스토어에 저장됨
 
     // 로그인 X : 로그인 페이지로 리다이렉트
@@ -284,9 +288,13 @@ export function* reload() {
       }
     }
   }
+}
+
+export function* reload_admin() {
+  const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
 
   // ReportAdmin 페이지
-  else if (pathname == '/admin') {
+  if (pathname == '/admin') {
     const username = sessionStorage.getItem("username")
 
     // 로그인 X : 로그인 페이지로 리다이렉트
@@ -305,6 +313,8 @@ export function* reload() {
     else {
       const password = sessionStorage.getItem("password")
       const url_report = 'http://127.0.0.1:8000/report/'
+      console.log(username)
+      console.log(password)
       const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저의 해시값
 
       //  백엔드에서 신고 리스트 로드
@@ -819,7 +829,9 @@ export function* penalty_func(action) {
 }
 
 export default function* () {
-  yield fork(reload)
+  yield fork(reload_meeting)
+  yield fork(reload_auth)
+  yield fork(reload_admin)
   yield fork(watchLogin)
   yield fork(watchSignup)
   yield fork(watchSendEmail)
