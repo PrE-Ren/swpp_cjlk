@@ -31,7 +31,7 @@ export const ADD_COMMENT_ACTION = 'ADD_COMMENT_ACTION'
 export const EDIT_COMMENT_ACTION = 'EDIT_COMMENT_ACTION'
 export const DELETE_COMMENT_ACTION = 'DELETE_COMMENT_ACTION'
 export const PENALTY_ACTION = 'PENALTY_ACTION'
-export const GET_REPORT_INFO_SUCCESS_ACTION = 'GET_REPORT_INFO_SUCCESS_ACTION'
+export const GET_REPORT_SUCCESS_ACTION = 'GET_REPORT_SUCCESS_ACTION'
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -223,6 +223,7 @@ export const load_memberinfo_action = (members) => {
     members
   }
 }
+
 export const load_comments_action = (meeting_id) => {
   return {
     type : LOAD_COMMENTS_ACTION,
@@ -230,19 +231,15 @@ export const load_comments_action = (meeting_id) => {
   }
 }
 
-export const load_comments_success_action = (comments) => {
+export const load_comments_success_action = () => {
   return {
-    type : LOAD_COMMENTS_SUCCESS_ACTION,
-    comments
+    type : LOAD_COMMENTS_SUCCESS_ACTION
   }
 }
 
-export const load_leaderinfo_success_action = (leader_name, leader_email, leader_phone_number) => {
+export const load_leaderinfo_success_action = () => {
   return {
-    type : LOAD_LEADERINFO_SUCCESS_ACTION,
-    leader_name,
-    leader_email,
-    leader_phone_number
+    type : LOAD_LEADERINFO_SUCCESS_ACTION
   }
 }
 
@@ -252,7 +249,6 @@ export const load_memberinfo_success_action = (member_list) => {
     member_list
   }
 }
-
 
 export const add_comment_action = (hash, content, meeting_id) => {
   return {
@@ -283,10 +279,10 @@ export const delete_comment_action = (hash, comment_id, meeting_id) => {
   }
 }
 
-export const get_report_info_success_action = (report_info_list) => {
+export const get_report_success_action = (report_list) => {
   return {
-    type : GET_REPORT_INFO_SUCCESS_ACTION,
-    report_info_list
+    type : GET_REPORT_SUCCESS_ACTION,
+    report_list
   }
 }
 

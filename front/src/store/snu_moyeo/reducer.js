@@ -222,18 +222,13 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
 
       case 'LOAD_COMMENTS_SUCCESS_ACTION': {
-        const comments = JSON.stringify(action.comments)
         return {
           ...state,
           check_meeting_click: true
         }
       }
 
-
       case 'LOAD_LEADERINFO_SUCCESS_ACTION': {
-        sessionStorage.setItem("leader.name", action.leader_name)
-        sessionStorage.setItem("leader.email", action.leader_email)
-        sessionStorage.setItem("leader.phone_number", action.leader_phone_number)
         return {
           ...state,
           check_leader_click: true
@@ -241,22 +236,18 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
 
       case 'LOAD_MEMBERINFO_SUCCESS_ACTION': {
-        sessionStorage.setItem("member_list", action.member_list)
         return {
           ...state,
-          member_list : action.member_list,
           check_member_click: true
         }
       }
 
-      case 'GET_REPORT_INFO_SUCCESS_ACTION': {
-        const report_info_list = JSON.stringify(action.report_info_list)
-        console.log("Set")
-        sessionStorage.setItem("report", report_info_list)
+      case 'GET_REPORT_SUCCESS_ACTION': {
+        const report_list = JSON.stringify(action.report_list)
+        sessionStorage.setItem("report_list", report_list)
         return {
           ...state,
-          report_info_list: report_info_list
-
+          report_list: report_list
         }
       }
 

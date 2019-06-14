@@ -29,6 +29,8 @@ export class Map extends React.Component {
         center: new daum.maps.LatLng(this.props.meeting_info.latitude, this.props.meeting_info.longitude),
         level: 4
       });
+      sessionStorage.setItem("lat", this.props.meeting_info.latitude)
+      sessionStorage.setItem("lng", this.props.meeting_info.longitude)
     }
 
     let infowindow = new daum.maps.InfoWindow();

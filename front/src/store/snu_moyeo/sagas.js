@@ -283,33 +283,37 @@ export function* reload() {
       }
     }
   }
+
+  // ReportAdmin 페이지
   else if (pathname == '/admin') {
     const username = sessionStorage.getItem("username")
+
     // 로그인 X : 로그인 페이지로 리다이렉트
     if (username == null) {
       alert('잘못된 접근입니다.')
       Object.defineProperty(window.location, 'href', { writable: true, value: '/login' })
     }
-    // 관리자 아님 : 홈 페이지로 리다이렉트
+
+    // 관리자 X : 홈 페이지로 리다이렉트
     else if (username != 'admin') {
       alert('오직 관리자만이 볼 수 있습니다.')
       Object.defineProperty(window.location, 'href', { writable: true, value: '/' })
     }
-    else
-    {
+
+    // 관리자 O
+    else {
       const password = sessionStorage.getItem("password")
       const url_report = 'http://127.0.0.1:8000/report/'
-      const hash = new Buffer(`${username}:${password}`).toString('base64')
+      const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저의 해시값
+
+      //  백엔드에서 신고 리스트 로드
       const response_report = yield call(fetch, url_report, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
+
       if (response_report.ok) {
         const response_report_data = yield call([response_report, response_report.json]);
-        console.log(response_report_data)
-        yield put(actions.get_report_info_success_action(response_report_data))
+        yield put(actions.get_report_success_action(response_report_data))  //  불러온 신고 리스트를 스토어에 저장 (by reducer)
       }
     }
-  }
-  else {
-    /* do nothing */
   }
 }
 
@@ -670,44 +674,45 @@ export function* load_leaderinfo_func(action) {
 
   if (response_leaderinfo.ok) {
     const leaderinfo = yield call([response_leaderinfo, response_leaderinfo.json])
-    yield put(actions.load_leaderinfo_success_action(leaderinfo.name, leaderinfo.email, leaderinfo.phone_number))
+    sessionStorage.setItem("leader.name", action.leader_name)                  //  리더 이름(닉네임) 로드 후 세션 스토리지에 저장
+    sessionStorage.setItem("leader.email", action.leader_email)                //  리더 이메일 로드 후 세션 스토리지에 저장
+    sessionStorage.setItem("leader.phone_number", action.leader_phone_number)  //  리더 폰 번호 로드 후 세션 스토리지에 저장
+    yield put(actions.load_leaderinfo_success_action())                        //  리더 정보 로드 완료
   }
-  else {
-    alert('leader 정보 읽어오지 못함')
-  }
+  else
+    alert('<Fail to fetch leader information>')
 }
 
 export function* load_memberinfo_func(action) {
-  let url_memberinfo = new Array();
+  let url = new Array();
   let response_memberinfo
   let memberinfo
-  let member_list = new Array();
-  let i = 0, j= 0
-  let x = 0
+  let memberinfo_list = new Array();
+  let i = 0, j = 0, x = 0
   action.members.map((member_id) =>
   {
-    url_memberinfo[i] = 'http://127.0.0.1:8000/user/' + member_id + '/',
+    url[i] = 'http://127.0.0.1:8000/user/' + member_id + '/',
     i = i + 1;
   })
 
-  while(j < i){
-    response_memberinfo = yield call(fetch, url_memberinfo[j], { method : 'GET' })
-    member_list[x] = new Array();
-    if(response_memberinfo.ok) {
+  while (j < i) {
+    response_memberinfo = yield call(fetch, url[j], { method : 'GET' })
+    memberinfo_list[x] = new Array();
+    if (response_memberinfo.ok) {
       memberinfo = yield call([response_memberinfo, response_memberinfo.json])
-      member_list[x][0] = memberinfo.username
-      member_list[x][1] = memberinfo.name
-      member_list[x][2] = memberinfo.email
-      member_list[x][3] = memberinfo.phone_number
+      memberinfo_list[x][0] = memberinfo.username
+      memberinfo_list[x][1] = memberinfo.name
+      memberinfo_list[x][2] = memberinfo.email
+      memberinfo_list[x][3] = memberinfo.phone_number
       x = x + 1;
     }
-    else {
-      alert('member정보 읽어오지 못 함')
-    }
-
+    else
+      alert('<Fail to fetch member information>')
     j = j + 1;
   }
-  yield put(actions.load_memberinfo_success_action(member_list))
+
+  sessionStorage.setItem("member_list", JSON.stringify(memberinfo_list))  //  참여 멤버 정보 로드 후 세션 스토리지에 저장
+  yield put(actions.load_memberinfo_success_action(memberinfo_list))      //  참여 멤버 정보 로드 완료
 }
 
 export function* load_comments_func(action) {
