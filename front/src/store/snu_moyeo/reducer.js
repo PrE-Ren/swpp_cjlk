@@ -245,6 +245,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
 
       case 'GET_REPORT_INFO_SUCCESS_ACTION': {
         const report_info_list = JSON.stringify(action.report_info_list)
+        console.log("Set")
         sessionStorage.setItem("report", report_info_list)
         return {
           ...state,

@@ -1,13 +1,21 @@
 import { connect } from 'react-redux'
 import { ReportInfo } from '../components/molecules/ReportInfo'
-import { give_penalty_action } from '../store/snu_moyeo/actions'
+import { penalty_action } from '../store/snu_moyeo/actions'
+
+
+const mapStateToProps = (state) => {
+  return {
+    username : state.snu_moyeo.username,
+    password : state.snu_moyeo.password
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    give_penalty_click: (user_id, points) => {
-      dispatch(give_penalty_action(user_id, points))
+    penalty_click: (hash, flag, report_info, points) => {
+      dispatch(penalty_action(hash, flag, report_info, points))
     }
   }
 }
 
-export default connect(null, mapDispatchToProps)(ReportInfo)
+export default connect(mapStateToProps, mapDispatchToProps)(ReportInfo)

@@ -132,10 +132,10 @@ export function* watchDeleteComment() {
   }
 }
 
-export function* watchGivePenalty() {
+export function* watchPenalty() {
   while(true) {
-    const action = yield take(actions.GIVE_PENALTY_ACTION)
-    yield call(give_penalty_func, action)
+    const action = yield take(actions.PENALTY_ACTION)
+    yield call(penalty_func, action)
   }
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,22 +279,26 @@ export function* reload() {
   else if (pathname == '/admin') {
     const username = sessionStorage.getItem("username")
     // 로그인 X : 로그인 페이지로 리다이렉트
-    if (username != 'admin') {
+    if (username == null) {
       alert('잘못된 접근입니다.')
       Object.defineProperty(window.location, 'href', { writable: true, value: '/login' })
+    }
+    // 관리자 아님 : 홈 페이지로 리다이렉트
+    else if (username != 'admin') {
+      alert('오직 관리자만이 볼 수 있습니다.')
+      Object.defineProperty(window.location, 'href', { writable: true, value: '/' })
     }
     else
     {
       const password = sessionStorage.getItem("password")
-      const url_report = 'http://127.0.0.1:8000/reportlist/'
+      const url_report = 'http://127.0.0.1:8000/report/'
       const hash = new Buffer(`${username}:${password}`).toString('base64')
       const response_report = yield call(fetch, url_report, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
-      if (response_user.ok) {
+      if (response_report.ok) {
         const response_report_data = yield call([response_report, response_report.json]);
         console.log(response_report_data)
+        yield put(actions.get_report_info_success_action(response_report_data))
       }
-      yield put(actions.get_report_info_success_action())
-
     }
   }
   else {
@@ -388,7 +392,6 @@ export function* login_func(action) {
     // 인증 X : 인증 페이지로 리다이렉트
     else {
       alert('인증 절차가 필요합니다.')
-      const response_user_data = yield call([response_user, response_user.json])
       yield put(actions.login_auth_action(username, password))  //  유저 아이디와 유저 패스워드 스토어에 저장 (인증 페이지에서 필요한 정보)
       Object.defineProperty(window.location, 'href', { writable: true, value: '/auth' })
     }
@@ -749,9 +752,25 @@ export function* delete_comment_func(action) {
     console.log('Comment DELETE bad')
 }
 
-export function* give_penalty_func(action) {
-  const user_id = action.user_id
-  const points = action.points
+export function* penalty_func(action) {
+  const report_info = action.report_info
+  const url_confirm_report = 'http://127.0.0.1:8000/report/' + report_info.id + '/'
+  console.log(report_info)
+  const report_info_modified = JSON.stringify({ reason: report_info.reason, isHandled: action.flag, point: action.points, reporterid: report_info.reporterid, reportee: report_info.reportee, reporteeid: report_info.reporteeid})
+  const response_report = yield call(fetch, url_confirm_report, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Basic ${action.hash}`,
+        'Content-Type': 'application/json',
+      },
+      body: report_info_modified,
+  })
+  if (response_report.ok) {
+    console.log('REPORT PUT ok')
+    window.location.reload()
+  }
+  else
+    console.log('REPORT PUT bad')
 }
 
 export default function* () {
@@ -774,5 +793,5 @@ export default function* () {
   yield fork(watchAddComment)
   yield fork(watchEditComment)
   yield fork(watchDeleteComment)
-  yield fork(watchGivePenalty)
+  yield fork(watchPenalty)
 }

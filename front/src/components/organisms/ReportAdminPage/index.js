@@ -1,13 +1,35 @@
 import React from 'react'
 import ReportInfo from '../../../containers/ReportInfo'
+import { Card, Header, Grid, Modal } from 'semantic-ui-react'
 
-export const ReportAdminPage = (state) => {
-    //if(state.username == 'admin') 등의 요소가 필요하나 아직 백엔드 구현 덜되어서 놔둠
-    if(state.report_info_list != null)
+export const ReportAdminPage = ({username, report_info_list}) => {
+    console.log(username)
+    if(username == 'admin')
     {
-        let report_infos = JSON.parse(state.report_info_list)
-        {report_infos.map(report_info =>
-            <ReportInfo report_info = {report_info}/>
-        )}
+        console.log("hi")
+        console.log(report_info_list)
+        if(report_info_list != null)
+        {
+            console.log("something is in")
+            let report_infos = JSON.parse(report_info_list)
+            return(   
+              <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+                <Grid.Column>
+                <Header as='h1' color='teal' textAlign='center'>User Reports</Header>
+                <Card.Group>      
+                    {report_infos.map(report_info =>
+                    <Card key = {report_info.id}>
+                        <ReportInfo report_info = {report_info}/>
+                    </Card> 
+                    )}
+                </Card.Group> 
+                </Grid.Column>
+              </Grid>
+            )
+        }
+        else
+            return (<div></div>)
     }
+    else
+        return (<div></div>)
 }
