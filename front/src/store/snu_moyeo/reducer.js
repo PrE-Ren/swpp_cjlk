@@ -183,9 +183,6 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         }
       }
 
-<<<<<<< HEAD
-      case 'LOAD_COMMENTS_SUCCESS_ACTION': {  //  댓글 목록 로드 완료 플래그 설정
-=======
       case 'SIGNUP_SUCCESS_ACTION': {
         return state
       }
@@ -226,7 +223,6 @@ const snu_moyeo_reducer = (state = initialState, action) => {
 
       case 'LOAD_COMMENTS_SUCCESS_ACTION': {
         const comments = JSON.stringify(action.comments)
->>>>>>> 04681d99452834fd5981b549d0c76def63289c6a
         return {
           ...state,
           check_meeting_click: true
@@ -252,7 +248,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
           check_member_click: true
         }
       }
-      
+
       case 'GET_REPORT_INFO_SUCCESS_ACTION': {
         const report_info_list = JSON.stringify(action.report_info_list)
         console.log("Set")

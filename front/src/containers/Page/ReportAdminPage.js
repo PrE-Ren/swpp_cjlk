@@ -4,7 +4,7 @@ import { ReportAdminPage } from '../../components/organisms/ReportAdminPage'
 const mapStateToProps = (state) => {
   return {
     username: state.snu_moyeo.username,
-    report_info_list: state.snu_moyeo.report_info_list
+    report_list: state.snu_moyeo.report_list
   }
 }
 
