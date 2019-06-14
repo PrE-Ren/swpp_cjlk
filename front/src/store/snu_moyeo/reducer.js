@@ -1,4 +1,5 @@
 import { initialState } from "./selectors";
+import { isNullOrUndefined } from "util";
 
 const snu_moyeo_reducer = (state = initialState, action) => {
     switch(action.type) {
@@ -182,11 +183,59 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         }
       }
 
+      case 'SIGNUP_SUCCESS_ACTION': {
+        return state
+      }
+
+      case 'LOGOUT_ACTION': {
+       sessionStorage.clear();
+       return {
+         ...state,
+         username: null,
+         password: null,
+         mySNU_verification_token: null,
+         phone_verification_token: null,
+         user_id: null,
+         email: null,
+         name: null,
+         meetinglist_impending : null,
+         meetinglist_recent : null,
+         meetinglist_lead : null,
+         meetinglist_join : null,
+         meetinglist_history : null,
+         meetinglist_list : null,
+         report_info_list : null,
+         page_num : null,
+         comments : null
+       }
+      }
+
+      case 'CHANGE_PAGE_NUM_SUCCESS_ACTION': {
+        const meetinglist = JSON.stringify(action.meetinglist)
+        sessionStorage.setItem("list", meetinglist)
+        sessionStorage.setItem("page_num", action.page_num)
+        return {
+          ...state,
+          meetinglist_list : meetinglist,
+          page_num : action.page_num
+        }
+      }
+
       case 'LOAD_COMMENTS_SUCCESS_ACTION': {
         const comments = JSON.stringify(action.comments)
         return {
           ...state,
           comments: comments
+        }
+      }
+
+      case 'GET_REPORT_INFO_SUCCESS_ACTION': {
+        const report_info_list = JSON.stringify(action.report_info_list)
+        console.log("Set")
+        sessionStorage.setItem("report", report_info_list)
+        return {
+          ...state,
+          report_info_list: report_info_list
         }
       }
 
