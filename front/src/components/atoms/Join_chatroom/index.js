@@ -13,6 +13,7 @@ export const Join_chatroom = ({ meetinglist_join }) => {
             :
             <List.Item key={meeting_entry.id} as='a' target="_blank" href={meeting_entry.kakao_link}>{meeting_entry.title}</List.Item>
         )}
+        
       </div>
     )
   }

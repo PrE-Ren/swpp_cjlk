@@ -20,5 +20,5 @@ it('username not null, token not null', () => {
   const wrapper3 = wrap({ username: 'asca', mySNU_verification_token: 'asvasa', phone_verification_token: 'qweas' })
   expect(wrapper3.contains(<Left_sidebar />)).toBe(true)
   expect(wrapper3.contains(<MyInfo />)).toBe(true)
-  expect(wrapper3.contains('SNU Moyeo')).toBe(true)
+  expect(wrapper3.contains(' SNU Moyeo')).toBe(true)
 })

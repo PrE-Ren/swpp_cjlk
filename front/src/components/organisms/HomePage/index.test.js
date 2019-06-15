@@ -20,5 +20,5 @@ it('token not defined', () => {
 
 it('token good', () => {
   const wrapper3 = wrap({ username: 'test1', mySNU_verification_token: '123asdas', phone_verification_token: '123asdaq' })
-  expect(wrapper3.contains(<Header.Subheader>SNU web service that helps you construct and join a meeting </Header.Subheader>)).toBe(true)
+  expect(wrapper3.contains(<Header.Subheader> SNU web service that helps you construct and join a meeting </Header.Subheader>)).toBe(true)
 })
