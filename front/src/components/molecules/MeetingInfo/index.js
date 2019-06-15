@@ -3,7 +3,7 @@ import CommentList from '../../../containers/CommentList'
 import Map from '../../../containers/Map'
 import { ModifyButton, CloseButton, BreakUpButton, ReOpenButton, ReCloseButton } from '../../atoms/ButtonsInMeetingInfo'
 import { JoinButton, WithdrawButton } from '../../atoms/ButtonsInMeetingInfo'
-import { Modal, Image, List, Dropdown, Message } from 'semantic-ui-react'
+import { Modal, Image, List, Dropdown, Message, Form, TextArea, Button } from 'semantic-ui-react'
 import * as meeting_state from '../../../literal'
 
 // 날짜를 보기 좋게 만들어주는 함수
@@ -27,9 +27,19 @@ const dateParse = (data) => {
 // load_leaderinfo_click : 리더의 이름을 눌렀을 때 리더 정보를 가져오기 위해 액션을 디스패치할 함수
 // load_memberinfo_click : 참여 인원을 눌렀을 때 참여 멤버들의 정보를 가져오기 위해 액션을 디스패치할 함수
 export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click,
-                            change_meeting_info_click, load_leaderinfo_click, load_memberinfo_click }) => {
+                            change_meeting_info_click, load_leaderinfo_click, load_memberinfo_click, accuse_click, check_member_click }) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')  //  유저의 해시값
   const member_list = JSON.parse(sessionStorage.getItem("member_list"))  //  참여 멤버 정보 로드
+
+  let accuse_reason
+  let member_id = meeting_info.leaderid
+  const leader_id = meeting_info.leaderid
+
+  const accuse_content = 
+    <Form>
+      <Form.Field control={TextArea} label = '신고 사유' placeholder = 'Accuse reason' onChange={(e) => { accuse_reason = e.target.value }}/>
+      <Form.Field control={Button} onClick = {() => {accuse_click(hash, accuse_reason, member_id)}}>제출</Form.Field>
+    </Form>
 
   // 미팅 정보
   const content =
@@ -48,14 +58,19 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
                     <Dropdown text='정보보기'>
                       <Dropdown.Menu>
                         <Message header='리더 정보' content={<div>
-                          이름 : {sessionStorage.getItem("leader.name")}<br/>
+                          이름 : {meeting_info.leader}<br/>
                           이메일 : {sessionStorage.getItem("leader.email")}<br/>
                           전화번호 : {sessionStorage.getItem("leader.phone_number")}<br/>
+                          벌점 : {sessionStorage.getItem("leader.points")}<br/>
                           </div>} />
                       </Dropdown.Menu>
                     </Dropdown>
                   </Dropdown.Item>
-                  <Dropdown.Item text='신고하기' />
+                  <Dropdown.Item>
+                    <Modal trigger = {<div>신고하기</div>}>
+                      {accuse_content}
+                    </Modal>
+                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
               :
@@ -89,40 +104,46 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         <List.Item>
           <List.Icon name='user' />
           <List.Content> 현재 참여 인원 :
-            {state.check_member_click
-              ?
+            {leader_id == state.user_id ?
               <Dropdown text = {' ' + meeting_info.members.length + '명'}
-                        onClick={() => {state.check_member_click = false; load_memberinfo_click(meeting_info.members)}}>
-                <Dropdown.Menu>
-                  {member_list.map(member =>
-                    <Dropdown.Item key={member[0]}>
-                      <Dropdown text={member[0]}>
-                        <Dropdown.Menu>
-                          <Dropdown.Item>
-                            <Dropdown text='정보보기'>
-                              <Dropdown.Menu>
-                                <Message header='멤버 정보' content={<div>
-                                  이름 : {member[1]}<br/>
-                                  이메일 : {member[2]}<br/>
-                                  전화번호 : {member[3]}<br/>
-                                  </div>} />
-                              </Dropdown.Menu>
-                            </Dropdown>
-                          </Dropdown.Item>
-                          <Dropdown.Item text='신고하기' />
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </Dropdown.Item>
-                  )}
-                </Dropdown.Menu>
-              </Dropdown>
-              :
-              <Dropdown text = {meeting_info.members.length + '명'}
-                        onClick={() => {state.check_member_click = false; load_memberinfo_click(meeting_info.members)}}>
-                <Dropdown.Menu>
-                </Dropdown.Menu>
+                          onClick={() => {check_member_click(); load_memberinfo_click(meeting_info.members)}}>
+              {state.check_member_click
+                ?
+                  <Dropdown.Menu>
+                    {member_list.map(member =>
+                      <Dropdown.Item key={member[0]}>
+                        <Dropdown text={member[0]}>
+                          <Dropdown.Menu>
+                            <Dropdown.Item>
+                              <Dropdown text='정보보기'>
+                                <Dropdown.Menu>
+                                  <Message header='멤버 정보' content={<div>
+                                    이름 : {member[1]}<br/>
+                                    이메일 : {member[2]}<br/>
+                                    전화번호 : {member[3]}<br/>
+                                    벌점 : {member[4]}<br/>
+                                    </div>} />
+                                </Dropdown.Menu>
+                              </Dropdown>
+                            </Dropdown.Item>
+                            <Dropdown.Item onClick={() => {member_id = member[5]}}>
+                              <Modal trigger = {<div>신고하기</div>}>
+                                {accuse_content}
+                              </Modal>
+                            </Dropdown.Item>
+                          </Dropdown.Menu>
+                        </Dropdown>
+                      </Dropdown.Item>
+                    )}
+                  </Dropdown.Menu>           
+                :
+                  <Dropdown.Menu>
+                  </Dropdown.Menu>
+                }
                 </Dropdown>
-              }
+              :
+              <span> {meeting_info.members.length}명</span>
+            }
           </List.Content>
         </List.Item>
 
@@ -132,6 +153,25 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
           <List.Content> 모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)} </List.Content>
         </List.Item>
 
+
+        {meeting_info.leader == state.username ?
+          <List.Item>
+            <List.Icon name='file excel' />
+            <List.Content as='a' target="_blank" href={'http://localhost:8000/infoexcel/'+meeting_info.id}> 멤버 정보 다운</List.Content>
+          </List.Item>
+          :
+          <div></div>
+        }
+
+        {/* 오픈 채팅방 null인 경우는 표시하지 않음*/}
+        {meeting_info.kakao_link !== "null" && meeting_info.members.includes(Number(state.user_id)) ?
+            <List.Item>
+              <List.Icon name='chat' />
+              <List.Content as='a' target="_blank" href={meeting_info.kakao_link}> 오픈채팅링크 : {meeting_info.kakao_link} </List.Content>
+            </List.Item>
+            :
+            <div></div>
+        }
       </List>
 
       {/* 지도 */}

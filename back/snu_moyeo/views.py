@@ -21,7 +21,11 @@ import random
 import sys
 import django
 import urllib.request
+from urllib import parse
 import json
+from openpyxl import Workbook
+from openpyxl.styles import Border, Side
+from openpyxl.styles import Font, Alignment
 
 OPEN = 0
 CLOSED = 1
@@ -177,9 +181,21 @@ def changeState():
     print(current)
 
     # Need optimization !! (to Jongmin)
-    Meeting.objects.filter(Q(state = OPEN) & Q(due__lt = current)).update(state = BREAK_UP)
-    for meeting_object in Meeting.objects.filter(Q(state = BREAK_UP) & Q(due__lt = current)):
+    for meeting in Meeting.objects.all() :
+        if meeting.due < current and meeting.state == OPEN :
+            if meeting.min_people > meeting.members.all().count() :
+                meeting.state = BREAK_UP
+            else :
+                meeting.state = CLOSED
+            meeting.save()
+    '''
+    Meeting.objects.filter(Q(state = OPEN) & Q(due__lt = current)).update(state = CLOSED)
+    for meeting_object in Meeting.objects.filter(Q(state = CLOSED) & Q(due__lt = current)):
         meeting_object.save()
+
+    Meeting.objects.filter(Q(state = OPEN) & Q(due__lt = current)).update(state = CLOSED)
+    '''
+
 
 class MeetingList(generics.ListCreateAPIView):
     queryset = Meeting.objects.all()
@@ -204,6 +220,22 @@ class ParticipateList(generics.ListCreateAPIView):
 class ParticipateDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Participate.objects.all()
     serializer_class = ParticipateSerializer
+
+    def delete(self, request, *args, **kwargs) :
+        outer_id = self.get_object().user_id.id
+        print((outer_id))
+        outer = SnuUser.objects.get(pk = outer_id)
+        target_meetingid = self.get_object().meeting_id.id
+        target_meeting = Meeting.objects.get(pk = target_meetingid)
+        # meeting_min = target_meeting.min_people
+        meeting_state = target_meeting.state
+        
+        if meeting_state == CLOSED :
+            outer.point += 3
+            outer.save()
+
+        return self.destroy(request, *args, **kwargs)
+
 
 def get_participate(request, in_userid, in_meetingid):
     participate_obj1 = Participate.objects.filter(Q(user_id_id = in_userid))
@@ -501,10 +533,104 @@ class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
     '''
 
+def InfoExcel(request, meeting_id) :
+    write_wb = Workbook()
+    write_ws = write_wb.active
+
+
+    box = Border(left=Side(border_style="thin", 
+                   color='FF000000'),
+         right=Side(border_style="thin",
+                    color='FF000000'),
+         top=Side(border_style="thin",
+                  color='FF000000'),
+         bottom=Side(border_style="thin",
+                     color='FF000000'),
+         diagonal=Side(border_style="thin",
+                       color='FF000000'),
+         diagonal_direction=0,
+         outline=Side(border_style="thin",
+                      color='FF000000'),
+         vertical=Side(border_style="thin",
+                       color='FF000000'),
+         horizontal=Side(border_style="thin",
+                        color='FF000000')
+        )
+
+
+
+
+    write_ws['A1'] = '이름'
+    write_ws['A1'].border = box
+    write_ws['A1'].font = Font(size=11, bold=True)
+    write_ws.column_dimensions['A'].width = 15
+    
+    write_ws['B1'] = '닉네임'
+    write_ws['B1'].border = box
+    write_ws['B1'].font = Font(size=11, bold=True)
+    write_ws.column_dimensions['B'].width = 15
+
+
+    write_ws['C1'] = '전화번호'
+    write_ws['C1'].border = box
+    write_ws['C1'].font = Font(size=11, bold=True)
+    write_ws.column_dimensions['C'].width = 20
+
+    write_ws['D1'] = '이메일'
+    write_ws['D1'].border = box
+    write_ws['D1'].font = Font(size=11, bold=True)
+    write_ws.column_dimensions['D'].width = 30
+
+    write_ws['E1'] = '벌점'
+    write_ws['E1'].border = box
+    write_ws['E1'].font = Font(size=11, bold=True)
+
+    meeting_info = Meeting.objects.get(pk = meeting_id)
+    participants = meeting_info.members.all()
+    
+    ind = 2
+    for user in participants :
+        write_ws.cell(row = ind, column = 1).value = user.name
+        write_ws.cell(row = ind, column = 1).border = box
+        write_ws.cell(row = ind, column = 2).value = user.username
+        write_ws.cell(row = ind, column = 2).border = box
+        write_ws.cell(row = ind, column = 3).value = user.phone_number
+        write_ws.cell(row = ind, column = 3).border = box
+        write_ws.cell(row = ind, column = 4).value = user.email
+        write_ws.cell(row = ind, column = 4).border = box
+        write_ws.cell(row = ind, column = 5).value = user.point
+        write_ws.cell(row = ind, column = 5).border = box
+        ind += 1
+
+    title = str(meeting_info.title).replace(' ','_')
+    excel_filename = 'media/' + str(title)  + '_모임참여자 정보.xlsx'
+    write_wb.save(excel_filename)
+
+    file_location = excel_filename
+    try:
+        with open(file_location, 'rb') as f:
+           file_data = f.read()
+
+        # sending response
+        response = HttpResponse(file_data, content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="foo.xls"'
+
+    except IOError:
+        # handle file not exist case here
+        response = HttpResponseNotFound('<h1>File not exist</h1>')
+
+    return response
+    '''
+    response = HttpResponse(content_type='application/vnd.ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=' + excel_filename
+    return response
+    '''
+
 def searchShop(request, search_word) :
     client_id = "N6c7MAUvz7uiaMUNt1Ww" # 애플리케이션 등록시 발급 받은 값 입력
     client_secret = "1hdjaYpmI6" # 애플리케이션 등록시 발급 받은 값 입력
     encText = urllib.parse.quote(search_word)
+    print(encText)
     url = "https://openapi.naver.com/v1/search/shop?query=" + encText +"&display=3&sort=count"
     request = urllib.request.Request(url)
     print(request)
@@ -514,11 +640,51 @@ def searchShop(request, search_word) :
     rescode = response.getcode()
     if(rescode==200):
         response_body = response.read()
-        print(response_body.decode('utf-8'))
-        return HttpResponse(response_body.decode('utf-8'), status.HTTP_200_OK)
+        #print(response_body.decode('utf-8'))
+        json_dict = json.loads(response_body.decode('utf-8'))
+        #print(json_dict)
+        return JsonResponse(json_dict)
     else:
         print("Error Code:" + rescode)
         return HttpResponse({}, status = status.HTTP_404_NOT_FOUND)
+
+
+def capcha(request):
+    client_id = "N6c7MAUvz7uiaMUNt1Ww" # 애플리케이션 등록시 발급 받은 값 입력
+    client_secret = "1hdjaYpmI6" # 애플리케이션 등록시 발급 받은 값 입력
+
+    url = "https://openapi.naver.com/v1/captcha/nkey?code=0"
+    request = urllib.request.Request(url)
+    request.add_header("X-Naver-Client-Id",client_id)
+    request.add_header("X-Naver-Client-Secret",client_secret)
+    response = urllib.request.urlopen(request)
+
+    rescode = response.getcode()
+    capch_key = ''
+    if(rescode==200):
+        response_body = response.read()
+        capch_key = response_body.decode('utf-8')
+        print((capch_key))
+    else:
+        print("Error Code:" + rescode)
+
+
+    url = "https://openapi.naver.com/v1/captcha/ncaptcha.bin?key=" + capch_key.split('\"')[3]
+    print(url)
+    request = urllib.request.Request(url)
+    request.add_header("X-Naver-Client-Id",client_id)
+    request.add_header("X-Naver-Client-Secret",client_secret)
+    response = urllib.request.urlopen(request)
+
+    rescode = response.getcode()
+    if(rescode==200):
+        print("캡차 이미지 저장")
+        response_body = response.read()
+        with open('media/captcha.jpg', 'wb') as f:
+            f.write(response_body)
+        return HttpResponse(response_body)
+    else:
+        print("Error Code:" + rescode)
 
 
 '''

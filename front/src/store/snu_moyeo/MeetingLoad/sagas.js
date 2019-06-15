@@ -65,9 +65,12 @@ export function* reload_meeting() {
   if (pathname == '/') {
     const meetinglist_impending = yield call(get_meetinglist, 'impending')  //  백엔드에서 미팅 리스트 로드
     const meetinglist_recent = yield call(get_meetinglist, 'recent')        //  백엔드에서 미팅 리스트 로드
-    if (meetinglist_impending !== null && meetinglist_recent !== null) {
+    const main_meetinglist_join = yield call(get_meetinglist, 'join')        //  백엔드에서 미팅 리스트 로드
+
+    if (meetinglist_impending !== null && meetinglist_recent !== null && main_meetinglist_join !== null) {
       yield put(actions.reload_action('impending', meetinglist_impending))  //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
       yield put(actions.reload_action('recent', meetinglist_recent))        //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
+      yield put(actions.reload_action('join', main_meetinglist_join))        //  불러온 미팅 리스트를 스토어에 저장 (by reducer)
     }
   }
 

@@ -22,6 +22,8 @@ class Meeting (models.Model):
     members = models.ManyToManyField('SnuUser', through = 'Participate')
     latitude = models.FloatField(default = 37.4615299)
     longitude = models.FloatField(default = 126.9519267)
+
+    kakao_link = models.CharField(max_length=200, blank = True, default = '')
     # comments : related field
 
     class Meta:

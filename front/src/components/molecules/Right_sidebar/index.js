@@ -2,7 +2,7 @@ import React from 'react'
 import ToMyPage from '../../atoms/ToMyPage'
 import Logout from '../../../containers/Logout'
 import Make_new from '../../atoms/Make_new'
-import Join_chatroom from '../../atoms/Join_chatroom'
+import Join_chatroom from '../../../containers/Join_chatroom'
 import { Menu, Sidebar, Input, Button } from 'semantic-ui-react'
 
 const Right_sidebar = () => {

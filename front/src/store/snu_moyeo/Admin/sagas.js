@@ -46,6 +46,13 @@ export function* watchPenalty() {
   }
 }
 
+export function* watchAccuse(){
+  while(true){
+    const action = yield take(actions.ACCUSE_ACTION)
+    yield call(accuse_func, action)
+  }
+}
+
 export function* penalty_func(action) {
   const report_info = action.report_info
   const url_report = 'http://127.0.0.1:8000/report/' + report_info.id + '/'
@@ -75,7 +82,31 @@ export function* penalty_func(action) {
     console.log('REPORT PUT bad')
 }
 
+export function* accuse_func(action) {
+  const url_accuse = 'http://127.0.0.1:8000/report/'
+  const accuse_info = JSON.stringify({
+    reason: action.accuse_reason,
+    reporteeid: action.member_id
+  })
+
+  // Report 모델 POST
+  const response_accuse = yield call(fetch, url_accuse, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Basic ${action.hash}`,
+        'Content-Type': 'application/json',
+      },
+      body: accuse_info,
+  })
+  if (response_accuse.ok) {
+    console.log('REPORT POST ok')
+  }
+  else
+    console.log('REPORT POST bad')
+}
+
 export default function* () {
   yield fork(reload_admin)
   yield fork(watchPenalty)
+  yield fork(watchAccuse)
 }

@@ -89,7 +89,7 @@ class MeetingModelsTests(TestCase):
 
     def post_meeting_test(self):
         link = self.link + 'meeting/'
-        data = {'title': 'postmeeting1', 'due': '2019-08-23T13:23:00+09:00' , 'min_people': 0, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
+        data = {'title': 'postmeeting1', 'due': '2019-08-23T13:23:00+09:00' , 'min_people': 2, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
         
         res = requests.post(link, data = data, auth = ('test1', 'hello'))
         self.assertEqual(res.status_code, 201)
@@ -101,28 +101,28 @@ class MeetingModelsTests(TestCase):
 
 
 
-        data = {'title': 'postmeeting2', 'due': '2019-08-24T13:23:00+09:00' , 'min_people': 0, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
+        data = {'title': 'postmeeting2', 'due': '2019-08-24T13:23:00+09:00' , 'min_people': 2, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
         res = requests.post(link, data = data, auth = ('test1', 'hello') )
         print("meeting2 post successfully")
 
-        data = {'title': 'postmeeting3', 'due': '2019-08-25T13:23:00+09:00' , 'min_people': 0, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
+        data = {'title': 'postmeeting3', 'due': '2019-08-25T13:23:00+09:00' , 'min_people': 2, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
         res = requests.post(link, data = data, auth = ('test1', 'hello') )
         print("meeting3 post successfully")
 
-        data = {'title': 'postmeeting4', 'due': '2019-08-26T13:23:00+09:00' , 'min_people': 0, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
+        data = {'title': 'postmeeting4', 'due': '2019-08-26T13:23:00+09:00' , 'min_people': 2, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
         res = requests.post(link, data = data, auth = ('test1', 'hello') )
         print("meeting4 post successfully")
 
-        data = {'title': 'postmeeting5', 'due': '2019-08-27T13:23:00+09:00' , 'min_people': 0, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
+        data = {'title': 'postmeeting5', 'due': '2019-08-27T13:23:00+09:00' , 'min_people': 2, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
         res = requests.post(link, data = data, auth = ('test1', 'hello') )
         print("meeting5 post successfully")
         
-        data = {'title': 'postmeeting6', 'due': '2019-08-28T13:23:00+09:00' , 'min_people': 0, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
+        data = {'title': 'postmeeting6', 'due': '2019-08-28T13:23:00+09:00' , 'min_people': 2, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
         res = requests.post(link, data = data, auth = ('test2', 'hello') )
         print("meeting6 post successfully")
 
 
-        data = {'title': 'postmeeting7', 'due': '2019-08-28T13:23:00+09:00' , 'min_people': 0, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
+        data = {'title': 'postmeeting7', 'due': '2019-08-28T13:23:00+09:00' , 'min_people': 2, 'max_people': 100, 'description': 'hello?','state': 0, 'kind': 1 }
         res = requests.post(link, data = data, auth = ('test2', 'hello') )
         print("meeting7 post successfully")
 
