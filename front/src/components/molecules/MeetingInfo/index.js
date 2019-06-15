@@ -19,7 +19,7 @@ const dateParse = (data) => {
 
 // state : 상태 전부 (is_leader_loaded, is_member_loaded 값에 접근하기 위해)
 // meeting_info : id, title, created, due, min_people, max_people, description, state, kind,
-//                leader, leaderid, picture, members, comments, latitude, longitude
+//                leader, leaderid, picture, members, comments, latitude, longitude, kakao_link
 // change_meeting_state_click : 미팅 상태를 바꿀 때 액션을 디스패치할 함수
 // change_meeting_info_click : 미팅을 수정할 때 액션을 디스패치할 함수
 // join_meeting_click : 미팅에 참가할 때 액션을 디스패치할 함수

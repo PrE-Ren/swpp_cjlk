@@ -14,7 +14,7 @@ const dateParse = (data) => {
 }
 
 // meeting_info : id, title, created, due, min_people, max_people, description, state, kind,
-//                leader, leaderid, picture, members, comments, latitude, longitude
+//                leader, leaderid, picture, members, comments, latitude, longitude, kakao_link
 // prepare_load_comments_click : 댓글 목록을 가져오기 전까지 봉인하기 위해 플래그를 설정할 함수
 export class MeetingEntry extends React.Component {
   state = { is_folded: true }
@@ -23,7 +23,7 @@ export class MeetingEntry extends React.Component {
     // 미팅 정보를 보여줄 카드
     let meeting_entry = (
       <Card.Content style={{ cursor: 'pointer' }} onClick={() => {
-        this.props.prepare_load_comments_click();                              //  이전에 봤던 댓글 목록이 보이지 않도록 lock
+        this.props.prepare_load_comments_click();                   //  이전에 봤던 댓글 목록이 보이지 않도록 lock
         this.props.load_comments_click(this.props.meeting_info.id)  //  댓글 목록을 새로 로드하여 세션 스토리지에 설정한 뒤 unlock
       }}>
         {/* 제목 */}

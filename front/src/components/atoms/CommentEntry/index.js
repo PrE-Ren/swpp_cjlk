@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Comment, Form, Modal } from 'semantic-ui-react'
 
-// comment_info :
+// comment_info : id, wrtier, writerid, meetingid, content, created
 // username : 유저 아이디
 // password : 유저 패스워드
 // meeting_id : 미팅 게시물 고유값
