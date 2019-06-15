@@ -38,13 +38,14 @@ const parse_datetime = (date) => {
 }
 
 // 입력할 제목, 마감 기한, 최소 인원, 최대 인원, 본문, 유형, 사진
-let title, due, min_people, max_people, description, kind, picture
+let title, due, min_people, max_people, kakao_link, description, kind, picture
 
 // 위의 변수와 각 입력 Form을 바운드
 const handle_title = (e) => { title = e.target.value }
 const handle_due = (e, { value }) => { due = value }
 const handle_min_people = (e) => { min_people = e.target.value }
 const handle_max_people = (e) => { max_people = e.target.value }
+const handle_kakao_link = (e) => { kakao_link = e.target.value }
 const handle_description = (e) => { description = e.target.value }
 const handle_picture = (e) => { picture = e.target.files[0] }
 const handle_kind = (e, { value }) => { kind = value }
@@ -70,6 +71,7 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
           <Form.Input fluid label='최소인원' placeholder='2' type="number" width={2} onChange={handle_min_people} />
           <Form.Input fluid label='최대인원' placeholder='2' type="number" width={2} onChange={handle_max_people} />
         </Form.Group>
+        <Form.Input fluid label='오픈채팅방 링크' placeholder='https://open.kakao.com/' onChange={handle_kakao_link} />
         <Form.Input fluid label='사진' type="file" width={6} onChange={handle_picture} accept="image/*" />
         <div><Map meeting_info = {null} write = {true} /></div>
         <Form.TextArea label='내용' placeholder='About this meeting...' onChange={handle_description} />
