@@ -20,7 +20,7 @@ export class CommentList extends React.Component {
       let content  //  댓글 작성 시 입력하는 내용
 
       return (
-        <Comment.Group style={{ marginLeft:'20px' }}>
+        <Comment.Group>
           <Header as='h3' dividing> 관련 댓글 </Header>
 
           {/* 댓글 각각을 렌더링 */}
@@ -33,9 +33,11 @@ export class CommentList extends React.Component {
           {/* 댓글 작성 */}
           <Form reply>
             <Form.TextArea id="comment" placeholder='Comment on this meeting...' onChange={(e) => { content = e.target.value }}/>
-            <Button content='댓글 작성' labelPosition='left' icon='edit' primary onClick={() => { add_comment_click(hash, content, meeting_id); document.getElementById("comment").value = ""; }}/>
+            <Button content='댓글 작성' labelPosition='left' icon='edit' primary
+                    onClick={() => { add_comment_click(hash, content, meeting_id), document.getElementById("comment").value = "" }}/>
           </Form>
-        </Comment.Group>)
+        </Comment.Group>
+      )
     }
     else
       return <Loader active inline />

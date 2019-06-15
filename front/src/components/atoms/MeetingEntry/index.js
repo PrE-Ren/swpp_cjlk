@@ -1,6 +1,6 @@
 import React from 'react'
 import MeetingInfo from '../../../containers/MeetingInfo'
-import { Modal, Card } from 'semantic-ui-react'
+import { Modal, Card, Header, Image, Grid } from 'semantic-ui-react'
 
 // 날짜를 보기 좋게 만들어주는 함수
 const dateParse = (data) => {
@@ -17,12 +17,14 @@ const dateParse = (data) => {
 //                leader, leaderid, picture, members, comments, latitude, longitude, kakao_link
 // prepare_load_comments_click : 댓글 목록을 가져오기 전까지 봉인하기 위해 플래그를 설정할 함수
 export class MeetingEntry extends React.Component {
-  state = { is_folded: true }
-
+  state = { open: false }
+  show = () => this.setState({ open: true })
+  close = () => this.setState({ open: false})
   render() {
     // 미팅 정보를 보여줄 카드
     let meeting_entry = (
       <Card.Content style={{ cursor: 'pointer' }} onClick={() => {
+        this.show()                                                 //  모임 게시글 정보 창이 뜨게 함
         this.props.prepare_load_comments_click();                   //  이전에 봤던 댓글 목록이 보이지 않도록 lock
         this.props.load_comments_click(this.props.meeting_info.id)  //  댓글 목록을 새로 로드하여 세션 스토리지에 설정한 뒤 unlock
       }}>
@@ -44,10 +46,12 @@ export class MeetingEntry extends React.Component {
     )
 
     return (
-      <Modal trigger={meeting_entry} >  {/* 해당 카드를 누르면 미팅 정보 창이 뜸 */}
-        <Modal.Header> {this.props.meeting_info.title} </Modal.Header>  {/* 제목 */}
-        <MeetingInfo meeting_info = {this.props.meeting_info} />        {/* 미팅 정보 */}
-      </Modal>
+      <React.Fragment>
+        {meeting_entry}                                             {/* 간단한 모임 정보를 담은 카드 */}
+        <Modal open={this.state.open} onClose={this.close}>         {/* 모임 게시글 정보 창 */}
+          <MeetingInfo meeting_info = {this.props.meeting_info} />  {/* 모임 게시글 정보 */}
+        </Modal>
+      </React.Fragment>
     )
   }
 }

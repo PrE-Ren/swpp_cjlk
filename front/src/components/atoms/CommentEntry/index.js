@@ -23,16 +23,15 @@ export class CommentEntry extends React.Component {
     return (
       <span>
         {/* 프로필 사진 */}
-        <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' />
+        <Comment.Avatar src='https://react.semantic-ui.com/images/avatar/small/matt.jpg' style={{ marginRight:'10px'}}/>
         <Comment.Content>
 
-          {/* 댓글 내용 */}
+          {/* 댓글 작성자 및 작성 날짜 */}
           <Comment.Author as='a'> {comment_info.writer} </Comment.Author>
-          <Comment.Metadata><div> {change_date(comment_info.created)} </div></Comment.Metadata>
-          <Comment.Text> {comment_info.content} </Comment.Text>
-          <Comment.Actions>
+          <Comment.Metadata style={{ marginRight:'10px'}}> {change_date(comment_info.created)} </Comment.Metadata>
 
-            {/* 댓글 수정 */}
+          {/* 댓글 수정 및 삭제 */}
+          <Comment.Actions as='a'>
             {(username == comment_info.writer) ? <Comment.Action onClick={this.edit_show}> 수정 </Comment.Action> : <div></div>}
             <Modal size='small' open={this.state.edit_open} onClose={this.edit_close}>
               <Modal.Header> 댓글 수정 </Modal.Header>
@@ -47,7 +46,6 @@ export class CommentEntry extends React.Component {
               </Modal.Actions>
             </Modal>
 
-            {/* 댓글 삭제 */}
             {(username == comment_info.writer) ? <Comment.Action onClick={this.delete_show}> 삭제 </Comment.Action> : <div></div>}
             <Modal size='small' open={this.state.delete_open} onClose={this.delete_close}>
               <Modal.Header> 댓글 삭제 </Modal.Header>
@@ -58,8 +56,11 @@ export class CommentEntry extends React.Component {
                 <Button negative onClick={this.delete_close}> 아니오 </Button>
               </Modal.Actions>
             </Modal>
-
           </Comment.Actions>
+
+          {/* 댓글 내용 */}
+          <Comment.Text> {comment_info.content} </Comment.Text>
+
         </Comment.Content>
       </span>
     )

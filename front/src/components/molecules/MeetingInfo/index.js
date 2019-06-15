@@ -3,7 +3,7 @@ import CommentList from '../../../containers/CommentList'
 import Map from '../../../containers/Map'
 import { ModifyButton, CloseButton, BreakUpButton, ReOpenButton, ReCloseButton } from '../../atoms/ButtonsInMeetingInfo'
 import { JoinButton, WithdrawButton } from '../../atoms/ButtonsInMeetingInfo'
-import { Modal, Image, List, Dropdown, Message, Form, TextArea, Button } from 'semantic-ui-react'
+import { Modal, Image, List, Dropdown, Message, Form, TextArea, Button, Grid, Header } from 'semantic-ui-react'
 import * as meeting_state from '../../../literal'
 
 // 날짜를 보기 좋게 만들어주는 함수
@@ -54,7 +54,7 @@ export class MeetingInfo extends React.Component {
       <Modal open={this.state.accuse_open} onClose={this.accuse_close}>
         <Modal.Header> 신고하기 </Modal.Header>
         <Form reply style={{ margin: '10px' }}>
-          <Form.TextArea onChange={(e) => { this.setState({ accuse_reason: e.target.value }) }} placeholder='Accuse reason'/>
+          <Form.TextArea onChange={(e) => { this.setState({ accuse_reason: e.target.value }) }} placeholder='신고 사유'/>
         </Form>
         <Modal.Actions>
           <Button positive icon='checkmark' labelPosition='right' content='완료'
@@ -63,9 +63,12 @@ export class MeetingInfo extends React.Component {
         </Modal.Actions>
       </Modal>
 
-    // 미팅 정보
-    const content =
-      <Modal.Description style={{ marginLeft: '10px' }}>
+    // 상단 제목
+    const window_title = <Modal.Header> {meeting_info.title} </Modal.Header>
+
+    // 모임 기본 정보 (주최자, 게시 날짜, 마감 기한, 유형, 참여 멤버, 상태, 참여 멤버 엑셀 파일 다운, 오픈 채팅방 링크)
+    const basic_info =
+      <React.Fragment>
         <List style={{ marginTop: '20px' }}>
 
           {/* 주최자 (정보 보기를 누르면 리더 정보를 가져온 후 플래그가 true로 설정되어 리렌더링됨) */}
@@ -174,7 +177,7 @@ export class MeetingInfo extends React.Component {
             <List.Content> 모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)} </List.Content>
           </List.Item>
 
-          {/* 리더는 참여 멤버의 정보를 엑셀 파일 형식으로 다운할 수 있음 */}
+          {/* 참여 멤버 정보 엑셀 파일 다운 (오직 리더만 가능) */}
           {meeting_info.leader == state.username
             ?
             <List.Item>
@@ -185,7 +188,7 @@ export class MeetingInfo extends React.Component {
             <div></div>
           }
 
-          {/* 오픈 채팅방 링크가 있고 내가 그 모임에 참여 중이면 링크가 보임 */}
+          {/* 오픈 채팅방 링크 */}
           {meeting_info.kakao_link !== "" && meeting_info.members.includes(Number(state.user_id))
             ?
             <List.Item>
@@ -198,21 +201,45 @@ export class MeetingInfo extends React.Component {
           }
         </List>
 
-        {/* 지도 */}
-        <Map meeting_info = {meeting_info} write = {false} />
-
         {/* 본문 */}
         <h4><pre>{meeting_info.description}</pre></h4>
+      </React.Fragment>
 
-      </Modal.Description>
+    // 사진 + 모임 기본 정보 + 지도 + 댓글 목록
+    const all_info =
+      <Modal.Content image scrolling>
+        <Grid column={2}>
+          {/* 사진 및 모임 기본 정보 */}
+          <Grid.Row>
+            <Grid.Column width={7}>  {/* 사진 (없으면 기본 사진) */}
+              {meeting_info.picture != null
+                ? <Image wrapped size='medium' src={meeting_info.picture} />
+                : <Image wrapped size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' />}
+            </Grid.Column>
+            <Grid.Column width={9}>  {/* 모임 기본 정보  */}
+              <Header> 모임 정보 </Header>
+              {basic_info}
+            </Grid.Column>
+          </Grid.Row>
+
+          {/* 지도 */}
+          <Grid.Row>
+            <div style={{ marginLeft: '15px' }}><Map meeting_info = {meeting_info} write = {false} /></div>
+          </Grid.Row>
+
+          {/* 댓글 목록 */}
+          <Grid.Row>
+            <Grid.Column width={16}>
+              <CommentList meeting_id={meeting_info.id} />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Modal.Content>
 
     // 사진이 첨부된 미팅 게시물에서, 사진 경로에 "http://"가 없는 경우 이를 붙여줌 (그래야 보임)
-    if (meeting_info.picture != null) {
-      if (meeting_info.picture.includes("http://") == false) {
+    if (meeting_info.picture != null)
+      if (meeting_info.picture.includes("http://") == false)
         meeting_info.picture = "http://127.0.0.1:8000" + meeting_info.picture
-        console.log(meeting_info.picture)
-      }
-    }
 
     // 내가 만든 모임
     if (meeting_info.leader == state.username) {
@@ -220,76 +247,68 @@ export class MeetingInfo extends React.Component {
         // 모집 중
         case meeting_state.OPEN :
           return (
-            <div>
-              <Modal.Content image scrolling>
-                {meeting_info.picture != null ? <Image size='medium' src={meeting_info.picture} wrapped /> : <div></div>}
-                {content}
-                <CommentList meeting_id={meeting_info.id} />
-              </Modal.Content>
-              <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-                <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-              </Modal.Actions>
-            </div>
+            <React.Fragment>
+              {window_title}{all_info}
+              {/* 마감, 해산, 수정 */}
+              <div>
+                <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                  <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+                </Modal.Actions>
+              </div>
+            </React.Fragment>
           )
         // 마감
         case meeting_state.CLOSED :
           return (
-            <div>
-              <Modal.Content image scrolling>
-                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-                {content}
-                <CommentList meeting_id={meeting_info.id} />
-              </Modal.Content>
-              <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-                <ReOpenButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-              </Modal.Actions>
-            </div>
+            <React.Fragment>
+              {window_title}{all_info}
+              {/* 추가모집 시작, 해산, 수정 */}
+              <div>
+                <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                  <ReOpenButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+                </Modal.Actions>
+              </div>
+            </React.Fragment>
           )
         // 추가모집 중
         case meeting_state.RE_OPEN :
           return (
-            <div>
-              <Modal.Content image scrolling>
-                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-                {content}
-                <CommentList meeting_id={meeting_info.id} />
-              </Modal.Content>
-              <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-                <ReCloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-              </Modal.Actions>
-            </div>
+            <React.Fragment>
+              {window_title}{all_info}
+              {/* 추가모집 중단, 해산, 수정 */}
+              <div>
+                <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                  <ReCloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+                </Modal.Actions>
+              </div>
+            </React.Fragment>
           )
         // 추가모집 마감
         case meeting_state.RE_CLOSED :
           return (
-            <div>
-              <Modal.Content image scrolling>
-                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-                {content}
-                <CommentList meeting_id={meeting_info.id} />
-              </Modal.Content>
-              <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-                <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-                <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-              </Modal.Actions>
-            </div>
+            <React.Fragment>
+              {window_title}{all_info}
+              {/* 해산, 수정 */}
+              <div>
+                <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                  <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                  <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+                </Modal.Actions>
+              </div>
+            </React.Fragment>
           )
         // 해산
         case meeting_state.BREAK_UP :
           return (
-            <div>
-              <Modal.Content image scrolling>
-                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-                {content}
-                <CommentList meeting_id={meeting_info.id} />
-              </Modal.Content>
-            </div>
+            <React.Fragment>
+              {window_title}{all_info}
+            </React.Fragment>
           )
       }
     }
@@ -301,43 +320,37 @@ export class MeetingInfo extends React.Component {
         switch (meeting_info.state) {
           case meeting_state.BREAK_UP :
             return (
-              <div>
-                <Modal.Content image>
-                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-                  {content}
-                  <CommentList meeting_id={meeting_info.id} />
-                </Modal.Content>
-              </div>
+              <React.Fragment>
+                {window_title}{all_info}
+              </React.Fragment>
             )
 
           default :
             return (
-              <div>
-                <Modal.Content image>
-                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-                  {content}
-                  <CommentList meeting_id={meeting_info.id} />
-                </Modal.Content>
-                <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-                  <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
-                </Modal.Actions>
-              </div>
+              <React.Fragment>
+                {window_title}{all_info}
+                {/* 탈퇴 */}
+                <div>
+                  <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                    <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
+                  </Modal.Actions>
+                </div>
+              </React.Fragment>
             )
         }
       }
       // 참여 중 X
       else {
         return (
-          <div>
-            <Modal.Content image>
-              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              {content}
-              <CommentList meeting_id={meeting_info.id} />
-            </Modal.Content>
-            <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-              <JoinButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {join_meeting_click} />
-            </Modal.Actions>
-          </div>
+          <React.Fragment>
+            {window_title}{all_info}
+            {/* 참가 */}
+            <div>
+              <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                <JoinButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {join_meeting_click} />
+              </Modal.Actions>
+            </div>
+          </React.Fragment>
         )
       }
     }
