@@ -1,11 +1,18 @@
 import React from 'react'
-import { PropTypes } from 'prop-types'
-import { Menu, Icon } from 'semantic-ui-react'
+import { Menu, Icon, List } from 'semantic-ui-react'
 
-const Join_chatroom = () => {
-  return (
-    <Menu.Item><Icon name='chat' size='big' /> 채팅방 빠른 입장 </Menu.Item>
-  )
+export const Join_chatroom = ({ meetinglist_join }) => {
+  if (meetinglist_join != null) {
+    let meetings = JSON.parse(meetinglist_join)  //  미팅 리스트
+    return (
+      <div>
+        <Menu.Item><Icon name='chat' size='big' />채팅방 빠른 입장</Menu.Item>
+        {meetings.map(meeting_entry =>
+          <List.Item key={meeting_entry.id} as='a' target="_blank" href="https://open.kakao.com/o/gvMvxRsb">{meeting_entry.title}</List.Item>
+        )}
+      </div>
+    )
+  }
+  else
+    return <div></div>
 }
-
-export default Join_chatroom
