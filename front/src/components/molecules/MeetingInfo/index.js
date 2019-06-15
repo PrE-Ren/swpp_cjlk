@@ -17,28 +17,36 @@ const dateParse = (data) => {
     return day.split("&")[0]
 }
 
-// state : 상태 전부 (check_leader_click, check_member_click 값 변경을 위함)
+// state : 상태 전부 (is_leader_loaded, is_member_loaded 값에 접근하기 위해)
 // meeting_info : id, title, created, due, min_people, max_people, description, state, kind,
 //                leader, leaderid, picture, members, comments, latitude, longitude
 // change_meeting_state_click : 미팅 상태를 바꿀 때 액션을 디스패치할 함수
+// change_meeting_info_click : 미팅을 수정할 때 액션을 디스패치할 함수
 // join_meeting_click : 미팅에 참가할 때 액션을 디스패치할 함수
 // withdraw_meeting_click : 미팅에서 탈퇴할 때 액션을 디스패치할 함수
-// change_meeting_info_click : 미팅을 수정할 때 액션을 디스패치할 함수
+// prepare_load_leaderinfo_click : 리더 정보를 가져오기 전까지 봉인하기 위해 플래그를 설정할 함수
 // load_leaderinfo_click : 리더의 이름을 눌렀을 때 리더 정보를 가져오기 위해 액션을 디스패치할 함수
+// prepare_load_memberinfo_click : 참여 멤버들 정보를 가져오기 전까지 봉인하기 위해 플래그를 설정할 함수
 // load_memberinfo_click : 참여 인원을 눌렀을 때 참여 멤버들의 정보를 가져오기 위해 액션을 디스패치할 함수
-export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, join_meeting_click, withdraw_meeting_click,
-                            change_meeting_info_click, load_leaderinfo_click, load_memberinfo_click, accuse_click, check_member_click }) => {
+// accuse_click : 신고할 때 액션을 디스패치할 함수 (Report 모델 POST)
+export const MeetingInfo = ({ state, meeting_info,
+                              change_meeting_state_click, change_meeting_info_click, join_meeting_click, withdraw_meeting_click,
+                              prepare_load_leaderinfo_click, load_leaderinfo_click,
+                              prepare_load_memberinfo_click, load_memberinfo_click,
+                              accuse_click
+                            }) => {
   const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')  //  유저의 해시값
   const member_list = JSON.parse(sessionStorage.getItem("member_list"))  //  참여 멤버 정보 로드
 
-  let accuse_reason
-  let member_id = meeting_info.leaderid
-  const leader_id = meeting_info.leaderid
+  let accuse_reason                        //  신고 사유
+  let member_id = meeting_info.leaderid    //  Reportee 고유값
+  const leader_id = meeting_info.leaderid  //  Reporter 고유값
 
-  const accuse_content = 
+  // 신고 창
+  const accuse_content =
     <Form>
       <Form.Field control={TextArea} label = '신고 사유' placeholder = 'Accuse reason' onChange={(e) => { accuse_reason = e.target.value }}/>
-      <Form.Field control={Button} onClick = {() => {accuse_click(hash, accuse_reason, member_id)}}>제출</Form.Field>
+      <Form.Field control={Button} onClick = {() => { accuse_click(hash, accuse_reason, member_id) }}> 신고 완료 </Form.Field>
     </Form>
 
   // 미팅 정보
@@ -50,9 +58,9 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         <List.Item>
           <List.Icon name='user circle' />
           <List.Content> 주최자 :&nbsp;
-            {state.check_leader_click
+            {state.is_leader_loaded
               ?
-              <Dropdown text={meeting_info.leader} onClick={() => { state.check_leader_click = false; load_leaderinfo_click(meeting_info.leaderid) }}>
+              <Dropdown text={meeting_info.leader} onClick={() => { prepare_load_leaderinfo_click(); load_leaderinfo_click(meeting_info.leaderid) }}>
                 <Dropdown.Menu>
                   <Dropdown.Item>
                     <Dropdown text='정보보기'>
@@ -74,7 +82,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
                 </Dropdown.Menu>
               </Dropdown>
               :
-              <Dropdown text={meeting_info.leader} onClick={() => {state.check_leader_click = false; load_leaderinfo_click(meeting_info.leaderid)}}>
+              <Dropdown text={meeting_info.leader} onClick={() => { prepare_load_leaderinfo_click(); load_leaderinfo_click(meeting_info.leaderid)}}>
                 <Dropdown.Menu>
                 </Dropdown.Menu>
               </Dropdown>
@@ -104,10 +112,11 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         <List.Item>
           <List.Icon name='user' />
           <List.Content> 현재 참여 인원 :
+            {/* 참여 멤버를 신고할 수 있는 건 오직 리더 */}
             {leader_id == state.user_id ?
               <Dropdown text = {' ' + meeting_info.members.length + '명'}
-                          onClick={() => {check_member_click(); load_memberinfo_click(meeting_info.members)}}>
-              {state.check_member_click
+                        onClick={() => { prepare_load_memberinfo_click(); load_memberinfo_click(meeting_info.members) }}>
+              {state.is_member_loaded
                 ?
                   <Dropdown.Menu>
                     {member_list.map(member =>
@@ -135,7 +144,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
                         </Dropdown>
                       </Dropdown.Item>
                     )}
-                  </Dropdown.Menu>           
+                  </Dropdown.Menu>
                 :
                   <Dropdown.Menu>
                   </Dropdown.Menu>
@@ -153,17 +162,18 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
           <List.Content> 모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)} </List.Content>
         </List.Item>
 
-
-        {meeting_info.leader == state.username ?
+        {/* 리더는 참여 멤버의 정보를 엑셀 파일 형식으로 다운할 수 있음 */}
+        {meeting_info.leader == state.username
+          ?
           <List.Item>
             <List.Icon name='file excel' />
-            <List.Content as='a' target="_blank" href={'http://localhost:8000/infoexcel/'+meeting_info.id}> 멤버 정보 다운</List.Content>
+            <List.Content as='a' target="_blank" href={'http://localhost:8000/infoexcel/' + meeting_info.id}> 참여 멤버 정보 다운 </List.Content>
           </List.Item>
           :
           <div></div>
         }
 
-        {/* 오픈 채팅방 null인 경우는 표시하지 않음*/}
+        {/* 오픈 채팅방 null인 경우는 표시하지 않음 */}
         {meeting_info.kakao_link !== "null" && meeting_info.members.includes(Number(state.user_id)) ?
             <List.Item>
               <List.Icon name='chat' />

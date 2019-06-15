@@ -48,8 +48,9 @@ export function* new_func(action) {
   if (action.meeting_info.picture !== undefined) formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
   else                                           formData.append('picture', null, null)
 
+  // 카카오 링크를 지정해주지 않으면 undefined 값이 넘어오므로 이때는 빈 문자열 값으로 설정
   if (action.meeting_info.kakao_link !== undefined) formData.append('kakao_link', action.meeting_info.kakao_link);
-  else                                              formData.append('kakao_link', null);
+  else                                              formData.append('kakao_link', "");
 
   // Meeting 모델 POST
   const response_meeting = yield call(fetch, url_meeting, {
@@ -109,8 +110,9 @@ export function* modify_func(action) {
   if (action.meeting_info.picture !== undefined) formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name);
   else                                           formData.append('picture', null, null)
 
+  // 카카오 링크를 지정해주지 않으면 undefined 값이 넘어오므로 이때는 빈 문자열 값으로 설정
   if (action.meeting_info.kakao_link !== undefined) formData.append('kakao_link', action.meeting_info.kakao_link);
-  else                                              formData.append('kakao_link', null);
+  else                                              formData.append('kakao_link', "");
 
   // Meeting 모델 PUT
   const response_meeting = yield call(fetch, url_meeting, {

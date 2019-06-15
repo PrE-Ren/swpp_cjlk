@@ -6,7 +6,7 @@ const mapStateToProps = (state) => {
   return {
     username : state.snu_moyeo.username,
     password : state.snu_moyeo.password,
-    check_meeting_click : state.snu_moyeo.check_meeting_click,
+    is_comment_loaded : state.snu_moyeo.is_comment_loaded,
     comments : state.snu_moyeo.comments
   }
 }
