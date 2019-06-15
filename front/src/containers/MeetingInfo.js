@@ -2,7 +2,8 @@ import { connect } from 'react-redux'
 import { MeetingInfo } from '../components/molecules/MeetingInfo'
 import { change_meeting_state_action, change_meeting_info_action } from '../store/snu_moyeo/MeetingCreateModify/actions'
 import { join_meeting_action, withdraw_meeting_action } from '../store/snu_moyeo/MeetingJoinWithdraw/actions'
-import { load_leaderinfo_action, load_memberinfo_action } from '../store/snu_moyeo/UserLoad/actions'
+import { load_leaderinfo_action, load_memberinfo_action, check_member_action } from '../store/snu_moyeo/UserLoad/actions'
+import { accuse_action } from '../store/snu_moyeo/Admin/actions';
 
 const mapStateToProps = (state, own_props) => {
   return {
@@ -29,6 +30,12 @@ const mapDispatchToProps = (dispatch) => {
     },
     load_memberinfo_click : (members) => {  //  참여 멤버들 정보를 로드하여 세션 스토리지에 저장 후 플래그 설정
       dispatch(load_memberinfo_action(members))
+    },
+    accuse_click : (hash, accuse_reason, member_id) => {
+      dispatch(accuse_action(hash, accuse_reason, member_id))
+    },
+    check_member_click : () => {
+      dispatch(check_member_action())
     }
   }
 }
