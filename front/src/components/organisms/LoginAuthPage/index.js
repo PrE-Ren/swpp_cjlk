@@ -34,6 +34,7 @@ export const LoginAuthPage = ({ username, password, mySNU_verification_token, ph
           </Grid>
         </Segment>
       </Form>
+
     </Grid.Column>
 
   // 이메일 및 인증번호 입력 창 (인증 완료 시)
