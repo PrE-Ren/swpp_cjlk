@@ -8,7 +8,10 @@ export const Join_chatroom = ({ meetinglist_join }) => {
       <div>
         <Menu.Item><Icon name='chat' size='big' />채팅방 빠른 입장</Menu.Item>
         {meetings.map(meeting_entry =>
-          <List.Item key={meeting_entry.id} as='a' target="_blank" href="https://open.kakao.com/o/gvMvxRsb">{meeting_entry.title}</List.Item>
+          meeting_entry.kakao_link == "null" ?
+            <div key={meeting_entry.id}></div>
+            :
+            <List.Item key={meeting_entry.id} as='a' target="_blank" href={meeting_entry.kakao_link}>{meeting_entry.title}</List.Item>
         )}
       </div>
     )

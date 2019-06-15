@@ -80,6 +80,7 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
           due: due,                  //  마감 기한 (입력)
           min_people: min_people,    //  최소 인원 (입력)
           max_people: max_people,    //  최대 인원 (입력)
+          kakao_link : kakao_link,   //  오픈채팅 링크
           description: description,  //  본문 (입력)
           kind: kind,                //  유형 (입력)
           leader: username,          //  주최자 아이디 (자동 입력)
@@ -101,6 +102,7 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
           <Form.Input disabled fluid label='최소인원' placeholder='2' type="number" width={2} defaultValue={meeting_info.min_people}  />
           <Form.Input disabled fluid label='최대인원' placeholder='2' type="number" width={2} defaultValue={meeting_info.max_people}  />
         </Form.Group>
+        <Form.Input fluid label='오픈채팅방 링크' placeholder='https://open.kakao.com/' defaultValue={meeting_info.kakao_link} onChange={handle_kakao_link} />
         <Form.Input fluid label='사진' type="file" width={6} onChange={handle_picture} accept="image/*" />
         <div><Map meeting_info = {meeting_info} write = {true} /></div>
         <Form.TextArea label='내용' placeholder='About this meeting...' defaultValue={meeting_info.description} onChange={handle_description} />
@@ -108,7 +110,8 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
           title: (title !== undefined) ? title : meeting_info.title,                          // 수정 가능 (안 바꿨으면 기존 값 사용)
           due: meeting_info.due,                                                              // 수정 불가능 (기존 값 사용)
           min_people: meeting_info.min_people,                                                // 수정 불가능 (기존 값 사용)
-          max_people: meeting_info.min_people,                                                // 수정 불가능 (기존 값 사용)
+          max_people: meeting_info.min_people,
+          kakao_link: (kakao_link !== undefined) ? kakao_link : meeting_info.kakao_link,      // 수정 불가능 (기존 값 사용)
           description: (description !== undefined) ? description : meeting_info.description,  // 수정 가능 (안 바꿨으면 기존 값 사용)
           kind: meeting_info.kind,                                                            // 수정 불가능 (기존 값 사용)
           leader: username,                                                                   // 수정 불가능 (기존 값 사용)

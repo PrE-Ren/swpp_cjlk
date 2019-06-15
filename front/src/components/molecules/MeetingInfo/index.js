@@ -132,6 +132,16 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
           <List.Content> 모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)} </List.Content>
         </List.Item>
 
+
+        {/* 오픈 채팅방 null인 경우는 표시하지 않음*/}
+        {meeting_info.kakao_link !== "null" && meeting_info.members.includes(Number(state.user_id)) ?
+            <List.Item>
+              <List.Icon name='chat' />
+              <List.Content as='a' target="_blank" href={meeting_info.kakao_link}> 오픈채팅링크 : {meeting_info.kakao_link} </List.Content>
+            </List.Item>
+            :
+            <div></div>
+        }
       </List>
 
       {/* 지도 */}
