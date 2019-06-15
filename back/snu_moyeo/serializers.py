@@ -33,6 +33,10 @@ class MeetingSerializer(serializers.ModelSerializer):
 
         min_people = data['min_people']
         max_people = data['max_people']
+
+        if not (max_people > 1 and min_people > 1) :
+            raise serializers.ValidationError("At least 1")
+
         if (min_people > max_people):
             raise serializers.ValidationError("Max should be larger than Min")
 
@@ -73,7 +77,8 @@ class MeetingSerializer(serializers.ModelSerializer):
             'members',      # invisible (ManyToManyField in models.py)
             'comments',      # invisible (read_only = True in serializers.py)
             'latitude',
-            'longitude'
+            'longitude',
+            'kakao_link'
         )
 
 class SnuUserSerializer(serializers.ModelSerializer):
