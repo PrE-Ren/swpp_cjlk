@@ -1,11 +1,12 @@
 import { connect } from 'react-redux'
 import { CommentList } from '../components/molecules/CommentList'
-import { add_comment_action, edit_comment_action, delete_comment_action } from '../store/snu_moyeo/actions'
+import { add_comment_action, edit_comment_action, delete_comment_action } from '../store/snu_moyeo/Comment/actions'
 
 const mapStateToProps = (state) => {
   return {
     username : state.snu_moyeo.username,
     password : state.snu_moyeo.password,
+    check_meeting_click : state.snu_moyeo.check_meeting_click,
     comments : state.snu_moyeo.comments
   }
 }

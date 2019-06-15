@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { ListPage } from '../../components/organisms/ListPage'
-import { change_page_num_action } from '../../store/snu_moyeo/actions'
+import { change_page_num_action } from '../../store/snu_moyeo/MeetingLoad/actions'
 
 const mapStateToProps = (state) => {
   return {

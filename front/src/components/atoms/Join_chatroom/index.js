@@ -4,7 +4,7 @@ import { Menu, Icon } from 'semantic-ui-react'
 
 const Join_chatroom = () => {
   return (
-    <Menu.Item><Icon name='chat' size='big' />채팅방 빠른 입장</Menu.Item>
+    <Menu.Item><Icon name='chat' size='big' /> 채팅방 빠른 입장 </Menu.Item>
   )
 }
 

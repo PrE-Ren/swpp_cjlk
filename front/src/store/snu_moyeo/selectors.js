@@ -16,6 +16,11 @@ export const initialState = {
   meetinglist_history : sessionStorage.getItem("history"),
   meetinglist_list : sessionStorage.getItem("kind"),
   meetinglist_all : sessionStorage.getItem("all"),
+  report_list : sessionStorage.getItem("report_list"),
+  comments : sessionStorage.getItem("comments"),
   page_num : sessionStorage.getItem("page_num"),
-  comments : null
+
+  check_leader_click : false,
+  check_member_click : false,
+  check_meeting_click : false
 };
