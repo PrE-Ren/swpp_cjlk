@@ -530,6 +530,13 @@ class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
     '''
 
+def InfoExcel(request, meeting_id) :
+    meeitng_info = Meeting.objects.get(pk = meeting_id)
+    participants = meeting_info.members.all()
+    print(type(participants))
+    
+
+
 def searchShop(request, search_word) :
     client_id = "N6c7MAUvz7uiaMUNt1Ww" # 애플리케이션 등록시 발급 받은 값 입력
     client_secret = "1hdjaYpmI6" # 애플리케이션 등록시 발급 받은 값 입력

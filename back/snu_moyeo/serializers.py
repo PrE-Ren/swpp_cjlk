@@ -77,7 +77,8 @@ class MeetingSerializer(serializers.ModelSerializer):
             'members',      # invisible (ManyToManyField in models.py)
             'comments',      # invisible (read_only = True in serializers.py)
             'latitude',
-            'longitude'
+            'longitude',
+            'kakao_link'
         )
 
 class SnuUserSerializer(serializers.ModelSerializer):
