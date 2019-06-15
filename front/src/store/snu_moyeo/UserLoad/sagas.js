@@ -20,10 +20,10 @@ export function* load_leaderinfo_func(action) {
   const response_leaderinfo = yield call(fetch, url_leaderinfo, { method : 'GET' })
 
   if (response_leaderinfo.ok) {
-    const leaderinfo = yield call([response_leaderinfo, response_leaderinfo.json])
-    sessionStorage.setItem("leader.name", leaderinfo.name)                  //  리더 이름(닉네임) 로드 후 세션 스토리지에 저장
+    const leaderinfo = yield call([response_leaderinfo, response_leaderinfo.json])                
     sessionStorage.setItem("leader.email", leaderinfo.email)                //  리더 이메일 로드 후 세션 스토리지에 저장
     sessionStorage.setItem("leader.phone_number", leaderinfo.phone_number)  //  리더 폰 번호 로드 후 세션 스토리지에 저장
+    sessionStorage.setItem("leader.points", leaderinfo.point)
     yield put(actions.load_leaderinfo_success_action())                     //  리더 정보 로드 완료
   }
   else
@@ -51,6 +51,8 @@ export function* load_memberinfo_func(action) {
       memberinfo_list[x][1] = memberinfo.name
       memberinfo_list[x][2] = memberinfo.email
       memberinfo_list[x][3] = memberinfo.phone_number
+      memberinfo_list[x][4] = memberinfo.point
+      memberinfo_list[x][5] = memberinfo.id
       x = x + 1;
     }
     else
