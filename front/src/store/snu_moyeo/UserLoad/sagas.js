@@ -61,7 +61,7 @@ export function* load_memberinfo_func(action) {
   }
 
   sessionStorage.setItem("member_list", JSON.stringify(memberinfo_list))  //  참여 멤버 정보 로드 후 세션 스토리지에 저장
-  yield put(actions.load_memberinfo_success_action(memberinfo_list))      //  참여 멤버 정보 로드 완료
+  yield put(actions.load_memberinfo_success_action())                     //  참여 멤버 정보 로드 완료
 }
 
 export default function* () {

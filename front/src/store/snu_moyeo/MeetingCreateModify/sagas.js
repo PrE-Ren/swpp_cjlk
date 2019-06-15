@@ -148,8 +148,9 @@ export function* change_meeting_state_func(action) {
   if (action.meeting_info.picture !== null) formData.append('picture', action.meeting_info.picture, action.meeting_info.picture.name)
   else                                      formData.append('picture', null, null)
 
-  if (action.meeting_info.kakao_link !== undefined) formData.append('kakao_link', action.meeting_info.kakao_link);
-  else                                              formData.append('kakao_link', null);
+  // 카카오 링크 (기존 값)
+  if (action.meeting_info.kakao_link !== "") formData.append('kakao_link', action.meeting_info.kakao_link);
+  else                                       formData.append('kakao_link', "");
 
   // Meeting 모델 PUT
   const response_meeting = yield call(fetch, url_meeting, {

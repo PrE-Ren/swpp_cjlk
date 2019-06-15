@@ -40,6 +40,5 @@ export const load_memberinfo_action = (members) => {
 export const load_memberinfo_success_action = (member_list) => {
   return {
     type : LOAD_MEMBERINFO_SUCCESS_ACTION,
-    member_list
   }
 }

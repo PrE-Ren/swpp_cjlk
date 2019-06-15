@@ -29,302 +29,317 @@ const dateParse = (data) => {
 // prepare_load_memberinfo_click : 참여 멤버들 정보를 가져오기 전까지 봉인하기 위해 플래그를 설정할 함수
 // load_memberinfo_click : 참여 인원을 눌렀을 때 참여 멤버들의 정보를 가져오기 위해 액션을 디스패치할 함수
 // accuse_click : 신고할 때 액션을 디스패치할 함수 (Report 모델 POST)
-export const MeetingInfo = ({ state, meeting_info,
-                              change_meeting_state_click, change_meeting_info_click, join_meeting_click, withdraw_meeting_click,
-                              prepare_load_leaderinfo_click, load_leaderinfo_click,
-                              prepare_load_memberinfo_click, load_memberinfo_click,
-                              accuse_click
-                            }) => {
-  const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')  //  유저의 해시값
-  const member_list = JSON.parse(sessionStorage.getItem("member_list"))  //  참여 멤버 정보 로드
+export class MeetingInfo extends React.Component {
+  state = {
+    accuse_open: false,
+    accuse_reason: null,  //  신고 사유
+    member_id: null       //  Reportee 고유값
+  }
+  accuse_show = () => this.setState({ accuse_open: true })
+  accuse_close = () => this.setState({ accuse_open: false})
 
-  let accuse_reason                        //  신고 사유
-  let member_id = meeting_info.leaderid    //  Reportee 고유값
-  const leader_id = meeting_info.leaderid  //  Reporter 고유값
+  render() {
+    const {
+      state, meeting_info, change_meeting_state_click, change_meeting_info_click, join_meeting_click, withdraw_meeting_click,
+      prepare_load_leaderinfo_click, load_leaderinfo_click,prepare_load_memberinfo_click, load_memberinfo_click, accuse_click
+    } = this.props
+    const { accuse_reason, member_id } = this.state
 
-  // 신고 창
-  const accuse_content =
-    <Form>
-      <Form.Field control={TextArea} label = '신고 사유' placeholder = 'Accuse reason' onChange={(e) => { accuse_reason = e.target.value }}/>
-      <Form.Field control={Button} onClick = {() => { accuse_click(hash, accuse_reason, member_id) }}> 신고 완료 </Form.Field>
-    </Form>
+    const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')  //  유저의 해시값
+    const member_list = JSON.parse(sessionStorage.getItem("member_list"))  //  참여 멤버 정보 로드
+    const leader_id = meeting_info.leaderid  //  Reporter 고유값
 
-  // 미팅 정보
-  const content =
-    <Modal.Description style={{ marginLeft: '10px' }}>
-      <List style={{ marginTop: '20px' }}>
+    // 신고 창
+    const accuse_content =
+      <Modal open={this.state.accuse_open} onClose={this.accuse_close}>
+        <Modal.Header> 신고하기 </Modal.Header>
+        <Form reply style={{ margin: '10px' }}>
+          <Form.TextArea onChange={(e) => { this.setState({ accuse_reason: e.target.value }) }} placeholder='Accuse reason'/>
+        </Form>
+        <Modal.Actions>
+          <Button positive icon='checkmark' labelPosition='right' content='완료'
+                  onClick={() => { accuse_click(hash, accuse_reason, member_id); alert("신고가 접수되었습니다."); this.accuse_close() }}/>
+          <Button negative onClick={this.accuse_close}> 취소 </Button>
+        </Modal.Actions>
+      </Modal>
 
-        {/* 주최자 (정보 보기를 누르면 리더 정보를 가져온 후 플래그가 true로 설정되어 리렌더링됨) */}
-        <List.Item>
-          <List.Icon name='user circle' />
-          <List.Content> 주최자 :&nbsp;
-            {state.is_leader_loaded
-              ?
-              <Dropdown text={meeting_info.leader} onClick={() => { prepare_load_leaderinfo_click(); load_leaderinfo_click(meeting_info.leaderid) }}>
-                <Dropdown.Menu>
-                  <Dropdown.Item>
-                    <Dropdown text='정보보기'>
-                      <Dropdown.Menu>
-                        <Message header='리더 정보' content={<div>
-                          이름 : {meeting_info.leader}<br/>
-                          이메일 : {sessionStorage.getItem("leader.email")}<br/>
-                          전화번호 : {sessionStorage.getItem("leader.phone_number")}<br/>
-                          벌점 : {sessionStorage.getItem("leader.points")}<br/>
-                          </div>} />
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </Dropdown.Item>
-                  <Dropdown.Item>
-                    <Modal trigger = {<div>신고하기</div>}>
-                      {accuse_content}
-                    </Modal>
-                  </Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-              :
-              <Dropdown text={meeting_info.leader} onClick={() => { prepare_load_leaderinfo_click(); load_leaderinfo_click(meeting_info.leaderid)}}>
-                <Dropdown.Menu>
-                </Dropdown.Menu>
-              </Dropdown>
-             }
-          </List.Content>
-        </List.Item>
+    // 미팅 정보
+    const content =
+      <Modal.Description style={{ marginLeft: '10px' }}>
+        <List style={{ marginTop: '20px' }}>
 
-        {/* 게시 날짜 */}
-        <List.Item>
-          <List.Icon name='calendar alternate outline' />
-          <List.Content> 게시 날짜 : {dateParse(meeting_info.created)} </List.Content>
-        </List.Item>
-
-        {/* 마감 기한 */}
-        <List.Item>
-          <List.Icon name='calendar alternate outline' />
-          <List.Content> 마감 날짜 : {dateParse(meeting_info.due)} </List.Content>
-        </List.Item>
-
-        {/* 유형 */}
-        <List.Item>
-          <List.Icon name='bars' />
-          <List.Content> 분류 : {meeting_state.KIND_NUM_TO_STRING(meeting_info.kind)} </List.Content>
-        </List.Item>
-
-        {/* 참여 멤버(인원) */}
-        <List.Item>
-          <List.Icon name='user' />
-          <List.Content> 현재 참여 인원 :
-            {/* 참여 멤버를 신고할 수 있는 건 오직 리더 */}
-            {leader_id == state.user_id ?
-              <Dropdown text = {' ' + meeting_info.members.length + '명'}
-                        onClick={() => { prepare_load_memberinfo_click(); load_memberinfo_click(meeting_info.members) }}>
-              {state.is_member_loaded
-                ?
-                  <Dropdown.Menu>
-                    {member_list.map(member =>
-                      <Dropdown.Item key={member[0]}>
-                        <Dropdown text={member[0]}>
-                          <Dropdown.Menu>
-                            <Dropdown.Item>
-                              <Dropdown text='정보보기'>
-                                <Dropdown.Menu>
-                                  <Message header='멤버 정보' content={<div>
-                                    이름 : {member[1]}<br/>
-                                    이메일 : {member[2]}<br/>
-                                    전화번호 : {member[3]}<br/>
-                                    벌점 : {member[4]}<br/>
-                                    </div>} />
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            </Dropdown.Item>
-                            <Dropdown.Item onClick={() => {member_id = member[5]}}>
-                              <Modal trigger = {<div>신고하기</div>}>
-                                {accuse_content}
-                              </Modal>
-                            </Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </Dropdown.Item>
-                    )}
-                  </Dropdown.Menu>
-                :
-                  <Dropdown.Menu>
-                  </Dropdown.Menu>
-                }
-                </Dropdown>
-              :
-              <span> {meeting_info.members.length}명</span>
-            }
-          </List.Content>
-        </List.Item>
-
-        {/* 상태 */}
-        <List.Item>
-          <List.Icon name='circle' />
-          <List.Content> 모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)} </List.Content>
-        </List.Item>
-
-        {/* 리더는 참여 멤버의 정보를 엑셀 파일 형식으로 다운할 수 있음 */}
-        {meeting_info.leader == state.username
-          ?
+          {/* 주최자 (정보 보기를 누르면 리더 정보를 가져온 후 플래그가 true로 설정되어 리렌더링됨) */}
           <List.Item>
-            <List.Icon name='file excel' />
-            <List.Content as='a' target="_blank" href={'http://localhost:8000/infoexcel/' + meeting_info.id}> 참여 멤버 정보 다운 </List.Content>
+            <List.Icon name='user circle' />
+            <List.Content> 주최자 :&nbsp;
+              {state.is_leader_loaded
+                ?
+                <Dropdown id="top" text={meeting_info.leader} onClick={() => { prepare_load_leaderinfo_click(); load_leaderinfo_click(meeting_info.leaderid) }}>
+                  <Dropdown.Menu>
+                    <Dropdown.Item>
+                      <Dropdown text='정보보기'>
+                        <Dropdown.Menu>
+                          <Message header='리더 정보' content={<div>
+                            이름 : {meeting_info.leader}<br/>
+                            이메일 : {sessionStorage.getItem("leader.email")}<br/>
+                            전화번호 : {sessionStorage.getItem("leader.phone_number")}<br/>
+                            벌점 : {sessionStorage.getItem("leader.points")}<br/>
+                            </div>} />
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </Dropdown.Item>
+                    <Dropdown.Item>
+                      <Dropdown text='신고하기' onClick={() => { this.setState({ member_id: leader_id}); this.accuse_show() }}/>
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                :
+                <Dropdown text={meeting_info.leader} onClick={() => { prepare_load_leaderinfo_click(); load_leaderinfo_click(meeting_info.leaderid)}}>
+                  <Dropdown.Menu>
+                  </Dropdown.Menu>
+                </Dropdown>
+              }
+              {accuse_content}
+            </List.Content>
           </List.Item>
-          :
-          <div></div>
-        }
 
-        {/* 오픈 채팅방 null인 경우는 표시하지 않음 */}
-        {meeting_info.kakao_link !== "null" && meeting_info.members.includes(Number(state.user_id)) ?
+          {/* 게시 날짜 */}
+          <List.Item>
+            <List.Icon name='calendar alternate outline' />
+            <List.Content> 게시 날짜 : {dateParse(meeting_info.created)} </List.Content>
+          </List.Item>
+
+          {/* 마감 기한 */}
+          <List.Item>
+            <List.Icon name='calendar alternate outline' />
+            <List.Content> 마감 날짜 : {dateParse(meeting_info.due)} </List.Content>
+          </List.Item>
+
+          {/* 유형 */}
+          <List.Item>
+            <List.Icon name='bars' />
+            <List.Content> 분류 : {meeting_state.KIND_NUM_TO_STRING(meeting_info.kind)} </List.Content>
+          </List.Item>
+
+          {/* 참여 멤버(인원) */}
+          <List.Item>
+            <List.Icon name='user' />
+            <List.Content> 현재 참여 인원 :
+              {/* 참여 멤버를 신고할 수 있는 건 오직 리더 */}
+              {leader_id == state.user_id
+                ?
+                <Dropdown text = {' ' + meeting_info.members.length + '명'}
+                          onClick={() => { prepare_load_memberinfo_click(); load_memberinfo_click(meeting_info.members) }}>
+                {state.is_member_loaded
+                  ?
+                    <Dropdown.Menu>
+                      {member_list.map(member =>
+                        <Dropdown.Item key={member[0]}>
+                          <Dropdown text={member[0]}>
+                            <Dropdown.Menu>
+                              <Dropdown.Item>
+                                <Dropdown text='정보보기'>
+                                  <Dropdown.Menu>
+                                    <Message header='멤버 정보' content={<div>
+                                      이름 : {member[1]}<br/>
+                                      이메일 : {member[2]}<br/>
+                                      전화번호 : {member[3]}<br/>
+                                      벌점 : {member[4]}<br/>
+                                      </div>} />
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              </Dropdown.Item>
+                              <Dropdown.Item >
+                                <Dropdown text='신고하기' onClick={() => { this.setState({ member_id: member[5]}); this.accuse_show() }}/>
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </Dropdown.Item>
+                      )}
+                    </Dropdown.Menu>
+                  :
+                    <Dropdown.Menu>
+                    </Dropdown.Menu>}
+                </Dropdown>
+                :
+                <span> {meeting_info.members.length}명</span>
+              }
+              {accuse_content}
+            </List.Content>
+          </List.Item>
+
+          {/* 상태 */}
+          <List.Item>
+            <List.Icon name='circle' />
+            <List.Content> 모임 상태 : {meeting_state.STATE_NUM_TO_STRING(meeting_info.state)} </List.Content>
+          </List.Item>
+
+          {/* 리더는 참여 멤버의 정보를 엑셀 파일 형식으로 다운할 수 있음 */}
+          {meeting_info.leader == state.username
+            ?
             <List.Item>
-              <List.Icon name='chat' />
-              <List.Content as='a' target="_blank" href={meeting_info.kakao_link}> 오픈채팅링크 : {meeting_info.kakao_link} </List.Content>
+              <List.Icon name='file excel' />
+              <List.Content as='a' target="_blank" href={'http://localhost:8000/infoexcel/' + meeting_info.id}> 참여 멤버 정보 다운 </List.Content>
             </List.Item>
             :
             <div></div>
-        }
-      </List>
+          }
 
-      {/* 지도 */}
-      <Map meeting_info = {meeting_info} write = {false} />
+          {/* 오픈 채팅방 링크가 있고 내가 그 모임에 참여 중이면 링크가 보임 */}
+          {meeting_info.kakao_link !== "" && meeting_info.members.includes(Number(state.user_id))
+            ?
+            <List.Item>
+              <List.Icon name='chat' />
+              <List.Content as='a' target="_blank" href={meeting_info.kakao_link}> 오픈 채팅 링크 : {meeting_info.kakao_link}
+              </List.Content>
+            </List.Item>
+            :
+            <div></div>
+          }
+        </List>
 
-      {/* 본문 */}
-      <h4><pre>{meeting_info.description}</pre></h4>
+        {/* 지도 */}
+        <Map meeting_info = {meeting_info} write = {false} />
 
-    </Modal.Description>
+        {/* 본문 */}
+        <h4><pre>{meeting_info.description}</pre></h4>
 
-  // 사진이 첨부된 미팅 게시물에서, 사진 경로에 "http://"가 없는 경우 이를 붙여줌 (그래야 보임)
-  if (meeting_info.picture != null) {
-    if (meeting_info.picture.includes("http://") == false) {
-      meeting_info.picture = "http://127.0.0.1:8000" + meeting_info.picture
-      console.log(meeting_info.picture)
+      </Modal.Description>
+
+    // 사진이 첨부된 미팅 게시물에서, 사진 경로에 "http://"가 없는 경우 이를 붙여줌 (그래야 보임)
+    if (meeting_info.picture != null) {
+      if (meeting_info.picture.includes("http://") == false) {
+        meeting_info.picture = "http://127.0.0.1:8000" + meeting_info.picture
+        console.log(meeting_info.picture)
+      }
     }
-  }
 
-  // 내가 만든 모임
-  if (meeting_info.leader == state.username) {
-    switch (meeting_info.state) {
-      // 모집 중
-      case meeting_state.OPEN :
-        return (
-          <div>
-            <Modal.Content image scrolling>
-              {meeting_info.picture != null ? <Image size='medium' src={meeting_info.picture} wrapped /> : <div></div>}
-              {content}
-              <CommentList meeting_id={meeting_info.id} />
-            </Modal.Content>
-            <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-              <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-              <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-              <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-            </Modal.Actions>
-          </div>
-        )
-      // 마감
-      case meeting_state.CLOSED :
-        return (
-          <div>
-            <Modal.Content image scrolling>
-              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              {content}
-              <CommentList meeting_id={meeting_info.id} />
-            </Modal.Content>
-            <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-              <ReOpenButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-              <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-              <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-            </Modal.Actions>
-          </div>
-        )
-      // 추가모집 중
-      case meeting_state.RE_OPEN :
-        return (
-          <div>
-            <Modal.Content image scrolling>
-              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              {content}
-              <CommentList meeting_id={meeting_info.id} />
-            </Modal.Content>
-            <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-              <ReCloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-              <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-              <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-            </Modal.Actions>
-          </div>
-        )
-      // 추가모집 마감
-      case meeting_state.RE_CLOSED :
-        return (
-          <div>
-            <Modal.Content image scrolling>
-              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              {content}
-              <CommentList meeting_id={meeting_info.id} />
-            </Modal.Content>
-            <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-              <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
-              <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
-            </Modal.Actions>
-          </div>
-        )
-      // 해산
-      case meeting_state.BREAK_UP :
-        return (
-          <div>
-            <Modal.Content image scrolling>
-              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-              {content}
-              <CommentList meeting_id={meeting_info.id} />
-            </Modal.Content>
-          </div>
-        )
-    }
-  }
-
-  // 다른 사람이 만든 모임
-  else {
-    // 참여 중 O
-    if (meeting_info.members.includes(Number(state.user_id))) {
+    // 내가 만든 모임
+    if (meeting_info.leader == state.username) {
       switch (meeting_info.state) {
-        case meeting_state.BREAK_UP :
+        // 모집 중
+        case meeting_state.OPEN :
           return (
             <div>
-              <Modal.Content image>
-                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              <Modal.Content image scrolling>
+                {meeting_info.picture != null ? <Image size='medium' src={meeting_info.picture} wrapped /> : <div></div>}
                 {content}
                 <CommentList meeting_id={meeting_info.id} />
               </Modal.Content>
+              <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                <CloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+              </Modal.Actions>
             </div>
           )
-
-        default :
+        // 마감
+        case meeting_state.CLOSED :
           return (
             <div>
-              <Modal.Content image>
+              <Modal.Content image scrolling>
                 {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
                 {content}
                 <CommentList meeting_id={meeting_info.id} />
               </Modal.Content>
               <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-                <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
+                <ReOpenButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
               </Modal.Actions>
+            </div>
+          )
+        // 추가모집 중
+        case meeting_state.RE_OPEN :
+          return (
+            <div>
+              <Modal.Content image scrolling>
+                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                {content}
+                <CommentList meeting_id={meeting_info.id} />
+              </Modal.Content>
+              <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                <ReCloseButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+              </Modal.Actions>
+            </div>
+          )
+        // 추가모집 마감
+        case meeting_state.RE_CLOSED :
+          return (
+            <div>
+              <Modal.Content image scrolling>
+                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                {content}
+                <CommentList meeting_id={meeting_info.id} />
+              </Modal.Content>
+              <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                <BreakUpButton meeting_info = {meeting_info} f = {change_meeting_state_click} hash = {hash} />
+                <ModifyButton meeting_info = {meeting_info} f = {change_meeting_info_click} />
+              </Modal.Actions>
+            </div>
+          )
+        // 해산
+        case meeting_state.BREAK_UP :
+          return (
+            <div>
+              <Modal.Content image scrolling>
+                {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                {content}
+                <CommentList meeting_id={meeting_info.id} />
+              </Modal.Content>
             </div>
           )
       }
     }
-    // 참여 중 X
+
+    // 다른 사람이 만든 모임
     else {
-      return (
-        <div>
-          <Modal.Content image>
-            {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
-            {content}
-            <CommentList meeting_id={meeting_info.id} />
-          </Modal.Content>
-          <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
-            <JoinButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {join_meeting_click} />
-          </Modal.Actions>
-        </div>
-      )
+      // 참여 중 O
+      if (meeting_info.members.includes(Number(state.user_id))) {
+        switch (meeting_info.state) {
+          case meeting_state.BREAK_UP :
+            return (
+              <div>
+                <Modal.Content image>
+                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                  {content}
+                  <CommentList meeting_id={meeting_info.id} />
+                </Modal.Content>
+              </div>
+            )
+
+          default :
+            return (
+              <div>
+                <Modal.Content image>
+                  {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+                  {content}
+                  <CommentList meeting_id={meeting_info.id} />
+                </Modal.Content>
+                <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+                  <WithdrawButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {withdraw_meeting_click} />
+                </Modal.Actions>
+              </div>
+            )
+        }
+      }
+      // 참여 중 X
+      else {
+        return (
+          <div>
+            <Modal.Content image>
+              {meeting_info.picture != null ? <img src={meeting_info.picture} width="400" /> : <div></div>}
+              {content}
+              <CommentList meeting_id={meeting_info.id} />
+            </Modal.Content>
+            <Modal.Actions style={{ float: 'right', marginTop: '20px', marginBottom: '10px' }}>
+              <JoinButton meeting_info = {meeting_info} user_id = {state.user_id} hash = {hash} f = {join_meeting_click} />
+            </Modal.Actions>
+          </div>
+        )
+      }
     }
   }
 }
