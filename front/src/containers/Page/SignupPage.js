@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { SignupPage } from '../../components/organisms/SignupPage'
-import { signup_action } from '../../store/snu_moyeo/actions'
+import { signup_action } from '../../store/snu_moyeo/Account/actions'
 
 const mapStateToProps = (state) => {
   return {

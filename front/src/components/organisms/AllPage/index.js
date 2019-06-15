@@ -10,7 +10,7 @@ import { Grid, Header, Icon, Container, Pagination, Search } from 'semantic-ui-r
 // meetinglist_all : 현재 페이지에서 보여줄 미팅 리스트 정보
 // change_page_num_click : 페이지를 바꿀 때 액션을 디스패치할 함수
 export const AllPage = ({ username, mySNU_verification_token, phone_verification_token, meetinglist_all, change_page_num_click }) => {
-
+  console.log(meetinglist_all)
   // 로그인 X : 로그인 페이지로 리다이렉트
   if (username == null) {
     Object.defineProperty(window.location, 'href', { writable: true, value: '/login' });

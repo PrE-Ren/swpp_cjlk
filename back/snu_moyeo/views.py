@@ -471,13 +471,13 @@ class ReportList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(reporter = self.request.user)
-    
+
     def get_queryset(self):
         user = self.request.user
         if (user.is_superuser):
             return Report.objects.all()
         return Meeting.objects.none()
-    
+
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
