@@ -58,8 +58,13 @@ export class MeetingInfo extends React.Component {
         </Form>
         <Modal.Actions>
           <Button positive icon='checkmark' labelPosition='right' content='완료'
-                  onClick={() => { accuse_click(hash, accuse_reason, member_id); alert("신고가 접수되었습니다."); this.accuse_close() }}/>
-          <Button negative onClick={this.accuse_close}> 취소 </Button>
+                  onClick={() => {
+                    if (accuse_reason !== null)
+                      accuse_click(hash, accuse_reason, member_id), alert("신고가 접수되었습니다."), this.accuse_close()
+                    else
+                      alert("신고 사유를 적어주세요.")
+                  }}/>
+          <Button negative onClick={() => { this.setState({ accuse_reason: null }), this.accuse_close() }}> 취소 </Button>
         </Modal.Actions>
       </Modal>
 

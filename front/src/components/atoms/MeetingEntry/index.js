@@ -1,6 +1,6 @@
 import React from 'react'
 import MeetingInfo from '../../../containers/MeetingInfo'
-import { Modal, Card, Header, Image, Grid } from 'semantic-ui-react'
+import { Modal, Card, Header, Image, Grid, Label } from 'semantic-ui-react'
 
 // 날짜를 보기 좋게 만들어주는 함수
 const dateParse = (data) => {
@@ -11,6 +11,15 @@ const dateParse = (data) => {
     day = day.replace(":", "시 ")
     day = day.replace(":", "분&")
     return day.split("&")[0]
+}
+
+// 모임 상태에 따라 다른 라벨 태그 생성
+const get_label = (state) => {
+  if (state == 0)       return <Label circular as='a' color='yellow'> 모집 중 </Label>
+  else if (state == 1)  return <Label circular as='a' color='red'> 모집 마감 </Label>
+  else if (state == 2)  return <Label circular as='a' color='pink'> 추가 모집 중 </Label>
+  else if (state == 3)  return <Label circular as='a' color='red'> 추가 모집 마감 </Label>
+  else                  return <Label circular as='a' color='grey'> 해산 </Label>
 }
 
 // meeting_info : id, title, created, due, min_people, max_people, description, state, kind,
@@ -28,8 +37,8 @@ export class MeetingEntry extends React.Component {
         this.props.prepare_load_comments_click();                   //  이전에 봤던 댓글 목록이 보이지 않도록 lock
         this.props.load_comments_click(this.props.meeting_info.id)  //  댓글 목록을 새로 로드하여 세션 스토리지에 설정한 뒤 unlock
       }}>
-        {/* 제목 */}
-        <Card.Header as='h5'> {this.props.meeting_info.title} </Card.Header>
+        {/* 제목 및 상태 라벨 */}
+        <Card.Header as='h5'> {this.props.meeting_info.title} &ensp; {get_label(this.props.meeting_info.state)} </Card.Header>
 
         {/* 모집 현황 (최소 인원) */}
         <Card.Meta>
