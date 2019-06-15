@@ -240,6 +240,13 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         report_list: report_list
       }
     }
+    
+    case 'CHECK_MEMBER_ACTION': {
+      return {
+        ...state,
+        check_member_click : false
+      }
+    }
 
     default:
       return state
