@@ -17,10 +17,8 @@ const dateParse = (data) => {
 // meeting_info : id, title, created, due, min_people, max_people, description, state, kind,
 //                leader, leaderid, picture, members, comments, latitude, longitude
 export class MeetingEntry extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { is_folded: true };
-  }
+  state = { is_folded: true }
+
   render() {
     // 미팅 정보를 보여줄 카드
     let meeting_entry = (
