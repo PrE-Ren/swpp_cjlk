@@ -32,8 +32,8 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
   const member_list = JSON.parse(sessionStorage.getItem("member_list"))  //  참여 멤버 정보 로드
 
   let accuse_reason
-  let member_id = sessionStorage.getItem("leader.id")
-  let leader_id = meeting_info.leaderid
+  let member_id = meeting_info.leaderid
+  const leader_id = meeting_info.leaderid
 
   const accuse_content = 
     <Form>
@@ -58,7 +58,7 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
                     <Dropdown text='정보보기'>
                       <Dropdown.Menu>
                         <Message header='리더 정보' content={<div>
-                          이름 : {sessionStorage.getItem("leader.name")}<br/>
+                          이름 : {meeting_info.leader}<br/>
                           이메일 : {sessionStorage.getItem("leader.email")}<br/>
                           전화번호 : {sessionStorage.getItem("leader.phone_number")}<br/>
                           벌점 : {sessionStorage.getItem("leader.points")}<br/>
