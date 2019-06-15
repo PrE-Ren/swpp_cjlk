@@ -133,6 +133,15 @@ export const MeetingInfo = ({ state, meeting_info, change_meeting_state_click, j
         </List.Item>
 
 
+        {meeting_info.leader == state.username ?
+          <List.Item>
+            <List.Icon name='file excel' />
+            <List.Content as='a' target="_blank" href={'http://localhost:8000/infoexcel/'+meeting_info.id}> 멤버 정보 다운</List.Content>
+          </List.Item>
+          :
+          <div></div>
+        }
+
         {/* 오픈 채팅방 null인 경우는 표시하지 않음*/}
         {meeting_info.kakao_link !== "null" && meeting_info.members.includes(Number(state.user_id)) ?
             <List.Item>
