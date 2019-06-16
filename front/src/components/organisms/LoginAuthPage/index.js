@@ -106,7 +106,7 @@ export class LoginAuthPage extends React.Component {
       return (<div></div>)
     }
 
-    // 로그인 O, 벌점 10 이상 : 로그인 페이지로 리다이렉트(by saga)
+    // 로그인 O, 벌점 10 이상 : 로그인 페이지로 리다이렉트 (by saga)
     else if (point >= 10) {
       return (<div></div>)
     }

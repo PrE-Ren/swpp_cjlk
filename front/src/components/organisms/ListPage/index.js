@@ -77,12 +77,11 @@ export const ListPage = ({ username, point, mySNU_verification_token, phone_veri
               </Grid.Column>
             </Grid>
           </Container>
-          {window.location.pathname[6] == 2 ?
-          <Container>
-            <NaverShopping/>
-          </Container>
-          : <Container>
-          </Container>}
+
+          {/* 네이버 쇼핑 검색 API */}
+          {window.location.pathname[6] == 2
+            ? <Container><NaverShopping/></Container>
+            : <Container></Container>}
         </Grid.Column>
 
         {/* Right Sidebar */}

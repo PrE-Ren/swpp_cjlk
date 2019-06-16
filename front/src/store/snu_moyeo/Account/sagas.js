@@ -27,7 +27,7 @@ export function* reload_auth() {
         alert('벌점 10점 이상으로 접근이 불가합니다. 운영자에게 연락하십시오.')
         Object.defineProperty(window.location, 'href', { writable: true, value: '/login' });
       }
-      
+
       // 인증 O : 홈 페이지로 리다이렉트
       else if (response_user.ok) {
         alert('이미 인증을 완료한 유저입니다.')
@@ -41,15 +41,15 @@ export function* reload_auth() {
         const email = response_user_data.mySNU_verified ? response_user_data.email : null
         const phone_number = response_user_data.phone_verified ? response_user_data.phone_number : null
         yield put(actions.login_success_action(  //  <인증 페이지에서 이미 인증된 필드의 유무 판단을 위한 정보 스토어에 저장>
-          username,                              //  유저 아이디
-          password,                              //  유저 패스워드
-          mySNU_verification_token,              //  이메일 토큰 : 이걸 설정하는 게 진짜 목적 (나머진 사실 불필요)
-          phone_verification_token,              //  폰 토큰 : 이걸 설정하는 게 진짜 목적 (나머진 사실 불필요)
-          response_user_data.user_id,            //  고유값
-          email,                                 //  이메일
-          phone_number,                          //  폰 번호
-          response_user_data.name,               //  이름(닉네임)
-          response_user_data.point               //  벌점
+          username,                              //  유저 아이디 (로그인이 성공 시 설정해주기 때문에 불필요)
+          password,                              //  유저 패스워드 (로그인 성공 시 설정해주기 때문에 불필요)
+          mySNU_verification_token,              //  이메일 토큰 : 이걸 설정하는 게 진짜 목적 (그래야 활성화 혹은 비활성화 가능)
+          phone_verification_token,              //  폰 토큰 : 이걸 설정하는 게 진짜 목적 (그래야 활성화 혹은 비활성화 가능)
+          response_user_data.user_id,            //  고유값 : 꼭 필요 (설정 안 해주면 평생 고유값은 스토어에 저장이 안 됨)
+          email,                                 //  이메일 : 꼭 필요 (설정 안 해주면 평생 이메일은 스토어에 저장 안 될 수도 있음)
+          phone_number,                          //  폰 번호 : 꼭 필요  (설정 안 해주면 평생 폰 번호는 스토어에 저장 안 될 수도 있음)
+          response_user_data.name,               //  이름(닉네임) : 꼭 필요 (설정 안 해주면 평생 이름는 스토어에 저장이 안 됨)
+          response_user_data.point               //  벌점 : 꼭 필요 (설정 안 해주면 평생 벌점은 스토어에 저장이 안 됨)
         ))
       }
     }
@@ -138,7 +138,7 @@ export function* login_func(action) {
           response_user_data.point                      //  벌점
         ))
         Object.defineProperty(window.location, 'href', { writable: true, value: '/' })
-      }  
+      }
     }
 
     // 인증 X : 인증 페이지로 리다이렉트
