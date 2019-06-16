@@ -37,3 +37,11 @@ it('test load_memberinfo_success_action', () => {
   }
   expect(actions.load_memberinfo_success_action(member_list)).toEqual(expectedAction)
 })
+
+it('test check_member_action', () => {
+
+  const expectedAction = {
+    type: actions.CHECK_MEMBER_ACTION
+  }
+  expect(actions.check_member_action()).toEqual(expectedAction)
+})

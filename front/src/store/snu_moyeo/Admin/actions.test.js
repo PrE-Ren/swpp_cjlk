@@ -25,3 +25,17 @@ it('test get_report_success_action', () => {
   }
   expect(actions.get_report_success_action(report_list)).toEqual(expectedAction)
 })
+
+it('test accuse_action', () => {
+  const hash = '1231asdq'
+  const accuse_reason = 'asdqwerq'
+  const member_id = '1'
+
+  const expectedAction = {
+    type: actions.ACCUSE_ACTION,
+    hash,
+    accuse_reason,
+    member_id
+  }
+  expect(actions.accuse_action(hash,accuse_reason,member_id)).toEqual(expectedAction)
+})

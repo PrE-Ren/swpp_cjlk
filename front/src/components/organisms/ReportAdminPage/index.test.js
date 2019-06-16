@@ -10,6 +10,6 @@ it('if user is not admin', () => {
 })
 
 it('if user is admin', () => {
-  const wrapper2 = wrap({ username : 'admin', report_list : '[]'})
+  const wrapper2 = wrap({ username : 'admin', report_list : '[{"id":1}]'})
   expect(wrapper2.contains(' User Reports ')).toBe(true)
 })
