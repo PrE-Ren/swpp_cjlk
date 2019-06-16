@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Grid, Header, Message, Segment } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Message, Segment, Icon } from 'semantic-ui-react'
 
 // username_store : 유저 아이디 (로그인 여부 확인을 위해 필요)
 // mySNU_verification_token : 이메일 토큰 (인증 여부 확인을 위해 필요)
@@ -23,6 +23,7 @@ export const LoginPage = ({ username_store, mySNU_verification_token, phone_veri
             </Segment>
           </Form>
           <Message><a href='/signup'> 회원가입 </a></Message>
+          <Icon name='question circle' /><a href='/tutorial'>홈페이지 소개</a>
         </Grid.Column>
       </Grid>
     )

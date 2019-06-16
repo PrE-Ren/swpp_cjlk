@@ -160,7 +160,7 @@ export function* signup_func(action) {
   let name = action.name     //  입력한 이름(닉네임)
   const url = 'http://127.0.0.1:8000/sign_up/'
   const info = JSON.stringify({ username: uid, password: upw, name: name});
-
+console.log(info)
   // 새로운 SnuUser 객체 생성 (POST)
   const response = yield call(fetch, url, {
     method: 'POST',

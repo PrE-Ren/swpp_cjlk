@@ -1,5 +1,5 @@
 import React from 'react'
-import TutorialPage from '../../../containers/Page/TutorialPage'
+import { TutorialPage } from '../../organisms/TutorialPage'
 
 const Tutorial = () => {
   return <TutorialPage/>
