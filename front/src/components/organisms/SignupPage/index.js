@@ -64,7 +64,7 @@ const is_valid_form = (username, password, password_confirm, nickname, is_captch
 // username_store : 유저 아이디 (로그인 여부 확인을 위해 필요)
 // mySNU_verification_token : 이메일 토큰 (인증 여부 확인을 위해 필요)
 // phone_verification_token : 폰 토큰 (인증 여부 확인을 위해 필요)
-// is_captcha_verified : 보안문자 인증 완료 여
+// is_captcha_verified : 보안문자 인증 완료 여부
 // signup_click : 회원가입 버튼을 눌렀을 때 액션을 디스패치할 함수
 export class SignupPage extends React.Component {
   constructor(props) {
