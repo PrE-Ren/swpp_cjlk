@@ -249,6 +249,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       return {
         ...state,
         is_search_loaded: true
+
       }
     }
 

@@ -95,7 +95,7 @@ export function* modify_func(action) {
   const meeting_info = JSON.parse(sessionStorage.getItem("meeting_info"))
   const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_info.id}/`
   const formData = new FormData()
-
+console.log(sessionStorage.getItem("lat"))
   formData.append('title', action.meeting_info.title)              //  제목 (새로 입력) : 안 바꾸면 기존 값
   formData.append('due', action.meeting_info.due)                  //  마감 기한 (기존 값)
   formData.append('min_people', action.meeting_info.min_people)    //  최소 인원 (기존 값)

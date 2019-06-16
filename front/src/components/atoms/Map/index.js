@@ -32,6 +32,8 @@ export class Map extends React.Component {
 
     // 모임을 생성 혹은 수정하려는 경우
     else if (this.props.write == true) {
+      console.log("아나")
+      console.log(this.props.meeting_info)
 
       // New (모임 생성)
       if (this.props.meeting_info == null) {
@@ -42,9 +44,16 @@ export class Map extends React.Component {
 
       // Modify (모임 수정)
       else {
-        map_position = { center: new daum.maps.LatLng(this.props.meeting_info.latitude, this.props.meeting_info.longitude), level: 4 }  //  모임 위치
-        sessionStorage.setItem("lat", this.props.meeting_info.latitude)   //  한 번도 클릭하지 않았을 경우를 대비하여 초기화
-        sessionStorage.setItem("lng", this.props.meeting_info.longitude)  //  한 번도 클릭하지 않았을 경우를 대비하여 초기화
+        if (this.props.meeting_info.latitude == 0 && this.props.meeting_info.longitude == 0) {
+          map_position = { center: new daum.maps.LatLng(37.4615299, 126.9519267), level: 4 }  //  모임 위치
+          sessionStorage.setItem("lat", 37.4615299)   //  한 번도 클릭하지 않았을 경우를 대비하여 초기화
+          sessionStorage.setItem("lng", 126.9519267)  //  한 번도 클릭하지 않았을 경우를 대비하여 초기화
+        }
+        else {
+          map_position = { center: new daum.maps.LatLng(this.props.meeting_info.latitude, this.props.meeting_info.longitude), level: 4 }  //  모임 위치
+          sessionStorage.setItem("lat", this.props.meeting_info.latitude)   //  한 번도 클릭하지 않았을 경우를 대비하여 초기화
+          sessionStorage.setItem("lng", this.props.meeting_info.longitude)  //  한 번도 클릭하지 않았을 경우를 대비하여 초기화
+        }
       }
 
       daumMap = new daum.maps.Map(map_container, map_position)          //  지도 생성
@@ -95,7 +104,12 @@ export class Map extends React.Component {
       return (<div><div id="map" style={{width:'800px', height:'500px'}} /></div>)
 
     // 모임 정보를 보려는 경우
-    else
-      return (<div><div id="map" style={{width:'600px', height:'300px'}} /></div>)
+    else {
+      console.log(this.props.meeting_info)
+      if (this.props.meeting_info.latitude == 0 && this.props.meeting_info.longitude == 0)
+        return (<div><div id="map" style={{width:'0px', height:'0px'}} /></div>)
+      else
+        return (<div><div id="map" style={{width:'600px', height:'300px'}} /></div>)
+    }
   }
 }

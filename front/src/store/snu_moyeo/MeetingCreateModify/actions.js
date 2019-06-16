@@ -20,6 +20,7 @@ export const modify_action = (hash, meeting_info) => {
   }
 };
 
+
 export const change_meeting_state_action = (hash, meeting_info, new_state) => {
   return {
     type: CHANGE_MEETING_STATE_ACTION,

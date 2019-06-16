@@ -17,7 +17,12 @@ const Font = styled.span`
 const Make_New = () => {
   return (
     <Wrapper>
-      <Button secondary onClick={() => { sessionStorage.removeItem("meeting_info"); window.location.href = '/new' }} size='big'>
+      <Button secondary onClick={() => {
+        sessionStorage.removeItem("meeting_info"),
+        sessionStorage.setItem("lat", 0),
+        sessionStorage.setItem("lng", 0),
+        window.location.href = '/new' 
+      }} size='big'>
         <Icon name='plus' size='big' />
         <Font>새 모임 만들기</Font>
       </Button>
