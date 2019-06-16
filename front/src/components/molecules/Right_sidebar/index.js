@@ -12,11 +12,11 @@ const Right_sidebar = () => {
     <Sidebar as={Menu} animation='overlay' direction='right' icon='labeled' inverted vertical visible width='wide'>
       <ToMyPage/>
       <Logout/><br /><br />
-      <Input type='text' placeholder='Search all . . .' action>
+      <Input type='text' placeholder='전체 검색' action>
         <input ref={node => {keyword = node}}/>
         <Button type='submit' onClick={() => {
           if (keyword.value == "")
-            alert('Type Search Keyword')
+            alert('검색어를 입력해주세요.')
           else
             window.location.href = '/all/' + keyword.value;
         }}>Search</Button>

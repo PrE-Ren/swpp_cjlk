@@ -153,7 +153,7 @@ export class MeetingCreate extends React.Component{
             description: (this.state.description !== undefined) ? this.state.description : meeting_info.description,  // 수정 가능 (안 바꾸면 기존 값)
             kind: meeting_info.kind,                                                                                  // 수정 불가능 (기존 값 사용)
             leader: username,                                                                                         // 수정 불가능 (기존 값 사용)
-            picture: this.state.picture,                                                                              // 수정 가능 (입력 안 하면 undefined)
+            picture: this.state.picture,                                                                              // 수정 가능 (입력 안 하면 undef)
             state: meeting_info.state                                                                                 // 수정 불가능 (기존 값 사용)
           })}> 수정 </Form.Button>
         </Form>
