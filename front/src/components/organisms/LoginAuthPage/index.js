@@ -17,7 +17,7 @@ export class LoginAuthPage extends React.Component {
   }
 
   render() {
-    const { username, password, mySNU_verification_token, phone_verification_token,
+    const { username, password, point, mySNU_verification_token, phone_verification_token,
             send_email_click, send_phone_click, confirm_email_click, confirm_phone_click, logout_click } = this.props
     const { email, phone_number, email_code, phone_code } = this.state
     const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저 해시값
