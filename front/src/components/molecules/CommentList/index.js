@@ -21,7 +21,7 @@ export class CommentList extends React.Component {
 
       return (
         <Comment.Group>
-          <Header as='h3' dividing> 관련 댓글 </Header>
+          <Header as='h3' dividing>관련 댓글</Header>
 
           {/* 댓글 각각을 렌더링 */}
           {comment_list.map(comment_entry =>

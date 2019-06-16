@@ -9,8 +9,8 @@ export const AllList = ({ meetinglist_all }) => {
     let meetings = JSON.parse(meetinglist_all).results  //  미팅 리스트
     return (
       <Segment raised>
-        <Label as='a' color='pink' ribbon> All </Label>  {/* 라벨 */}
-        <Header as='h1'> 전체 검색 결과 </Header>         {/* 제목 */}
+        <Label as='a' color='pink' ribbon>All</Label>  {/* 라벨 */}
+        <Header as='h1'>전체 검색 결과</Header>         {/* 제목 */}
         <Card.Group>                                     {/* 각각의 카드는 하나의 미팅 엔트리를 담고 있음 */}
           {meetings.map(meeting_entry =>
             <Card key = {meeting_entry.id} >

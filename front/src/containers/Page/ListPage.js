@@ -5,6 +5,7 @@ import { change_page_num_action } from '../../store/snu_moyeo/MeetingLoad/action
 const mapStateToProps = (state) => {
   return {
     username: state.snu_moyeo.username,
+    point: state.snu_moyeo.point,
     mySNU_verification_token: state.snu_moyeo.mySNU_verification_token,
     phone_verification_token: state.snu_moyeo.phone_verification_token,
     meetinglist_list: state.snu_moyeo.meetinglist_list

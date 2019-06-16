@@ -6,7 +6,7 @@ export const initialState = {
   name : sessionStorage.getItem("name"),
   email : sessionStorage.getItem("email"),
   phone_number : sessionStorage.getItem("phone_number"),
-  point : null,
+  point : sessionStorage.getItem("point"),
   mySNU_verification_token : sessionStorage.getItem("mySNU_verification_token"),
   phone_verification_token : sessionStorage.getItem("phone_verification_token"),
 
@@ -30,4 +30,5 @@ export const initialState = {
   // UserLoad
   is_leader_loaded : false,
   is_member_loaded : false,
+  is_search_loaded : false
 };

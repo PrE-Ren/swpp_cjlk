@@ -41,7 +41,7 @@ export class MeetingInfo extends React.Component {
   render() {
     const {
       state, meeting_info, change_meeting_state_click, change_meeting_info_click, join_meeting_click, withdraw_meeting_click,
-      prepare_load_leaderinfo_click, load_leaderinfo_click,prepare_load_memberinfo_click, load_memberinfo_click, accuse_click
+      prepare_load_leaderinfo_click, load_leaderinfo_click, prepare_load_memberinfo_click, load_memberinfo_click, accuse_click
     } = this.props
     const { accuse_reason, member_id } = this.state
 
