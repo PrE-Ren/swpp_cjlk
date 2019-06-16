@@ -1,4 +1,5 @@
 import React from 'react'
+import Captcha from '../../../containers/Captcha'
 import { Button, Form, Grid, Header, Segment, Message } from 'semantic-ui-react'
 import styled from 'styled-components'
 
@@ -19,7 +20,7 @@ const Font_Green = styled.div`
 `
 
 // 입력한 내용이 올바른 형식인지 체크
-const is_valid_form = (username, password, password_confirm, nickname) => {
+const is_valid_form = (username, password, password_confirm, nickname, is_captcha_verified) => {
   const pattern1 = /[0-9]/;
   const pattern2 = /[a-zA-Z]/;
   const pattern3 = /[~!@\#$%<>^&*]/;
@@ -53,12 +54,17 @@ const is_valid_form = (username, password, password_confirm, nickname) => {
     alert("이름(닉네임)을 입력해주세요.")
     return false
   }
+  if (is_captcha_verified == false) {
+    alert("보안문자 인증을 완료해주세요.")
+    return false
+  }
   return true
 }
 
 // username_store : 유저 아이디 (로그인 여부 확인을 위해 필요)
 // mySNU_verification_token : 이메일 토큰 (인증 여부 확인을 위해 필요)
 // phone_verification_token : 폰 토큰 (인증 여부 확인을 위해 필요)
+// is_captcha_verified : 보안문자 인증 완료 여부
 // signup_click : 회원가입 버튼을 눌렀을 때 액션을 디스패치할 함수
 export class SignupPage extends React.Component {
   constructor(props) {
@@ -73,7 +79,7 @@ export class SignupPage extends React.Component {
   }
 
   render() {
-    const { username_store, mySNU_verification_token, phone_verification_token, signup_click } = this.props
+    const { username_store, mySNU_verification_token, phone_verification_token, is_captcha_verified, signup_click } = this.props
 
     //  패스워드 일치 여부 메시지
     let confirm_message =
@@ -113,15 +119,14 @@ export class SignupPage extends React.Component {
                 <Form.Input fluid icon='signup' iconPosition='left' placeholder='nickname'
                 onChange={(e) => this.setState({ nickname: e.target.value })} />
 
+                {/* 보안문자 입력 */}
+                <Captcha />
+
                 {/* 회원가입 완료 버튼 */}
                 <Button color='teal' fluid size='large'
                 onClick={() => {
-                  if (is_valid_form(this.state.username, this.state.password, this.state.password_confirm, this.state.nickname)) {
-                    console.log(this.state.username)
-                    console.log(this.state.password)
-                    console.log(this.state.nickname)
+                  if (is_valid_form(this.state.username, this.state.password, this.state.password_confirm, this.state.nickname, is_captcha_verified))
                     signup_click(this.state.username, this.state.password, this.state.nickname)
-                  }
                 }}> 회원가입 </Button>
 
               </Segment>

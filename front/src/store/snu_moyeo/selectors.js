@@ -32,5 +32,7 @@ export const initialState = {
   is_member_loaded : false,
 
   // OtherFunc
-  is_search_loaded : false
+  is_search_loaded : false,
+  is_captcha_loaded : false,
+  is_captcha_verified : false
 };
