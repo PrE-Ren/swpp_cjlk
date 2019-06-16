@@ -30,6 +30,7 @@ matrix:
         - pip install django-allauth==0.39.1
         - pip install Pillow==6.0.0
         - pip install coolsms_python_sdk
+        - pip install openpyxl
       script:
         - python3 manage.py makemigrations snu_moyeo
         - python3 manage.py migrate
