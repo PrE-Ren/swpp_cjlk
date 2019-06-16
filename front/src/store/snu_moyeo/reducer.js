@@ -237,22 +237,6 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
     }
 
-
-    case 'CHANGE_MAP_TRUE_ACTION' : {
-      return {
-        ...state,
-        map_checked : true
-
-      }
-    }
-
-    case 'CHANGE_MAP_FALSE_ACTION' : {
-      return {
-        ...state,
-        map_checked : false
-      }
-    }
-    
     case 'PREPARE_SEARCH_ACTION': {
       sessionStorage.removeItem("searchlist")
       return {

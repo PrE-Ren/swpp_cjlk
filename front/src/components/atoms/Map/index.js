@@ -42,7 +42,7 @@ export class Map extends React.Component {
 
       // Modify (모임 수정)
       else {
-        if(this.props.meeting_info.latitude == 0 && this.props.meeting_info.longitude == 0)
+        if (this.props.meeting_info.latitude == 0 && this.props.meeting_info.longitude == 0)
           map_position = { center: new daum.maps.LatLng(37.4615299, 126.9519267), level: 4 }  //  모임 위치
         else
           map_position = { center: new daum.maps.LatLng(this.props.meeting_info.latitude, this.props.meeting_info.longitude), level: 4 }  //  모임 위치
@@ -98,8 +98,9 @@ export class Map extends React.Component {
       return (<div><div id="map" style={{width:'800px', height:'500px'}} /></div>)
 
     // 모임 정보를 보려는 경우
-    else{
-      if(this.props.meeting_info.latitude == 0 && this.props.meeting_info.longitude == 0)
+    else {
+      console.log(this.props.meeting_info)
+      if (this.props.meeting_info.latitude == 0 && this.props.meeting_info.longitude == 0)
         return (<div><div id="map" style={{width:'0px', height:'0px'}} /></div>)
       else
         return (<div><div id="map" style={{width:'600px', height:'300px'}} /></div>)
