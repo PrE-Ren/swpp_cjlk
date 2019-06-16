@@ -15,7 +15,6 @@ export function* load_search_func(action) {
   if (response_searchinfo.ok) {
     const searchinfo = yield call([response_searchinfo, response_searchinfo.json])
     sessionStorage.setItem("searchlist", JSON.stringify(searchinfo.items))              
-    console.log(searchinfo)
     yield put(actions.search_success_action())                     //  검색 정보 로드 완료
   }
   else

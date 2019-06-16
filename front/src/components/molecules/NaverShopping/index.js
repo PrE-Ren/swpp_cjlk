@@ -13,11 +13,8 @@ export class NaverShopping extends React.Component{
     result_close = () => this.setState({ result_open: false})
 
     render() {
-        const {state, prepare_search_click, search_click} = this.props
-        const {query} = this.state
+        const {prepare_search_click, search_click} = this.props
         const searchlist = (sessionStorage.getItem("searchlist") != null ? JSON.parse(sessionStorage.getItem('searchlist')) : [])
-        console.log(this.props.state.is_search_loaded)
-        console.log(searchlist)
 
         const result_content =
             <Modal open={this.state.result_open} onClose={this.result_close}>
@@ -25,18 +22,14 @@ export class NaverShopping extends React.Component{
                 <Item.Group divided>                              
                   {searchlist.map(searchlist_entry =>
                     <Item key = {searchlist_entry.image}>
-                        <Item>
-                            <Item.Content> {searchlist_entry.title} </Item.Content>
-                        </Item>
-                        <Item>
-                            <Item.Image src = {searchlist_entry.image}/>
-                        </Item>
-                        <Item>
-                            <Item.Content href={searchlist_entry.link} target="_blank"> {searchlist_entry.link} </Item.Content>
-                        </Item>
-                        <Item>
-                            <Item.Content> 가격 : {searchlist_entry.lprice} 원 </Item.Content>
-                        </Item>      
+                        <Item.Image src = {searchlist_entry.image}/>
+                        <Item.Content>
+                            <Item.Header> {searchlist_entry.title} </Item.Header>
+                            <Item.Meta>
+                                <span> 가격(단가) : {searchlist_entry.lprice}원 </span>
+                            </Item.Meta>  
+                            <Item.Description href={searchlist_entry.link} target="_blank"> 제품 링크 : {searchlist_entry.link} </Item.Description>    
+                        </Item.Content>                
                     </Item>
                   )}
                 </Item.Group>
