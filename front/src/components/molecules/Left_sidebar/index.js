@@ -14,6 +14,7 @@ export const Left_sidebar = () => {
   return (
     <Sidebar as={Menu} animation='overlay' icon='labeled' inverted vertical visible width='thin'>
       <Menu.Item as='a' href="/"><Icon name='home' />To Home</Menu.Item>
+      <Menu.Item as='a' href="/tutorial"><Icon name='question circle' />홈페이지 소개</Menu.Item>
       <Font_Classify>모임 분류</Font_Classify>
       <Menu.Item as='a' href="/list/0"><Icon name='food' />음식배달</Menu.Item>
       <Menu.Item as='a' href="/list/1"><Icon name='taxi' />택시합승</Menu.Item>

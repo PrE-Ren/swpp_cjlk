@@ -4,16 +4,16 @@ it('test penalty_action', () => {
   const hash = 'asdqewqr'
   const flag = true
   const report_info = 'adqrqcaa'
-  const points = 1
+  const point = 1
 
   const expectedAction = {
     type: actions.PENALTY_ACTION,
     hash,
     flag,
     report_info,
-    points
+    point
   }
-  expect(actions.penalty_action(hash,flag,report_info,points)).toEqual(expectedAction)
+  expect(actions.penalty_action(hash,flag,report_info,point)).toEqual(expectedAction)
 })
 
 it('test get_report_success_action', () => {
