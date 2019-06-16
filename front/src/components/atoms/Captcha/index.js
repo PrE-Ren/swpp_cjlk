@@ -2,6 +2,7 @@ import React from 'react'
 import { Button, Image, Form, Icon, Grid } from 'semantic-ui-react'
 
 // is_captcha_loaded : 캡챠 이미지 로드가 완료되었는지 여부
+// is_captcha_verified : 캡챠 인증이 완료되었는지 여부
 // load_captcha_click : 새로고침 버튼을 눌렀을 때 액션을 디스패치할 함수
 // confirm_captcha_click : 보안문자를 입력하고 확인 버튼을 눌렀을 때 액션을 디스패치할 함수
 export class Captcha extends React.Component {
