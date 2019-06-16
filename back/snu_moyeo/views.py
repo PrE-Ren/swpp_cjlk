@@ -651,8 +651,8 @@ def searchShop(request, search_word) :
             item['title'] = replace_tag
             json_dict['items'][ind] = item
             ind +=1
-        print(type(json_dict))
-        print(json_dict)
+        #print(type(json_dict))
+        #print(json_dict)
         #print(json_dict)
         return JsonResponse(json_dict)
     else:
