@@ -30,4 +30,6 @@ export const initialState = {
   // UserLoad
   is_leader_loaded : false,
   is_member_loaded : false,
+
+  map_checked : false
 };

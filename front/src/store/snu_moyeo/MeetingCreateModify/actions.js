@@ -2,6 +2,8 @@ export const NEW_ACTION = 'NEW_ACTION'
 export const MODIFY_ACTION = 'MODIFY_ACTION'
 export const CHANGE_MEETING_STATE_ACTION = 'CHANGE_MEETING_STATE_ACTION'
 export const CHANGE_MEETING_INFO_ACTION = 'CHANGE_MEETING_INFO_ACTION'
+export const CHANGE_MAP_TRUE_ACTION = 'CHANGE_MAP_TRUE_ACTION'
+export const CHANGE_MAP_FALSE_ACTION = 'CHANGE_MAP_FALSE_ACTION'
 
 export const new_action = (hash, user_id, meeting_info) => {
   return {
@@ -17,6 +19,18 @@ export const modify_action = (hash, meeting_info) => {
     type: MODIFY_ACTION,
     hash,
     meeting_info
+  }
+};
+
+export const change_map_true_action = () => {
+  return {
+    type: CHANGE_MAP_TRUE_ACTION
+  }
+};
+
+export const change_map_false_action = () => {
+  return {
+    type: CHANGE_MAP_FALSE_ACTION
   }
 };
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import Map from '../../../containers/Map'
-import { Form  } from 'semantic-ui-react'
+import { Form, Radio } from 'semantic-ui-react'
 
 // 모임 유형 상수
 const options = [
@@ -40,6 +40,7 @@ const parse_datetime = (date) => {
 // 입력할 제목, 마감 기한, 최소 인원, 최대 인원, 본문, 유형, 사진
 let title, due, min_people, max_people, kakao_link, description, kind, picture
 
+
 // 위의 변수와 각 입력 Form을 바운드
 const handle_title = (e) => { title = e.target.value }
 const handle_due = (e, { value }) => { due = value }
@@ -50,18 +51,25 @@ const handle_description = (e) => { description = e.target.value }
 const handle_picture = (e) => { picture = e.target.files[0] }
 const handle_kind = (e, { value }) => { kind = value }
 
+
+
 // username : 유저 아이디 (해시값 획득을 위해 필요)
 // password : 유저 패스워드 (해시값 획득을 위해 필요)
 // user_id : 유저 고유값 (모임 생성 시 Participate 모델의 POST를 위해 필요)
 // new_click : 생성 완료 버튼을 눌렀을 때 액션을 디스패치할 함수 (Meeting 모델 POST)
 // modify_click : 수정 완료 버튼을 눌렀을 때 액션을 디스패치할 함수 (Meeting 모델 PUT)
-export const MeetingCreate = ({ username, password, user_id, new_click, modify_click }) => {
+export const MeetingCreate = ({ username, password, user_id, map_checked, new_click, modify_click, change_map_true, change_map_false }) => {
   const hash = new Buffer(`${username}:${password}`).toString('base64')    //  유저의 해시값
   const meeting_info = JSON.parse(sessionStorage.getItem('meeting_info'))  //  세션 스토리지에 저장된 미팅 정보
 
+  sessionStorage.setItem("lat", 0)   //  한 번도 클릭하지 않았을 경우를 대비하여 초기화
+  sessionStorage.setItem("lng", 0)  //  한 번도 클릭하지 않았을 경우를 대비하여 초기화
+  
   // New (새 모임 만들기 버튼을 누르면 세션 스토리지에 저장된 미팅 정보가 삭제됨)
   if (meeting_info == null) {
+
     const datetime = get_current_datetime()  //  현재 시간
+
     return (
       <Form>
         <Form.Input fluid label='제목' placeholder='Title' onChange={handle_title}/>
@@ -73,7 +81,12 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
         </Form.Group>
         <Form.Input fluid label='오픈 채팅방 링크' placeholder='https://open.kakao.com/' onChange={handle_kakao_link} />
         <Form.Input fluid label='사진' type="file" width={6} onChange={handle_picture} accept="image/*" />
-        <div><Map meeting_info = {null} write = {true} /></div>
+
+        {map_checked  ? <Radio toggle label='hide the map' onChange={() => change_map_false()}/> :
+                       <Radio toggle label='show the map' onChange={() => change_map_true()} /> }
+
+        {map_checked == true ? <div><br/><Map meeting_info = {meeting_info} write = {true} /></div> : <div><br/></div>}
+
         <Form.TextArea label='내용' placeholder='About this meeting...' onChange={handle_description} />
         <Form.Button onClick={() => new_click(hash, user_id, {
           title: title,              //  제목 (직접 입력)
@@ -93,6 +106,7 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
   // Modify (수정 버튼을 누르면 세션 스토리지에 해당 미팅 정보가 저장됨)
   else {
     const datetime = parse_datetime(meeting_info.due)  //  기존 마감 기한
+
     return (
       <Form>
         <Form.Input fluid label='제목' placeholder='Title' defaultValue={meeting_info.title} onChange={handle_title}/>
@@ -104,7 +118,13 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
         </Form.Group>
         <Form.Input fluid label='오픈 채팅방 링크' placeholder='https://open.kakao.com/' defaultValue={meeting_info.kakao_link} onChange={handle_kakao_link} />
         <Form.Input fluid label='사진' type="file" width={6} onChange={handle_picture} accept="image/*" />
-        <div><Map meeting_info = {meeting_info} write = {true} /></div>
+
+        {map_checked  ? <Radio toggle label='hide the map' onChange={() => change_map_false()}/> :
+                       <Radio toggle label='show the map' onChange={() => change_map_true()} /> }
+
+        {map_checked == true ? <div><br/><Map meeting_info = {meeting_info} write = {true} /></div> : <div><br/></div>}
+
+
         <Form.TextArea label='내용' placeholder='Description' defaultValue={meeting_info.description} onChange={handle_description} />
         <Form.Button onClick={() => modify_click(hash, {
           title: (title !== undefined) ? title : meeting_info.title,                          // 수정 가능 (안 바꾸면 기존 값)
