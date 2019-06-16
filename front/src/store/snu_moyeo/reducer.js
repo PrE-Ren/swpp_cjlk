@@ -237,6 +237,20 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
     }
 
+    case 'PREPARE_SEARCH_ACTION': {
+      return {
+        ...state,
+        is_search_loaded : false
+      }
+    }
+
+    case 'SEARCH_SUCCESS_ACTION': {
+      return {
+        ...state,
+        is_search_loaded: true
+      }
+    }
+
     default:
       return state
   }

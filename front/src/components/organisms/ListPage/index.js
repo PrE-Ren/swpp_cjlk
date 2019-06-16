@@ -3,6 +3,7 @@ import Left_sidebar from '../../molecules/Left_sidebar'
 import KindList from '../../../containers/KindList'
 import Right_sidebar from '../../molecules/Right_sidebar'
 import { Grid, Header, Icon, Container, Pagination, Input, Button } from 'semantic-ui-react'
+import NaverShopping  from '../../../containers/NaverShopping';
 
 // username : 유저 아이디 (로그인 여부 확인을 위해 필요)
 // mySNU_verification_token : 이메일 토큰 (인증 여부 확인을 위해 필요)
@@ -76,6 +77,12 @@ export const ListPage = ({ username, point, mySNU_verification_token, phone_veri
               </Grid.Column>
             </Grid>
           </Container>
+          {window.location.pathname[6] == 2 ?
+          <Container>
+            <NaverShopping/>
+          </Container>
+          : <Container>
+          </Container>}
         </Grid.Column>
 
         {/* Right Sidebar */}

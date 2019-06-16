@@ -1,5 +1,5 @@
 import React from 'react'
-import { Segment, Form, Grid, Modal, Card, Button } from 'semantic-ui-react'
+import { Segment, Form, Grid, Card, Button } from 'semantic-ui-react'
 
 // username : 유저 아이디
 // password : 유저 패스워드
