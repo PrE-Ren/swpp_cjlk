@@ -642,7 +642,15 @@ def searchShop(request, search_word) :
     if(rescode==200):
         response_body = response.read()
         #print(response_body.decode('utf-8'))
-        json_dict = json.loads(response_body.decode('utf-8'))
+        json_dict_def = json.loads(response_body.decode('utf-8'))
+        json_dict = json_dict_def
+        items = json_dict['items']
+        ind = 0
+        for item in items :
+            replace_tag = item['title'].replace('<b>','').replace('</b>','')
+            item['title'] = replace_tag
+            json_dict['items'][ind] = item
+            ind +=1
         print(type(json_dict))
         print(json_dict)
         #print(json_dict)
