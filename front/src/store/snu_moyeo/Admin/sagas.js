@@ -47,7 +47,7 @@ export function* watchPenalty() {
 }
 
 export function* watchAccuse(){
-  while(true){
+  while(true) {
     const action = yield take(actions.ACCUSE_ACTION)
     yield call(accuse_func, action)
   }
@@ -98,9 +98,8 @@ export function* accuse_func(action) {
       },
       body: accuse_info,
   })
-  if (response_accuse.ok) {
+  if (response_accuse.ok)
     console.log('REPORT POST ok')
-  }
   else
     console.log('REPORT POST bad')
 }

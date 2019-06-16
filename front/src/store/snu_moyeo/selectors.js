@@ -1,4 +1,5 @@
 export const initialState = {
+  // Account
   user_id : sessionStorage.getItem("user_id"),
   username : sessionStorage.getItem("username"),
   password : sessionStorage.getItem("password"),
@@ -9,6 +10,7 @@ export const initialState = {
   mySNU_verification_token : sessionStorage.getItem("mySNU_verification_token"),
   phone_verification_token : sessionStorage.getItem("phone_verification_token"),
 
+  // MeetingLoad
   meetinglist_impending : sessionStorage.getItem("impending"),
   meetinglist_recent : sessionStorage.getItem("recent"),
   meetinglist_lead : sessionStorage.getItem("lead"),
@@ -16,11 +18,16 @@ export const initialState = {
   meetinglist_history : sessionStorage.getItem("history"),
   meetinglist_list : sessionStorage.getItem("kind"),
   meetinglist_all : sessionStorage.getItem("all"),
-  report_list : sessionStorage.getItem("report_list"),
-  comments : sessionStorage.getItem("comments"),
   page_num : sessionStorage.getItem("page_num"),
 
-  check_leader_click : false,
-  check_member_click : false,
-  check_meeting_click : false
+  // Admin
+  report_list : sessionStorage.getItem("report_list"),
+
+  // Comment
+  comments : sessionStorage.getItem("comments"),
+  is_comment_loaded : false,
+
+  // UserLoad
+  is_leader_loaded : false,
+  is_member_loaded : false,
 };

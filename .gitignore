@@ -4,3 +4,4 @@ back/env
 back/*~
 back/snu_moyeo/migrations
 back/db.sqlite3
+back/media

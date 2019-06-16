@@ -71,20 +71,20 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
           <Form.Input fluid label='최소인원' placeholder='2' type="number" width={2} onChange={handle_min_people} />
           <Form.Input fluid label='최대인원' placeholder='2' type="number" width={2} onChange={handle_max_people} />
         </Form.Group>
-        <Form.Input fluid label='오픈채팅방 링크' placeholder='https://open.kakao.com/' onChange={handle_kakao_link} />
+        <Form.Input fluid label='오픈 채팅방 링크' placeholder='https://open.kakao.com/' onChange={handle_kakao_link} />
         <Form.Input fluid label='사진' type="file" width={6} onChange={handle_picture} accept="image/*" />
         <div><Map meeting_info = {null} write = {true} /></div>
         <Form.TextArea label='내용' placeholder='About this meeting...' onChange={handle_description} />
         <Form.Button onClick={() => new_click(hash, user_id, {
-          title: title,              //  제목 (입력)
-          due: due,                  //  마감 기한 (입력)
-          min_people: min_people,    //  최소 인원 (입력)
-          max_people: max_people,    //  최대 인원 (입력)
-          kakao_link : kakao_link,   //  오픈채팅 링크
-          description: description,  //  본문 (입력)
-          kind: kind,                //  유형 (입력)
+          title: title,              //  제목 (직접 입력)
+          due: due,                  //  마감 기한 (직접 입력)
+          min_people: min_people,    //  최소 인원 (직접 입력)
+          max_people: max_people,    //  최대 인원 (직접 입력)
+          kakao_link : kakao_link,   //  오픈 채팅방 링크 (직접 입력)
+          description: description,  //  본문 (직접 입력)
+          kind: kind,                //  유형 (직접 입력)
           leader: username,          //  주최자 아이디 (자동 입력)
-          picture: picture           //  사진 (입력)
+          picture: picture           //  사진 (직접 입력)
         })}> 완료 </Form.Button>
       </Form>
     )
@@ -102,20 +102,20 @@ export const MeetingCreate = ({ username, password, user_id, new_click, modify_c
           <Form.Input disabled fluid label='최소인원' placeholder='2' type="number" width={2} defaultValue={meeting_info.min_people}  />
           <Form.Input disabled fluid label='최대인원' placeholder='2' type="number" width={2} defaultValue={meeting_info.max_people}  />
         </Form.Group>
-        <Form.Input fluid label='오픈채팅방 링크' placeholder='https://open.kakao.com/' defaultValue={meeting_info.kakao_link} onChange={handle_kakao_link} />
+        <Form.Input fluid label='오픈 채팅방 링크' placeholder='https://open.kakao.com/' defaultValue={meeting_info.kakao_link} onChange={handle_kakao_link} />
         <Form.Input fluid label='사진' type="file" width={6} onChange={handle_picture} accept="image/*" />
         <div><Map meeting_info = {meeting_info} write = {true} /></div>
-        <Form.TextArea label='내용' placeholder='About this meeting...' defaultValue={meeting_info.description} onChange={handle_description} />
+        <Form.TextArea label='내용' placeholder='Description' defaultValue={meeting_info.description} onChange={handle_description} />
         <Form.Button onClick={() => modify_click(hash, {
-          title: (title !== undefined) ? title : meeting_info.title,                          // 수정 가능 (안 바꿨으면 기존 값 사용)
+          title: (title !== undefined) ? title : meeting_info.title,                          // 수정 가능 (안 바꾸면 기존 값)
           due: meeting_info.due,                                                              // 수정 불가능 (기존 값 사용)
           min_people: meeting_info.min_people,                                                // 수정 불가능 (기존 값 사용)
-          max_people: meeting_info.min_people,
-          kakao_link: (kakao_link !== undefined) ? kakao_link : meeting_info.kakao_link,      // 수정 불가능 (기존 값 사용)
-          description: (description !== undefined) ? description : meeting_info.description,  // 수정 가능 (안 바꿨으면 기존 값 사용)
+          max_people: meeting_info.min_people,                                                // 수정 불가능 (기존 값 사용)
+          kakao_link: (kakao_link !== undefined) ? kakao_link : meeting_info.kakao_link,      // 수정 가능 (안 바꾸면 기존 값)
+          description: (description !== undefined) ? description : meeting_info.description,  // 수정 가능 (안 바꾸면 기존 값)
           kind: meeting_info.kind,                                                            // 수정 불가능 (기존 값 사용)
           leader: username,                                                                   // 수정 불가능 (기존 값 사용)
-          picture: picture,                                                                   // 수정 가능 (새로 지정 안 하면 undefined 넘어감)
+          picture: picture,                                                                   // 수정 가능 (입력 안 하면 undefined)
           state: meeting_info.state                                                           // 수정 불가능 (기존 값 사용)
         })}> 수정 </Form.Button>
       </Form>
