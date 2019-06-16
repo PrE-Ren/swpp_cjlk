@@ -11,7 +11,7 @@ export const MyInfo = ({ state }) => {
   return (
     <Container>
       <Segment raised>
-        <Label as='a' color='purple' ribbon> My Information </Label>
+        <Label as='a' color='teal' ribbon> My Information </Label>
         <Header as='h1'> 내 정보 </Header>
         <List>
           <List.Item>

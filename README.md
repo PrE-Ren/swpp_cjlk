@@ -21,6 +21,7 @@ pip install djangorestframework
 pip install django-cors-headers
 pip install coolsms_python_sdk
 pip install Pillow
+pip install openpyxl
 
 # setup database
 python manage.py makemigrations snu_moyeo

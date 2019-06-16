@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 declare var daum:any;
 
 // meeting_info : id, title, created, due, min_people, max_people, description, state, kind,
-//                leader, leaderid, picture, members, comments, latitude, longitude
+//                leader, leaderid, picture, members, comments, latitude, longitude, kakao_link
 // write : 조작 가능 여부
 export class Map extends React.Component {
   constructor(props) {
