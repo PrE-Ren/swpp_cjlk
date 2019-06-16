@@ -695,9 +695,8 @@ def captcha(request):
     return JsonResponse(json_dict)
 
 def captcha_verify(request, in_key, in_value) :
-    client_id = "N6c7MAUvz7uiaMUNt1Ww" # 애플리케이션 등록시 발급 받은 값 입력
-    client_secret = "1hdjaYpmI6" # 애플리케이션 등록시 발급 받은 값 입력
-
+    client_id = "YOUR_CLIENT_ID" # 개발자센터에서 발급받은 Client ID 값
+    client_secret = "YOUR_CLIENT_SECRET" # 개발자센터에서 발급받은 Client Secret 값
     code = "1"
     key = in_key
     value = in_value

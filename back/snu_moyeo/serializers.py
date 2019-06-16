@@ -2,12 +2,44 @@ from rest_framework import serializers
 from snu_moyeo.models import Meeting, SnuUser, Participate, Comment, Report
 from django.db.models import Q
 import django
+from sdk.api.message import Message
+from sdk.exceptions import CoolsmsException
+
 
 OPEN = 0
 CLOSED = 1
 RE_OPEN = 2
 RE_CLOSED = 3
 BREAK_UP = 4
+
+def send_message(to_number, code):
+    # set api key, api secret
+    api_key = "NCSTXGIWAWFV3UHU"
+    api_secret = "4DO7XGNVKEOGGDDDDXWESGCVNW9MFBGP"
+
+    ## 4 params(to, from, type, text) are mandatory. must be filled
+    params = dict()
+    params['type'] = 'sms' # Message type ( sms, lms, mms, ata )
+    params['to'] =  str(to_number)  # Recipients Number '01000000000, 01000000001'
+    params['from'] = '01040079493' # Sender number
+    params['text'] = str(code)  # Authentication code
+
+    cool = Message(api_key, api_secret)
+    try:
+        response = cool.send(params)
+        print("Success Count : %s" % response['success_count'])
+        print("Error Count : %s" % response['error_count'])
+        print("Group ID : %s" % response['group_id'])
+
+        if "error_list" in response:
+            print("Error List : %s" % response['error_list'])
+
+    except CoolsmsException as e:
+        print("Error Code : %s" % e.code)
+        print("Error Message : %s" % e.msg)
+
+
+
 
 class MeetingSerializer(serializers.ModelSerializer):
     leader = serializers.ReadOnlyField(source = 'SnuUser.username')
@@ -150,6 +182,17 @@ class ParticipateSerializer(serializers.ModelSerializer):
         if (cnt_participate >= 5):
             response = {'detail':'you can only 5'}
             raise serializers.ValidationError(response['detail'])
+        
+        
+        target_meeting = Meeting.objects.get(pk = data['meeting_id'].id)
+        least = target_meeting.min_people
+        bef_count = target_meeting.members.all().count()
+        
+        leader = SnuUser.objects.get(username = target_meeting.leader).phone_number
+
+        if bef_count + 1 == least:
+            message = '개설하신 모임의 최소 인원이 충족되었습니다.'
+            send_message(leader,message)
         return data
 
     class Meta:
