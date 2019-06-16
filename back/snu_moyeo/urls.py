@@ -44,8 +44,9 @@ urlpatterns = [
     path('report/', views.ReportList.as_view()),
     path('report/<int:pk>/', views.ReportDetail.as_view()),
     path('shopsearch/<str:search_word>/', views.searchShop),
-    path('infoexcel/<int:meeting_id>/', views.InfoExcel)
-    #path('captcha/',views.capcha)
+    path('infoexcel/<int:meeting_id>/', views.InfoExcel),
+    path('captcha/',views.captcha),
+    path('captcha_verify/<str:in_key>/<str:in_value>/', views.captcha_verify)
     #url('reportcreate/', views.ReportCreate.as_view())
     # url(meeting/<int:id>/commnet/ , comment_on_meeting_id.asview),
 ]

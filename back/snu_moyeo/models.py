@@ -99,7 +99,10 @@ class Report (models.Model) :
    
     class Meta:
         ordering = ['-created']  # sorted in decreasing order of created time
-
- 
-    
+'''
+class Captcha (models.Model) :
+    id = models.AutoField(primary_key = True)
+    image = models.ImageField(blank = False)
+    key = models.CharField(max_length=200)
+'''    
     
