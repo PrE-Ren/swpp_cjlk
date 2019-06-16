@@ -9,8 +9,8 @@ export const JoinList = ({ meetinglist_join }) => {
     let meetings = JSON.parse(meetinglist_join)  //  미팅 리스트
     return (
       <Segment raised>
-        <Label as='a' color='red' ribbon> Now </Label>  {/* 라벨 */}
-        <Header as='h1'> 내가 참여중인 모임 </Header>      {/* 제목 */}
+        <Label as='a' color='red' ribbon>Now</Label>  {/* 라벨 */}
+        <Header as='h1'>내가 참여중인 모임</Header>      {/* 제목 */}
         <Card.Group>                                      {/* 각각의 카드는 하나의 미팅 엔트리를 담고 있음 */}
           {meetings.map(meeting_entry =>
             <Card key = {meeting_entry.id} >

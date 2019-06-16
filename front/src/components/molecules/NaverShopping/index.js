@@ -1,5 +1,5 @@
 import React from 'react'
-import { Segment, Form, Grid, Modal, Card, Button, List, Item } from 'semantic-ui-react'
+import { Dimmer, Form, Grid, Modal, Loader, Button, List, Item } from 'semantic-ui-react'
 
 
 
@@ -13,12 +13,13 @@ export class NaverShopping extends React.Component{
     result_close = () => this.setState({ result_open: false})
 
     render() {
-        const {prepare_search_click, search_click} = this.props
+        const {state, prepare_search_click, search_click} = this.props
         const searchlist = (sessionStorage.getItem("searchlist") != null ? JSON.parse(sessionStorage.getItem('searchlist')) : [])
 
         const result_content =
             <Modal open={this.state.result_open} onClose={this.result_close}>
                 <Modal.Header> '{this.state.query}' 에 대한 검색 결과 </Modal.Header>
+                {this.props.state.is_search_loaded ? 
                 <Item.Group divided>                              
                   {searchlist.map(searchlist_entry =>
                     <Item key = {searchlist_entry.image}>
@@ -33,6 +34,11 @@ export class NaverShopping extends React.Component{
                     </Item>
                   )}
                 </Item.Group>
+                :
+                <Dimmer active inverted>
+                    <Loader inverted>검색 결과를 가져오고 있습니다</Loader>
+                </Dimmer>
+                }
                 <Modal.Actions>
                 <Button negative onClick={() => {this.result_close()}}> 닫기 </Button>
                 </Modal.Actions>
@@ -41,7 +47,7 @@ export class NaverShopping extends React.Component{
         return(
             <Grid.Column width={4}>
               <Form.Input fluid icon='user' iconPosition='left' placeholder='Search' onChange={(e) => this.setState({query : e.target.value})}/>
-              <Button color='teal' fluid size='large' onClick={() => {prepare_search_click(); this.result_show(); search_click(this.state.query)}}> 검색 </Button>
+              <Button color='teal' fluid size='large' onClick={() => {prepare_search_click(); this.result_show(); search_click(this.state.query)}}> 네이버 쇼핑으로 검색 </Button>
               {result_content}
             </Grid.Column>
         )

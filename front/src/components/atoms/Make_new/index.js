@@ -19,7 +19,7 @@ const Make_New = () => {
     <Wrapper>
       <Button secondary onClick={() => { sessionStorage.removeItem("meeting_info"); window.location.href = '/new' }} size='big'>
         <Icon name='plus' size='big' />
-        <Font> 새 모임 만들기 </Font>
+        <Font>새 모임 만들기</Font>
       </Button>
     </Wrapper>
   );

@@ -238,6 +238,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
     }
 
     case 'PREPARE_SEARCH_ACTION': {
+      sessionStorage.removeItem("searchlist")
       return {
         ...state,
         is_search_loaded : false

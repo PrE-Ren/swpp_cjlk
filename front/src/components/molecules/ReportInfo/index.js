@@ -29,12 +29,10 @@ export class ReportInfo extends React.Component {
             <Form.Input fluid icon='user' iconPosition='left' placeholder='부여할 벌점 점수' onChange={(e) => point = e.target.value}/>
             <Grid columns={2}>
               <Grid.Column width={8}>
-                <Button color='teal' fluid size='large' onClick={() => this.props.penalty_click(hash, true, this.props.report_info, point)}>
-                처리 </Button>
+                <Button color='teal' fluid size='large' onClick={() => this.props.penalty_click(hash, true, this.props.report_info, point)}>처리</Button>
               </Grid.Column>
               <Grid.Column width={8}>
-                <Button color='teal' fluid size='large' onClick={() => this.props.penalty_click(hash, true, this.props.report_info, 0)}>
-                기각 </Button>
+                <Button color='teal' fluid size='large' onClick={() => this.props.penalty_click(hash, true, this.props.report_info, 0)}>기각</Button>
               </Grid.Column>
             </Grid>
           </Segment>
@@ -42,8 +40,7 @@ export class ReportInfo extends React.Component {
           <Segment stacked>  {/* 처리된 신고 */}
             <Grid columns={1}>
               <Grid.Column width={16}>
-                <Button color='teal' fluid size='large' onClick={() => this.props.penalty_click(hash, false, this.props.report_info, 0)}>
-                되돌리기 </Button>
+                <Button color='teal' fluid size='large' onClick={() => this.props.penalty_click(hash, false, this.props.report_info, 0)}>되돌리기</Button>
               </Grid.Column>
             </Grid>
           </Segment>}

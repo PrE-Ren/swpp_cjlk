@@ -23,7 +23,7 @@ export const KindList = ({ meetinglist_list }) => {
     return (
       <Segment raised>
         {get_label(kind)}                         {/* 라벨 */}
-        <Header as='h1'> 모집 중인 모임 </Header>  {/* 제목 */}
+        <Header as='h1'>모집 중인 모임</Header>  {/* 제목 */}
         <Card.Group>                              {/* 각각의 카드는 하나의 미팅 엔트리를 담고 있음 */}
           {meetings.map(meeting_entry =>
             <Card key = {meeting_entry.id} >

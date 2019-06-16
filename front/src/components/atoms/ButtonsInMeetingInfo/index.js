@@ -11,7 +11,7 @@ export const ModifyButton = ({ meeting_info, f }) => {
       <Button secondary onClick={() => {
         if (meeting_info.members.length == 1) f(meeting_info)  //  미팅 정보를 세션 스토리지에 저장한 후 모임 생성 페이지로 리다이렉트
         else                                  alert('이미 멤버가 있는 상태입니다. 수정이 불가능합니다.')
-      }}> 수정 </Button>
+      }}>수정</Button>
   );
 };
 
@@ -25,7 +25,7 @@ export const CloseButton = ({ meeting_info, f, hash }) => {
       <Button secondary onClick={() => {
         if (meeting_info.members.length < meeting_info.min_people)  alert('최소인원을 충족하지 못하였습니다. 마감이 불가능합니다.')
         else                                                        f(hash, meeting_info, meeting_state.CLOSED)  //  미팅 상태 변경
-      }}> 마감 </Button>
+      }}>마감</Button>
   );
 };
 
@@ -36,7 +36,7 @@ export const CloseButton = ({ meeting_info, f, hash }) => {
 // hash : 내가 만든 모임인지 확인할 때 필요
 export const BreakUpButton = ({ meeting_info, f, hash }) => {
   return (
-      <Button secondary onClick={() => { f(hash, meeting_info, meeting_state.BREAK_UP) }}> 해산 </Button>  //  미팅 상태 변경
+      <Button secondary onClick={() => { f(hash, meeting_info, meeting_state.BREAK_UP) }}>해산</Button>  //  미팅 상태 변경
   );
 };
 
@@ -47,7 +47,7 @@ export const BreakUpButton = ({ meeting_info, f, hash }) => {
 // hash : 내가 만든 모임인지 확인할 때 필요
 export const ReOpenButton = ({ meeting_info, f, hash }) => {
   return (
-      <Button secondary onClick={() => { f(hash, meeting_info, meeting_state.RE_OPEN) }}> 추가 모집 시작 </Button>  //  미팅 상태 변경
+      <Button secondary onClick={() => { f(hash, meeting_info, meeting_state.RE_OPEN) }}>추가 모집 시작</Button>  //  미팅 상태 변경
   );
 };
 
@@ -58,7 +58,7 @@ export const ReOpenButton = ({ meeting_info, f, hash }) => {
 // hash : 내가 만든 모임인지 확인할 때 필요
 export const ReCloseButton = ({ meeting_info, f, hash }) => {
   return (
-      <Button secondary onClick={() => { f(hash, meeting_info, meeting_state.RE_CLOSED) }}> 추가 모집 중단 </Button>  //  미팅 상태 변경
+      <Button secondary onClick={() => { f(hash, meeting_info, meeting_state.RE_CLOSED) }}>추가 모집 중단</Button>  //  미팅 상태 변경
   );
 };
 
@@ -74,7 +74,7 @@ export const JoinButton = ({ meeting_info, user_id, hash, f }) => {
       <Button secondary onClick={() => {
         if (meeting_info.members.length >= meeting_info.max_people) alert('정원이 모두 찼습니다. 참가가 불가능합니다.')
         else                                                        f(hash, user_id, meeting_info.id)
-      }}> 참가 </Button>
+      }}>참가</Button>
   );
 }
 
@@ -86,6 +86,6 @@ export const JoinButton = ({ meeting_info, user_id, hash, f }) => {
 // f (= withdraw_meeting_click) : 탈퇴 버튼을 눌렀을 때 액션을 디스패치할 함수
 export const WithdrawButton = ({ meeting_info, user_id, hash, f }) => {
   return (
-      <Button secondary onClick={() => { f(hash, user_id, meeting_info.id) }}> 탈퇴 </Button>
+      <Button secondary onClick={() => { f(hash, user_id, meeting_info.id) }}>탈퇴</Button>
   );
 };
