@@ -17,7 +17,7 @@ export class LoginAuthPage extends React.Component {
   }
 
   render() {
-    const { username, password, mySNU_verification_token, phone_verification_token,
+    const { username, password, point, mySNU_verification_token, phone_verification_token,
             send_email_click, send_phone_click, confirm_email_click, confirm_phone_click, logout_click } = this.props
     const { email, phone_number, email_code, phone_code } = this.state
     const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저 해시값
@@ -106,7 +106,7 @@ export class LoginAuthPage extends React.Component {
       return (<div></div>)
     }
 
-    // 로그인 O, 벌점 10 이상 : 로그인 페이지로 리다이렉트(by saga)
+    // 로그인 O, 벌점 10 이상 : 로그인 페이지로 리다이렉트 (by saga)
     else if (point >= 10) {
       return (<div></div>)
     }
