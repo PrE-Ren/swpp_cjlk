@@ -9,10 +9,17 @@ import { Grid, Header, Icon, Container, Pagination, Search } from 'semantic-ui-r
 // phone_verification_token : 폰 토큰 (인증 여부 확인을 위해 필요)
 // meetinglist_all : 현재 페이지에서 보여줄 미팅 리스트 정보
 // change_page_num_click : 페이지를 바꿀 때 액션을 디스패치할 함수
-export const AllPage = ({ username, mySNU_verification_token, phone_verification_token, meetinglist_all, change_page_num_click }) => {
+export const AllPage = ({ username, point, mySNU_verification_token, phone_verification_token, meetinglist_all, change_page_num_click }) => {
   console.log(meetinglist_all)
   // 로그인 X : 로그인 페이지로 리다이렉트
   if (username == null) {
+    Object.defineProperty(window.location, 'href', { writable: true, value: '/login' });
+    return (<div></div>)
+  }
+
+  // 로그인 O, 벌점 10 이상 : 로그인 페이지로 리다이렉트
+  else if (point >= 10) {
+    alert('벌점 10점 이상으로 접근이 불가합니다. 운영자에게 연락하십시오.')
     Object.defineProperty(window.location, 'href', { writable: true, value: '/login' });
     return (<div></div>)
   }

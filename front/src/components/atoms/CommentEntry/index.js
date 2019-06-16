@@ -32,9 +32,9 @@ export class CommentEntry extends React.Component {
 
           {/* 댓글 수정 및 삭제 */}
           <Comment.Actions as='a'>
-            {(username == comment_info.writer) ? <Comment.Action onClick={this.edit_show}> 수정 </Comment.Action> : <div></div>}
+            {(username == comment_info.writer) ? <Comment.Action onClick={this.edit_show}>수정</Comment.Action> : <div></div>}
             <Modal size='small' open={this.state.edit_open} onClose={this.edit_close}>
-              <Modal.Header> 댓글 수정 </Modal.Header>
+              <Modal.Header>댓글 수정</Modal.Header>
               <Form reply style={{ margin: '10px' }}>
                 <Form.TextArea defaultValue={comment_info.content} onChange={(e) => { new_content = e.target.value }}/>
               </Form>
@@ -42,18 +42,18 @@ export class CommentEntry extends React.Component {
                 <Button positive icon='checkmark' labelPosition='right' content='완료'
                         onClick={() => { edit_comment_click(hash, comment_info.id, meeting_id, sessionStorage.getItem("user_id"),
                                          (new_content !== undefined) ? new_content : comment_info.content); this.edit_close() }}/>
-                <Button negative onClick={this.edit_close}> 취소 </Button>
+                <Button negative onClick={this.edit_close}>취소</Button>
               </Modal.Actions>
             </Modal>
 
-            {(username == comment_info.writer) ? <Comment.Action onClick={this.delete_show}> 삭제 </Comment.Action> : <div></div>}
+            {(username == comment_info.writer) ? <Comment.Action onClick={this.delete_show}>삭제</Comment.Action> : <div></div>}
             <Modal size='small' open={this.state.delete_open} onClose={this.delete_close}>
-              <Modal.Header> 댓글 삭제 </Modal.Header>
-              <Modal.Content><p> 정말로 이 댓글을 삭제하시겠습니까? </p></Modal.Content>
+              <Modal.Header>댓글 삭제</Modal.Header>
+              <Modal.Content><p>정말로 이 댓글을 삭제하시겠습니까?</p></Modal.Content>
               <Modal.Actions>
                 <Button positive icon='checkmark' labelPosition='right' content='예'
                         onClick={() => { delete_comment_click(hash, comment_info.id, meeting_id); this.delete_close() }}/>
-                <Button negative onClick={this.delete_close}> 아니오 </Button>
+                <Button negative onClick={this.delete_close}>아니오</Button>
               </Modal.Actions>
             </Modal>
           </Comment.Actions>

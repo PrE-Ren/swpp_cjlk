@@ -47,6 +47,7 @@ it('renders page when passed in', () => {
   expect(wrapper.contains('이름 : ')).toBe(true)
   expect(wrapper.contains('이메일 : ')).toBe(true)
   expect(wrapper.contains('핸드폰 : ')).toBe(true)   
+  expect(wrapper.contains('벌점 : ')).toBe(true) 
   const wrapper2 = wrap({ state: state1})
   expect(wrapper2.contains(<LeadList/>)).toBe(true)
   expect(wrapper2.contains(<JoinList/>)).toBe(true)
@@ -57,4 +58,5 @@ it('renders page when passed in', () => {
   expect(wrapper2.contains('이름 : ')).toBe(true)
   expect(wrapper2.contains('이메일 : ')).toBe(true)
   expect(wrapper2.contains('핸드폰 : ')).toBe(true) 
+  expect(wrapper2.contains('벌점 : ')).toBe(true) 
 })

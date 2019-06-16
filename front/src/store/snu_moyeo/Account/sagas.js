@@ -20,16 +20,22 @@ export function* reload_auth() {
       const url_user = 'http://127.0.0.1:8000/log_in/'
       const hash = new Buffer(`${username}:${password}`).toString('base64')
       const response_user = yield call(fetch, url_user, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
+      const response_user_data = yield call([response_user, response_user.json]);
 
+      // 인증 O, 벌점 10점 이상 : 로그인 페이지로 리다이렉트
+      if (response_user_data.point >= 10) {
+        alert('벌점 10점 이상으로 접근이 불가합니다. 운영자에게 연락하십시오.')
+        Object.defineProperty(window.location, 'href', { writable: true, value: '/login' });
+      }
+      
       // 인증 O : 홈 페이지로 리다이렉트
-      if (response_user.ok) {
+      else if (response_user.ok) {
         alert('이미 인증을 완료한 유저입니다.')
         Object.defineProperty(window.location, 'href', { writable: true, value: '/' });
       }
 
       // 인증 X
       else {
-        const response_user_data = yield call([response_user, response_user.json]);
         const mySNU_verification_token = response_user_data.mySNU_verified ? response_user_data.mySNU_verification_token : null
         const phone_verification_token = response_user_data.phone_verified ? response_user_data.phone_verification_token : null
         const email = response_user_data.mySNU_verified ? response_user_data.email : null
@@ -42,7 +48,8 @@ export function* reload_auth() {
           response_user_data.user_id,            //  고유값
           email,                                 //  이메일
           phone_number,                          //  폰 번호
-          response_user_data.name                //  이름(닉네임)
+          response_user_data.name,               //  이름(닉네임)
+          response_user_data.point               //  벌점
         ))
       }
     }
@@ -112,17 +119,26 @@ export function* login_func(action) {
     // 인증 O : 홈 페이지로 리다이렉트
     if (response_user.ok) {
       const response_user_data = yield call([response_user, response_user.json]);
-      yield put(actions.login_success_action(         //  <로그인 성공 : 유저 정보 스토어에 저장>
-        username,                                     //  유저 아이디
-        password,                                     //  유저 패스워드
-        response_user_data.mySNU_verification_token,  //  이메일 토큰
-        response_user_data.phone_verification_token,  //  폰 토큰
-        response_user_data.user_id,                   //  고유값
-        response_user_data.email,                     //  이메일
-        response_user_data.phone_number,              //  폰 번호
-        response_user_data.name                       //  이름(닉네임)
-      ))
-      Object.defineProperty(window.location, 'href', { writable: true, value: '/' })
+      console.log(response_user_data)
+      if(response_user_data.point >= 10)
+      {
+        alert('벌점 10점 이상으로 로그인이 불가하니 관리자에게 문의하십시오.')
+      }
+      else
+      {
+        yield put(actions.login_success_action(         //  <로그인 성공 : 유저 정보 스토어에 저장>
+          username,                                     //  유저 아이디
+          password,                                     //  유저 패스워드
+          response_user_data.mySNU_verification_token,  //  이메일 토큰
+          response_user_data.phone_verification_token,  //  폰 토큰
+          response_user_data.user_id,                   //  고유값
+          response_user_data.email,                     //  이메일
+          response_user_data.phone_number,              //  폰 번호
+          response_user_data.name,                      //  이름(닉네임)
+          response_user_data.point                      //  벌점
+        ))
+        Object.defineProperty(window.location, 'href', { writable: true, value: '/' })
+      }  
     }
 
     // 인증 X : 인증 페이지로 리다이렉트

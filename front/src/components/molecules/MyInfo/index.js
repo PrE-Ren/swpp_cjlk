@@ -11,24 +11,28 @@ export const MyInfo = ({ state }) => {
   return (
     <Container>
       <Segment raised>
-        <Label as='a' color='teal' ribbon> My Information </Label>
-        <Header as='h1'> 내 정보 </Header>
+        <Label as='a' color='teal' ribbon>My Information</Label>
+        <Header as='h1'>내 정보</Header>
         <List>
           <List.Item>
             <List.Icon name='user' />
-            <List.Content> 아이디 : {state.username} </List.Content>
+            <List.Content>아이디 : {state.username} </List.Content>
           </List.Item>
           <List.Item>
             <List.Icon name='pencil alternate' />
-            <List.Content> 이름 : {state.name} </List.Content>
+            <List.Content>이름 : {state.name} </List.Content>
           </List.Item>
           <List.Item>
             <List.Icon name='mail' />
-            <List.Content> 이메일 : {state.email} </List.Content>
+            <List.Content>이메일 : {state.email} </List.Content>
           </List.Item>
           <List.Item>
             <List.Icon name='call' />
-            <List.Content> 핸드폰 : {state.phone_number} </List.Content>
+            <List.Content>핸드폰 : {state.phone_number} </List.Content>
+          </List.Item>
+          <List.Item>
+            <List.Icon name='minus' />
+            <List.Content>벌점 : {state.point} </List.Content>
           </List.Item>
         </List>
       </Segment>

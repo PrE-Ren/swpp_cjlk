@@ -153,7 +153,8 @@ class LogIn(APIView):
                 'phone_number':user.phone_number,
                 'mySNU_verification_token':user.mySNU_verification_token,
                 'phone_verification_token':user.phone_verification_token,
-                'name':user.name
+                'name':user.name,
+                'point':user.point
             }, status = status.HTTP_202_ACCEPTED)
         else :
             return Response(data = {
@@ -164,7 +165,8 @@ class LogIn(APIView):
                 'phone_verified':user.phone_verified,
                 'mySNU_verification_token':user.mySNU_verification_token,
                 'phone_verification_token':user.phone_verification_token,
-                'name':user.name
+                'name':user.name,
+                'point':user.point
             }, status = status.HTTP_403_FORBIDDEN)
 
 class SnuUserList(generics.ListAPIView):
@@ -216,6 +218,7 @@ class MeetingDetail(generics.RetrieveUpdateDestroyAPIView):
 class ParticipateList(generics.ListCreateAPIView):
     queryset = Participate.objects.all()
     serializer_class = ParticipateSerializer
+
 
 class ParticipateDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Participate.objects.all()
@@ -613,7 +616,7 @@ def InfoExcel(request, meeting_id) :
 
         # sending response
         response = HttpResponse(file_data, content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'attachment; filename="foo.xls"'
+        response['Content-Disposition'] = 'attachment; filename="member_info.xlsx"'
 
     except IOError:
         # handle file not exist case here
@@ -631,7 +634,7 @@ def searchShop(request, search_word) :
     client_secret = "1hdjaYpmI6" # 애플리케이션 등록시 발급 받은 값 입력
     encText = urllib.parse.quote(search_word)
     print(encText)
-    url = "https://openapi.naver.com/v1/search/shop?query=" + encText +"&display=3&sort=count"
+    url = "https://openapi.naver.com/v1/search/shop?query=" + encText +"&display=3&sort=sim"
     request = urllib.request.Request(url)
     print(request)
     request.add_header("X-Naver-Client-Id",client_id)
@@ -641,7 +644,17 @@ def searchShop(request, search_word) :
     if(rescode==200):
         response_body = response.read()
         #print(response_body.decode('utf-8'))
-        json_dict = json.loads(response_body.decode('utf-8'))
+        json_dict_def = json.loads(response_body.decode('utf-8'))
+        json_dict = json_dict_def
+        items = json_dict['items']
+        ind = 0
+        for item in items :
+            replace_tag = item['title'].replace('<b>','').replace('</b>','')
+            item['title'] = replace_tag
+            json_dict['items'][ind] = item
+            ind +=1
+        #print(type(json_dict))
+        #print(json_dict)
         #print(json_dict)
         return JsonResponse(json_dict)
     else:
@@ -649,7 +662,7 @@ def searchShop(request, search_word) :
         return HttpResponse({}, status = status.HTTP_404_NOT_FOUND)
 
 
-def capcha(request):
+def captcha(request):
     client_id = "N6c7MAUvz7uiaMUNt1Ww" # 애플리케이션 등록시 발급 받은 값 입력
     client_secret = "1hdjaYpmI6" # 애플리케이션 등록시 발급 받은 값 입력
 
@@ -680,9 +693,35 @@ def capcha(request):
     if(rescode==200):
         print("캡차 이미지 저장")
         response_body = response.read()
-        with open('media/captcha.jpg', 'wb') as f:
+        filename = 'media/captcha'
+        filename = filename + str(random.randint(1, 100))+'.jpg'
+        with open(filename, 'wb') as f:
             f.write(response_body)
+        #return HttpResponse(response_body)
+    else:
+        print('wrong')
+
+    json_dict = {'image': filename,'key': capch_key.split('\"')[3]}
+    return JsonResponse(json_dict)
+
+def captcha_verify(request, in_key, in_value) :
+    client_id = "N6c7MAUvz7uiaMUNt1Ww" # 애플리케이션 등록시 발급 받은 값 입력
+    client_secret = "1hdjaYpmI6" # 애플리케이션 등록시 발급 받은 값 입력
+
+    code = "1"
+    key = in_key
+    value = in_value
+    url = "https://openapi.naver.com/v1/captcha/nkey?code=" + code + "&key=" + key + "&value=" + value
+    print(url)
+    request = urllib.request.Request(url)
+    request.add_header("X-Naver-Client-Id",client_id)
+    request.add_header("X-Naver-Client-Secret",client_secret)
+    response = urllib.request.urlopen(request)
+    rescode = response.getcode()
+    if(rescode==200):
+        response_body = response.read()
         return HttpResponse(response_body)
+        #print(response_body.decode('utf-8'))
     else:
         print("Error Code:" + rescode)
 
