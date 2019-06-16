@@ -1,5 +1,22 @@
 import * as actions from './actions'
 
+it('test prepare_load_leaderinfo_action', () => {
+
+  const expectedAction = {
+    type: actions.PREPARE_LOAD_LEADERINFO_ACTION
+  }
+  expect(actions.prepare_load_leaderinfo_action()).toEqual(expectedAction)
+})
+
+it('test prepare_load_memberinfo_action', () => {
+  const user_id = '1'
+
+  const expectedAction = {
+    type: actions.PREPARE_LOAD_MEMBERINFO_ACTION
+  }
+  expect(actions.prepare_load_memberinfo_action()).toEqual(expectedAction)
+})
+
 it('test load_leaderinfo_action', () => {
   const user_id = '1'
 
@@ -29,19 +46,9 @@ it('test load_memberinfo_action', () => {
 })
 
 it('test load_memberinfo_success_action', () => {
-  const member_list = '[1,2]'
 
   const expectedAction = {
-    type: actions.LOAD_MEMBERINFO_SUCCESS_ACTION,
-    member_list
+    type: actions.LOAD_MEMBERINFO_SUCCESS_ACTION
   }
-  expect(actions.load_memberinfo_success_action(member_list)).toEqual(expectedAction)
-})
-
-it('test check_member_action', () => {
-
-  const expectedAction = {
-    type: actions.CHECK_MEMBER_ACTION
-  }
-  expect(actions.check_member_action()).toEqual(expectedAction)
+  expect(actions.load_memberinfo_success_action()).toEqual(expectedAction)
 })
