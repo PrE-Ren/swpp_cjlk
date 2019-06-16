@@ -12,7 +12,8 @@ export class MeetingCreate extends React.Component{
     kakao_link: undefined,
     description: undefined,
     kind: undefined,
-    picture: undefined
+    picture: undefined,
+    map_checked : false
   }
 
   get_current_datetime = () => {
@@ -47,10 +48,25 @@ export class MeetingCreate extends React.Component{
   handle_description = (e) => this.setState({ description: e.target.value })
   handle_kind = (e, { value }) => this.setState({kind: value})
   handle_picture = (e) => this.setState({ picture: e.target.files[0] })
+  change_map_false = (e) => this.setState({ map_checked : false })
+  change_map_true = (e) => this.setState({ map_checked : true })
+
+  componentDidMount(){
+    const info = JSON.parse(sessionStorage.getItem('meeting_info'))
+    if(info !== null){
+      if(info.latitude == 0 || info.latitude == null)
+        this.setState({ map_checked : false })
+      else {
+        this.setState({ map_checked : true })
+      }
+    }
+  }
 
   render(){
-    const { username, password, user_id, map_checked, new_click, modify_click, change_map_false, change_map_true } = this.props
+    const { username, password, user_id, new_click, modify_click } = this.props
 
+    sessionStorage.setItem("lat",0)
+    sessionStorage.setItem("lng",0)
     // 모임 유형 상수
     const options = [
       { key: 0, text: '음식배달', value: 0 },
@@ -86,10 +102,10 @@ export class MeetingCreate extends React.Component{
           <Form.Input fluid label='오픈 채팅방 링크' placeholder='https://open.kakao.com/' onChange={this.handle_kakao_link} />
           <Form.Input fluid label='사진' type="file" width={6} onChange={this.handle_picture} accept="image/*" />
 
-          {map_checked  ? <Radio toggle label='hide the map' onChange={() => change_map_false()}/> :
-                         <Radio toggle label='show the map' onChange={() => change_map_true()} /> }
+          {this.state.map_checked  ? <Radio toggle label='hide the map' onChange={this.change_map_false}/> :
+                                     <Radio toggle label='show the map' onChange={this.change_map_true} /> }
 
-          {map_checked == true ? <div><br/><Map meeting_info = {meeting_info} write = {true} /></div> : <div><br/></div>}
+          {this.state.map_checked == true ? <div><br/><Map meeting_info = {meeting_info} write = {true} /></div> : <div><br/></div>}
 
           <Form.TextArea label='내용' placeholder='About this meeting...' onChange={this.handle_description} />
           <Form.Button onClick={() => new_click(hash, user_id, {
@@ -109,6 +125,7 @@ export class MeetingCreate extends React.Component{
 
     // Modify (수정 버튼을 누르면 세션 스토리지에 해당 미팅 정보가 저장됨)
     else {
+
       const datetime = this.parse_datetime(meeting_info.due)  //  기존 마감 기한
       return (
         <Form>
@@ -122,10 +139,10 @@ export class MeetingCreate extends React.Component{
           <Form.Input fluid label='오픈 채팅방 링크' placeholder='https://open.kakao.com/' defaultValue={meeting_info.kakao_link} onChange={this.handle_kakao_link} />
           <Form.Input fluid label='사진' type="file" width={6} onChange={this.handle_picture} accept="image/*" />
 
-          {map_checked  ? <Radio toggle label='hide the map' onChange={() => change_map_false()}/> :
-                         <Radio toggle label='show the map' onChange={() => change_map_true()} /> }
+          {this.state.map_checked  ? <Radio toggle label='hide the map' onChange={this.change_map_false}/> :
+                                     <Radio toggle label='show the map' onChange={this.change_map_true} /> }
 
-          {map_checked == true ? <div><br/><Map meeting_info = {meeting_info} write = {true} /></div> : <div><br/></div>}
+          {this.state.map_checked == true ? <div><br/><Map meeting_info = {meeting_info} write = {true} /></div> : <div><br/></div>}
 
           <Form.TextArea label='내용' placeholder='Description' defaultValue={meeting_info.description} onChange={this.handle_description} />
           <Form.Button onClick={() => modify_click(hash, {
