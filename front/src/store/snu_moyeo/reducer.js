@@ -253,6 +253,27 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
     }
 
+    case 'PREPARE_LOAD_CAPTCHA_ACTION' : {
+      return {
+        ...state,
+        is_captcha_loaded : false
+      }
+    }
+
+    case 'LOAD_CAPTCHA_SUCCESS_ACTION' : {
+      return {
+        ...state,
+        is_captcha_loaded : true,
+      }
+    }
+
+    case 'CONFIRM_CAPTCHA_SUCCESS_ACTION' : {
+      return {
+        ...state,
+        is_captcha_verified : true
+      }
+    }
+
     default:
       return state
   }
