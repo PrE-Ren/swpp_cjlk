@@ -183,52 +183,46 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
     }
 
-    case 'SIGNUP_SUCCESS_ACTION': {
-      return state
+    case 'PREPARE_LOAD_COMMENTS_ACTION': {
+      return {
+        ...state,
+        is_comment_loaded: false
+      }
     }
 
-    case 'LOGOUT_ACTION': {
-     sessionStorage.clear();
-     return {
-       ...state,
-       username: null,
-       password: null,
-       mySNU_verification_token: null,
-       phone_verification_token: null,
-       user_id: null,
-       email: null,
-       name: null,
-       meetinglist_impending : null,
-       meetinglist_recent : null,
-       meetinglist_lead : null,
-       meetinglist_join : null,
-       meetinglist_history : null,
-       meetinglist_list : null,
-       report_info_list : null,
-       page_num : null,
-       comments : null
-     }
-    }
-    
     case 'LOAD_COMMENTS_SUCCESS_ACTION': {
       return {
         ...state,
         comments: JSON.stringify(action.comments),
-        check_meeting_click: true
+        is_comment_loaded: true
+      }
+    }
+
+    case 'PREPARE_LOAD_LEADERINFO_ACTION': {
+      return {
+        ...state,
+        is_leader_loaded : false
       }
     }
 
     case 'LOAD_LEADERINFO_SUCCESS_ACTION': {
       return {
         ...state,
-        check_leader_click: true
+        is_leader_loaded: true
+      }
+    }
+
+    case 'PREPARE_LOAD_MEMBERINFO_ACTION': {
+      return {
+        ...state,
+        is_member_loaded : false
       }
     }
 
     case 'LOAD_MEMBERINFO_SUCCESS_ACTION': {
       return {
         ...state,
-        check_member_click: true
+        is_member_loaded: true
       }
     }
 
