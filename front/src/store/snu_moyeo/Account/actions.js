@@ -18,7 +18,7 @@ export const login_action = (username, password) => {
     }
 };
 
-export const login_success_action = (username, password, mySNU_verification_token, phone_verification_token, user_id, email, phone_number, name) => {
+export const login_success_action = (username, password, mySNU_verification_token, phone_verification_token, user_id, email, phone_number, name, point) => {
     return {
         type : LOGIN_SUCCESS_ACTION,
         data : {
@@ -29,7 +29,8 @@ export const login_success_action = (username, password, mySNU_verification_toke
             user_id : user_id,
             email : email,
             phone_number : phone_number,
-            name : name
+            name : name,
+            point : point
         }
     }
 };

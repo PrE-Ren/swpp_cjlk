@@ -115,6 +115,7 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
       sessionStorage.setItem("user_id", action.data.user_id);
       sessionStorage.setItem("name", action.data.name);
+      sessionStorage.setItem("point", action.data.point);
       return {
         ...state,
         username: action.data.username,
@@ -124,7 +125,8 @@ const snu_moyeo_reducer = (state = initialState, action) => {
         user_id: action.data.user_id,
         email: action.data.email,
         phone_number: action.data.phone_number,
-        name: action.data.name
+        name: action.data.name,
+        point: action.data.point
       }
     }
 

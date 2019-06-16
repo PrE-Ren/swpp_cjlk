@@ -10,7 +10,7 @@ import { Button, Form, Grid, Header, Segment, Container } from 'semantic-ui-reac
 // confirm_email_click : 확인 버튼을 눌렀을 때 액션을 디스패치할 함수
 // confirm_phone_click : 확인 버튼을 눌렀을 때 액션을 디스패치할 함수
 // logout_click : 로그아웃 버튼을 눌렀을 때 액션을 디스패치할 함수
-export const LoginAuthPage = ({ username, password, mySNU_verification_token, phone_verification_token,
+export const LoginAuthPage = ({ username, password, point, mySNU_verification_token, phone_verification_token,
                                 send_email_click, send_phone_click, confirm_email_click, confirm_phone_click, logout_click }) => {
   const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저 해시값
   let email, phone_number     //  입력한 이메일 및 폰 번호
@@ -92,6 +92,11 @@ export const LoginAuthPage = ({ username, password, mySNU_verification_token, ph
 
   // 로그인 X : 로그인 페이지로 리다이렉트 (by saga)
   if (username == null) {
+    return (<div></div>)
+  }
+
+  // 로그인 O, 벌점 10 이상 : 로그인 페이지로 리다이렉트(by saga)
+  else if (point >= 10) {
     return (<div></div>)
   }
 

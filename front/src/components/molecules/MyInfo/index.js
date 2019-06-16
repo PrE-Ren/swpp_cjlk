@@ -30,6 +30,10 @@ export const MyInfo = ({ state }) => {
             <List.Icon name='call' />
             <List.Content> 핸드폰 : {state.phone_number} </List.Content>
           </List.Item>
+          <List.Item>
+            <List.Icon name='minus' />
+            <List.Content> 벌점 : {state.point} </List.Content>
+          </List.Item>
         </List>
       </Segment>
       <Container>

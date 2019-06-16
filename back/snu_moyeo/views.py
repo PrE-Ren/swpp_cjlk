@@ -153,7 +153,8 @@ class LogIn(APIView):
                 'phone_number':user.phone_number,
                 'mySNU_verification_token':user.mySNU_verification_token,
                 'phone_verification_token':user.phone_verification_token,
-                'name':user.name
+                'name':user.name,
+                'point':user.point
             }, status = status.HTTP_202_ACCEPTED)
         else :
             return Response(data = {
@@ -164,7 +165,8 @@ class LogIn(APIView):
                 'phone_verified':user.phone_verified,
                 'mySNU_verification_token':user.mySNU_verification_token,
                 'phone_verification_token':user.phone_verification_token,
-                'name':user.name
+                'name':user.name,
+                'point':user.point
             }, status = status.HTTP_403_FORBIDDEN)
 
 class SnuUserList(generics.ListAPIView):

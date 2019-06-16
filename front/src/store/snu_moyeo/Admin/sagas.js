@@ -59,7 +59,7 @@ export function* penalty_func(action) {
   const report_info_modified = JSON.stringify({
     reason: report_info.reason,
     isHandled: action.flag,  //  관리자가 입력한 값
-    point: action.points,    //  관리자가 입력한 값
+    point: action.point,    //  관리자가 입력한 값
     reporterid: report_info.reporterid,
     reportee: report_info.reportee,
     reporteeid: report_info.reporteeid
