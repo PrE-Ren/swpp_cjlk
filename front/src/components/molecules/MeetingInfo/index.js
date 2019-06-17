@@ -187,7 +187,7 @@ export class MeetingInfo extends React.Component {
             ?
             <List.Item>
               <List.Icon name='file excel' />
-              <List.Content as='a' target="_blank" href={'http://localhost:8000/infoexcel/' + meeting_info.id}> 참여 멤버 정보 다운 </List.Content>
+              <List.Content as='a' target="_blank" href={'http://localhost:8000/infoexcel_secure/' + meeting_info.secure_token}> 참여 멤버 정보 다운 </List.Content>
             </List.Item>
             :
             <div></div>

@@ -121,7 +121,7 @@ export class LoginAuthPage extends React.Component {
             <Grid.Column>
               <br /><br />
               <Button size='massive' style={{ float:'top' }} onClick={() => { window.location.href='/' }}>인증완료</Button><br /><br />
-              <Button size='massive' style={{ float:'bottom' }} onClick={() => { logout_click(); window.location.href='/login' }}>로그아웃</Button><br/><br/>
+              <Button size='massive' style={{ float:'bottom' }} onClick={() => { logout_click(); window.location.href='/login' }}>로그아웃</Button><br/>
               <Icon name='question circle' /><a href='/tutorial'>홈페이지 소개</a>
             </Grid.Column>
           </Grid>

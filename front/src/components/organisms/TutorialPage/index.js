@@ -20,7 +20,7 @@ export const TutorialPage = () => {
         {/* Header */}
         <Container>
           <Header as='h1' icon textAlign='center'>
-            <Icon name='group' circular /> SNU Moyeo
+            <Icon name='group' circular />SNU Moyeo
             <Header.Subheader> SNU web service that helps you construct and join a meeting </Header.Subheader><br /><br />
           </Header>
         </Container>
