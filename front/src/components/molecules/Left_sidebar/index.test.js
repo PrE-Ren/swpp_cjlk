@@ -13,6 +13,7 @@ it('renders same sidebar when different childern, props passed in', () => {
   expect(wrapper.contains('스터디')).toBe(true)
   expect(wrapper.contains('운동')).toBe(true)
   expect(wrapper.contains('미팅')).toBe(true)
+  expect(wrapper.contains('기타')).toBe(true)
   const wrapper2 = wrap({ children: 'foo', id: 'test' })
   expect(wrapper2.contains('To Home')).toBe(true)
   expect(wrapper2.contains('모임 분류')).toBe(true)
@@ -21,6 +22,7 @@ it('renders same sidebar when different childern, props passed in', () => {
   expect(wrapper2.contains('스터디')).toBe(true)
   expect(wrapper2.contains('운동')).toBe(true)
   expect(wrapper2.contains('미팅')).toBe(true)
+  expect(wrapper.contains('기타')).toBe(true)
 
 })
 
