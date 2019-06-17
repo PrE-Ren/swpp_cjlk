@@ -16,11 +16,13 @@ export class Map extends React.Component {
   // 렌더링된 직후에 실행되는 함수
   componentDidMount() {
     const map_container = document.getElementById('map')  //  지도를 표시할 element
-    let daumMap       //  지도
-    let map_position  //  지도 옵션
-    let marker        //  위치를 표시할 마커
-    let infowindow    //  주소를 보여줄 창
-    let geocoder      //  주소-좌표 변환 객체
+    let daumMap        //  지도
+    let map_position   //  지도 옵션
+    let marker         //  위치를 표시할 마커
+    let infowindow     //  주소를 보여줄 창
+    let geocoder       //  주소-좌표 변환 객체
+    let mapTypeControl // 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤
+    let zoomControl    // 지도 확대 축소를 제어할 수 있는  줌 컨트롤
 
     // 모임 정보를 보려는 경우
     if (this.props.write == false) {
@@ -28,6 +30,12 @@ export class Map extends React.Component {
       daumMap = new daum.maps.Map(map_container, map_position)          //  지도 생성
       marker = new daum.maps.Marker({ position: daumMap.getCenter() })  //  모임 위치를 표시할 마커 생성 (아직 보이지는 않음)
       marker.setMap(daumMap)                                            //  마커를 지도 위에 표시
+      mapTypeControl = new daum.maps.MapTypeControl();
+      // 지도에 컨트롤을 추가해야 지도위에 표시됩니다
+      // daum.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
+      daumMap.addControl(mapTypeControl, daum.maps.ControlPosition.TOPRIGHT);
+      zoomControl = new daum.maps.ZoomControl();
+      daumMap.addControl(zoomControl, daum.maps.ControlPosition.RIGHT);
     }
 
     // 모임을 생성 혹은 수정하려는 경우
@@ -62,6 +70,13 @@ export class Map extends React.Component {
       marker.setMap(daumMap)                                            //  마커를 지도 위에 표시
       geocoder = new daum.maps.services.Geocoder()  //  주소-좌표 변환 객체 생성
 
+
+      mapTypeControl = new daum.maps.MapTypeControl();
+      // 지도에 컨트롤을 추가해야 지도위에 표시됩니다
+      // daum.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
+      daumMap.addControl(mapTypeControl, daum.maps.ControlPosition.TOPRIGHT);
+      zoomControl = new daum.maps.ZoomControl();
+      daumMap.addControl(zoomControl, daum.maps.ControlPosition.RIGHT);
       // 클릭 이벤트 핸들러가 아직 등록되지 않은 경우 (등록하고 강제 리렌더링해야 함)
       if (this.state.is_added_handler == false) {
 
@@ -76,7 +91,7 @@ export class Map extends React.Component {
             if (status === daum.maps.services.Status.OK) {
                 let detailAddr = (!!result[0].road_address ? '<span>도로명 주소 : ' + result[0].road_address.address_name + '</span><br />' : '')
                                   + '<span>지번 주소 : ' + result[0].address.address_name + '</span>';
-                let content = '<div style="width:300px; height:45px;">' + detailAddr + '</div>';
+                let content = '<div style="width:350px; height:45px; padding:2px;">' + detailAddr + '</div>';
 
                 // 마커를 클릭한 위치에 표시
                 marker.setPosition(mouseEvent.latLng);

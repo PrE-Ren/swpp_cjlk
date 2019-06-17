@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Grid, Header, Segment, Container } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment, Container, Icon } from 'semantic-ui-react'
 
 // username : 유저 아이디 (로그인 여부 확인 및 해시값 획득을 위해 필요)
 // password : 유저 패스워드 (해시값 획득을 위해 필요)
@@ -121,7 +121,8 @@ export class LoginAuthPage extends React.Component {
             <Grid.Column>
               <br /><br />
               <Button size='massive' style={{ float:'top' }} onClick={() => { window.location.href='/' }}>인증완료</Button><br /><br />
-              <Button size='massive' style={{ float:'bottom' }} onClick={() => { logout_click(); window.location.href='/login' }}>로그아웃</Button>
+              <Button size='massive' style={{ float:'bottom' }} onClick={() => { logout_click(); window.location.href='/login' }}>로그아웃</Button><br/><br/>
+              <Icon name='question circle' /><a href='/tutorial'>홈페이지 소개</a>
             </Grid.Column>
           </Grid>
         </Container>
