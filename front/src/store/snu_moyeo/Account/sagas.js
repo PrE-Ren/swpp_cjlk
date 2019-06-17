@@ -184,8 +184,10 @@ export function* send_email_func(action) {
   const url_send_email = 'http://127.0.0.1:8000/send_email/' + action.email + '/'
   const response_email = yield call(fetch, url_send_email, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
 
-  if (response_email.ok)  //  해당 유저의 이메일 토큰 필드 설정 (by BACK-END)
+  if (response_email.ok) {  //  해당 유저의 이메일 토큰 필드 설정 (by BACK-END)
     alert('이메일로 인증번호가 전송되었습니다.')
+    yield put(actions.require_email_action())
+  }
   else
     alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
 }
@@ -194,8 +196,10 @@ export function* send_phone_func(action) {
   const url_send_phone = 'http://127.0.0.1:8000/send_phone/' + action.phone_number + '/'
   const response_phone = yield call(fetch, url_send_phone, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
 
-  if (response_phone.ok)  //  해당 유저의 폰 토큰 필드 설정 (by BACK-END)
+  if (response_phone.ok){  //  해당 유저의 폰 토큰 필드 설정 (by BACK-END)
     alert('휴대폰으로 인증번호가 전송되었습니다.')
+    yield put(actions.require_phone_action())
+  }
   else
     alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
 }

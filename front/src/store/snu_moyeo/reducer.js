@@ -185,6 +185,34 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
     }
 
+    case 'PREPARE_SEND_EMAIL_ACTION' : {  
+      return {
+        ...state,
+        email_open: true
+      }
+    }
+
+    case 'PREPARE_SEND_PHONE_ACTION' : {  
+      return {
+        ...state,
+        phone_open: true
+      }
+    }
+
+    case 'REQUIRE_EMAIL_ACTION' : {  
+      return {
+        ...state,
+        email_open: false
+      }
+    }
+
+    case 'REQUIRE_PHONE_ACTION' : {  
+      return {
+        ...state,
+        phone_open: false
+      }
+    }
+
     case 'PREPARE_LOAD_COMMENTS_ACTION': {
       return {
         ...state,
