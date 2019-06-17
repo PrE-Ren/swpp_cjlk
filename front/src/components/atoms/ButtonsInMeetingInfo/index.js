@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Icon } from 'semantic-ui-react'
+import { Button, Icon, Popup } from 'semantic-ui-react'
 import * as meeting_state from '../../../literal'
 
 // <수정>
@@ -36,7 +36,9 @@ export const CloseButton = ({ meeting_info, f, hash }) => {
 // hash : 내가 만든 모임인지 확인할 때 필요
 export const BreakUpButton = ({ meeting_info, f, hash }) => {
   return (
-      <Button secondary onClick={() => { f(hash, meeting_info, meeting_state.BREAK_UP) }}>해산</Button>  //  미팅 상태 변경
+      <Popup position='bottom' content='정말 해산하시겠습니까?'
+        trigger={<Button secondary onClick={() => { f(hash, meeting_info, meeting_state.BREAK_UP) }}>해산</Button>} />
+        //  미팅 상태 변경
   );
 };
 
@@ -86,6 +88,7 @@ export const JoinButton = ({ meeting_info, user_id, hash, f }) => {
 // f (= withdraw_meeting_click) : 탈퇴 버튼을 눌렀을 때 액션을 디스패치할 함수
 export const WithdrawButton = ({ meeting_info, user_id, hash, f }) => {
   return (
-      <Button secondary onClick={() => { f(hash, user_id, meeting_info.id) }}>탈퇴</Button>
+      <Popup position='bottom right' content='마감된 모임을 탈퇴시 벌점 3점 부과'
+             trigger={<Button secondary onClick={() => { f(hash, user_id, meeting_info.id) }}>탈퇴</Button>} />
   );
 };

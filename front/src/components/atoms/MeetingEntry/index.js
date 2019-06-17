@@ -1,6 +1,7 @@
 import React from 'react'
 import MeetingInfo from '../../../containers/MeetingInfo'
 import { Modal, Card, Header, Image, Grid, Label } from 'semantic-ui-react'
+import styled from 'styled-components'
 
 // 날짜를 보기 좋게 만들어주는 함수
 const dateParse = (data) => {
@@ -13,6 +14,16 @@ const dateParse = (data) => {
     return day.split("&")[0]
 }
 
+const EllipsisCss = styled.span`
+  display: inline-block;
+  width: 190px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`
+const InfoCss = styled.span`
+  color : darkblue;
+`
 // 모임 상태에 따라 다른 라벨 태그 생성
 const get_label = (state) => {
   if (state == 0)       return <Label circular as='a' color='yellow'> 모집 중 </Label>
@@ -38,19 +49,31 @@ export class MeetingEntry extends React.Component {
         this.props.load_comments_click(this.props.meeting_info.id)  //  댓글 목록을 새로 로드하여 세션 스토리지에 설정한 뒤 unlock
       }}>
         {/* 제목 및 상태 라벨 */}
-        <Card.Header as='h5'> {this.props.meeting_info.title} &ensp; {get_label(this.props.meeting_info.state)} </Card.Header>
+        <Card.Header as='h5'> <EllipsisCss>{this.props.meeting_info.title}</EllipsisCss> &ensp; {get_label(this.props.meeting_info.state)} </Card.Header>
 
         {/* 모집 현황 (최소 인원) */}
         <Card.Meta>
-          모집 현황 : {this.props.meeting_info.members.length}명/{this.props.meeting_info.max_people}명&ensp;
-          (최소 인원 : {this.props.meeting_info.min_people}명)
+          <InfoCss>
+            모집 현황 : {this.props.meeting_info.members.length}명/{this.props.meeting_info.max_people}명&ensp;
+            (최소 인원 : {this.props.meeting_info.min_people}명)
+          </InfoCss>
         </Card.Meta>
 
         {/* 마감 기한*/}
-        <Card.Meta> 마감 기한 : {dateParse(this.props.meeting_info.due)} </Card.Meta>
+        <Card.Meta>
+          <InfoCss>
+            마감 기한 : {dateParse(this.props.meeting_info.due)}
+          </InfoCss>
+        </Card.Meta>
 
         {/* 본문 */}
-        <Card.Description> {this.props.meeting_info.description}</Card.Description>
+        <Card.Description>
+          <EllipsisCss>
+            <InfoCss>
+              {this.props.meeting_info.description}
+            </InfoCss>
+          </EllipsisCss>
+        </Card.Description>
       </Card.Content>
     )
 
