@@ -44,7 +44,6 @@ export class MeetingInfo extends React.Component {
       prepare_load_leaderinfo_click, load_leaderinfo_click, prepare_load_memberinfo_click, load_memberinfo_click, accuse_click
     } = this.props
     const { accuse_reason, member_id } = this.state
-
     const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')  //  유저의 해시값
     const member_list = JSON.parse(sessionStorage.getItem("member_list"))  //  참여 멤버 정보 로드
     const leader_id = meeting_info.leaderid  //  Reporter 고유값

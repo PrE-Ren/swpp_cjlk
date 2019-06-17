@@ -9,6 +9,8 @@ export const initialState = {
   point : sessionStorage.getItem("point"),
   mySNU_verification_token : sessionStorage.getItem("mySNU_verification_token"),
   phone_verification_token : sessionStorage.getItem("phone_verification_token"),
+  email_open: false, 
+  phone_open: false,
 
   // MeetingLoad
   meetinglist_impending : sessionStorage.getItem("impending"),
