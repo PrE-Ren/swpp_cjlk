@@ -10,7 +10,7 @@ const wrap = (props = {}) => shallow(<LoginPage {...props} />)
 it('username null', () => {
   const wrapper = wrap({ username_store: null, mySNU_verification_token: null, phone_verification_token: null, login_click: login_action})
   expect(wrapper.contains(' Log in to your account ')).toBe(true)
-  expect(wrapper.contains(<Message><a href='/signup'> 회원가입 </a></Message>)).toBe(true)
+  expect(wrapper.contains('홈페이지 소개')).toBe(true)
 })
 
 it('username not null, token null', () => {
