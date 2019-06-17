@@ -4,7 +4,7 @@ from django.db.models import Q
 import django
 from sdk.api.message import Message
 from sdk.exceptions import CoolsmsException
-
+from django.utils.crypto import get_random_string
 
 OPEN = 0
 CLOSED = 1
