@@ -64,24 +64,24 @@ export const ListPage = ({ username, point, mySNU_verification_token, phone_veri
                             onPageChange={(e, {activePage}) => change_page_num_click({activePage}.activePage)} />
               </Grid.Column>
               <Grid.Column width={4}>
-                <Input type='text' placeholder='Search . . . ' action>
+                <Input type='text' placeholder='이 게시판에서 검색' action style={{ marginLeft: '-5px' }}>
                   <input ref={node => {keyword = node}}/>
                   <Button type='submit' onClick={() => {
                     const kind = window.location.pathname[6]  //  "/list/n"에서 "n"을 추출
                     if (keyword.value == "")                  //  검색 키워드는 반드시 입력해야 함
-                      alert('Type Search Keyword')
+                      alert('검색어를 입력해주세요.')
                     else
                       window.location.href = '/list/' + kind + '/' + keyword.value;  //  검색
                   }}> Search </Button>
                 </Input>
+                {window.location.pathname[6] == 2 ? <NaverShopping/> : <div></div>}
               </Grid.Column>
             </Grid>
           </Container>
 
           {/* 네이버 쇼핑 검색 API */}
-          {window.location.pathname[6] == 2
-            ? <Container><NaverShopping/></Container>
-            : <Container></Container>}
+          {/* {window.location.pathname[6] == 2 ? <NaverShopping/> : <div></div>} */}
+
         </Grid.Column>
 
         {/* Right Sidebar */}

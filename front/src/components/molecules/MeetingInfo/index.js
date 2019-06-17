@@ -71,7 +71,7 @@ export class MeetingInfo extends React.Component {
     // 상단 제목
     const window_title = <Modal.Header> {meeting_info.title} </Modal.Header>
 
-    // 모임 기본 정보 (주최자, 게시 날짜, 마감 기한, 유형, 참여 멤버, 상태, 참여 멤버 엑셀 파일 다운, 오픈 채팅방 링크)
+    // 모임 기본 정보 (주최자, 게시 날짜, 마감 기한, 유형, 참여 멤버, 상태, 참여 멤버 엑셀 파일 다운, 오픈 채팅방 링크, 본문)
     const basic_info =
       <React.Fragment>
         <List style={{ marginTop: '20px' }}>
@@ -219,7 +219,7 @@ export class MeetingInfo extends React.Component {
             <Grid.Column width={7}>  {/* 사진 (없으면 기본 사진) */}
               {meeting_info.picture != null
                 ? <Image wrapped size='medium' src={meeting_info.picture} />
-                : <Image wrapped size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' />}
+                : <Image wrapped size='medium' src='https://react.semantic-ui.com/images/wireframe/image.png' />}
             </Grid.Column>
             <Grid.Column width={9}>  {/* 모임 기본 정보  */}
               <Header> 모임 정보 </Header>
