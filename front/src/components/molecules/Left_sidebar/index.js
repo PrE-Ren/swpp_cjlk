@@ -22,6 +22,7 @@ export const Left_sidebar = () => {
       <Menu.Item as='a' href="/list/3"><Icon name='pencil alternate' />스터디</Menu.Item>
       <Menu.Item as='a' href="/list/4"><Icon name='basketball ball' />운동</Menu.Item>
       <Menu.Item as='a' href="/list/5"><Icon name='heart' />미팅</Menu.Item>
+      <Menu.Item as='a' href="/list/6"><Icon name='certificate' />기타</Menu.Item>
     </Sidebar>
   )
 }

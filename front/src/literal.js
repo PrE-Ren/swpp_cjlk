@@ -27,6 +27,7 @@ export const BUY = 2
 export const STUDY = 3
 export const EXERCISE = 4
 export const MEETING = 5
+export const ETC = 6
 
 export const KIND_NUM_TO_STRING = (kind_num) => {
   switch (kind_num) {
@@ -42,6 +43,8 @@ export const KIND_NUM_TO_STRING = (kind_num) => {
       return '운동'
     case MEETING :
       return '미팅'
+    case ETC :
+        return '기타'
     default :
       return ''
   }
