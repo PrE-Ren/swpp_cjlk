@@ -5,6 +5,9 @@ import { ModifyButton, CloseButton, BreakUpButton, ReOpenButton, ReCloseButton }
 import { JoinButton, WithdrawButton } from '../../atoms/ButtonsInMeetingInfo'
 import { Modal, Image, List, Dropdown, Message, Form, TextArea, Button, Grid, Header } from 'semantic-ui-react'
 import * as meeting_state from '../../../literal'
+import styled from 'styled-components'
+
+
 
 // 날짜를 보기 좋게 만들어주는 함수
 const dateParse = (data) => {
@@ -206,7 +209,7 @@ export class MeetingInfo extends React.Component {
         </List>
 
         {/* 본문 */}
-        <h4><pre>{meeting_info.description}</pre></h4>
+        <h4><pre style={{fontSize:'17px',fontFamily:'Georgia',fontWeight:'400'}}>{meeting_info.description}</pre></h4>
       </React.Fragment>
 
     // 사진 + 모임 기본 정보 + 지도 + 댓글 목록
