@@ -114,7 +114,7 @@ export class LoginAuthPage extends React.Component {
             <Form.Input fluid icon='code' disabled iconPosition='left' placeholder='Type your message code' />
             <Grid columns={1}>
               <Grid.Column width={16}>
-                <Button color='teal' disabled fluid size='large'> 핸드폰 인증 완료 </Button>
+                <Button color='teal' disabled fluid size='large'> 휴대폰 인증 완료 </Button>
               </Grid.Column>
             </Grid>
           </Segment>
