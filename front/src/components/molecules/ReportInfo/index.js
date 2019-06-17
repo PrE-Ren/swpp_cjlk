@@ -19,7 +19,6 @@ export class ReportInfo extends React.Component {
   render() {
     let point = 0  //  입력한 부여 벌점 점수
     const hash = new Buffer(`${this.props.username}:${this.props.password}`).toString('base64')  //  유저의 해시값
-
     return (
       <Card.Content>
 
@@ -35,9 +34,9 @@ export class ReportInfo extends React.Component {
           {!this.props.report_info.isHandled
           ?
           <Card.Content extra>
-            <Form.Input fluid icon='exclamation triangle' iconPosition='left' placeholder='부여할 벌점 점수' onChange={(e) => point = e.target.value}/>
+            <Form.Input type='number' fluid icon='exclamation triangle' iconPosition='left' placeholder='부여할 벌점 점수' onChange={(e) => point = e.target.value}/>
             <div className='ui two buttons'>
-              <Button basic color='green' fluid size='large' onClick={() => this.props.penalty_click(hash, true, this.props.report_info, point)}>처리</Button>
+              <Button basic color='green' fluid size='large' onClick={() => {point == null || point =='' || point <= 0 ? alert('벌점을 알맞게 설정해주세요') :this.props.penalty_click(hash, true, this.props.report_info, point)}}>처리</Button>
               <Button basic color='red' fluid size='large' onClick={() => this.props.penalty_click(hash, true, this.props.report_info, 0)}>기각</Button>
             </div>
           </Card.Content>
