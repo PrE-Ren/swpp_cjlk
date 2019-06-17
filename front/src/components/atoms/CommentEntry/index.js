@@ -32,7 +32,7 @@ export class CommentEntry extends React.Component {
 
           {/* 댓글 수정 및 삭제 */}
           <Comment.Actions as='a'>
-            {(username == comment_info.writer) ? <Comment.Action onClick={this.edit_show}>수정</Comment.Action> : <div></div>}
+            {(username == comment_info.writer) ? <Comment.Action as='span' style={{ cursor: 'pointer' }} onClick={this.edit_show}>수정</Comment.Action> : <div></div>}
             <Modal size='small' open={this.state.edit_open} onClose={this.edit_close}>
               <Modal.Header>댓글 수정</Modal.Header>
               <Form reply style={{ margin: '10px' }}>
@@ -46,7 +46,9 @@ export class CommentEntry extends React.Component {
               </Modal.Actions>
             </Modal>
 
-            {(username == comment_info.writer) ? <Comment.Action onClick={this.delete_show}>삭제</Comment.Action> : <div></div>}
+            <span>&ensp;</span>
+
+            {(username == comment_info.writer) ? <Comment.Action as='span' style={{ cursor: 'pointer' }} onClick={this.delete_show}>삭제</Comment.Action> : <div></div>}
             <Modal size='small' open={this.state.delete_open} onClose={this.delete_close}>
               <Modal.Header>댓글 삭제</Modal.Header>
               <Modal.Content><p>정말로 이 댓글을 삭제하시겠습니까?</p></Modal.Content>

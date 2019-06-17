@@ -36,7 +36,7 @@ export const CloseButton = ({ meeting_info, f, hash }) => {
 // hash : 내가 만든 모임인지 확인할 때 필요
 export const BreakUpButton = ({ meeting_info, f, hash }) => {
   return (
-      <Popup position='bottom' content='정말 해산하시겠습니까?'
+      <Popup position='bottom center' content='정말 해산하시겠습니까?'
         trigger={<Button secondary onClick={() => { f(hash, meeting_info, meeting_state.BREAK_UP) }}>해산</Button>} />
         //  미팅 상태 변경
   );

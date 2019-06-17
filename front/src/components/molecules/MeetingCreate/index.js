@@ -118,7 +118,7 @@ export class MeetingCreate extends React.Component{
             kind: this.state.kind,                //  유형 (직접 입력)
             leader: username,                     //  주최자 아이디 (자동 입력)
             picture: this.state.picture           //  사진 (직접 입력)
-          })}> 완료 </Form.Button>
+          })}>완료</Form.Button>
         </Form>
       )
     }
@@ -155,7 +155,7 @@ export class MeetingCreate extends React.Component{
             leader: username,                                                                                         // 수정 불가능 (기존 값 사용)
             picture: this.state.picture,                                                                              // 수정 가능 (입력 안 하면 undef)
             state: meeting_info.state                                                                                 // 수정 불가능 (기존 값 사용)
-          })}> 수정 </Form.Button>
+          })}>수정</Form.Button>
         </Form>
       )
     }
