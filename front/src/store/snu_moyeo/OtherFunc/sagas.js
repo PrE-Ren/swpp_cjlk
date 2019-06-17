@@ -23,12 +23,12 @@ export function* watchConfirmCaptcha() {
 }
 
 export function* load_search_func(action) {
-  const url_searchinfo = 'http://127.0.0.1:8000/shopsearch/' + action.query + '/'
-  const response_searchinfo = yield call(fetch, url_searchinfo, { method : 'GET' })
+  const url_search = 'http://127.0.0.1:8000/shopsearch/' + action.query + '/'
+  const response_search = yield call(fetch, url_search, { method : 'GET' })
 
-  if (response_searchinfo.ok) {
-    const searchinfo = yield call([response_searchinfo, response_searchinfo.json])
-    sessionStorage.setItem("searchlist", JSON.stringify(searchinfo.items))
+  if (response_search.ok) {
+    const search_list = yield call([response_search, response_search.json])
+    sessionStorage.setItem("search_list", JSON.stringify(search_list.items))
     yield put(actions.search_success_action())  //  검색 정보 로드 완료
   }
   else
