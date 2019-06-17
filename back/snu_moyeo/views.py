@@ -252,7 +252,7 @@ def get_participate(request, in_userid, in_meetingid):
     return HttpResponse(participate_id, status = status.HTTP_200_OK)
 
 class RecentList(generics.ListAPIView):
-    queryset = Meeting.objects.all().filter(Q(state = OPEN) | Q(state = RE_OPEN))[:5]
+    queryset = Meeting.objects.all().filter(Q(state = OPEN) | Q(state = RE_OPEN))[:6]
     serializer_class = MeetingSerializer
 
     def get(self, request, *args, **kwargs):
@@ -260,7 +260,7 @@ class RecentList(generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 class ImpendingList(generics.ListAPIView):
-    queryset = Meeting.objects.all().filter(Q(state = OPEN) | Q(state = RE_OPEN)).order_by('due')[:5]
+    queryset = Meeting.objects.all().filter(Q(state = OPEN) | Q(state = RE_OPEN)).order_by('due')[:6]
     serializer_class = MeetingSerializer
 
     def get(self, request, *args, **kwargs):
@@ -314,9 +314,9 @@ class HistoryList (generics.ListAPIView):
         return self.list(request, *args, **kwargs)
 
 class CustomPagination(PageNumberPagination):
-    page_size = 3
+    page_size = 9
     page_size_query_param = 'page_size'
-    max_page_size = 3
+    max_page_size = 9
 
     def get_paginated_response(self, data):
         return Response({
@@ -536,6 +536,98 @@ class ReportDetail(generics.RetrieveUpdateDestroyAPIView):
         return self.destroy(request, *args, **kwargs)
     '''
 
+
+def InfoExcel_secure(request, meeting_token) :
+    write_wb = Workbook()
+    write_ws = write_wb.active
+
+
+    box = Border(left=Side(border_style="thin",
+                   color='FF000000'),
+         right=Side(border_style="thin",
+                    color='FF000000'),
+         top=Side(border_style="thin",
+                  color='FF000000'),
+         bottom=Side(border_style="thin",
+                     color='FF000000'),
+         diagonal=Side(border_style="thin",
+                       color='FF000000'),
+         diagonal_direction=0,
+         outline=Side(border_style="thin",
+                      color='FF000000'),
+         vertical=Side(border_style="thin",
+                       color='FF000000'),
+         horizontal=Side(border_style="thin",
+                        color='FF000000')
+        )
+
+
+
+
+    write_ws['A1'] = '이름'
+    write_ws['A1'].border = box
+    write_ws['A1'].font = Font(size=11, bold=True)
+    write_ws.column_dimensions['A'].width = 15
+
+    write_ws['B1'] = '닉네임'
+    write_ws['B1'].border = box
+    write_ws['B1'].font = Font(size=11, bold=True)
+    write_ws.column_dimensions['B'].width = 15
+
+
+    write_ws['C1'] = '전화번호'
+    write_ws['C1'].border = box
+    write_ws['C1'].font = Font(size=11, bold=True)
+    write_ws.column_dimensions['C'].width = 20
+
+    write_ws['D1'] = '이메일'
+    write_ws['D1'].border = box
+    write_ws['D1'].font = Font(size=11, bold=True)
+    write_ws.column_dimensions['D'].width = 30
+
+    write_ws['E1'] = '벌점'
+    write_ws['E1'].border = box
+    write_ws['E1'].font = Font(size=11, bold=True)
+
+    meeting_info = Meeting.objects.get(secure_token = meeting_token)
+    participants = meeting_info.members.all()
+
+    ind = 2
+    for user in participants :
+        write_ws.cell(row = ind, column = 1).value = user.name
+        write_ws.cell(row = ind, column = 1).border = box
+        write_ws.cell(row = ind, column = 2).value = user.username
+        write_ws.cell(row = ind, column = 2).border = box
+        write_ws.cell(row = ind, column = 3).value = user.phone_number
+        write_ws.cell(row = ind, column = 3).border = box
+        write_ws.cell(row = ind, column = 4).value = user.email
+        write_ws.cell(row = ind, column = 4).border = box
+        write_ws.cell(row = ind, column = 5).value = user.point
+        write_ws.cell(row = ind, column = 5).border = box
+        ind += 1
+
+    title = str(meeting_info.title).replace(' ','_')
+    excel_filename = 'media/' + str(title)  + '_모임참여자 정보.xlsx'
+    write_wb.save(excel_filename)
+
+    file_location = excel_filename
+    try:
+        with open(file_location, 'rb') as f:
+           file_data = f.read()
+
+        # sending response
+        response = HttpResponse(file_data, content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="member_info.xlsx"'
+
+    except IOError:
+        # handle file not exist case here
+        response = HttpResponseNotFound('<h1>File not exist</h1>')
+
+    return response
+
+
+
+
 def InfoExcel(request, meeting_id) :
     write_wb = Workbook()
     write_ws = write_wb.active
@@ -634,7 +726,7 @@ def searchShop(request, search_word) :
     client_secret = "1hdjaYpmI6" # 애플리케이션 등록시 발급 받은 값 입력
     encText = urllib.parse.quote(search_word)
     print(encText)
-    url = "https://openapi.naver.com/v1/search/shop?query=" + encText +"&display=3&sort=sim"
+    url = "https://openapi.naver.com/v1/search/shop?query=" + encText +"&display=10&sort=sim"
     request = urllib.request.Request(url)
     print(request)
     request.add_header("X-Naver-Client-Id",client_id)
