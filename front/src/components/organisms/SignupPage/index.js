@@ -1,6 +1,6 @@
 import React from 'react'
 import Captcha from '../../../containers/Captcha'
-import { Button, Form, Grid, Header, Segment, Message } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Segment, Message, Icon } from 'semantic-ui-react'
 import styled from 'styled-components'
 
 const Font_Red = styled.div`
@@ -44,7 +44,7 @@ const is_valid_form = (username, password, password_confirm, nickname, is_captch
       password.length < 8 ||
       password.length > 50) {
     alert("패스워드는 영문+숫자+특수기호 8자리 이상으로 구성해야 합니다.");
-    return fals;
+    return false;
   }
   if (password.indexOf(username) > -1) {
     alert("비밀번호는 아이디를 포함할 수 없습니다.")
@@ -102,7 +102,11 @@ export class SignupPage extends React.Component {
 
                 {/* 유저 패스워드 입력 */}
                 <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password'
-                onChange={(e) => this.setState({ password: e.target.value })} type='password' />
+                onChange={(e) => {
+                  this.setState({ password: e.target.value })
+                  if (this.state.password_confirm == e.target.value) { this.setState({ is_confirmed : true }) }
+                  else                                               { this.setState({ is_confirmed : false }) }
+                }} type='password' />
 
                 {/* 유저 패스워드 다시 입력 (확인) */}
                 <Form.Input fluid icon='lock' iconPosition='left' placeholder='Password Confirm'
@@ -132,6 +136,7 @@ export class SignupPage extends React.Component {
               </Segment>
             </Form>
             <Message><a href='/login'> 돌아가기 </a></Message>
+            <Icon name='question circle' /><a href='/tutorial'>홈페이지 소개</a>
           </Grid.Column>
         </Grid>
       )
