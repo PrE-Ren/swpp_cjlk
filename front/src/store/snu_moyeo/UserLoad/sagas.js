@@ -21,6 +21,7 @@ export function* load_leaderinfo_func(action) {
 
   if (response_leaderinfo.ok) {
     const leaderinfo = yield call([response_leaderinfo, response_leaderinfo.json])
+    sessionStorage.setItem("leader.name", leaderinfo.name)
     sessionStorage.setItem("leader.email", leaderinfo.email)                //  리더 이메일 로드 후 세션 스토리지에 저장
     sessionStorage.setItem("leader.phone_number", leaderinfo.phone_number)  //  리더 폰 번호 로드 후 세션 스토리지에 저장
     sessionStorage.setItem("leader.points", leaderinfo.point)               //  리더 벌점 로드 후 세션 스토리지에 저장

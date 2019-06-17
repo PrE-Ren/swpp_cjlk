@@ -88,7 +88,7 @@ export class MeetingInfo extends React.Component {
                       <Dropdown text='정보보기'>
                         <Dropdown.Menu>
                           <Message header='리더 정보' content={<div>
-                            이름 : {meeting_info.leader}<br/>
+                            이름 : {sessionStorage.getItem("leader.name")}<br/>
                             이메일 : {sessionStorage.getItem("leader.email")}<br/>
                             전화번호 : {sessionStorage.getItem("leader.phone_number")}<br/>
                             벌점 : {sessionStorage.getItem("leader.points")}<br/>
