@@ -320,6 +320,33 @@ class MeetingModelsTests(TestCase):
         res = requests.delete(com_link)
         self.assertEqual(res.status_code,204)
 
+    def post_report(self):
+        rep_link = self.link + 'report/'
+        data = {'reason': 'babo' , 'reporteeid': 2}
+        res = requests.post(rep_link, data, auth = ('test1', 'hello'))
+        self.assertEqual(res.status_code, 201)
+
+    def get_report(self):
+        rep_link = self.link + 'report/'
+        res = requests.get(rep_link)
+        self.assertEqual(res.status_code,200)
+        content = res.json()
+        self.assertEqual(len(content), 0)
+
+    def get_shop(self):
+        shop_link = self.link + 'shopsearch/linearalgebra/'
+        res = requests.get(shop_link)
+        self.assertEqual(res.status_code, 200)
+
+    def get_search(self) :
+        search_link = 'http://127.0.0.1:8000/searchall/?search=postmeeting4'
+        res = requests.get(search_link)
+        self.assertEqual(res.status_code, 200)
+        content = res.json()
+        self.assertEqual(len(content['results']), 1)
+
+
+
         
     def test_all(self):
         
@@ -351,3 +378,11 @@ class MeetingModelsTests(TestCase):
         
         self.delete_meeting_test()
         self.delete_participate_test()
+
+
+        self.post_report()
+        self.get_report()
+
+        self.get_shop()
+        self.get_search()
+
