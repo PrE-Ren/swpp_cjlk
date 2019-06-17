@@ -48,6 +48,8 @@ class MeetingSerializer(serializers.ModelSerializer):
     comments = serializers.PrimaryKeyRelatedField(many = True, read_only = True)
 
     def validate(self, data):
+        data['secure_token'] = get_random_string(length = 20)
+
         if 'picture' not in data.keys():
             print('not input picture')
             data['picture'] = ''
@@ -110,7 +112,8 @@ class MeetingSerializer(serializers.ModelSerializer):
             'comments',      # invisible (read_only = True in serializers.py)
             'latitude',
             'longitude',
-            'kakao_link'
+            'kakao_link',
+            'secure_token'
         )
 
 class SnuUserSerializer(serializers.ModelSerializer):

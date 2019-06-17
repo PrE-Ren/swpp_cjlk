@@ -26,6 +26,7 @@ class Meeting (models.Model):
     kakao_link = models.CharField(max_length=200, blank = True, default = '')
     # comments : related field
 
+    secure_token = models.CharField(max_length = 100, blank = True, unique = True)
     class Meta:
         ordering = ['-created']  # sorted in decreasing order of created time
 
