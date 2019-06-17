@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Header, Icon, Container } from 'semantic-ui-react'
+import { Grid, Header, Icon, Container, Menu } from 'semantic-ui-react'
 import styled from 'styled-components'
 
 const Font_content = styled.div`
@@ -11,7 +11,10 @@ const Font_content = styled.div`
 export const TutorialPage = () => {
   return (
     <Grid columns={3}>
-      <Grid.Column width={2}></Grid.Column>
+      <Grid.Column width={2}>
+        <br />
+        <Menu.Item as='a' href="/"><div style={{fontSize:'30px'}}><Icon name='home' />To Home</div></Menu.Item>
+      </Grid.Column>
 
       <Grid.Column width={12}>
         {/* Header */}
