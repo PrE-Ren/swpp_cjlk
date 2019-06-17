@@ -21,6 +21,7 @@ const routes = (
     <Route path={"/list/"+kind.STUDY} component={List} />
     <Route path={"/list/"+kind.EXERCISE} component={List} />
     <Route path={"/list/"+kind.MEETING} component={List} />
+    <Route path={"/list/"+kind.ETC} component={List} />
     <Route path={"/list/"+kind.DELIVER+"/:keyword"} component={List} />
     <Route path={"/list/"+kind.TAXI+"/:keyword"} component={List} />
     <Route path={"/list/"+kind.BUY+"/:keyword"} component={List} />

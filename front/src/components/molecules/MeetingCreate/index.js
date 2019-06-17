@@ -34,6 +34,7 @@ const options = [
   { key: 3, text: '스터디', value: 3 },
   { key: 4, text: '운동', value: 4 },
   { key: 5, text: '미팅', value: 5 },
+  { key: 6, text: '기타', value: 6 },
 ]
 
 // username : 유저 아이디 (해시값 획득을 위해 필요)

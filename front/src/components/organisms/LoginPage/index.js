@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Grid, Header, Message, Segment, Icon } from 'semantic-ui-react'
+import { Button, Form, Grid, Header, Message, Segment, Icon, Popup } from 'semantic-ui-react'
 
 // username_store : 유저 아이디 (로그인 여부 확인을 위해 필요)
 // mySNU_verification_token : 이메일 토큰 (인증 여부 확인을 위해 필요)
@@ -22,7 +22,8 @@ export const LoginPage = ({ username_store, mySNU_verification_token, phone_veri
               <Button color='teal' fluid size='large' onClick={() => login_click(username, password)}> 로그인 </Button>
             </Segment>
           </Form>
-          <Message><a href='/signup'> 회원가입 </a></Message>
+          <Popup content='휴대폰 번호와 이메일은 저장되어 마이페이지에서 확인 가능하며, 모임의 리더는 참여자의 이메일, 휴대폰 번호, 벌점을 확인할 수 있습니다.'
+            position='bottom center' trigger={<Message><a href='/signup'> 회원가입 </a></Message>} />
           <Icon name='question circle' /><a href='/tutorial'>홈페이지 소개</a>
         </Grid.Column>
       </Grid>
