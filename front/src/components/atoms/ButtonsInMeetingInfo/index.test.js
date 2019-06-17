@@ -56,16 +56,6 @@ it('renders same text, calls onClick when Clicked', () => {
   expect(onClick).toBeCalled()
 })
 
-//BreakUpButton
-it('renders same text, calls onClick when Clicked', () => {
-  onClick.mockClear()
-  const wrapper = wrap3({meeting_info: meeting, f: onClick, hash: hash})
-  expect(wrapper.contains('해산')).toBe(true)
-  expect(onClick).not.toBeCalled()
-  wrapper.simulate('click')
-  expect(onClick).toBeCalled()
-})
-
 //ReOpenButton
 it('renders same text, calls onClick when Clicked', () => {
   onClick.mockClear()
@@ -105,14 +95,3 @@ it('renders same text, calls onClick when Clicked', () => {
   wrapper.simulate('click')
   expect(onClick).not.toBeCalled()
 })
-
-//WithdrawButton
-it('renders same text, calls onClick when Clicked', () => {
-  onClick.mockClear()
-  const wrapper = wrap7({meeting_info: meeting, f: onClick, hash: hash})
-  expect(wrapper.contains('탈퇴')).toBe(true)
-  expect(onClick).not.toBeCalled()
-  wrapper.simulate('click')
-  expect(onClick).toBeCalled()
-})
-

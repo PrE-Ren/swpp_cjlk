@@ -12,7 +12,7 @@ export class NaverShopping extends React.Component{
 
         const result_content =
             <Modal open={this.state.result_open} onClose={this.result_close}>
-                <Modal.Header> '{this.state.query.value}'에 대한 검색 결과 </Modal.Header>
+                <Modal.Header> '{this.state.query.value}'에 대한 상위 10개의 검색 결과 (유사도 기준)</Modal.Header>
                 <Modal.Content image scrolling>
                   {this.props.state.is_search_loaded
                     ?
