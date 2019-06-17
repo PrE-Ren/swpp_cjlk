@@ -7,14 +7,11 @@ const wrap = (props = {}) => shallow(<HistoryList {...props} />)
 it('renders same text when different children, props passed in', () => {
   const wrapper = wrap({meetinglist_history : JSON.stringify([{id: 3, title: '미팅', created: '2019-05-10T19:00:00+09:00', leader: 'abc', min_people: 8, max_people: 10, state: 0, description: '미팅 구해요', kind: 5, due: '2019-05-16T19:00:00+09:00', picture: null, members: [1,2]}])})
   expect(wrapper.contains('History')).toBe(true)
-  expect(wrapper.contains('내가 참여했던 모임')).toBe(true)
   const wrapper2 = wrap({meetinglist_history : JSON.stringify([{id: 4, title: '미팅아님', created: '2019-05-10T19:00:00+09:00', leader: 'abc', min_people: 8, max_people: 10, state: 0, description: '미팅 구해요', kind: 5, due: '2019-05-16T19:00:00+09:00', picture: null, members: [1,2]}])})
-  expect(wrapper.contains('History')).toBe(true)
-  expect(wrapper2.contains('내가 참여했던 모임')).toBe(true)
+  expect(wrapper2.contains('History')).toBe(true)
 })
 
 it('renders nothing when null', () => {
   const wrapper = wrap({meetinglist_history : null})
   expect(wrapper.contains('History')).toBe(false)
-  expect(wrapper.contains('내가 참여했던 모임')).toBe(false)
 })

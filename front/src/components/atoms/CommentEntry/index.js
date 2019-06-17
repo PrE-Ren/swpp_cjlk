@@ -46,7 +46,7 @@ export class CommentEntry extends React.Component {
               </Modal.Actions>
             </Modal>
 
-            <span>&ensp;</span>
+            {(username == comment_info.writer) ? <span>&ensp;</span> : <span></span>}
 
             {(username == comment_info.writer) ? <Comment.Action as='span' style={{ cursor: 'pointer' }} onClick={this.delete_show}>삭제</Comment.Action> : <div></div>}
             <Modal size='small' open={this.state.delete_open} onClose={this.delete_close}>
