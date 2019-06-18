@@ -81,6 +81,10 @@ class SendEmail(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
 
     def get(self, request, email):
         user = request.user
+        
+        if (len(SnuUser.objects.filter(email = email)) != 0) :
+            return Response('Duplicate Email', status = 400)
+
         email_token = random.randint(10000000, 99999999)
         send_mail('SnuMoyeo Authenticate', 'Authentication Code : ' + str(email_token),
                 'toro.8906@gmail.com', [email], fail_silently = False)
@@ -113,6 +117,10 @@ class SendPhone(mixins.ListModelMixin, mixins.CreateModelMixin, generics.Generic
 
     def get(self, request, phone_number):
         user = request.user
+        
+        if (len(SnuUser.objects.filter(phone_number = phone_number)) != 0) :
+            return Response('Duplicate phone number', status = 400)
+
         phone_token = random.randint(10000000, 99999999)
         send_message(phone_number, phone_token)
 
