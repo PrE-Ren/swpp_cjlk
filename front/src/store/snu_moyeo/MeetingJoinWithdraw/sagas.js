@@ -33,7 +33,7 @@ export function* join_meeting_func(action) {
     window.location.reload()
   }
   else {
-    alert("참여하고자 하는 모임의 인원이 가득 찼습니다")
+    alert("인당 5개 이상의 열린 모임을 가질 수 없습니다.")
     console.log('Participate POST bad')
   }
 }

@@ -22,7 +22,7 @@ export class LoginAuthPage extends React.Component {
             email_open, phone_open, prepare_send_email_click, prepare_send_phone_click} = this.props
     const { email, phone_number, email_code, phone_code } = this.state
     const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저 해시값
-
+    
     const mail_loading =
     <Modal open={this.props.email_open}>
       <Modal.Header>이메일 인증</Modal.Header>

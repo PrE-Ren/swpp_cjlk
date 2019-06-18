@@ -165,6 +165,14 @@ const snu_moyeo_reducer = (state = initialState, action) => {
       }
     }
 
+    case 'MYPAGE_RELOAD_ACTION': {
+      sessionStorage.setItem("point", action.point);
+      return {
+        ...state,
+        point: action.point
+      }
+    }
+
     case 'SUCCESS_EMAIL_ACTION' : {  //  인증 성공 시 이메일 및 이메일 토큰 설정 (-> 인증 페이지 리렌더링)
       sessionStorage.setItem("email", action.email);
       sessionStorage.setItem("mySNU_verification_token", action.email_code);

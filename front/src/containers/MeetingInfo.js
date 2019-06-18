@@ -27,7 +27,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(withdraw_meeting_action(hash, user_id, meeting_id))
     },
     prepare_load_leaderinfo_click : () => {  //  리더 정보를 새로 로드할 때까지 잠시 봉인
-      console.log("prepare_load_leaderinfo_click")
       dispatch(prepare_load_leaderinfo_action())
     },
     load_leaderinfo_click : (user_id) => {  //  리더 정보를 로드하여 세션 스토리지에 저장 후 플래그 설정
