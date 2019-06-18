@@ -46,7 +46,7 @@ export class NaverShopping extends React.Component{
                 <Popup content='네이버 쇼핑에서 먼저 검색해보시면 어떨까요?' position='left center'
                        trigger={<Image src="http://localhost:8000/media/naver_symbol.png" size='mini' as='a'/>} />&ensp;
 
-                <input ref={node => {this.state.query = node}}/>
+                <input style={{width:'150px'}} ref={node => {this.state.query = node}}/>
                 <Button color='green' type='submit' onClick={() => {
                   if (this.state.query.value == "")
                     alert('검색어를 입력해주세요.')

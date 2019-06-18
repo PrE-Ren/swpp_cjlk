@@ -63,7 +63,10 @@ export function* add_comment_func(action) {
     yield call(load_comments_func, load_action)  //  새로 댓글 리스트를 로드하여 리렌더링
   }
   else {
-    alert('댓글을 입력해주세요.')
+    if(action.content.length > 400)
+      alert('400자 이내로 입력해주세요.')
+    else
+      alert('댓글을 입력해주세요.')
     console.log('Comment POST bad')
   }
 }
@@ -87,7 +90,10 @@ export function* edit_comment_func(action) {
     yield call(load_comments_func, load_action)  //  새로 댓글 리스트를 로드하여 리렌더링
   }
   else {
-    alert('댓글을 입력해주세요.')
+    if(action.content.length > 400)
+      alert('400자 이내로 입력해주세요.')
+    else
+      alert('댓글을 입력해주세요.')
     console.log('Comment PUT bad')
   }
 }
