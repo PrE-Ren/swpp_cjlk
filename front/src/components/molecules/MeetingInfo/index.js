@@ -209,7 +209,7 @@ export class MeetingInfo extends React.Component {
         </List>
 
         {/* 본문 */}
-        <h4><pre style={{fontSize:'17px',fontFamily:'Georgia',fontWeight:'400'}}>{meeting_info.description}</pre></h4>
+        <h4><pre style={{fontSize:'17px',fontFamily:'Georgia',fontWeight:'400',whiteSpace:'pre-wrap'}}>{meeting_info.description}</pre></h4>
       </React.Fragment>
 
     // 사진 + 모임 기본 정보 + 지도 + 댓글 목록

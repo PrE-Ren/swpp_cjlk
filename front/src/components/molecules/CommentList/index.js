@@ -32,7 +32,7 @@ export class CommentList extends React.Component {
 
           {/* 댓글 작성 */}
           <Form reply>
-            <Form.TextArea id="comment" placeholder='Comment on this meeting...' onChange={(e) => { content = e.target.value }}/>
+            <Form.TextArea id="comment" placeholder='댓글은 400자 이내로 작성해주세요.' onChange={(e) => { content = e.target.value }}/>
             <Button content='댓글 작성' labelPosition='left' icon='edit' primary
                     onClick={() => { add_comment_click(hash, content, meeting_id), document.getElementById("comment").value = "" }}/>
           </Form>

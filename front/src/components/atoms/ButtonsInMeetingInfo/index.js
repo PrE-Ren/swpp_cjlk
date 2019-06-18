@@ -8,10 +8,13 @@ import * as meeting_state from '../../../literal'
 // f (= change_meeting_info_click) : 수정 버튼을 눌렀을 때 액션을 디스패치할 함수
 export const ModifyButton = ({ meeting_info, f }) => {
   return (
-      <Button secondary onClick={() => {
+
+    <Popup position='bottom center' content='사진을 등록한 경우 다시 사진을 첨부해야 합니다.'
+      trigger={<Button secondary onClick={() => {
         if (meeting_info.members.length == 1) f(meeting_info)  //  미팅 정보를 세션 스토리지에 저장한 후 모임 생성 페이지로 리다이렉트
         else                                  alert('이미 멤버가 있는 상태입니다. 수정이 불가능합니다.')
-      }}>수정</Button>
+      }}>수정</Button>} />
+
   );
 };
 

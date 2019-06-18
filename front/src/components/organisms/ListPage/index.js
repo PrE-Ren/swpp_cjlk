@@ -65,7 +65,7 @@ export const ListPage = ({ username, point, mySNU_verification_token, phone_veri
               </Grid.Column>
               <Grid.Column width={4}>
                 <Input type='text' placeholder='이 게시판에서 검색' action style={{ marginLeft: '-5px' }}>
-                  <input ref={node => {keyword = node}}/>
+                  <input style={{width:'190px'}} ref={node => {keyword = node}}/>
                   <Button type='submit' onClick={() => {
                     const kind = window.location.pathname[6]  //  "/list/n"에서 "n"을 추출
                     if (keyword.value == "")                  //  검색 키워드는 반드시 입력해야 함
