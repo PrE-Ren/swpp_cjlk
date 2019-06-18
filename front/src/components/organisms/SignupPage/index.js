@@ -59,7 +59,7 @@ const is_valid_form = (username, password, password_confirm, nickname, is_captch
     return false
   }
   if (nickname.length == 0) {
-    alert("이름(닉네임)을 입력해주세요.")
+    alert("이름을 입력해주세요.")
     return false
   }
   if (is_captcha_verified == false) {

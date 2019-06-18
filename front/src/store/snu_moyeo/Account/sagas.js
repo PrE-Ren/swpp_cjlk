@@ -185,7 +185,7 @@ console.log(info)
 
   // 회원가입 실패
   else
-    alert("회원가입 실패 : 정보를 바르게 입력하세요.")
+    alert("회원가입 실패 : 이미 해당 아이디로 가입된 사용자가 존재합니다.")
 }
 
 export function* send_email_func(action) {
@@ -198,7 +198,12 @@ export function* send_email_func(action) {
   }
   else
   {
-    alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
+    const response_email_data = yield call([response_email, response_email.json]);
+    console.log(response_email_data)
+    if(response_email_data == 'Duplicate Email')
+      alert('인증번호 전송 실패 : 이미 해당 이메일로 가입된 사용자가 존재합니다.')
+    else
+      alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
     yield put(actions.require_email_action())
   }
 }
@@ -213,7 +218,12 @@ export function* send_phone_func(action) {
   }
   else
   {
-    alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
+    const response_phone_data = yield call([response_phone, response_phone.json]);
+    console.log(response_phone_data)
+    if(response_phone_data == 'Duplicate phone number')
+      alert('인증번호 전송 실패 : 이미 해당 휴대폰 번호로 가입된 사용자가 존재합니다.')
+    else
+      alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
     yield put(actions.require_phone_action())
   }
 }
