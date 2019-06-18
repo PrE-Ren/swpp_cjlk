@@ -60,7 +60,7 @@ export const ReOpenButton = ({ meeting_info, f, hash }) => {
 // hash : 내가 만든 모임인지 확인할 때 필요
 export const ReCloseButton = ({ meeting_info, f, hash }) => {
   return (
-      <Button secondary onClick={() => { f(hash, meeting_info, meeting_state.RE_CLOSED) }}>추가 모집 중단</Button>  //  미팅 상태 변경
+      <Button secondary onClick={() => { f(hash, meeting_info, meeting_state.RE_CLOSED) }}>추가 모집 마감</Button>  //  미팅 상태 변경
   );
 };
 

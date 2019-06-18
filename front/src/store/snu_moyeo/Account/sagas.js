@@ -227,7 +227,7 @@ export function* confirm_email_func(action) {
     yield put(actions.success_email_action(action.email, action.email_code))  //  이메일 및 이메일 토큰 설정 (-> 인증 페이지 리렌더링)
   }
   else
-    alert('인증번호가 틀렸습니다. : 문제가 있을 시 운영자(010-4007-9493)에게 문의 바랍니다.')
+    alert('인증번호가 틀렸습니다. 문제가 있을 시 운영자(010-4007-9493)에게 문의 바랍니다.')
 }
 
 export function* confirm_phone_func(action) {
@@ -239,7 +239,7 @@ export function* confirm_phone_func(action) {
     yield put(actions.success_phone_action(action.phone_number, action.phone_code))  //  폰 번호 및 폰 토큰 설정 (-> 인증 페이지 리렌더링)
   }
   else
-    alert('인증번호가 틀렸습니다. : 문제가 있을 시 운영자(010-4007-9493)에게 문의 바랍니다.')
+    alert('인증번호가 틀렸습니다. 문제가 있을 시 운영자(010-4007-9493)에게 문의 바랍니다.')
 }
 
 export default function* () {
