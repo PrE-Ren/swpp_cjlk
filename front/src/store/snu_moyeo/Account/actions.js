@@ -13,6 +13,7 @@ export const REQUIRE_EMAIL_ACTION = 'REQUIRE_EMAIL_ACTION'
 export const REQUIRE_PHONE_ACTION = 'REQUIRE_PHONE_ACTION'
 export const PREPARE_SEND_EMAIL_ACTION = 'PREPARE_SEND_EMAIL_ACTION'
 export const PREPARE_SEND_PHONE_ACTION = 'PREPARE_SEND_PHONE_ACTION'
+export const MYPAGE_RELOAD_ACTION = 'MYPAGE_RELOAD_ACTION'
 
 export const login_action = (username, password) => {
     return {
@@ -135,3 +136,10 @@ export const success_phone_action = (phone_number, phone_verification_token) => 
       phone_code : phone_verification_token
   }
 };
+
+export const mypage_reload_action = (point) => {
+  return {
+      type : MYPAGE_RELOAD_ACTION,
+      point : point
+  }
+}

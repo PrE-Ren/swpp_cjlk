@@ -54,6 +54,14 @@ export function* reload_auth() {
       }
     }
   }
+  else if (pathname == '/mypage')
+  {
+    const user_id = sessionStorage.getItem("user_id")
+    const url_user = 'http://127.0.0.1:8000/user/' + user_id + '/'
+    const response_user = yield call(fetch, url_user, { method: 'GET'})
+    const response_user_data = yield call([response_user, response_user.json]);
+    yield put(actions.mypage_reload_action(response_user_data.point))
+  }
 }
 
 export function* watchLogin() {
