@@ -1,0 +1,102 @@
+<Account>
+
+/get_auth_token/				POST	AUTH_USER_MODEL		{ 아이디, 패스워드 }
+
+/log_in/   					GET	SnuUser   		해시값
+
+/sign_up/					POST	SnuUser			{ 아이디, 패스워드, 이름 }
+
+/send_email/<str:email>/			GET	SnuUser			해시값
+
+/send_phone/<str:phone>/			GET	SnuUser			해시값
+
+/email_auth/<str:email>/<str:email_code>/	GET	SnuUser			해시값
+
+/email_auth/<str:phone>/<str:phone_code>/	GET	SnuUser			해시값
+
+
+
+<Admin>
+
+/report/					GET	Report			해시값
+
+/report/					POST	Report			해시값, { 사유, 신고 대상 }
+
+/report/<int:report_id>/			PUT	Report			해시값, { 사유, 처리 여부, 벌점, 신고자, 신고 대상 }
+
+
+
+<Comment>
+
+/comment/					POST	Comment			해시값, { 모임, 댓글 내용 }
+
+/comment/<int:comment_id>/			PUT	Comment			해시값, { 모임, 댓글 내용, 작성자 }
+
+/comment/<int:comment_id>/			DELETE	Comment			해시값
+
+/comment/meeting/<int:meeting_id>/		GET	Comment
+
+
+
+<MeetingCreateModify>
+
+/meeting/					POST	Meeting			해시값, { 제목, 마감 날짜, 최소인원, 최대인원, 본문, 
+											상태, 유형, 위도, 경도, 사진, 카카오 링크 }
+
+/participate/					POST	Participate		해시값, { 참가자, 모임 }
+
+/meeting/<int:meeting_id>			PUT	Meeting			해시값, { 제목, 마감 날짜, 최소인원, 최대인원, 본문, 
+											상태, 유형, (위도, 경도,) 사진, 카카오 링크 }
+
+
+<MeetingJoinWithdraw>
+
+/participate/					POST	Participate		해시값, { 참가자, 모임 }
+
+/participate/<int:participate_id>		DELETE	Participate		해시값
+
+/participate/<int:user_id>/<int:meeting_id>	GET	Participate
+
+
+
+<MeetingLoad>
+
+/search[k]/?page=[n]&search=[keyword]/		GET	Meeting			해시값
+
+/list/<int:k>/?page=[n]/			GET	Meeting			해시값
+
+/searchall/?page=[n]&search=[keyword]/		GET	Meeting			해시값
+
+/meetinglist/impending/				GET	Meeting			해시값
+
+/meetinglist/recent/				GET	Meeting			해시값
+
+/meetinglist/lead/				GET	Meeting			해시값
+
+/meetinglist/join/				GET	Meeting			해시값
+
+/meetinglist/history/				GET	Meeting			해시값
+
+
+
+<OtherFunc>
+
+/shopsearch/<str:keyword>			GET	X (외부 API)
+
+/captcha/					GET	X (외부 API)
+
+/captcha_verify/<str:key>/<str:value>		GET	X (외부 API)
+
+
+
+<UserLoad>
+
+/user/<int:user_id>/				GET	SnuUser
+
+/user/<int:member_id>/				GET	SnuUser
+
+
+
+<기타>
+
+/infoexcel_secure/<int:token>			GET	X (외부 API)
