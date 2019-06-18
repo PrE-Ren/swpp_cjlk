@@ -130,7 +130,7 @@ export function* login_func(action) {
       console.log(response_user_data)
       if(response_user_data.point >= 10)
       {
-        alert('벌점 10점 이상으로 로그인이 불가하니 관리자에게 문의하십시오.')
+        alert('벌점 10점 이상으로 로그인이 불가하니 운영자(010-4007-9493)에게 문의 바랍니다.')
       }
       else
       {
@@ -197,7 +197,10 @@ export function* send_email_func(action) {
     yield put(actions.require_email_action())
   }
   else
+  {
     alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
+    yield put(actions.require_email_action())
+  }
 }
 
 export function* send_phone_func(action) {
@@ -209,7 +212,10 @@ export function* send_phone_func(action) {
     yield put(actions.require_phone_action())
   }
   else
+  {
     alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
+    yield put(actions.require_phone_action())
+  }
 }
 
 export function* confirm_email_func(action) {
