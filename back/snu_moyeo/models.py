@@ -97,7 +97,7 @@ class Report (models.Model) :
     reportee = models.CharField(max_length = 100, blank = True)
     #ForeignKey('SnuUser', related_name = 'temp2', on_delete = models.CASCADE)
     reporteeid = models.IntegerField(default = -1)
-   
+
     class Meta:
         ordering = ['-created']  # sorted in decreasing order of created time
 '''
@@ -105,5 +105,4 @@ class Captcha (models.Model) :
     id = models.AutoField(primary_key = True)
     image = models.ImageField(blank = False)
     key = models.CharField(max_length=200)
-'''    
-    
+'''
