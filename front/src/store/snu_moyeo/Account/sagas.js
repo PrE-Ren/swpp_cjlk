@@ -2,7 +2,7 @@ import {take, put, call, fork, select, all} from 'redux-saga/effects'
 import * as actions from './actions'
 
 export function* reload_auth() {
-  const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
+  const pathname = window.location.pathname  //  "http://18.223.163.91:3000"의 뒷부분 URL
 
   // LoginAuth 페이지
   if (pathname == '/auth') {
@@ -17,7 +17,7 @@ export function* reload_auth() {
     // 로그인 O
     else {
       const password = sessionStorage.getItem("password")  //  로그인 페이지에서 넘어올 때 혹은 회원가입 직후 스토어에 저장됨
-      const url_user = 'http://127.0.0.1:8000/log_in/'
+      const url_user = 'http://18.223.163.91:8000/log_in/'
       const hash = new Buffer(`${username}:${password}`).toString('base64')
       const response_user = yield call(fetch, url_user, { method: 'GET', headers: { 'Authorization' : `Basic ${hash}` } })
       const response_user_data = yield call([response_user, response_user.json]);
@@ -57,7 +57,7 @@ export function* reload_auth() {
   else if (pathname == '/mypage')
   {
     const user_id = sessionStorage.getItem("user_id")
-    const url_user = 'http://127.0.0.1:8000/user/' + user_id + '/'
+    const url_user = 'http://18.223.163.91:8000/user/' + user_id + '/'
     const response_user = yield call(fetch, url_user, { method: 'GET'})
     const response_user_data = yield call([response_user, response_user.json]);
     yield put(actions.mypage_reload_action(response_user_data.point))
@@ -109,8 +109,8 @@ export function* watchConfirmPhone() {
 export function* login_func(action) {
   const username = action.username  //  입력한 유저 아이디
   const password = action.password  //  입력한 유저 패스워드
-  const url_token = 'http://127.0.0.1:8000/get_auth_token/'
-  const url_user = 'http://127.0.0.1:8000/log_in/'
+  const url_token = 'http://18.223.163.91:8000/get_auth_token/'
+  const url_user = 'http://18.223.163.91:8000/log_in/'
   const info = JSON.stringify({ username: username, password: password })
 
   const response_token = yield call(fetch, url_token, {
@@ -166,7 +166,7 @@ export function* signup_func(action) {
   let uid = action.username  //  입력한 유저 아이디
   let upw = action.password  //  입력한 유저 패스워드
   let name = action.name     //  입력한 이름(닉네임)
-  const url = 'http://127.0.0.1:8000/sign_up/'
+  const url = 'http://18.223.163.91:8000/sign_up/'
   const info = JSON.stringify({ username: uid, password: upw, name: name});
 console.log(info)
   // 새로운 SnuUser 객체 생성 (POST)
@@ -189,7 +189,7 @@ console.log(info)
 }
 
 export function* send_email_func(action) {
-  const url_send_email = 'http://127.0.0.1:8000/send_email/' + action.email + '/'
+  const url_send_email = 'http://18.223.163.91:8000/send_email/' + action.email + '/'
   const response_email = yield call(fetch, url_send_email, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
 
   if (response_email.ok) {  //  해당 유저의 이메일 토큰 필드 설정 (by BACK-END)
@@ -209,7 +209,7 @@ export function* send_email_func(action) {
 }
 
 export function* send_phone_func(action) {
-  const url_send_phone = 'http://127.0.0.1:8000/send_phone/' + action.phone_number + '/'
+  const url_send_phone = 'http://18.223.163.91:8000/send_phone/' + action.phone_number + '/'
   const response_phone = yield call(fetch, url_send_phone, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
 
   if (response_phone.ok){  //  해당 유저의 폰 토큰 필드 설정 (by BACK-END)
@@ -229,7 +229,7 @@ export function* send_phone_func(action) {
 }
 
 export function* confirm_email_func(action) {
-  const url_send_email = 'http://127.0.0.1:8000/email_auth/' + action.email + '/' + action.email_code + '/'
+  const url_send_email = 'http://18.223.163.91:8000/email_auth/' + action.email + '/' + action.email_code + '/'
   const response_email = yield call(fetch, url_send_email, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
 
   if (response_email.ok) {  //  해당 유저의 이메일 및 이메일 인증 여부 필드 설정 (by BACK-END)
@@ -241,7 +241,7 @@ export function* confirm_email_func(action) {
 }
 
 export function* confirm_phone_func(action) {
-  const url_send_phone = 'http://127.0.0.1:8000/phone_auth/' + action.phone_number + '/' + action.phone_code + '/'
+  const url_send_phone = 'http://18.223.163.91:8000/phone_auth/' + action.phone_number + '/' + action.phone_code + '/'
   const response_phone = yield call(fetch, url_send_phone, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
 
   if (response_phone.ok) {  //  해당 유저의 폰 번호 및 폰 인증 여부 필드 설정 (by BACK-END)

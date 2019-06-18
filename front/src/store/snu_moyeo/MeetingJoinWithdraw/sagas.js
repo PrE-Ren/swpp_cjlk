@@ -16,7 +16,7 @@ export function* watchWithdrawMeeting() {
 }
 
 export function* join_meeting_func(action) {
-  const url_participate = 'http://127.0.0.1:8000/participate/'
+  const url_participate = 'http://18.223.163.91:8000/participate/'
   const info_participate = JSON.stringify({ user_id: action.user_id, meeting_id: action.meeting_id });  //  POST할 Participate 객체 정보
 
   // Participate 모델 POST
@@ -39,10 +39,10 @@ export function* join_meeting_func(action) {
 }
 
 export function* withdraw_meeting_func(action) {
-  const url = `http://127.0.0.1:8000/participate/${action.user_id}/${action.meeting_id}/`
+  const url = `http://18.223.163.91:8000/participate/${action.user_id}/${action.meeting_id}/`
   const response = yield call(fetch, url, { method: 'GET' })
   const participate_id = yield call([response, response.json])  //  DELETE할 Participate 객체의 고유값
-  const url_participate = `http://127.0.0.1:8000/participate/${participate_id}/`
+  const url_participate = `http://18.223.163.91:8000/participate/${participate_id}/`
 
   // Participate 모델 DELETE
   const response_participate = yield call(fetch, url_participate, {

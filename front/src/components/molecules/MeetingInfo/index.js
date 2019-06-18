@@ -189,7 +189,7 @@ export class MeetingInfo extends React.Component {
             ?
             <List.Item>
               <List.Icon name='file excel' />
-              <List.Content as='a' target="_blank" href={'http://localhost:8000/infoexcel_secure/' + meeting_info.secure_token}> 참여 멤버 정보 다운 </List.Content>
+              <List.Content as='a' target="_blank" href={'http://18.223.163.91:8000/infoexcel_secure/' + meeting_info.secure_token}> 참여 멤버 정보 다운 </List.Content>
             </List.Item>
             :
             <div></div>
@@ -246,7 +246,7 @@ export class MeetingInfo extends React.Component {
     // 사진이 첨부된 미팅 게시물에서, 사진 경로에 "http://"가 없는 경우 이를 붙여줌 (그래야 보임)
     if (meeting_info.picture != null)
       if (meeting_info.picture.includes("http://") == false)
-        meeting_info.picture = "http://127.0.0.1:8000" + meeting_info.picture
+        meeting_info.picture = "http://18.223.163.91:8000" + meeting_info.picture
 
     // 내가 만든 모임
     if (meeting_info.leader == state.username) {

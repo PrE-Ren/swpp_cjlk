@@ -30,7 +30,7 @@ export function* watchDeleteComment() {
 }
 
 export function* load_comments_func(action) {
-  const url_comments = 'http://127.0.0.1:8000/comment/meeting/' + action.meeting_id + '/'
+  const url_comments = 'http://18.223.163.91:8000/comment/meeting/' + action.meeting_id + '/'
   const response_comments = yield call(fetch, url_comments, { method : 'GET' })
 
   if (response_comments.ok) {
@@ -45,7 +45,7 @@ export function* load_comments_func(action) {
 }
 
 export function* add_comment_func(action) {
-  const url_comment = 'http://127.0.0.1:8000/comment/'
+  const url_comment = 'http://18.223.163.91:8000/comment/'
   const info_comment = JSON.stringify({ meetingid: action.meeting_id, content: action.content})
   const response_comment = yield call(fetch, url_comment, {
       method: 'POST',
@@ -72,7 +72,7 @@ export function* add_comment_func(action) {
 }
 
 export function* edit_comment_func(action) {
-  const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment_id + '/'
+  const url_comment = 'http://18.223.163.91:8000/comment/' + action.comment_id + '/'
   const info_comment = JSON.stringify({ meetingid: action.meeting_id, writerid: action.writer_id, content: action.content })
   const response_comment = yield call(fetch, url_comment, {
       method: 'PUT',
@@ -99,7 +99,7 @@ export function* edit_comment_func(action) {
 }
 
 export function* delete_comment_func(action) {
-  const url_comment = 'http://127.0.0.1:8000/comment/' + action.comment_id + '/'
+  const url_comment = 'http://18.223.163.91:8000/comment/' + action.comment_id + '/'
   const response_comment = yield call(fetch, url_comment, {
       method: 'DELETE',
       headers: { 'Authorization': `Basic ${action.hash}` },

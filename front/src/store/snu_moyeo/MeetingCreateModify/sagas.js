@@ -30,8 +30,8 @@ export function* watchChangeMeetingInfo() {
 }
 
 export function* new_func(action) {
-  const url_meeting = 'http://127.0.0.1:8000/meeting/'
-  const url_participate = 'http://127.0.0.1:8000/participate/'
+  const url_meeting = 'http://18.223.163.91:8000/meeting/'
+  const url_participate = 'http://18.223.163.91:8000/participate/'
   const formData = new FormData()
 
   const get_current_datetime = () => {
@@ -113,7 +113,7 @@ export function* new_func(action) {
 
 export function* modify_func(action) {
   const meeting_info = JSON.parse(sessionStorage.getItem("meeting_info"))
-  const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_info.id}/`
+  const url_meeting = `http://18.223.163.91:8000/meeting/${meeting_info.id}/`
   const formData = new FormData()
 
   if (action.meeting_info.title == undefined || action.meeting_info.title == '') alert('제목을 입력해주세요')
@@ -154,7 +154,7 @@ export function* modify_func(action) {
 
 export function* change_meeting_state_func(action) {
   let meeting_id = action.meeting_info.id
-  const url_meeting = `http://127.0.0.1:8000/meeting/${meeting_id}/`
+  const url_meeting = `http://18.223.163.91:8000/meeting/${meeting_id}/`
   const formData = new FormData()
 
   formData.append('title', action.meeting_info.title)              //  제목 (기존값)

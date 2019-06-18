@@ -2,7 +2,7 @@ import {take, put, call, fork, select, all} from 'redux-saga/effects'
 import * as actions from './actions'
 
 export function* reload_admin() {
-  const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
+  const pathname = window.location.pathname  //  "http://18.223.163.91:3000"의 뒷부분 URL
 
   // ReportAdmin 페이지
   if (pathname == '/admin') {
@@ -23,7 +23,7 @@ export function* reload_admin() {
     // 관리자 O
     else {
       const password = sessionStorage.getItem("password")
-      const url_report = 'http://127.0.0.1:8000/report/'
+      const url_report = 'http://18.223.163.91:8000/report/'
       console.log(username)
       console.log(password)
       const hash = new Buffer(`${username}:${password}`).toString('base64')  //  유저의 해시값
@@ -55,7 +55,7 @@ export function* watchAccuse(){
 
 export function* penalty_func(action) {
   const report_info = action.report_info
-  const url_report = 'http://127.0.0.1:8000/report/' + report_info.id + '/'
+  const url_report = 'http://18.223.163.91:8000/report/' + report_info.id + '/'
   const report_info_modified = JSON.stringify({
     reason: report_info.reason,
     isHandled: action.flag,  //  관리자가 입력한 값
@@ -83,7 +83,7 @@ export function* penalty_func(action) {
 }
 
 export function* accuse_func(action) {
-  const url_accuse = 'http://127.0.0.1:8000/report/'
+  const url_accuse = 'http://18.223.163.91:8000/report/'
   const accuse_info = JSON.stringify({
     reason: action.accuse_reason,
     reporteeid: action.member_id

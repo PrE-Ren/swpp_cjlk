@@ -16,7 +16,7 @@ export function* watchLoadMemberinfo() {
 }
 
 export function* load_leaderinfo_func(action) {
-  const url_leaderinfo = 'http://127.0.0.1:8000/user/' + action.user_id + '/'
+  const url_leaderinfo = 'http://18.223.163.91:8000/user/' + action.user_id + '/'
   const response_leaderinfo = yield call(fetch, url_leaderinfo, { method : 'GET' })
 
   if (response_leaderinfo.ok) {
@@ -39,7 +39,7 @@ export function* load_memberinfo_func(action) {
   let i = 0, j = 0, x = 0
   action.members.map((member_id) =>
   {
-    url[i] = 'http://127.0.0.1:8000/user/' + member_id + '/',
+    url[i] = 'http://18.223.163.91:8000/user/' + member_id + '/',
     i = i + 1;
   })
 

@@ -44,7 +44,7 @@ export class NaverShopping extends React.Component{
             <React.Fragment>
               <Input placeholder='네이버 쇼핑 검색' action size='mini' style={{ marginTop: '5px', marginBottom: '15px', marginLeft: '-5px' }}>
                 <Popup content='네이버 쇼핑에서 먼저 검색해보시면 어떨까요?' position='left center'
-                       trigger={<Image src="http://localhost:8000/media/naver_symbol.png" size='mini' as='a'/>} />&ensp;
+                       trigger={<Image src="http://18.223.163.91:8000/media/naver_symbol.png" size='mini' as='a'/>} />&ensp;
 
                 <input style={{width:'150px'}} ref={node => {this.state.query = node}}/>
                 <Button color='green' type='submit' onClick={() => {

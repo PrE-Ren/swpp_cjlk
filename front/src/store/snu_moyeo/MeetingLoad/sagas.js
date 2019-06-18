@@ -18,20 +18,20 @@ function* get_meetinglist(opt) {
       if (opt.length >= 8) {
         const kind = opt[6]               //  미팅 유형
         const keyword = opt.substring(8)  //  검색 키워드
-        url = 'http://127.0.0.1:8000/search' + kind + '/?page=1&search=' + keyword
+        url = 'http://18.223.163.91:8000/search' + kind + '/?page=1&search=' + keyword
       }
       // 일반적인 경우
       else
-        url = 'http://127.0.0.1:8000' + opt + '/?page=1'
+        url = 'http://18.223.163.91:8000' + opt + '/?page=1'
     }
 
     // All 페이지에서 미팅 리스트를 불러오는 경우
     else if (opt.includes('/all')) {
       const keyword = opt.substring(5)  //  검색 키워드
-      url = 'http://127.0.0.1:8000/searchall/?page=1&search=' + keyword
+      url = 'http://18.223.163.91:8000/searchall/?page=1&search=' + keyword
     }
     else
-      url = 'http://127.0.0.1:8000/meetinglist/' + opt
+      url = 'http://18.223.163.91:8000/meetinglist/' + opt
 
     const get_username = (state) => state.snu_moyeo.username
     const get_password = (state) => state.snu_moyeo.password
@@ -59,7 +59,7 @@ function* get_meetinglist(opt) {
 }
 
 export function* reload_meeting() {
-  const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
+  const pathname = window.location.pathname  //  "http://18.223.163.91:3000"의 뒷부분 URL
 
   // Home 페이지
   if (pathname == '/') {
@@ -109,7 +109,7 @@ export function* watchChangePageNum() {
 }
 
 export function* change_page_num_func(action) {
-  const pathname = window.location.pathname  //  "http://localhost:3000"의 뒷부분 URL
+  const pathname = window.location.pathname  //  "http://18.223.163.91:3000"의 뒷부분 URL
   const get_token = (state) => state.snu_moyeo.mySNU_verification_token
   const token = yield select(get_token)  //  이메일 토큰
 
@@ -123,18 +123,18 @@ export function* change_page_num_func(action) {
       if (pathname.length >= 8) {
         const kind = pathname[6]               //  미팅 유형
         const keyword = pathname.substring(8)  //  검색 키워드
-        url = 'http://127.0.0.1:8000/search' + kind + '/?page=' + action.page_num + '&search=' + keyword
+        url = 'http://18.223.163.91:8000/search' + kind + '/?page=' + action.page_num + '&search=' + keyword
       }
 
       // 일반적인 경우
       else
-        url = 'http://127.0.0.1:8000' + pathname + '/?page=' + action.page_num
+        url = 'http://18.223.163.91:8000' + pathname + '/?page=' + action.page_num
     }
 
     // All 페이지에서 페이지를 넘기는 경우
     else if (action.option == "all") {
       const keyword = pathname.substring(5)  //  검색 키워드
-      url = 'http://127.0.0.1:8000/searchall/?page=' + action.page_num + '&search=' + keyword
+      url = 'http://18.223.163.91:8000/searchall/?page=' + action.page_num + '&search=' + keyword
     }
 
     const get_username = (state) => state.snu_moyeo.username

@@ -14,8 +14,8 @@ export class Captcha extends React.Component {
 
     const image =
       (is_captcha_loaded)
-      ? <Image src={"http://localhost:8000/" + sessionStorage.getItem("captcha_image")}></Image>
-      : <Image src={"http://localhost:8000/media/captcha_default.jpg"}></Image>
+      ? <Image src={"http://18.223.163.91:8000/" + sessionStorage.getItem("captcha_image")}></Image>
+      : <Image src={"http://18.223.163.91:8000/media/captcha_default.jpg"}></Image>
 
     return (
       (is_captcha_verified == false)

@@ -23,7 +23,7 @@ export function* watchConfirmCaptcha() {
 }
 
 export function* load_search_func(action) {
-  const url_search = 'http://127.0.0.1:8000/shopsearch/' + action.query + '/'
+  const url_search = 'http://18.223.163.91:8000/shopsearch/' + action.query + '/'
   const response_search = yield call(fetch, url_search, { method : 'GET' })
 
   if (response_search.ok) {
@@ -36,7 +36,7 @@ export function* load_search_func(action) {
 }
 
 export function* load_captcha_func(action) {
-  const url_captcha = 'http://127.0.0.1:8000/captcha/'
+  const url_captcha = 'http://18.223.163.91:8000/captcha/'
   const response_captcha = yield call(fetch, url_captcha, { method : 'GET' })
 
   if (response_captcha.ok) {
@@ -51,7 +51,7 @@ export function* load_captcha_func(action) {
 }
 
 export function* confirm_captcha_func(action) {
-  const url_confirm_captcha = 'http://127.0.0.1:8000/captcha_verify/' + action.key + '/' + action.value + '/'
+  const url_confirm_captcha = 'http://18.223.163.91:8000/captcha_verify/' + action.key + '/' + action.value + '/'
   const response_confirm_captcha = yield call(fetch, url_confirm_captcha, { method : 'GET' })
 
   if (response_confirm_captcha.ok) {
