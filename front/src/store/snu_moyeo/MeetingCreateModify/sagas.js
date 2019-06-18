@@ -46,12 +46,12 @@ export function* new_func(action) {
   }
 
   if (action.meeting_info.title == undefined || action.meeting_info.title == '') alert('제목을 입력해주세요')
+  else if (action.meeting_info.kind == undefined) alert('모임 유형을 설정해주세요')
   else if (action.meeting_info.due == undefined || action.meeting_info.due == '') alert('시간을 입력해주세요')
   else if (action.meeting_info.due < get_current_datetime() ) alert('현재시간보다 빠르면 안됩니다.')
   else if (action.meeting_info.min_people == undefined || action.meeting_info.min_people == '') alert('최소인원을 입력해주세요')
   else if (action.meeting_info.max_people == undefined || action.meeting_info.max_people == '') alert('최대인원을 입력해주세요')
   else if (action.meeting_info.description == undefined || action.meeting_info.description == '' ) alert('본문을 입력해주세요')
-  else if (action.meeting_info.kind == undefined) alert('모임 유형을 설정해주세요')
   else {
     formData.append('title', action.meeting_info.title)               //  제목 (직접 입력)
     formData.append('due', action.meeting_info.due)                   //  마감 기한 (직접 입력)

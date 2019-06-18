@@ -11,8 +11,15 @@ export const ReportAdminPage = ({ username, report_list }) => {
       if (report_list != null) {
           let reports = JSON.parse(report_list)
           return (
-              <div>
-                {/* Header */}
+            <Grid columns={2}>
+
+              <Grid.Column width={2}>
+                <br />
+                <Menu.Item as='a' href="/"><div style={{fontSize:'30px'}}><Icon name='home' />To Home</div></Menu.Item>
+              </Grid.Column>
+
+              <Grid.Column width={12}>
+              {/* Header */}
                 <Container>
                   <Header as='h1' icon textAlign='center'>
                     <Icon name='group' circular />User reports
@@ -28,7 +35,8 @@ export const ReportAdminPage = ({ username, report_list }) => {
                       </Card>)}
                   </Card.Group>
                 </Container>
-              </div>
+              </Grid.Column>
+            </Grid>
           )
       }
   }
