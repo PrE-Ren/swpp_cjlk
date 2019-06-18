@@ -10,7 +10,7 @@ import sys
 
 class MeetingModelsTests(TestCase):
 
-    link = "http://127.0.0.1:8000/"
+    link = "http://18.223.163.91:8000/"
 
     # def setUp(self):
     #     self.snuuser = SnuUser.objects.create(username = "testadmin", password = "testadmin", email = "sdrjseka96@naver.com")
@@ -339,7 +339,7 @@ class MeetingModelsTests(TestCase):
         self.assertEqual(res.status_code, 200)
 
     def get_search(self) :
-        search_link = 'http://127.0.0.1:8000/searchall/?search=postmeeting4'
+        search_link = 'http://18.223.163.91:8000/searchall/?search=postmeeting4'
         res = requests.get(search_link)
         self.assertEqual(res.status_code, 200)
         content = res.json()
