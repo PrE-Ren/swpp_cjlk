@@ -5,6 +5,9 @@ import { ModifyButton, CloseButton, BreakUpButton, ReOpenButton, ReCloseButton }
 import { JoinButton, WithdrawButton } from '../../atoms/ButtonsInMeetingInfo'
 import { Modal, Image, List, Dropdown, Message, Form, TextArea, Button, Grid, Header } from 'semantic-ui-react'
 import * as meeting_state from '../../../literal'
+import styled from 'styled-components'
+
+
 
 // 날짜를 보기 좋게 만들어주는 함수
 const dateParse = (data) => {
@@ -44,7 +47,6 @@ export class MeetingInfo extends React.Component {
       prepare_load_leaderinfo_click, load_leaderinfo_click, prepare_load_memberinfo_click, load_memberinfo_click, accuse_click
     } = this.props
     const { accuse_reason, member_id } = this.state
-
     const hash = new Buffer(`${state.username}:${state.password}`).toString('base64')  //  유저의 해시값
     const member_list = JSON.parse(sessionStorage.getItem("member_list"))  //  참여 멤버 정보 로드
     const leader_id = meeting_info.leaderid  //  Reporter 고유값
@@ -88,7 +90,7 @@ export class MeetingInfo extends React.Component {
                       <Dropdown text='정보보기'>
                         <Dropdown.Menu>
                           <Message header='리더 정보' content={<div>
-                            이름 : {meeting_info.leader}<br/>
+                            이름 : {sessionStorage.getItem("leader.name")}<br/>
                             이메일 : {sessionStorage.getItem("leader.email")}<br/>
                             전화번호 : {sessionStorage.getItem("leader.phone_number")}<br/>
                             벌점 : {sessionStorage.getItem("leader.points")}<br/>
@@ -207,7 +209,7 @@ export class MeetingInfo extends React.Component {
         </List>
 
         {/* 본문 */}
-        <h4><pre>{meeting_info.description}</pre></h4>
+        <h4><pre style={{fontSize:'17px',fontFamily:'Georgia',fontWeight:'400',whiteSpace:'pre-wrap'}}>{meeting_info.description}</pre></h4>
       </React.Fragment>
 
     // 사진 + 모임 기본 정보 + 지도 + 댓글 목록

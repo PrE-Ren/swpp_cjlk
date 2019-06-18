@@ -19,14 +19,17 @@ export class HistoryList extends React.Component {
       return (
         <Segment raised>
           <Label as='a' color='red' ribbon>History</Label> {/* 라벨 */}
-          <Header as='h1'>내가 참여했던 모임 &nbsp;
-          {this.state.fold_click ?
-            <Button basic color='green' circular icon='triangle up' content = '접기' onClick={() => this.list_close()}/>
-            :
-            <Button basic color='green' circular icon='triangle down' content = '펼치기' onClick={() => this.list_show()}/>
-          }</Header>                        {/* 제목 */}
+          <Header as='h1'>내가 참여했던 모임 &nbsp;         {/* 제목 */}
+          {this.state.fold_click 
+            ? <Button basic color='green' circular icon='triangle up' content = '접기' onClick={() => this.list_close()}/>
+            : <Button basic color='green' circular icon='triangle down' content = '펼치기' onClick={() => this.list_show()}/>
+          }
+          </Header>                        
 
-          {this.state.fold_click ?
+          <br/>
+          
+          {this.state.fold_click 
+          ?
             <Card.Group>                                                {/* 각각의 카드는 하나의 미팅 엔트리를 담고 있음 */}
               {meetings.map(meeting_entry =>
                 <Card key = {meeting_entry.id} >
@@ -35,7 +38,7 @@ export class HistoryList extends React.Component {
               )}
             </Card.Group>
           :
-          <div></div>
+          <Card.Group></Card.Group>
           }
         </Segment>
       )

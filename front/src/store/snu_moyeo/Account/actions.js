@@ -9,6 +9,11 @@ export const CONFIRM_EMAIL_ACTION = 'CONFIRM_EMAIL_ACTION'
 export const CONFIRM_PHONE_ACTION = 'CONFIRM_PHONE_ACTION'
 export const SUCCESS_EMAIL_ACTION = 'SUCCESS_EMAIL_ACTION'
 export const SUCCESS_PHONE_ACTION = 'SUCCESS_PHONE_ACTION'
+export const REQUIRE_EMAIL_ACTION = 'REQUIRE_EMAIL_ACTION'
+export const REQUIRE_PHONE_ACTION = 'REQUIRE_PHONE_ACTION'
+export const PREPARE_SEND_EMAIL_ACTION = 'PREPARE_SEND_EMAIL_ACTION'
+export const PREPARE_SEND_PHONE_ACTION = 'PREPARE_SEND_PHONE_ACTION'
+export const MYPAGE_RELOAD_ACTION = 'MYPAGE_RELOAD_ACTION'
 
 export const login_action = (username, password) => {
     return {
@@ -74,6 +79,18 @@ export const send_phone_action = (hash, phone_number) => {
   }
 };
 
+export const prepare_send_email_action = () => {
+    return {
+        type : PREPARE_SEND_EMAIL_ACTION
+    }
+};
+  
+export const prepare_send_phone_action = () => {
+    return {
+        type : PREPARE_SEND_PHONE_ACTION
+    }
+};
+
 export const confirm_email_action = (hash, email, mySNU_verification_token) => {
   return {
       type : CONFIRM_EMAIL_ACTION,
@@ -92,6 +109,18 @@ export const confirm_phone_action = (hash, phone_number, phone_verification_toke
   }
 };
 
+export const require_email_action = () => {
+    return {
+        type : REQUIRE_EMAIL_ACTION
+    }
+};
+
+export const require_phone_action = () => {
+    return {
+        type : REQUIRE_PHONE_ACTION
+    }
+};
+
 export const success_email_action = (email, mySNU_verification_token) => {
   return {
       type : SUCCESS_EMAIL_ACTION,
@@ -107,3 +136,10 @@ export const success_phone_action = (phone_number, phone_verification_token) => 
       phone_code : phone_verification_token
   }
 };
+
+export const mypage_reload_action = (point) => {
+  return {
+      type : MYPAGE_RELOAD_ACTION,
+      point : point
+  }
+}

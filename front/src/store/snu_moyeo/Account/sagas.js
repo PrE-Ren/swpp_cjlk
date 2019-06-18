@@ -54,6 +54,14 @@ export function* reload_auth() {
       }
     }
   }
+  else if (pathname == '/mypage')
+  {
+    const user_id = sessionStorage.getItem("user_id")
+    const url_user = 'http://127.0.0.1:8000/user/' + user_id + '/'
+    const response_user = yield call(fetch, url_user, { method: 'GET'})
+    const response_user_data = yield call([response_user, response_user.json]);
+    yield put(actions.mypage_reload_action(response_user_data.point))
+  }
 }
 
 export function* watchLogin() {
@@ -122,7 +130,7 @@ export function* login_func(action) {
       console.log(response_user_data)
       if(response_user_data.point >= 10)
       {
-        alert('벌점 10점 이상으로 로그인이 불가하니 관리자에게 문의하십시오.')
+        alert('벌점 10점 이상으로 로그인이 불가하니 운영자(010-4007-9493)에게 문의 바랍니다.')
       }
       else
       {
@@ -177,27 +185,47 @@ console.log(info)
 
   // 회원가입 실패
   else
-    alert("회원가입 실패 : 정보를 바르게 입력하세요.")
+    alert("회원가입 실패 : 이미 해당 아이디로 가입된 사용자가 존재합니다.")
 }
 
 export function* send_email_func(action) {
   const url_send_email = 'http://127.0.0.1:8000/send_email/' + action.email + '/'
   const response_email = yield call(fetch, url_send_email, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
 
-  if (response_email.ok)  //  해당 유저의 이메일 토큰 필드 설정 (by BACK-END)
+  if (response_email.ok) {  //  해당 유저의 이메일 토큰 필드 설정 (by BACK-END)
     alert('이메일로 인증번호가 전송되었습니다.')
+    yield put(actions.require_email_action())
+  }
   else
-    alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
+  {
+    const response_email_data = yield call([response_email, response_email.json]);
+    console.log(response_email_data)
+    if(response_email_data == 'Duplicate Email')
+      alert('인증번호 전송 실패 : 이미 해당 이메일로 가입된 사용자가 존재합니다.')
+    else
+      alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
+    yield put(actions.require_email_action())
+  }
 }
 
 export function* send_phone_func(action) {
   const url_send_phone = 'http://127.0.0.1:8000/send_phone/' + action.phone_number + '/'
   const response_phone = yield call(fetch, url_send_phone, { method: 'GET', headers: { 'Authorization' : `Basic ${action.hash}` } })
 
-  if (response_phone.ok)  //  해당 유저의 폰 토큰 필드 설정 (by BACK-END)
+  if (response_phone.ok){  //  해당 유저의 폰 토큰 필드 설정 (by BACK-END)
     alert('휴대폰으로 인증번호가 전송되었습니다.')
+    yield put(actions.require_phone_action())
+  }
   else
-    alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
+  {
+    const response_phone_data = yield call([response_phone, response_phone.json]);
+    console.log(response_phone_data)
+    if(response_phone_data == 'Duplicate phone number')
+      alert('인증번호 전송 실패 : 이미 해당 휴대폰 번호로 가입된 사용자가 존재합니다.')
+    else
+      alert('인증번호 전송 실패 : 운영자(010-4007-9493)에게 문의 바랍니다.')
+    yield put(actions.require_phone_action())
+  }
 }
 
 export function* confirm_email_func(action) {
@@ -209,7 +237,7 @@ export function* confirm_email_func(action) {
     yield put(actions.success_email_action(action.email, action.email_code))  //  이메일 및 이메일 토큰 설정 (-> 인증 페이지 리렌더링)
   }
   else
-    alert('인증번호가 틀렸습니다. : 문제가 있을 시 운영자(010-4007-9493)에게 문의 바랍니다.')
+    alert('인증번호가 틀렸습니다. 문제가 있을 시 운영자(010-4007-9493)에게 문의 바랍니다.')
 }
 
 export function* confirm_phone_func(action) {
@@ -221,7 +249,7 @@ export function* confirm_phone_func(action) {
     yield put(actions.success_phone_action(action.phone_number, action.phone_code))  //  폰 번호 및 폰 토큰 설정 (-> 인증 페이지 리렌더링)
   }
   else
-    alert('인증번호가 틀렸습니다. : 문제가 있을 시 운영자(010-4007-9493)에게 문의 바랍니다.')
+    alert('인증번호가 틀렸습니다. 문제가 있을 시 운영자(010-4007-9493)에게 문의 바랍니다.')
 }
 
 export default function* () {

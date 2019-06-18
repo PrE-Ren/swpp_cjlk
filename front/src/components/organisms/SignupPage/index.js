@@ -19,6 +19,14 @@ const Font_Green = styled.div`
   text-align: left;
 `
 
+const Font_Gray = styled.div`
+  color: gray;
+  font-size: 13px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+  text-align: left;
+`
+
 // 입력한 내용이 올바른 형식인지 체크
 const is_valid_form = (username, password, password_confirm, nickname, is_captcha_verified) => {
   const pattern1 = /[0-9]/;
@@ -51,7 +59,7 @@ const is_valid_form = (username, password, password_confirm, nickname, is_captch
     return false
   }
   if (nickname.length == 0) {
-    alert("이름(닉네임)을 입력해주세요.")
+    alert("이름을 입력해주세요.")
     return false
   }
   if (is_captcha_verified == false) {
@@ -85,7 +93,7 @@ export class SignupPage extends React.Component {
     let confirm_message =
     (this.state.is_confirmed)
     ? <Font_Green> 패스워드가 일치합니다. </Font_Green>
-    : <Font_Red> 패스워드가 일치하지 않습니다. </Font_Red>
+    : <div><Font_Red> 패스워드가 일치하지 않습니다.</Font_Red> <Font_Gray>영어 소문자, 숫자, 특수문자를 포함하여 8글자 이상으로 <br/> 작성해주세요. </Font_Gray></div>
 
     // 로그인 X : 정상 출력
     if (username_store == null) {
@@ -120,7 +128,7 @@ export class SignupPage extends React.Component {
                 {confirm_message}
 
                 {/* 유저 이름(닉네임) 입력 */}
-                <Form.Input fluid icon='signup' iconPosition='left' placeholder='nickname'
+                <Form.Input fluid icon='signup' iconPosition='left' placeholder='name'
                 onChange={(e) => this.setState({ nickname: e.target.value })} />
 
                 {/* 보안문자 입력 */}

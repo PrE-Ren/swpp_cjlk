@@ -36,12 +36,10 @@ export class Map extends React.Component {
       daumMap.addControl(mapTypeControl, daum.maps.ControlPosition.TOPRIGHT);
       zoomControl = new daum.maps.ZoomControl();
       daumMap.addControl(zoomControl, daum.maps.ControlPosition.RIGHT);
-    }
 
+    }
     // 모임을 생성 혹은 수정하려는 경우
     else if (this.props.write == true) {
-      console.log("아나")
-      console.log(this.props.meeting_info)
 
       // New (모임 생성)
       if (this.props.meeting_info == null) {
