@@ -120,7 +120,7 @@ export class SignupPage extends React.Component {
                 {confirm_message}
 
                 {/* 유저 이름(닉네임) 입력 */}
-                <Form.Input fluid icon='signup' iconPosition='left' placeholder='nickname'
+                <Form.Input fluid icon='signup' iconPosition='left' placeholder='name'
                 onChange={(e) => this.setState({ nickname: e.target.value })} />
 
                 {/* 보안문자 입력 */}
