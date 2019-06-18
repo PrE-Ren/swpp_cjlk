@@ -100,7 +100,7 @@ export class MeetingCreate extends React.Component{
             <Form.Input fluid label='최대인원' placeholder='2' type="number" width={2} onChange={this.handle_max_people} />
           </Form.Group>
           {this.state.kind == 2 ? <NaverShopping/> : <div></div>}
-          <Form.Input fluid label='오픈 채팅방 링크' placeholder='https://open.kakao.com/' onChange={this.handle_kakao_link} />
+          <Form.Input fluid label='오픈 채팅방 링크' placeholder='https://open.kakao.com/o/' onChange={this.handle_kakao_link} />
           <Form.Input fluid label='사진' type="file" width={6} onChange={this.handle_picture} accept="image/*" />
 
           {this.state.map_checked  ? <Radio toggle label='hide the map' onChange={this.change_map_false}/> :
